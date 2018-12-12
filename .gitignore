@@ -1,0 +1,15 @@
+*.iml
+.svn/
+target/
+.idea/
+*.iml
+*.classpath
+.settings/
+*.log
+**/bin/
+**/.settings/
+csj-shark-vue.iml
+.DS_Store
+tmp/
+LOG_PATH_IS_UNDEFINED/
+apidocs/
