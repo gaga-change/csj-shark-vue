@@ -16,12 +16,34 @@ export const flowChildTableConfig=[// 流水子列表
   { label:'业务行号',prop:'busiIndex', minWidth:80 },
   { label:'商品编码',prop:'skuCode', width:150 },
   { label:'商品名称',prop:'skuName', width:150 },
-  { label:'商品型号',prop:'skuModel', minWidth:120 },//unconfirm
-  { label:'商品规格',prop:'skuFormat', minWidth:120 },//unconfirm
+  { label:'规格型号',prop:'skuFormat', minWidth:120 },
   { label:'单位',prop:'skuUnitName', minWidth:120 },
   { label:'商品数量',prop:'planInQty', minWidth:120 },
   { label:'入库数量',prop:'realInQty', minWidth:120 },
-  { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
-  { label:'备注',prop:'skuUnitConvert', minWidth:120 },//unconfirm
+  // { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
+  // { label:'备注',prop:'skuUnitConvert', minWidth:120 },//unconfirm
+  
+]
+export const inTableConfig=[// 入库列表
+  { label:'入库时间', width:120, prop:'gmtCreate', type:'time' },
+  { label:'预约单号',prop:'planCode', width:150 },
+  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
+  { label:'货主',prop:'ownerName', width:150 },
+  { label:'供应商',prop:'providerName', width:150 },
+  { label:'商品总数',prop:'inPlanQty', minWidth:90 },
+  { label:'操作人',prop:'createrName', minWidth:90 },
+
+  // { label:'款项性质',prop:'moneyState',useLocalEnum:true, type:'MoneyStateEnum', minWidth:120, },
+]
+export const inChildTableConfig=[// 入库子列表
+  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
+  { label:'商品编码',prop:'skuCode', width:150 },
+  { label:'商品名称',prop:'skuName', width:150 },
+  // { label:'商品型号',prop:'skuModel', minWidth:120 },//unconfirm
+  { label:'规格型号',prop:'skuFormat', minWidth:120 },
+  { label:'单位',prop:'skuUnitName', minWidth:120 },
+  { label:'商品数量',prop:'planInQty', minWidth:120 },
+  { label:'本次入库数量',prop:'realInQty', minWidth:120 },
+  // { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
   
 ]

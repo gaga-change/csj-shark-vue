@@ -19,5 +19,21 @@ export function getInfoDetailWarehousing(data) {
   })
 }
 
+//获取出库单列表
+export function getInfoOutWarehousing(data) {
+  return request({
+    url: `/webApi/outWarehouse/order/queryOutWarehouseOrder?${stringify(data)}`,
+    method: 'get',
+    // data:data
+  })
+}
+//获取出库单详情
+export function getInfoDetailOutWarehousing(data) {
+  return request({
+    url: `/webApi/outWarehouse/order/queryOutWarehouseOrderList?${stringify(data)}`,
+    method: 'get',
+    // data:data
+  })
+}
 
 

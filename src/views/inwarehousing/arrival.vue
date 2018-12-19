@@ -2,7 +2,8 @@
     <div>
         <tab-label :tab-config="BusiBillTypeEnum" @tabSwitch="tabSwitch" :tab-default="tabDefault"></tab-label>
         <search-warehousing @searchTrigger="submitForm" ref="searchWarhouse" @resetSearch="resetForm" :search-forms="ruleForm"></search-warehousing>
-        <double-table :loading="loading" :table-data="tableData" :handle-button-map="handleButtonMap"  :highlight-current-row="highlightCurrentRow" :child-data-name="childDataName" :config="flowTableConfig" :childTableConfig="flowChildTableConfig" :accordion-expand="accordionExpand" @currentRadioChange="currentRadioChange" :child-can-select="childCanSelect" :expand-key="expandKey" @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
+        <double-table :loading="loading" :table-data="tableData"
+        ref="tableChild" :handle-button-map="handleButtonMap"  :highlight-current-row="highlightCurrentRow" :child-data-name="childDataName" :config="flowTableConfig" :childTableConfig="flowChildTableConfig" :accordion-expand="accordionExpand" @currentRadioChange="currentRadioChange" :child-can-select="childCanSelect" :expand-key="expandKey" @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
         @currentChange="handleCurrentChange" 
         :total="total" 
         :maxTotal="10"
@@ -86,10 +87,10 @@
                 total:0,
                 //主表操作
                 handleButtonMap:[
-                    {title:'详情',handle:(index,data)=>{
-                        this.dialogVisible = true
-                        this.dialogData = {...data}
-                    }}
+                    // {title:'详情',handle:(index,data)=>{
+                    //     this.dialogVisible = true
+                    //     this.dialogData = {...data}
+                    // }}
                 ],
                 childCanSelect:true,//子表可选择,false全选，
                 accordionExpand:true,//手风琴展开
@@ -101,7 +102,7 @@
             getTableData(){
 
                 this.$router.replace({
-                    path:'/warehousing/flow',
+                    path:'/inwarehousing/arrival',
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
@@ -113,11 +114,23 @@
                         
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'planCode')
                         this.total = res.data.total
+                        var a = this.$refs.tableChild.expands//之前打开过 
+                        if(a&&a.length>0){
+                            
+                            var info = {
+                                childData:[],
+                                planCode:a[0]
+                            }
+                            this.currentRadioChange(info)
+                        }
+                    }else{
+                        this.tableData = []
                     }
                     this.loading = false;
 
                 }).catch(err=>{
                     console.log(err);
+                    this.tableData = []
                     this.loading = false;                    
                 })
             },
@@ -182,7 +195,7 @@
                     this.currentTab = tab.name
                     this.$refs.searchWarhouse.resetForm()
                     this.ruleForm = {...ruleForm,busiBillType:tab.name}
-                    this.getTableData()
+                    // this.getTableData()
 
                 }
             },

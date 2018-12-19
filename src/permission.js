@@ -23,14 +23,14 @@ router.beforeEach((to, from, next) => {
            
         } else{
           console.log(res);
-          // debugger
+          debugger
           store.dispatch('SetWarehouse','')
           location.href = `/csj_logout`
         }
        
       }).catch((err) => {
         console.log(err);
-        // debugger
+        debugger
         store.dispatch('SetWarehouse','')
         location.href = `/csj_logout`
       })

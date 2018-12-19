@@ -18,6 +18,8 @@ service.interceptors.response.use(
         MessageBox.alert('验证失败,请重新登录').then(_ => {
           location.href = `/csj_login`
         })
+      }else if (res.size&&res.type) {//blob对象，目前没法直接判断类型
+        return res
       } else {
         let message=res.message||res.errorMsg||'';
         if(message=='用户未登录'){

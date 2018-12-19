@@ -36,3 +36,14 @@ export function exportExcel(exportdata) {
     })
   })
 }
+export function exportExcelBlob(name,blobData){
+  const blob = new Blob([blobData]);
+  const elink = document.createElement('a');
+  elink.download = name ? name+'.xlsx' :'库存台账.xlsx';
+  elink.style.display = 'none';
+  elink.href = URL.createObjectURL(blob);
+  document.body.appendChild(elink);
+  elink.click();
+  URL.revokeObjectURL(elink.href); // 释放URL 对象
+  document.body.removeChild(elink);
+}
