@@ -24,7 +24,6 @@ export default [
         component: _import('warehousing/flow'),
         hidden: false,
       },
-     
     ]
   },
 ]

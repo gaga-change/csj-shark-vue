@@ -18,7 +18,7 @@
 
 <script>
 import { Navbar, Sidebar, AppMain, TagsView,Topbar } from './components'
-
+import { setWarehouseCode } from '@/api/login.js'
 export default {
   name: 'layout',
   components: {
@@ -32,6 +32,73 @@ export default {
     sidebar() {
       return this.$store.state.app.sidebar
     }
+  },
+  methods:{
+    setUserWarehouse(){
+        var chooseWarehouse = ''//sessionStorage.getItem('warehouse')
+          var userWarehouse = this.$store.getters.userInfo.roles
+          var warehouseMap = this.$store.getters.userInfo.warehouses.filter(item=> userWarehouse.includes(item.warehouseNo))
+          if(this.$store.getters.chooseWarehouse){
+            if(this.$store.getters.chooseWarehouse != chooseWarehouse){
+              chooseWarehouse = chooseWarehouse ? chooseWarehouse : this.$store.getters.chooseWarehouse
+              this.setWarehouse(chooseWarehouse)
+            }
+           
+          }else{
+            const h = this.$createElement
+            chooseWarehouse = warehouseMap[0].warehouseNo
+            
+            this.$msgbox(
+              {
+                title: '请选择仓库',
+                message: h('div',{},[h('span',{style:"margin-right:10px;"},'仓库'),h('Select',{props:{value:''},class:'el-select',style:'height:26px;',on:{'change':(event)=>{chooseWarehouse = event.target.value;console.log(chooseWarehouse)}}}, warehouseMap.map(item=> h('Option',{attrs:{value:item.warehouseNo}},item.warehouseName))
+                )]),  
+                showCancelButton: false,
+                confirmButtonText: '确定',
+                // center:true,
+                showClose:false,
+                confirmButtonClass:'buttonRight',
+                closeOnClickModal:false,
+                beforeClose: (action, instance, done) => {
+                  if (action === 'confirm') {
+                    instance.confirmButtonLoading = true;
+                    instance.confirmButtonText = '执行中...';
+                    this.setWarehouse(chooseWarehouse,function(){
+                      done();
+                      console.log(33331);
+                      
+                      setTimeout(() => {
+                        instance.confirmButtonLoading = false;
+                      }, 300);
+                    })
+
+                    // this.$store.dispatch('SetWarehouse',chooseWarehouse).then(res=>{
+                    //   done();
+                    //   setTimeout(() => {
+                    //     instance.confirmButtonLoading = false;
+                    //   }, 300);
+                    //   // next({ ...to, replace: true })
+                    // })
+                  } 
+                }
+              }
+            )
+          }
+    },
+    setWarehouse(warehouse,cb){
+      setWarehouseCode({operaterId:this.$store.getters.userInfo.id,warehouseCode:warehouse}).then(res => {
+        if(res.success){
+          // sessionStorage.setItem('warehouse',warehouse)
+          this.$store.dispatch('SetWarehouse',warehouse)
+          if(cb&&typeof cb == 'function'){
+            cb()
+          }
+        }
+      })
+    }
+  },
+  created(){
+    this.setUserWarehouse()
   }
 }
 </script>
@@ -53,5 +120,9 @@ export default {
   .main-container-nav{
     border-bottom: 1px solid #d8dce5;
   }
-
+  .el-message-box--center .el-message-box__btns{
+    text-align: right !important;
+  }
 </style>
+
+

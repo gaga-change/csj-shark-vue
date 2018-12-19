@@ -22,6 +22,18 @@
             主页
           </el-dropdown-item>
         </router-link>
+         <el-dropdown-item divided>
+          仓库：<el-select v-model="warehouse" style="display:inline-block"
+               placeholder="请选择仓库"  @change="setWarehouse"
+              size="small" prefix-icon="el-icon-search">
+                <el-option
+                  v-for="item in warehouseMap"
+                  :key="item.warehouseNo"
+                  :label="item.warehouseName"
+                  :value="item.warehouseNo">
+                </el-option>
+              </el-select>
+        </el-dropdown-item>
         <el-dropdown-item divided>
           <span @click="modifyPasswordShow = true" style="display:block;">修改密码</span>
         </el-dropdown-item>
@@ -58,7 +70,7 @@
 <script>
 import logoPath from '@/assets/images/logo.png'
 import { mapGetters } from 'vuex'
-import { updatepassword } from '@/api/login'
+import { updatepassword, setWarehouseCode } from '@/api/login'
 import { LoginPath, TiggerUrl } from '@/utils'
 export default {
   data() {
@@ -94,6 +106,8 @@ export default {
         newpassword: '',
         renewpassword: ''
       },
+      warehouse:'',
+      preWarehouse:'',
       formrule: {
         oldpassword: [
           { required: true, message: '请输入旧密码', trigger: 'blur' }
@@ -112,10 +126,38 @@ export default {
       'sidebar',
       'avatar',
       'company',
-      'userInfo'
+      'userInfo',
+      'warehouseMap',
+      'chooseWarehouse',
     ])
   },
+  watch:{
+    chooseWarehouse(){
+      this.preWarehouse = this.chooseWarehouse
+      this.warehouse = this.chooseWarehouse
+    }
+  },
+  created(){
+    this.preWarehouse = this.chooseWarehouse
+    this.warehouse = this.chooseWarehouse
+  },
   methods: {
+    setWarehouse(){
+      var warehouse = this.warehouse;
+       setWarehouseCode({operaterId:this.userInfo.id,warehouseCode:warehouse}).then(res => {
+        if(res.success){
+          // sessionStorage.setItem('warehouse',warehouse)
+          this.$store.dispatch('SetWarehouse',warehouse)
+          this.$message({type:'success',message:'切换仓库成功'})
+        }else{
+          this.$message({type:'error',message:'切换仓库失败'})
+          this.warehouse = this.preWarehouse
+        }
+      }).catch(err => {
+        this.$message({type:'error',message:'切换仓库失败'})
+        this.warehouse = this.preWarehouse
+      })
+    },
      modifyPassword() {
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
@@ -146,6 +188,8 @@ export default {
         cancelButtonText: '取消'
       }).then(action => {
         if (action === 'confirm') {
+          // sessionStorage.setItem('warehouse','')
+           this.$store.dispatch('SetWarehouse','')
           location.href = `/csj_logout`
         }
       })
@@ -173,6 +217,7 @@ export default {
     color: #fff;
   }
 }
+
 .avatar-container {
   height: 50px;
   display: inline-block;

@@ -5,7 +5,10 @@ const user = {
     userInfo: null,
     company: null,
     companyId: null,
-    permissionCodes: []
+    permissionCodes: [],
+    chooseWarehouse: null,
+    roles:[],
+    warehouseMap: [],
   },
   
   mutations: {
@@ -20,6 +23,14 @@ const user = {
     },
     SET_PERMISSIONCODES: (state, permissionCodes) => {
       state.permissionCodes = permissionCodes
+    },
+    SET_WAREHOUSE: (state,warehouse) => {
+      // sessionStorage.setItem('warehouse',warehouse)
+      state.chooseWarehouse = warehouse
+    },
+    SET_WAREHOUSEENUM:(state,info) => {
+      state.roles = info.roles
+      state.warehouseMap = info.warehouses.filter(item=> state.roles.includes(item.warehouseNo))
     }
   },
 
@@ -36,12 +47,16 @@ const user = {
           commit('SET_PERMISSIONCODES', data.permissionCodes||[])
           commit('SET_COMPANY', data.companyname||'')
           commit('SET_COMPANYID', data.companyid||'')
+          commit('SET_WAREHOUSEENUM',data)
           resolve(response)
         }).catch(error => {
       
           reject(error)
         })
       })
+    },
+    SetWarehouse({commit},warehouse){
+      commit('SET_WAREHOUSE',warehouse)
     }
   }
 }

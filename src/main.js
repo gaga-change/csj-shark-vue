@@ -2,6 +2,8 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import ItemTitle from '@/components/ItemTitle/index' 
 import ItemCard from '@/components/ItemCard/index' 
+import TabLabel from '@/components/TabLabel/index' 
+
 
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 
@@ -29,6 +31,7 @@ Vue.use(ElementUI, { locale })
 Vue.use(EXTENDS)
 Vue.use(ItemTitle);  
 Vue.use(ItemCard);  
+Vue.use(TabLabel);  
 
 Vue.config.productionTip = false
 

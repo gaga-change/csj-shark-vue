@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ls_router from './localRouter/ls_router'
+import luos_router from './localRouter/luos_router'
 
 const _import = require('./_import_' + process.env.NODE_ENV)
 Vue.use(Router)
@@ -36,6 +37,7 @@ export default new Router({
 
 export const asyncRouterMap = [
   ...ls_router,
+  ...luos_router,
   { path: '*', redirect: '/404', hidden: true }
 ]
 

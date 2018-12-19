@@ -17,16 +17,21 @@ router.beforeEach((to, from, next) => {
         if(res.success){
           store.dispatch('gitMap');
           router.addRoutes(store.getters.menu)
-          next({ ...to, replace: true }) 
+          next({ ...to, replace: true })
+          
+        
+           
         } else{
           console.log(res);
-          
+          // debugger
+          store.dispatch('SetWarehouse','')
           location.href = `/csj_logout`
         }
        
       }).catch((err) => {
         console.log(err);
-        
+        // debugger
+        store.dispatch('SetWarehouse','')
         location.href = `/csj_logout`
       })
 

@@ -1,8 +1,10 @@
 'use strict'
 
 const path = require('path')
-// const ip='http://192.168.2.163:8787';//红兵
-const ip='http://192.168.1.195:7979';//测试服务
+// const ip='http://192.168.2.163:8787';//红斌
+const ip='http://172.16.81.162:8787';//修浩
+
+// const ip='http://192.168.1.195:7979';//测试服务
 const proxyTableArr=['/csj_login','/csj_logout','/webApi','/api'];
 
 let proxyTable={};

@@ -17,6 +17,13 @@ export function getInfo() {
     method: 'get'
   })
 }
+//用户登录选择仓库后绑定选择的仓库
+export function setWarehouseCode(data) {
+  return request({
+    url: `/webApi/base/user/setWarehouseCode?${stringify(data)}`,
+    method: 'get'
+  })
+}
 
 
 
