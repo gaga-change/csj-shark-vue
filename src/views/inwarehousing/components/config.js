@@ -1,6 +1,6 @@
 export const planTableConfig=[// 计划单列表
   { label:'下单时间', width:120, prop:'gmtCreate', type:'time' },
-  { label:'单据号',prop:'planCode', width:150 },
+  { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'providerName', width:150 },
@@ -33,7 +33,7 @@ export const planChildTableEditConfig=[// 计划单操作列表
   { label:'总数量',prop:'planInQty', minWidth:120 },
   { label:'已入库',prop:'realInQty', minWidth:120 },//已入库，取realInQty的值
   { label:'待入库数量',prop:'tempInQty', minWidth:120, },
-  { label:'本次实入',prop:'realInQtyIt', width:120,editable:true,editType:'number',fixed:'right' },//unconfirm
+  { label:'本次实入',prop:'realInQtyIt', width:120,editable:true,fixed:'right' },//unconfirm
   // { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
   { label:'备注',prop:'remarkInfo', width:120,editable:true ,fixed:'right'},//unconfirm
   
@@ -52,7 +52,7 @@ export const planChildTableLabelConfig=[// 计划单商品条码打印列表
 ]
 export const planChildTablePrintConfig=[// 计划单打印列表
   // { label:'业务行号',prop:'busiIndex', minWidth:80 },
-  { label:'单据号',prop:'planCode', width:150 },
+  { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
   // { label:'单据类型',prop:'skuName', width:100 },
   { label:'货主',prop:'ownerName', width:150 },

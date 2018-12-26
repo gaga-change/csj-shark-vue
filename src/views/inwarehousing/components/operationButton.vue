@@ -71,7 +71,7 @@ import moment from 'moment'
 import axios from 'axios'
 import editTable from '@/components/Table/editTable'
 import { inboundOrderSubmit, getBatchNo } from '@/api/warehousing'
-import { PositiveIntegerReg } from '@/utils/validator'
+import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
@@ -234,14 +234,14 @@ export default {
                 if(item.realInQtyIt>limit){//加减操作 if()
                     canSubmit = false
                 }
-                if(!PositiveIntegerReg.test(item.realInQtyIt)){
+                if(!MoneyPositiveReg.test(item.realInQtyIt)){
                     canSubmit = false
                 }
-                items.push({realInQty:item.realInQtyIt,busiIndex:item.busiIndex,remarkInfo:item.remarkInfo,skuCode:item.skuCode})
+                items.push({realInQty:item.realInQtyIt||0,busiIndex:item.busiIndex,remarkInfo:item.remarkInfo,skuCode:item.skuCode})
 
             })
             if(!canSubmit){
-                this.$message({type:'error',message:'数据有误，请修改'})
+                this.$message({type:'error',message:'数据有误,最多两位小数，请修改'})
                 return false
             }
             

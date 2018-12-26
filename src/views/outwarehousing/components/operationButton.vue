@@ -61,7 +61,7 @@
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
 import { outboundOrderSubmit } from '@/api/warehousing'
-import { PositiveIntegerReg } from '@/utils/validator'
+import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
@@ -187,15 +187,14 @@ export default {
                
                     canSubmit = false
                 }
-                if(!PositiveIntegerReg.test(item.realOutQtyIt)){
-                    console.log(2,item.realOutQtyIt,PositiveIntegerReg.test(item.realOutQtyIt));
+                if(!MoneyPositiveReg.test(item.realOutQtyIt)){
                     
                     canSubmit = false
                 }
                 items.push({batchNo:item.batchNo,busiIndex:item.busiIndex,skuCode:item.skuCode,realOutQty:item.realOutQtyIt,remarkInfo:item.remarkInfo})
             })
             if(!canSubmit){
-                this.$message({type:'error',message:'数据错误，请修改'})
+                this.$message({type:'error',message:'数据错误，最多两位小数，请修改'})
                 return false
             }
             

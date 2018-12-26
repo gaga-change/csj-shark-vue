@@ -4,7 +4,7 @@
       <el-row :gutter="10">
         
        <el-col :span="6">
-          <el-form-item :label="outbound?'预约单号':'单据号'" prop="planCode">
+          <el-form-item label="预约单号" prop="planCode">
             <el-input type="text" size="small" v-model="searchForm.planCode" placehold="
 后四位"></el-input>
           </el-form-item>
@@ -45,12 +45,15 @@
               <el-select v-model="searchForm.orderStatus" 
                filterable clearable placeholder="请选择出库状态" 
               size="small" prefix-icon="el-icon-search">
+              <template v-for="item in OutOrderStatusEnum">
                 <el-option
-                  v-for="item in OutOrderStatusEnum"
+                  v-if="item.show"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value">
                 </el-option>
+              </template>
+                
               </el-select>
             </el-form-item>
         </el-col>  

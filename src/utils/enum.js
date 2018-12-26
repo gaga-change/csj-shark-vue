@@ -65,20 +65,24 @@ export const OrderStatusEnum = [
   
   {
     name: '草稿',
-    value: 0
+    value: 0,
+    show:false,
   },
 
   {
     name: '暂存',
-    value: 1
+    value: 1,
+    show:true,
   },
   {
     name: '已确认上架',
-    value: 2
+    value: 2,
+    show:true,
   },
   {
     name: '驳回',
-    value: 3
+    value: 3,
+    show:false,
   },
 ];
 //
@@ -86,20 +90,24 @@ export const OutOrderStatusEnum = [
   
   {
     name: '草稿',
-    value: 0
+    value: 0,
+    show:false,
   },
 
   {
     name: '暂存',
-    value: 1
+    value: 1,
+    show:true,
   },
   {
     name: '已确认出库',
-    value: 2
+    value: 2,
+    show:true,
   },
   {
     name: '驳回',
-    value: 3
+    value: 3,
+    show:false,
   },
 ];
 //物流状态

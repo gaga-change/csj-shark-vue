@@ -8,6 +8,7 @@
         :handle-button-map="handleButtonMap" :config="tableConfig"   @sizeChange="handleSizeChange"
         @currentChange="handleCurrentChange" 
         @currentRadioChange="currentRadioChange"
+        :highlight-current-row="highlightCurrentRow" 
         :total="total" 
         :maxTotal="10"
         :expand-key="expandKey"
@@ -16,23 +17,22 @@
         <el-dialog
                 :title="'新增物流登记'"
                 :visible.sync="dialogVisible"
-                width="420px"
         >
             <el-row :gutter="10">
-                <el-cow :span="12">
+                <el-col :span="12">
                     <span>预约单号：</span>{{selectData.planCode}}
-                </el-cow>
-                <el-cow :span="12">
+                </el-col>
+                <el-col :span="12">
                     <span>下单时间：</span>{{formatTime(selectData.placeOrderTime)}}
-                </el-cow>
-                <el-cow :span="12">
+                </el-col>
+                <el-col :span="12">
                     <span>收货人：</span>{{selectData.receiver}}
-                </el-cow>
-                <el-cow :span="12">
+                </el-col>
+                <el-col :span="12">
                     <span>收货地址：</span>{{selectData.receiveAddress}}
-                </el-cow>
+                </el-col>
             </el-row>
-            <el-form :model="logisticsForm" class="formInput" :rules="logisticsRules"     ref="subForm"  label-width="70px" label-position="left">
+            <el-form :model="logisticsForm" class="formInput" :rules="logisticsRules"     ref="subForm"  label-width="80px" label-position="left">
                
                 <el-form-item label="物流公司名称" label-width="100px" prop="logisticsComCode" >
                     <el-select v-model="logisticsForm.logisticsComCode" :rules="[
@@ -70,10 +70,10 @@
                 <el-form-item label="物流总额"  prop="skuAmt" >
                     <el-input type="number" size="small"  v-model="logisticsForm.skuAmt" disabled></el-input>
                 </el-form-item>
-                 <el-form-item label="运费承担方"  prop="payType" >
-                     <el-select v-model="logisticsForm.payType" :rules="[
+                 <el-form-item label="运费承担方" label-width="100px"  prop="payType" :rules="[
                     { required: true, message: '该项为必选'},
-                    ]" 
+                    ]" >
+                     <el-select v-model="logisticsForm.payType" 
                     size="small">
                         <el-option
                         key="我方承担"
@@ -81,7 +81,7 @@
                         :value="0">
                         </el-option>
                         <el-option
-                        key="我方承担"
+                        key="客户承担"
                         label="客户承担"
                         :value="1">
                         </el-option>
@@ -175,14 +175,28 @@
                 logisticsForm:{},
                 detailData:[],
                 dialogVisibleDeliver:false,
-                deliverCompanyAll:[]
+                deliverCompanyAll:[],
+                highlightCurrentRow: true,
             }
         },
         computed:{
             skuAmt:function(){
                 var a = (this.logisticsForm.freightAmt||0)-0+(this.logisticsForm.otherAmt||0)
                 this.logisticsForm.skuAmt = a
+                console.log(this.logisticsForm.skuAmt,a,555555555);
+                
                 return a
+            }
+        },
+        watch:{
+            logisticsForm:{
+                handler(val,oldval){
+                    this.logisticsForm.skuAmt = (this.logisticsForm.freightAmt||0)-0+((this.logisticsForm.otherAmt||0)-0)
+                    console.log(63333333,this.logisticsForm.skuAmt);
+                    
+                },
+                deep:true,
+                immediate:true
             }
         },
         methods:{
@@ -233,9 +247,9 @@
             },
             submitDeliver(){
                 
-                this.$refs['logisticsForm'].validate((valid) => {
+                this.$refs['subForm'].validate((valid) => {
                     if (valid) {
-                        addLogistics({...this.logisticsForm,id:this.selectData.id}).then(res => {
+                        addLogisticsRegister({...this.logisticsForm,id:this.selectData.id}).then(res => {
                             if(res.success){
                                 this.$message({type:'success',message:'新增物流登记成功'})
                                 this.dialogVisible = false
@@ -257,7 +271,9 @@
                 
             },
             logisticsHandle(){
-                if(this.selectData&&!this.selectData.register){
+                this.logisticsForm = {}
+                this.dialogVisible = true
+                if(this.selectData&&this.selectData.planCode&&!this.selectData.register){
                     this.dialogVisible = true
                 }else{
                     this.$message({
@@ -267,8 +283,10 @@
                 }
             },
             logisticsRecord(data){
+                console.log(data,888888);
+                
                 if(data.register){
-                    getLogisticsRegisterInfo({...data,logisticsRegisterId:data.id}).then(res=>{
+                    getLogisticsRegisterInfo({logisticsComCode:data.logisticsComCode,logisticsOrderCode:data.logisticsOrderCode,logisticsRegisterId:data.id}).then(res=>{
                         if(res.success){
                             this.dialogVisibleDeliver = true
                             this.detailData = res.data

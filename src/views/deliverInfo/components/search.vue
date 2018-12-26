@@ -32,7 +32,7 @@
                 clearable placeholder="请选择物流公司" 
                 size="small">
                 <el-option
-                  v-for="item in deliverCompanyAll"
+                  v-for="item in deliverCompany"
                   :key="item.companyCode"
                   :label="item.companyName"
                   :value="item.companyCode">

@@ -1,6 +1,6 @@
 export const flowTableConfig=[// 流水列表
   { label:'下单时间', width:120, prop:'gmtCreate', type:'time' },
-  { label:'单据号',prop:'planCode', width:150 },
+  { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'providerName', width:150 },

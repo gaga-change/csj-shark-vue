@@ -97,11 +97,11 @@ export function getLogisticsRegisterInfo(data) {
     // data: stringify(data)
   })
 }
-
+//物流登记信息新增
 export function addLogisticsRegister(data) {
   return request({
-    url: `/webApi/logistics/register/register?${stringify(data)}`,
+    url: `/webApi/logistics/register/register`,
     method: 'PUT',
-    // data: stringify(data)
+    data: data
   })
 }

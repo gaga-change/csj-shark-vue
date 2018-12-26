@@ -5,7 +5,7 @@ export const tableConfig=[// 物流登记
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', minWidth:90 },
   // { label:'联系人',prop:'linkUser', width:120 },
   { label:'供应商',prop:'ownerName', width:150 },
-  { label:'登记状态',prop:'register', minWidth:90,formatter:(a,b,c,d)=>{return c?'已登记':'未登记'} },
+  { label:'登记状态',prop:'register', minWidth:90,useLocalEnum:true,type:'registerStatusEnum'},
   { label:'收货人',prop:'receiver', width:120 },
   { label:'收获地址',prop:'receiveAddress', width:120 },
   { label:'联系电话',prop:'linkTel', width:150 },
