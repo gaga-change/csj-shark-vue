@@ -68,7 +68,7 @@ export default {
                     instance.confirmButtonText = '执行中...';
                     this.setWarehouse(chooseWarehouse,function(){
                       done();
-                      console.log(33331);
+                      
                       
                       setTimeout(() => {
                         instance.confirmButtonLoading = false;
@@ -97,7 +97,7 @@ export default {
                     instance.confirmButtonText = '执行中...';
                     this.setWarehouse(chooseWarehouse,function(){
                       done();
-                      console.log(33331);
+                     
                       
                       setTimeout(() => {
                         instance.confirmButtonLoading = false;

@@ -148,12 +148,12 @@
                 }
                 var templatePlanTag = [...this.planPrintData,data]
                 this.planPrintData = uniqueArray([...templatePlanTag],'planCode')
-                console.log(this.planPrintData,12312,data);
+               
                 
                 var chooseList = data
                 if(data.childData&&data.childData.length>0){
                     // chooseList = data
-                    console.log(data,999999)
+                   
                 }else{
                     this.loading = true
                     getInfoDetailWarehousing({planCode:data.planCode}).then(res=>{
@@ -220,10 +220,9 @@
             },
             closePlanTags(tag){
                 var planPrintData = [...this.planPrintData]
-                var b = [...planPrintData.filter(item => {console.log('in',item.planCode!=tag.planCode);
-                ;return item.planCode!=tag.planCode})]
+                var b = [...planPrintData.filter(item => {return item.planCode!=tag.planCode})]
                 this.planPrintData = [...b]
-                console.log(b,'b',tag);
+                
                 
             }
         },

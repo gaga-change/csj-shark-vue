@@ -46,9 +46,9 @@ export default {
   .deliverInfo{
     border:1px solid #e2e2e2;
     width:100%;
-    min-width: 480px;
+    // min-width: 480px;
     overflow: auto;
-    font-size: 12px;
+    font-size: 14px;
     .title{
       height:26px;
       line-height: 26px;
@@ -60,7 +60,7 @@ export default {
     }
     .content{
       margin: 50px; 
-      background: #f3f3f3;
+      // background: #f3f3f3;
       
       .item{
         min-height: 30px;
@@ -69,13 +69,14 @@ export default {
         
         &::before{
           content: '';
-          border: 3px solid #f3f3f3;
-          background-color: #d9d9d9;
+          border: 3px solid #ddd;
+          // background-color: #d9d9d9;
           display: inline-block;
           width: 5px;
           height: 5px;
+          position: absolute;
           border-radius: 5px;
-          margin-left: -6px;
+          margin-left: -4px;
           margin-right: 10px;
           // &::last-child{
           //   background-color: #fe4300;
@@ -83,8 +84,9 @@ export default {
           // }
         }
         &:last-child::before{
-            background-color: #fe4300;
-            border-color: #f8e9e4;
+            background-color: #f00;
+            border-color: #f4c;
+            margin-left:-2px;
         }
         &:last-child{
           border-left:0;
@@ -94,6 +96,7 @@ export default {
         }
         .ymd{
           width:78px;
+          margin-left: 12px; 
           margin-right: 8px;
         }
         .week{

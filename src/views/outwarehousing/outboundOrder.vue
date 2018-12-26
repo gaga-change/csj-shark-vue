@@ -142,14 +142,14 @@
                 //     return
                 // }
                 var chooseList = data
-                console.log(12);
+                
                 
                 if(data.childData&&data.childData.length>0){
                     // chooseList = data
-                    console.log(data,223232)
+                  
                 }else{
                     this.loading = true
-                    console.log(333);
+                    
                     
                     getInfoDetailOutWarehousing({orderCode:data.orderCode}).then(res=>{
                         
@@ -172,7 +172,7 @@
                     })
                 }
                this.quickSubmitData = {...chooseList}
-                console.log(chooseList,'pa');  
+                
             },
              quickSubmit(){
                 if(!this.quickSubmitData.orderCode){

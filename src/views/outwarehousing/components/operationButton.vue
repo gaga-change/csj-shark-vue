@@ -151,7 +151,7 @@ export default {
             this.childData=[...b]
             
             this.parentData = {...a}
-            console.log(a,1,this.parentData,2,this.parentDataObj);
+            
             
             var objectUsabel = Object.keys(a).length>0
             var arrUsabel = b.length>0

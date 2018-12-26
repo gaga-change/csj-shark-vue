@@ -100,7 +100,7 @@
          <el-dialog
                 :title="'物流详情'"
                 :visible.sync="dialogVisibleDeliver"
-                width="420px"
+                
         >
            <deliver-detail :detailData="detailData"/>
             <span slot="footer" class="dialog-footer">
@@ -183,7 +183,6 @@
             skuAmt:function(){
                 var a = (this.logisticsForm.freightAmt||0)-0+(this.logisticsForm.otherAmt||0)
                 this.logisticsForm.skuAmt = a
-                console.log(this.logisticsForm.skuAmt,a,555555555);
                 
                 return a
             }
@@ -285,10 +284,8 @@
             logisticsRecord(data){
                 
                 if(data.register){
-                    getLogisticsRegisterInfo({logisticsComCode:
-                     data.logisticsComCode,
-                    logisticsOrderCode:
-                    data.logisticsOrderCode,
+                    getLogisticsRegisterInfo({logisticsComCode:data.logisticsComCode,
+                    logisticsOrderCode:data.logisticsOrderCode,
                     logisticsRegisterId:data.id}).then(res=>{
                         if(res.success){
                             this.dialogVisibleDeliver = true

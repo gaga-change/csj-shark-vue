@@ -189,8 +189,7 @@
                         this.loading = false
                     })
                 }
-               
-                console.log(chooseList,'pa');  
+                 
             },
             childDataSelect(selectedData){
 
