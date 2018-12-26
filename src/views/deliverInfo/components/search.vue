@@ -4,49 +4,49 @@
       <el-row :gutter="10">
         
        <el-col :span="6">
-          <el-form-item :label="outbound?'预约单号':'单据号'" prop="planCode">
+          <el-form-item label="预约单号" prop="planCode">
             <el-input type="text" size="small" v-model="searchForm.planCode" placehold="
 后四位"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6" v-if="outbound">
+        <!-- <el-col :span="6" v-if="outbound">
           <el-form-item label="出库单号" prop="planCode">
             <el-input type="text" size="small" v-model="searchForm.orderCode" placehold="
 后四位"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <!-- <el-col :span="6">
           <el-form-item label="供应商名称" label-width="85px"  prop="providerName">
             <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
           </el-form-item>
         </el-col>
         
-       <!-- <el-col :span="6">
+       <el-col :span="6">
           <el-form-item label="商品名称" label-width="85px"  prop="providerName">
             <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
           </el-form-item>
         </el-col> -->
-        <el-col :span="6">
-            <el-form-item label-width="70px" label="出库状态" class="postInfo-container-item" prop="execStatus">
-              <el-select v-model="searchForm.execStatus" 
-               filterable clearable placeholder="请选择出库状态" 
-              size="small" prefix-icon="el-icon-search">
+         <el-col :span="6">
+            <el-form-item label-width="70px" label="物流公司" class="postInfo-container-item" prop="logisticsComCode">
+              <el-select v-model="searchForm.logisticsComCode" 
+                clearable placeholder="请选择物流公司" 
+                size="small">
                 <el-option
-                  v-for="item in OutExecStatusEnum"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
+                  v-for="item in deliverCompanyAll"
+                  :key="item.companyCode"
+                  :label="item.companyName"
+                  :value="item.companyCode">
                 </el-option>
               </el-select>
             </el-form-item>
         </el-col>  
-         <el-col :span="6" v-if="outbound">
-            <el-form-item label-width="70px" label="单据状态" class="postInfo-container-item" prop="orderStatus">
-              <el-select v-model="searchForm.orderStatus" 
-               filterable clearable placeholder="请选择出库状态" 
-              size="small" prefix-icon="el-icon-search">
+        <el-col :span="6">
+            <el-form-item label-width="70px" label="登记状态" class="postInfo-container-item" prop="register">
+              <el-select v-model="searchForm.register" 
+               clearable placeholder="请选择登记状态" 
+              size="small" >
                 <el-option
-                  v-for="item in OutOrderStatusEnum"
+                  v-for="item in registerStatusEnum"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value">
@@ -86,7 +86,7 @@
 
 <script>
 // import {  InvoiceType  as invoicetype  } from '@/utils'
-import { OutExecStatusEnum, OutOrderStatusEnum } from '@/utils/enum';  
+import { ExecStatusEnum,registerStatusEnum } from '@/utils/enum';  
 export default  {
   name: 'SearchWarehousing',
 
@@ -95,8 +95,8 @@ export default  {
       searchRules: { 
       },
       searchForm:{},
-      OutExecStatusEnum,
-      OutOrderStatusEnum,
+      ExecStatusEnum,
+      registerStatusEnum,
     }
   },
   props:{
@@ -107,6 +107,10 @@ export default  {
     outbound:{
       type:Boolean,
       default:false,
+    },
+    deliverCompany:{
+      type:Array,
+      default:()=>[]
     }
   },
   
@@ -117,7 +121,6 @@ export default  {
   
   methods:{
 
-    
     submitIt(){//查询
       this.$emit('searchTrigger',this.searchForm)
     },

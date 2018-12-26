@@ -4,13 +4,19 @@
       <el-row :gutter="10">
         
         <el-col :span="6">
-          <el-form-item label="单据号" prop="busiBillNo">
-            <el-input type="text" size="small" v-model="searchForm.busiBillNo" placehold="
+          <el-form-item :label="inbound?'计划单号':'单据号'" prop="planCode">
+            <el-input type="text" size="small" v-model="searchForm.planCode" placehold="
+后四位"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6" v-if="inbound">
+          <el-form-item label="入库单号" prop="planCode">
+            <el-input type="text" size="small" v-model="searchForm.orderCode" placehold="
 后四位"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="供应商名称" label-width="85px"  prop="providerName">
+          <el-form-item label="供应商" label-width="85px"  prop="providerName">
             <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
           </el-form-item>
         </el-col>
@@ -39,8 +45,23 @@
             <el-input type="text" size="small" v-model="searchForm.ownerName" ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="6" v-if="inbound">
+          <el-form-item label="单据状态" prop="orderStatus">
+            <el-select v-model="searchForm.orderStatus" 
+               filterable clearable placeholder="请选择单据状态" 
+              size="small" prefix-icon="el-icon-search">
+                <el-option
+                  v-for="item in OrderStatusEnum"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form-item>
+        </el-col>
          <el-col :span="12">
-          <el-form-item label="下单时间" label-width="70px"  prop="durationTime">
+          <el-form-item :label="inbound?'入库时间':'下单时间'" label-width="70px"  prop="durationTime">
             <el-date-picker
               v-model="searchForm.durationTime"
               type="daterange"
@@ -66,7 +87,7 @@
 
 <script>
 // import {  InvoiceType  as invoicetype  } from '@/utils'
-import { ExecStatusEnum } from '@/utils/enum';  
+import { ExecStatusEnum,OrderStatusEnum } from '@/utils/enum';  
 export default  {
   name: 'SearchWarehousing',
 
@@ -76,6 +97,7 @@ export default  {
       },
       searchForm:{},
       ExecStatusEnum,
+      OrderStatusEnum,
     }
   },
   props:{
@@ -83,6 +105,11 @@ export default  {
       type:Object,
       default:() => {}
     },
+    inbound:{
+      type:Boolean,
+      default:false
+    },
+    
   },
   
   created(){

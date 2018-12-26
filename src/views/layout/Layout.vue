@@ -35,10 +35,11 @@ export default {
   },
   methods:{
     setUserWarehouse(){
-        var chooseWarehouse = ''//sessionStorage.getItem('warehouse')
-          var userWarehouse = this.$store.getters.userInfo.roles
-          var warehouseMap = this.$store.getters.userInfo.warehouses.filter(item=> userWarehouse.includes(item.warehouseNo))
-          if(this.$store.getters.chooseWarehouse){
+        var chooseWarehouse = sessionStorage.getItem('warehouse')
+          // var userWarehouse = this.$store.getters.userInfo.roles
+          var warehouseMap =  this.$store.getters.warehouseMap 
+          // this.$store.getters.userInfo.warehouses.filter(item=> userWarehouse.includes(item.warehouseNo))
+          if(this.$store.getters.chooseWarehouse||chooseWarehouse){
             if(this.$store.getters.chooseWarehouse != chooseWarehouse){
               chooseWarehouse = chooseWarehouse ? chooseWarehouse : this.$store.getters.chooseWarehouse
               this.setWarehouse(chooseWarehouse)
@@ -47,8 +48,39 @@ export default {
           }else{
             const h = this.$createElement
             chooseWarehouse = warehouseMap[0].warehouseNo
-            
-            this.$msgbox(
+            if(!chooseWarehouse){
+                // this.$alert({title:'您还未关联仓库，请关联仓库后操作',closable:false})
+                this.$msgbox(
+              {
+                title: '未关联仓库',
+                message:'您还未关联仓库，请关联仓库后操作' ,  
+                type:'error',
+                showCancelButton: false,
+                showConfirmButton:false,
+                confirmButtonText: '确定',
+                center:true,
+                showClose:false,
+                confirmButtonClass:'buttonRight',
+                closeOnClickModal:false,
+                beforeClose: (action, instance, done) => {
+                  if (action === 'confirm') {
+                    instance.confirmButtonLoading = true;
+                    instance.confirmButtonText = '执行中...';
+                    this.setWarehouse(chooseWarehouse,function(){
+                      done();
+                      console.log(33331);
+                      
+                      setTimeout(() => {
+                        instance.confirmButtonLoading = false;
+                      }, 300);
+                    })
+
+                  } 
+                }
+              }
+            )
+            }else{
+              this.$msgbox(
               {
                 title: '请选择仓库',
                 message: h('div',{},[h('span',{style:"margin-right:10px;"},'仓库'),h('Select',{props:{value:''},class:'el-select',style:'height:26px;',on:{'change':(event)=>{chooseWarehouse = event.target.value;console.log(chooseWarehouse)}}}, warehouseMap.map(item=> h('Option',{attrs:{value:item.warehouseNo}},item.warehouseName))
@@ -83,6 +115,8 @@ export default {
                 }
               }
             )
+            }
+            
           }
     },
     setWarehouse(warehouse,cb){

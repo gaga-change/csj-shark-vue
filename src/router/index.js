@@ -36,7 +36,7 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  ...ls_router,
+  // ...ls_router,
   ...luos_router,
   { path: '*', redirect: '/404', hidden: true }
 ]

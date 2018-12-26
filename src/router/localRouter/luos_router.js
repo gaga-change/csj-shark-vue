@@ -65,4 +65,36 @@ export default [
       },
     ]
   },
+  {
+    path: '/baseInfo',
+    component: Layout,
+    redirect: 'baseInfo/logistics',
+    meta: { title: '基础资料', noCache: true,icon: 'out' },
+    hidden: false,
+    children: [
+      {
+        name: 'logistics',
+        path: 'logistics',
+        meta: { title: '物流公司', noCache: true },
+        component: _import('baseInfo/logistics'),
+        hidden: false,
+      },
+    ]
+  },
+  {
+    path: '/deliverInfo',
+    component: Layout,
+    redirect: 'deliverInfo/deliver',
+    meta: { title: '配送管理', noCache: true,icon: 'out' },
+    hidden: false,
+    children: [
+      {
+        name: 'deliver',
+        path: 'deliver',
+        meta: { title: '物流登记', noCache: true },
+        component: _import('deliverInfo/deliver'),
+        hidden: false,
+      },
+    ]
+  },
 ]

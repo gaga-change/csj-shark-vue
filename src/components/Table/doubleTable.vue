@@ -10,6 +10,7 @@
         :data="tableDataEditable"
         :highlight-current-row="highlightCurrentRow"
         @current-change="handleCurrentRadioChange"
+        @expand-change="expandChangeItem"
         :summary-method="summaryMethod"
         :border="border"
         :row-key="expandKey"
@@ -20,7 +21,7 @@
         <template v-if="childDataName">
           <el-table-column type="expand" fixed>
             <template slot-scope="childTable" v-if="childTable&&childTable.row&&childTable.row[childDataName]">
-               <el-table :data="childTable.row[childDataName]"@select="handleSelection" @select-all="handleSelection" @expand-change="expandChange">
+               <el-table :data="childTable.row[childDataName]" @select="handleSelection" @select-all="handleSelection" @expand-change="expandChange">
                  <el-table-column type="selection" width="55" v-if="childCanSelect" @expand-change="expandChange"></el-table-column>
                 <el-table-column
                   v-for="item in childTableConfigFilter"
@@ -236,6 +237,10 @@ export default {
     expandKey:{
       type:String,
       default:'',
+    },
+    expandsParent:{
+      type: Array,
+      default:()=>[]
     }
   },
 
@@ -253,8 +258,10 @@ export default {
   watch:{
     tableData(){
       this.tableDataEditable = [...this.tableData]
+    },
+    expandsParent(){
+      this.expands = [...this.expandsParent]
     }
-    
   },
   beforeMount(){
     this.tableDataEditable = [...this.tableData]
@@ -272,7 +279,7 @@ export default {
          } 
          else{
           switch(tableConfig[i].type){
-            case 'time':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?moment(cellValue).format(tableConfig[i].format||'YYYY-MM-DD'):'';break;
+            case 'time':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?moment(Number(cellValue)).format(tableConfig[i].format||'YYYY-MM-DD'):'';break;
             case 'Boolean':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?'是':'否' ;break;
             case 'index':tableConfig[i].formatter=(row, column, cellValue, index)=>(this.pageSize)*(this.currentPage-1)+index+1;break;
             case 'toFixed':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue&&Number(Number(cellValue).toFixed(2));break;
@@ -337,6 +344,11 @@ export default {
 
   },
   methods: { 
+
+    expandChangeItem(row, expandedRows){
+      this.$emit('expandChangePa',row, expandedRows)
+    },
+
      handleSizeChange(val){
         this.$emit('sizeChange', val); 
      },
@@ -346,11 +358,14 @@ export default {
      },
 
      handleCurrentRadioChange(currentRow, oldCurrentRow){
-        if(this.accordionExpand){
+       if(currentRow){
+          if(this.accordionExpand){
           this.expands = [];
           this.expands.push(currentRow[this.expandKey]);
         }
         this.$emit('currentRadioChange', currentRow, oldCurrentRow); 
+       }
+       
      },
      handleSelection(val,row){
        this.$emit('childDataSelect',val)

@@ -20,7 +20,7 @@
             :key="item.label"
             :label="item.label">
              <template slot-scope="scope">
-                <template v-if="scope.row.editable&&item.editable">
+                <template v-if="scope.row.editable&&item.editable&&defaultCanedit">
                   <template v-if="item.editType">
                     <el-input
                       size="mini"
@@ -54,6 +54,12 @@
                              </el-dropdown-menu>
                           </el-dropdown>
                 </span>
+                <template v-else-if="item.userIf=='images'">
+                  <bar-code :code="scope.row[item.prop]"></bar-code>
+                  <!-- <img :src="scope.row[item.prop]" alt="图片" > -->
+                </template>
+
+                
                 <span v-else-if="typeof item.formatter == 'function'">
                   {{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}
                 </span>
@@ -66,6 +72,7 @@
           <el-table-column
             width="160"
             fixed="right"
+            v-if="defaultEdit"
             label="操作" >
             <template slot-scope="scope">
                 <div style="width:160px">
@@ -173,7 +180,14 @@ export default {
       type: Number,
       default: 0
     },
-   
+    defaultEdit:{
+      type:Boolean,
+      default:true,
+    },
+    defaultCanedit:{
+      type:Boolean,
+      default:true,
+    }
   },
 
   data() {

@@ -25,12 +25,13 @@ const user = {
       state.permissionCodes = permissionCodes
     },
     SET_WAREHOUSE: (state,warehouse) => {
-      // sessionStorage.setItem('warehouse',warehouse)
+      sessionStorage.setItem('warehouse',warehouse)
       state.chooseWarehouse = warehouse
     },
     SET_WAREHOUSEENUM:(state,info) => {
       state.roles = info.roles
-      state.warehouseMap = info.warehouses.filter(item=> state.roles.includes(item.warehouseNo))
+      state.warehouseMap = info.warehouses
+      //后台已控制.filter(item=> state.roles.includes(item.warehouseNo))
     }
   },
 
