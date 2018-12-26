@@ -283,10 +283,13 @@
                 }
             },
             logisticsRecord(data){
-                console.log(data,888888);
                 
                 if(data.register){
-                    getLogisticsRegisterInfo({logisticsComCode:data.logisticsComCode,logisticsOrderCode:data.logisticsOrderCode,logisticsRegisterId:data.id}).then(res=>{
+                    getLogisticsRegisterInfo({logisticsComCode:
+                     data.logisticsComCode,
+                    logisticsOrderCode:
+                    data.logisticsOrderCode,
+                    logisticsRegisterId:data.id}).then(res=>{
                         if(res.success){
                             this.dialogVisibleDeliver = true
                             this.detailData = res.data
