@@ -6,15 +6,15 @@
     <div class="plant-text">
       供应链协同操作管理平台
     </div>
-    <ul class="top-nav">
+    <!-- <ul class="top-nav">
       <li>
         <a :href="TiggerUrl" target="_blank">供应链</a>
       </li>
-    </ul>
+    </ul> -->
      <el-dropdown class="avatar-container warehouse" @command="handleCommand">
       <div class="avatar-wrapper">
         <span class="welcome">
-            仓库切换<i class="el-icon-caret-bottom"></i>
+            {{warehouseName}}<i class="el-icon-caret-bottom"></i>
           </span>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -145,7 +145,16 @@ export default {
       'userInfo',
       'warehouseMap',
       'chooseWarehouse',
-    ])
+    ]),
+    warehouseName(){
+      var warehouseName = ''
+      this.warehouseMap.map(item=>{
+        if(this.warehouse==item.warehouseNo){
+          warehouseName = item.warehouseName
+        }
+      })
+      return warehouseName
+    }
   },
   watch:{
     chooseWarehouse(){
