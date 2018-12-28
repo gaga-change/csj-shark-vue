@@ -26,7 +26,7 @@
             <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
           </el-form-item>
         </el-col> -->
-        <el-col :span="6">
+        <el-col :span="6" v-if="!inbound">
             <el-form-item label-width="70px" label="入库状态" class="postInfo-container-item" prop="execStatus">
               <el-select v-model="searchForm.execStatus" 
                filterable clearable placeholder="请选择入库状态" 

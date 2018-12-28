@@ -27,7 +27,7 @@ export const planOrderChildTableConfig=[// 出库计划单子列表
 export const orderTableConfig=[// 出库单列表
   { label:'出库时间', width:120, prop:'gmtCreate', type:'time' },
   { label:'出库单号',prop:'orderCode', width:150 },
-  { label:'预约单号',prop:'planCode', width:150 },
+  { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'orderType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
   { label:'单据状态',prop:'orderStatus',useLocalEnum:true,type:'OutOrderStatusEnum', width:90 },
   { label:'客户/供应商',prop:'ownerName', width:150 },

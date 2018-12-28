@@ -11,7 +11,7 @@
                 width="70%"
             >
                 <el-row :gutter="20" style="margin-bottom:14px;">
-                    <el-col :span="8">入库预约单: {{parentDataObj.planCode}}</el-col>
+                    <el-col :span="8">入库计划单: {{parentDataObj.planCode}}</el-col>
                     <el-col :span="8">客户/供应商: {{parentDataObj.providerName}}</el-col>
                     <el-col :span="8">下单时间: {{formateTime(parentDataObj.gmtCreate)}}</el-col>
                 </el-row>
@@ -29,16 +29,16 @@
             >
                  <edit-table :config="planChildTableLabelConfig" :table-data="childData" v-loading="loading" :default-edit="false"></edit-table>
                  <template v-if="!previewIt">
-                     预览
-                     <div id="print" style="width:80mm;height:40mm;overflow:auto;">
+                     <div style="margin:10px;">预览</div> 
+                     <div id="print" style="width:80mm;height:40mm;overflow:auto;margin:10px;">
                          <div v-for="item in childData" :key="item.skuCode">
                              <div v-for="i in Number(item.printNum)" :key="i" class="labelContainer">
                                  <div class="labelItem"><span class="labelItemLeft" >商品编码</span><span>{{item.skuCode}}</span></div>
-                                 <div><span class="labelItemLeft">商品名称</span><span>{{item.skuName}}</span></div>
-                                 <div><span class="labelItemLeft">规格型号</span><span>{{item.skuFormat}}</span></div>
-                                 <div><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
-                                 <div><span class="labelItemLeft">批次</span><span>{{item.batchNo}}</span></div>
-                                 <div style="width:80px;height:60px">
+                                 <div class="labelItem"><span class="labelItemLeft">商品名称</span><span>{{item.skuName}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">规格型号</span><span>{{item.skuFormat}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">批次</span><span>{{item.batchNo}}</span></div>
+                                 <div>
                                      <!-- <img :src="`/webApi/barcode?msg=${item.skuUnitConvert}&type=code128&width=120&height=80`" alt="条形码" > -->
                                      <bar-code :code="item.batchNo"></bar-code>
                                  </div>
@@ -127,6 +127,7 @@ export default {
             var usable =  this.checkDataUsable();
             if(usable.arrUsabel){
                 this.dialogVisibleLabel = true
+                this.previewIt = true
             }else{
                 this.$message({type:'info',message:'请选择单据和商品'})
             }
@@ -194,7 +195,7 @@ export default {
         printLabel(){
             var label = document.getElementById('print').innerHTML
             //样式暂时不可配，需优化
-            var style = "<style type='text/css'>.labelContainer{width:80mm; height:80mm;overflow:hidden;}.labelContainer .labelItemLeft{display:inline-block;width:70px;margin-right:20px;} img{width:40mm;height:20mm}</style>"
+            var style = "<style type='text/css'>.labelContainer{width:80mm; height:80mm;overflow:hidden;}.labelItem{ height:5mm;line-height: 5mm; font-weight: 600;font-size: 13px;}.labelContainer .labelItemLeft{display:inline-block;width:70px;margin-right:20px;} img{width:40mm;height:20mm}</style>"
             MakePrint(label,style)
         },
         checkDataUsable(){
@@ -254,10 +255,10 @@ export default {
                         this.$router.push({path:'/inwarehousing/inboundOrder'})
                     }})
                 }else{
-                     this.$message({type:'info',message:'入库单提交失败'+res.message})
+                     this.$message({type:'info',message:'入库单提交失败'})
                 }
             }).catch(err=>{
-                this.$message({type:'info',message:'入库单提交失败'+err.message})
+                this.$message({type:'info',message:'入库单提交失败'})
             })
         }
     }
@@ -267,14 +268,22 @@ export default {
  .labelContainer{
      width:80mm;
      height:40mm;
+     overflow: hidden;
+     .labelItem{
+         
+         height:5mm;
+         line-height: 5mm;
+         font-weight: 600;
+         font-size: 13px;
+     }
     .labelItemLeft{
         display:inline-block;
         width:60px;
-        margin-right:10px;
+        margin:0 10px;
     }
     img{
         width: 40mm;
-        height:20mm;
+        height:16mm;
         margin: 0 auto;
     }
  }

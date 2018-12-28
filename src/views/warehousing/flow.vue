@@ -15,7 +15,7 @@
             width="70%"
         >
             <el-row :gutter="20">
-                <el-col :span="8">入库预约单{{selectData.planCode}}</el-col>
+                <el-col :span="8">入库计划单{{selectData.planCode}}</el-col>
                 <el-col :span="8">客户/供应商{{selectData.planCode}}</el-col>
                  <el-col :span="8">下单时间{{selectData.planCode}}</el-col>
             </el-row>

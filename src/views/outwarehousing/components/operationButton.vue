@@ -11,7 +11,7 @@
                 width="70%"
             >
                 <el-row :gutter="20" style="margin-bottom:14px;">
-                    <el-col :span="6">出库预约单：{{parentData.planCode}}</el-col>
+                    <el-col :span="6">出库计划单：{{parentData.planCode}}</el-col>
                     <el-col :span="6">供应商：{{parentData.arrivalName}}</el-col>
                      <el-col :span="6">货主：{{parentData.ownerName}}</el-col>
                     <el-col :span="6">下单时间：{{formateTime(parentDataObj.gmtCreate)}}</el-col>
@@ -207,10 +207,10 @@ export default {
                         this.$router.push({path:'/outwarehousing/outboundOrder'})
                     }})
                 }else{
-                     this.$message({type:'info',message:'出库单提交失败'+res.message})
+                     this.$message({type:'info',message:'出库单提交失败'})
                 }
             }).catch(err=>{
-                this.$message({type:'info',message:'出库单提交失败'+err.message})
+                this.$message({type:'info',message:'出库单提交失败'})
             })
             
         }

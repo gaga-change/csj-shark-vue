@@ -32,6 +32,7 @@
         startTime:'',
         endTime:'',
         planCode:'',
+        // busiBillNo:'',
         orderCode:'',
         providerName:'',
         execStatus:'',
@@ -208,12 +209,12 @@
             },
              submitForm(ruleForm) {
                 
-                var startTime='',endTime='';
+                var orderStartDate='',orderEndDate='';
                 if(ruleForm.durationTime&&ruleForm.durationTime[0]){
-                    startTime = +ruleForm.durationTime[0]
-                    endTime = +ruleForm.durationTime[1]
+                    orderStartDate = +ruleForm.durationTime[0]
+                    orderEndDate = +ruleForm.durationTime[1]
                 }
-                this.ruleForm={...ruleForm,pageSize:10,pageNum:1,startTime,endTime,busiBillType:this.currentTab}
+                this.ruleForm={...ruleForm,pageSize:10,pageNum:1,orderStartDate,orderEndDate,busiBillType:this.currentTab}
                 
                 this.getTableData();
                 

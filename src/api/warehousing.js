@@ -21,9 +21,9 @@ export function getInfoDetailWarehousing(data) {
 //获取入库列表
 export function getInfoInWarehousing(data) {
   return request({
-    url: `/webApi/in/list?${stringify(data)}`,
-    method: 'get',
-    // data:data
+    url: `/webApi/in/list`,
+    method: 'post',
+    data:data
   })
 }
 //获取入库详情

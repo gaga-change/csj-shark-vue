@@ -108,7 +108,8 @@
             },
 
             getTableData(){
-
+                console.log(1);
+                
                 this.$router.replace({
                     path:'/inwarehousing/arrival',
                     query:{data:JSON.stringify(this.ruleForm)}

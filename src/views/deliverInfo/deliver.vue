@@ -20,7 +20,7 @@
         >
             <el-row :gutter="10">
                 <el-col :span="12">
-                    <span>预约单号：</span>{{selectData.planCode}}
+                    <span>计划单号：</span>{{selectData.planCode}}
                 </el-col>
                 <el-col :span="12">
                     <span>下单时间：</span>{{formatTime(selectData.placeOrderTime)}}

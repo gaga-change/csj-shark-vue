@@ -4,7 +4,7 @@
       <el-row :gutter="10">
         
        <el-col :span="6">
-          <el-form-item label="预约单号" prop="planCode">
+          <el-form-item label="计划单号" prop="planCode">
             <el-input type="text" size="small" v-model="searchForm.planCode" placehold="
 后四位"></el-input>
           </el-form-item>

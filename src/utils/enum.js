@@ -13,6 +13,16 @@ export const BusiBillTypeEnum = [
     type:'in'
   },
   {
+    name: '仓储入库',
+    value: 13,
+    type:'in'
+  },
+  {
+    name: '拒收入库',
+    value: 15,
+    type:'in'
+  },
+  {
     name: '销售出库',
     value: 21,
     type:'out'
