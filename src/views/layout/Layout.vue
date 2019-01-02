@@ -47,93 +47,105 @@ export default {
            
           }else{
             const h = this.$createElement
-            chooseWarehouse = warehouseMap[0].warehouseNo
-            if(!chooseWarehouse){
+            // if(warehouseMap&&warehouseMap.length>0){
+            //    chooseWarehouse = warehouseMap[0].warehouseNo
+
+            // }
+            if(!(warehouseMap&&warehouseMap.length>0)){
                 // this.$alert({title:'您还未关联仓库，请关联仓库后操作',closable:false})
                 this.$msgbox(
               {
                 title: '未关联仓库',
                 message:'您还未关联仓库，请关联仓库后操作' ,  
-                type:'error',
+                type:'info',
                 showCancelButton: false,
                 showConfirmButton:false,
                 confirmButtonText: '确定',
                 center:true,
-                showClose:false,
+                showClose:true,
                 confirmButtonClass:'buttonRight',
                 closeOnClickModal:false,
                 beforeClose: (action, instance, done) => {
-                  if (action === 'confirm') {
-                    instance.confirmButtonLoading = true;
-                    instance.confirmButtonText = '执行中...';
-                    this.setWarehouse(chooseWarehouse,function(){
-                      done();
-                      
-                      
-                      setTimeout(() => {
-                        instance.confirmButtonLoading = false;
-                      }, 300);
-                    })
-
-                  } 
+                  this.$message({type:'info',message:'配置仓库后重新登录',duration:1500,onClose:()=>{
+                    this.$store.dispatch('SetWarehouse','')
+                    location.href = `/csj_logout`
+                  }})
+                    
                 }
               }
             )
             }else{
-              this.$msgbox(
-              {
-                title: '请选择仓库',
-                message: h('div',{},[h('span',{style:"margin-right:10px;"},'仓库'),h('Select',{props:{value:''},class:'el-select',style:'height:26px;',on:{'change':(event)=>{chooseWarehouse = event.target.value;console.log(chooseWarehouse)}}}, warehouseMap.map(item=> h('Option',{attrs:{value:item.warehouseNo}},item.warehouseName))
-                )]),  
-                showCancelButton: false,
-                confirmButtonText: '确定',
-                // center:true,
-                showClose:false,
-                confirmButtonClass:'buttonRight',
-                closeOnClickModal:false,
-                beforeClose: (action, instance, done) => {
-                  if (action === 'confirm') {
-                    instance.confirmButtonLoading = true;
-                    instance.confirmButtonText = '执行中...';
-                    this.setWarehouse(chooseWarehouse,function(){
-                      done();
-                     
+              if(warehouseMap.length<20000){
+                
+                  this.setWarehouse(warehouseMap[0].warehouseNo,(res)=>{   
+                        this.$message({
+                          type:'success',
+                          message:`您当前默认的仓库是${warehouseMap[0].warehouseName}`
+                        })
+                        
+                  },(err)=>{
+                      this.$message({
+                          type:'info',
+                          message:`默认的仓库选择失败，请手动选择`
+                        })
+                  })
+              }else{
+                this.$msgbox({
+                  title: '请选择仓库',
+                  message: h('div',{},[h('span',{style:"margin-right:10px;"},'仓库'),h('Select',{props:{value:''},class:'el-select',style:'height:26px;',on:{'change':(event)=>{chooseWarehouse = event.target.value;console.log(chooseWarehouse)}}}, warehouseMap.map(item=> h('Option',{attrs:{value:item.warehouseNo}},item.warehouseName))
+                  )]),  
+                  showCancelButton: false,
+                  confirmButtonText: '确定',
+                  // center:true,
+                  showClose:false,
+                  confirmButtonClass:'buttonRight',
+                  closeOnClickModal:false,
+                  beforeClose: (action, instance, done) => {
+                    if (action === 'confirm') {
+                      instance.confirmButtonLoading = true;
+                      instance.confirmButtonText = '执行中...';
+                      this.setWarehouse(chooseWarehouse,function(){
+                        done();
                       
-                      setTimeout(() => {
-                        instance.confirmButtonLoading = false;
-                      }, 300);
-                    })
-
-                    // this.$store.dispatch('SetWarehouse',chooseWarehouse).then(res=>{
-                    //   done();
-                    //   setTimeout(() => {
-                    //     instance.confirmButtonLoading = false;
-                    //   }, 300);
-                    //   // next({ ...to, replace: true })
-                    // })
-                  } 
-                }
+                        
+                        setTimeout(() => {
+                          instance.confirmButtonLoading = false;
+                        }, 300);
+                      })
+                    } 
+                  }
+                })
               }
-            )
+              
             }
             
           }
     },
-    setWarehouse(warehouse,cb){
+    setWarehouse(warehouse,cb,errcb,fcb){
       setWarehouseCode({operaterId:this.$store.getters.userInfo.id,warehouseCode:warehouse}).then(res => {
         if(res.success){
           // sessionStorage.setItem('warehouse',warehouse)
           this.$store.dispatch('SetWarehouse',warehouse)
           if(cb&&typeof cb == 'function'){
-            cb()
+            cb(res)
           }
+        }
+        if(fcb&&typeof fcb == 'function'){
+          fcb(res)
+        }
+      }).catch(err=>{
+        if(errcb&&typeof errcb == 'function'){
+          errcb(err)
+        }
+        if(fcb&&typeof fcb == 'function'){
+          fcb(err)
         }
       })
     }
   },
   created(){
     this.setUserWarehouse()
-  }
+  },
 }
 </script>
 
