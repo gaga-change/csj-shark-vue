@@ -75,7 +75,7 @@ export default {
               }
             )
             }else{
-              if(warehouseMap.length<20000){
+              if(warehouseMap.length<2){
                 
                   this.setWarehouse(warehouseMap[0].warehouseNo,(res)=>{   
                         this.$message({
