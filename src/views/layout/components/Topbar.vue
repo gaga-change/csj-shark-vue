@@ -186,10 +186,10 @@ export default {
         if(res.success){
           // sessionStorage.setItem('warehouse',warehouse)
           this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
+            this.$message({type:'success',message:'切换仓库成功'})
             
             this.$router.go(0)
           })
-          this.$message({type:'success',message:'切换仓库成功'})
         }else{
           this.$message({type:'error',message:'切换仓库失败'})
           this.warehouse = this.preWarehouse

@@ -75,9 +75,10 @@ export default {
               }
             )
             }else{
+              chooseWarehouse = warehouseMap[0].warehouseNo
               if(warehouseMap.length<2){
                 
-                  this.setWarehouse(warehouseMap[0].warehouseNo,(res)=>{   
+                  this.setWarehouse(chooseWarehouse,(res)=>{   
                         this.$message({
                           type:'success',
                           message:`您当前默认的仓库是${warehouseMap[0].warehouseName}`

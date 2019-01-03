@@ -49,7 +49,7 @@
                 <span slot="footer" class="dialog-footer" v-loading="loading">
                     <el-button @click="dialogVisibleLabel = false">取 消</el-button>
                     <el-button type="primary" @click="getCode">预览</el-button>
-                    <el-button type="primary" v-if="!previewIt" @click="printLabel">确 定</el-button>
+                    <el-button type="primary" v-if="!previewIt" @click="printLabel">打印</el-button>
                 </span>
             </el-dialog>
              <el-dialog
@@ -195,7 +195,7 @@ export default {
         printLabel(){
             var label = document.getElementById('print').innerHTML
             //样式暂时不可配，需优化
-            var style = "<style type='text/css'>.labelContainer{width:80mm; height:80mm;overflow:hidden;}.labelItem{ height:5mm;line-height: 5mm; font-weight: 600;font-size: 13px;}.labelContainer .labelItemLeft{display:inline-block;width:70px;margin-right:20px;} img{width:40mm;height:20mm}</style>"
+            var style = "<style type='text/css'>.labelContainer{width:80mm; height:40mm;overflow:hidden;border-bottom: 1px dashed #eee;}.labelItem{ height:5mm;line-height: 5mm; font-weight: 600;font-size: 13px;}.labelContainer .labelItemLeft{display:inline-block;width:70px;margin-right:20px;} img{width:40mm;height:15mm}</style>"
             MakePrint(label,style)
         },
         checkDataUsable(){
@@ -269,6 +269,7 @@ export default {
      width:80mm;
      height:40mm;
      overflow: hidden;
+     border-bottom: 1px dashed #eee;
      .labelItem{
          
          height:5mm;
@@ -283,7 +284,7 @@ export default {
     }
     img{
         width: 40mm;
-        height:16mm;
+        height:15mm;
         margin: 0 auto;
     }
  }
