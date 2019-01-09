@@ -19,14 +19,39 @@
         >
 
             <el-form :model="logisticsForm" class="formInput" :rules="logisticsRules"     ref="subForm"  label-width="70px" label-position="left">
-               
-                <el-form-item label="物流公司名称" label-width="100px" prop="companyName" :rules="[
-              { required: true, message: '该项为必填'},
+               <el-form-item label="仓库编码"  prop="warehouseCode" label-width="100px" >
+                    <el-input type="text" size="small" v-model="logisticsForm.warehouseCode" disabled></el-input>
+               </el-form-item>
+               <el-form-item label="仓库名称"  prop="warehouseName" label-width="100px" >
+                    <el-input type="text" size="small" v-model="logisticsForm.warehouseName" disabled></el-input>
+               </el-form-item>
+                <el-form-item label="库区编码"  prop="companyCode" label-width="100px" :rules="[
+              { required: true, message: '请选择库区'},
              ]">
-                    <!-- <el-input type="text" size="small" v-model="logisticsForm.companyName" ></el-input> -->
-
-                    <el-autocomplete v-model="logisticsForm.companyName" :debounce="300" size="small" :fetch-suggestions="querySearchAsync" placeholder="请输入物流公司" @select="handleSelect"></el-autocomplete>
-
+                   <el-select v-model="searchForm.logisticsComCode" 
+                        clearable placeholder="请选择库区" 
+                        size="small">
+                        <el-option
+                        v-for="item in deliverCompany"
+                        :key="item.companyCode"
+                        :label="item.companyName"
+                        :value="item.companyCode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="是否虚拟区" label-width="100px" prop="companyName" :rules="[
+              { required: true, message: '请选择'},
+             ]">
+                  <el-select v-model="searchForm.logisticsComCode" 
+                        clearable placeholder="请选择" 
+                        size="small">
+                        <el-option
+                        v-for="item in deliverCompany"
+                        :key="item.companyCode"
+                        :label="item.companyName"
+                        :value="item.companyCode">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                  <el-form-item label="物流公司编码"  prop="companyCode" label-width="100px" :rules="[
               { required: true, message: '该选择物流公司'},
