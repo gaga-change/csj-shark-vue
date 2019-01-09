@@ -29,6 +29,18 @@
             <el-input type="text" size="small" v-model="searchForm.ownerName" ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="10" v-if="pageName=='stream'">
+          <el-form-item label="变动时间">
+            <el-date-picker
+              v-model="searchForm.durationTime"
+              type="daterange"
+              size="small"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
         
       </el-row>
       <el-row :gutter="10">
@@ -60,7 +72,12 @@ export default  {
       type:Object,
       default:() => {}
     },
+    pageName:{
+      type:String,
+      default:'inventory'
+    },
   },
+
   
   created(){
     this.searchForm = {...this.searchForms}
@@ -71,6 +88,7 @@ export default  {
 
     
     submitIt(){//查询
+    
       this.$emit('searchTrigger',this.searchForm)
     },
     resetForm(){//重置

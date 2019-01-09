@@ -16,3 +16,24 @@ export const inventoryTableConfig=[// 库存列表
   
   // { label:'款项性质',prop:'moneyState',useLocalEnum:true, type:'MoneyStateEnum', minWidth:120, },
 ]
+
+export const streamTableConfig=[// 流水列表 unconfirm
+  { label:'序号', minWidth:80, prop:'id'},
+  { label:'时间',prop:'lastOutTime', width:120,type:'time' },
+  { label:'变动类型',prop:'register', minWidth:90,useLocalEnum:true,type:'registerStatusEnum'},
+
+  { label:'单据号',prop:'warehouseName', width:150 },
+  { label:'货主',prop:'ownerName', width:150 },
+  { label:'供应商',prop:'qqownerName', width:120 },
+  { label:'商品编码',prop:'skuCode', width:120 },
+  { label:'商品名称',prop:'skuName', width:120 },
+
+  { label:'规格型号  ',prop:'skuForma', minWidth:90 },
+  
+  { label:'单位',prop:'skuUnitName', minWidth:90 },
+  { label:'数量',prop:'inPrice', minWidth:90 },//unconfirm
+  { label:'结算',prop:'batchNo', width:120 },//unconfirm
+  { label:'库位',prop:'skuQty', minWidth:90 },//unconfirm
+  
+  // { label:'款项性质',prop:'moneyState',useLocalEnum:true, type:'MoneyStateEnum', minWidth:120, },
+]

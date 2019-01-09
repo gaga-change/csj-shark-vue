@@ -13,7 +13,7 @@
         :pageSize="ruleForm.pageSize"
         :currentPage="ruleForm.pageNum"></double-table>
         <el-dialog
-                :title="dialogTitle+'物流公司'"
+                :title="dialogTitle+'库区'"
                 :visible.sync="dialogVisible"
                 width="420px"
         >
