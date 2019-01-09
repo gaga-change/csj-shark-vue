@@ -6,14 +6,50 @@
         :element-loading-background="elementLoadingBackground"
         :data="tableDataEditable"
         :highlight-current-row="highlightCurrentRow"
-        @current-change="handleCurrentRedioChange"
+        @current-change="handleCurrentRadioChange"
+        @expand-change="expandChangeItem"
         :summary-method="summaryMethod"
         :border="border"
+        :row-key="expandKey"
+        :expand-row-keys="expands"
         :show-summary="showSummary"
-        @select="handleSelection" @select-all="handleSelection"
         size="small"
-        :style="tableStyle">
-          <el-table-column type="selection" width="55" v-if="childCanSelect" ></el-table-column>
+        :style="tableStyle"
+        @select="handleParentSelection" @select-all="handleParentSelection" 
+        >
+        <el-table-column type="selection" width="55" v-if="canSelect" ></el-table-column>
+        <template v-if="childDataName">
+          <el-table-column type="expand" fixed>
+            <template slot-scope="childTable" v-if="childTable&&childTable.row&&childTable.row[childDataName]">
+              <template v-if="canEdit">
+                <edit-table
+                @editDataSelect="editDataSelect"
+                @dataChange="dataChange"
+                :table-data="childTable.row[childDataName]" 
+                :unique="childTable.row[expandKey]"
+                :config='childTableConfigFilter'
+                :childCanSelect="true"
+                ></edit-table>
+              </template>
+             <template v-else>
+               <el-table :data="childTable.row[childDataName]" @select="handleSelection" @select-all="handleSelection" >
+                 <el-table-column type="selection" width="55" v-if="childCanSelect" ></el-table-column>
+                <el-table-column
+                  v-for="item in childTableConfigFilter"
+                  :fixed="item.fixed"
+                  :width="item.width"
+                  :key="item.label"
+                  :label="item.label"
+                  :prop="item.prop"
+                >
+                </el-table-column>
+              </el-table>
+             </template>
+             
+            </template>
+          </el-table-column>
+        </template>
+          
           <el-table-column
             v-for="item in tableConfig"
             :fixed="item.fixed"
@@ -21,25 +57,7 @@
             :key="item.label"
             :label="item.label">
              <template slot-scope="scope">
-                <template v-if="scope.row.editable&&item.editable&&defaultCanedit">
-                  <template v-if="item.editType">
-                    <el-input
-                      size="mini"
-                      style="width:70px"
-                      v-if="item.editType"
-                      :type="item.editType"
-                      v-model="scope.row[item.prop]" >
-                    </el-input>
-                  </template>
-                  <template v-else>
-                    <el-input
-                    size="mini"
-                    style="width:70px"
-                    v-model="scope.row[item.prop]" >
-                    </el-input>
-                  </template>
-                </template>
-                <span v-else-if="item.linkTo">
+                <span v-if="item.linkTo">
                   <router-link :to="{path:item.linkTo,query:mapFormatter(item.query,scope.row)}" style="color:#3399ea">{{item.linkText?  item.linkText:scope.row[item.prop]}}</router-link>
                 </span>
                 <span v-else-if="item.useIf == 'files'">
@@ -55,12 +73,6 @@
                              </el-dropdown-menu>
                           </el-dropdown>
                 </span>
-                <template v-else-if="item.userIf=='images'">
-                  <bar-code :code="scope.row[item.prop]"></bar-code>
-                  <!-- <img :src="scope.row[item.prop]" alt="图片" > -->
-                </template>
-
-                
                 <span v-else-if="typeof item.formatter == 'function'">
                   {{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}
                 </span>
@@ -72,15 +84,14 @@
           </el-table-column>
           <el-table-column
             width="160"
+            v-if="handleButtonMap.length>0"
             fixed="right"
-            v-if="defaultEdit"
             label="操作" >
             <template slot-scope="scope">
-                <div style="width:160px">
-                    <el-button v-if="scope.row.editable" type="success" @click="goeditrow(scope.$index,'confirm',scope.row)" size="mini" >确定</el-button>
-                    <el-button v-else @click="goeditrow(scope.$index,'edit',scope.row)" size="mini" >编辑</el-button>
-                    <el-button size="mini" type="danger" v-if="deleteNeed" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                </div>
+                 <template v-for="thisButton in handleButtonMap" >
+                    <el-button :key="thisButton.title" :size="thisButton.size ?thisButton.size : 'size'" :type="thisButton.type ?thisButton.type : 'text'" @click="thisButton.handle(scope.$index, scope.row)">{{thisButton.title}}</el-button>
+                 </template>
+               
             </template>
           </el-table-column>
       </el-table>
@@ -106,8 +117,10 @@ import _  from 'lodash';
 import moment from 'moment';
 import { mapGetters } from 'vuex'
 import  * as Enum from "@/utils/enum.js";
+import editTable from './editTable'
 
 export default {
+  components:{editTable},
    props: {
      loading: {
       type: Boolean,
@@ -125,9 +138,14 @@ export default {
       type:Boolean,
       defalut:false
     },
+    
     summaryMethod:{
       type: Function,
       default: ()=>{}    
+    },
+    handleButtonMap:{
+      type: Array,
+      default:()=>[]
     },
     tableData: {
       type: Array,
@@ -149,6 +167,7 @@ export default {
       type: Number,
       default: 10
     },
+    
     layout:{
       type: String,
       default: "total, sizes, prev, pager, next, jumper"
@@ -181,25 +200,41 @@ export default {
       type: Number,
       default: 0
     },
-    defaultEdit:{
-      type:Boolean,
-      default:true,
+    //子表配置
+    childDataName:{
+      type: String,
+      default: ''
     },
-    defaultCanedit:{
+    childCanSelect:{//子表能否勾选
       type:Boolean,
-      default:true,
+      defalut:false
     },
-    deleteNeed:{
+    childTableConfig:{
+      type: Array,
+      default:()=>[]
+    },
+    // currentRadioChange:{
+    //   type:Function,
+    // },
+    accordionExpand:{
       type:Boolean,
       default:false,
     },
-    childCanSelect:{
-      type:Boolean,
-      default:false,
-    },
-    unique:{
+    expandKey:{
       type:String,
       default:'',
+    },
+    expandsParent:{
+      type: Array,
+      default:()=>[]
+    },
+    canEdit:{
+      type: Boolean,
+      default: false
+    },
+    canSelect:{
+      type: Boolean,
+      default: false
     },
   },
 
@@ -207,8 +242,8 @@ export default {
     return {
       tableConfig:[],
       tableDataEditable: [],
-      // changeDataArr:[],
-      // test:'test',
+      childTableConfigFilter:[],
+      expands: [],
     }
   },
   created(){
@@ -216,27 +251,16 @@ export default {
   },
   watch:{
     tableData(){
-      let tableDataEditable = [...this.tableData]
-      this.tableDataEditable = tableDataEditable.map((item,index)=>{
-        item.unique = this.unique + '+' + index
-        return item
-      })
-      
-      // this.tableDataEditable = [...this.tableData]
+      this.tableDataEditable = [...this.tableData]
+    },
+    expandsParent(){
+      this.expands = [...this.expandsParent]
     }
-    
-  },
-  activated(){
-  },
-  beforeDestroy(){
   },
   beforeMount(){
-    let tableDataEditable = [...this.tableData]
-    this.tableDataEditable = tableDataEditable.map((item,index)=>{
-      item.unique = this.unique + '+' + index
-      return item
-    })
-    let tableConfig=_.cloneDeep(this.config);
+    this.tableDataEditable = [...this.tableData]
+    let childTableConfigFilter = [...this.childTableConfig]
+    let tableConfig=[...this.config];
     for(let i in tableConfig){
        if(tableConfig[i].type){
          if(tableConfig[i].useApi){
@@ -249,7 +273,7 @@ export default {
          } 
          else{
           switch(tableConfig[i].type){
-            case 'time':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?moment(cellValue).format(tableConfig[i].format||'YYYY-MM-DD'):'';break;
+            case 'time':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?moment(Number(cellValue)).format(tableConfig[i].format||'YYYY-MM-DD'):'';break;
             case 'Boolean':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?'是':'否' ;break;
             case 'index':tableConfig[i].formatter=(row, column, cellValue, index)=>(this.pageSize)*(this.currentPage-1)+index+1;break;
             case 'toFixed':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue&&Number(Number(cellValue).toFixed(2));break;
@@ -260,11 +284,35 @@ export default {
           tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue!==undefined&&cellValue!==null&&cellValue!==''?cellValue:'' 
        }
     }
+    for(let i in childTableConfigFilter){
+      if(childTableConfigFilter[i].type){
+        if(childTableConfigFilter[i].useApi){
+            childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>this.mapConfig[childTableConfigFilter[i].type].find(v=>v.key==cellValue)&&this.mapConfig[childTableConfigFilter[i].type].find(v=>v.key==cellValue).value||cellValue
+         } else if(childTableConfigFilter[i].useLocalEnum){
+           
+           
+            childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>{
+              return Enum[childTableConfigFilter[i].type].find(v=>v.value==cellValue)&&Enum[childTableConfigFilter[i].type].find(v=>v.value==cellValue).name||cellValue}
+         } 
+         else{
+          switch(childTableConfigFilter[i].type){
+            case 'time':childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>cellValue?moment(cellValue).format(tableConfig[i].format||'YYYY-MM-DD'):'';break;
+            case 'Boolean':childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>cellValue?'是':'否' ;break;
+            case 'index':childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>(this.pageSize)*(this.currentPage-1)+index+1;break;
+            case 'toFixed':childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>cellValue&&Number(Number(cellValue).toFixed(2));break;
+
+           }
+         }  
+        } else{
+          childTableConfigFilter[i].formatter=(row, column, cellValue, index)=>cellValue!==undefined&&cellValue!==null&&cellValue!==''?cellValue:'' 
+       }
+    }
     this.tableConfig=tableConfig;
+    this.childTableConfigFilter = childTableConfigFilter
  
   },
 
-   computed: {
+  computed: {
      
     ...mapGetters([
       'mapConfig',
@@ -289,8 +337,17 @@ export default {
     },
 
   },
-
   methods: { 
+    demo(){
+      console.log('emit'); 
+    },
+    dataChange(index,type,changeData){
+      this.$emit('dataChange',index,type,changeData)
+    },
+    expandChangeItem(row, expandedRows){
+      this.$emit('expandChangePa',row, expandedRows)
+    },
+
      handleSizeChange(val){
         this.$emit('sizeChange', val); 
      },
@@ -298,41 +355,27 @@ export default {
      handleCurrentChange(val){
         this.$emit('currentChange', val); 
      },
-     
-     handleCurrentRedioChange(currentRow, oldCurrentRow){
-       this.$emit('currentRedioChange', currentRow, oldCurrentRow); 
+
+     handleCurrentRadioChange(currentRow, oldCurrentRow){
+       if(currentRow){
+        //   if(this.accordionExpand){
+        //   this.expands = [];
+        //   this.expands.push(currentRow[this.expandKey]);
+        // }
+        this.$emit('currentRadioChange', currentRow, oldCurrentRow); 
+       }
+       
      },
      handleSelection(val,row){
-       
-        this.$emit('editDataSelect',{arr:[...val],unique:this.unique},row)
+        this.$emit('childDataSelect',val)
      },
-    
-      goeditrow(index,type,changeData) {
-       
-        let data = _.cloneDeep(this.tableDataEditable);
+     handleParentSelection(val,row){
+        this.$emit('dataSelect',val)
+     },
 
-        // let hadPush = false
-        // let unique = this.unique+'+'+index
-        // let changeDataArr = [..._CHANGEDATAARR]
-
-        data[index].editable = !data[index].editable
-        
-        this.tableDataEditable=data;
-        if(type!='edit'){
-          this.tableDataEditable[index] = {...changeData,editable:!changeData.editable}
-          changeData.editable = !changeData.editable
-          
-          this.$emit('dataChange',index,type,changeData)//触发父组件方法，数据更改
-        }
-
-      },
-
-      handleDelete(index, row) {
-        this.tableDataEditable.splice(index, 1)
-        var spliceIndex = 0;
-        
-        this.$emit('dataChange',index,'delete')
-      },
+     editDataSelect(val,row){       
+       this.$emit('childDataSelect',val,row)
+     },
       mapFormatter(target, data){
         let json={};
         target.forEach(item=>{

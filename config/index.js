@@ -4,9 +4,10 @@ const path = require('path')
 // const ip='http://192.168.2.163:8787';//红斌
 // const ip='http://172.16.81.162:8787';//修浩
 // const ip='http://172.16.81.219:8787';//成龙
+const ip= "http://172.16.80.138:8787"//亚磊
 
 // const ip='http://172.16.80.138:8787'; 
-const ip='http://192.168.2.167:8787';//修浩
+// const ip='http://192.168.2.167:8787';//修浩
 
 // const ip='http://192.168.1.195:8787';//测试服务
 const proxyTableArr=['/csj_login','/csj_logout','/webApi','/api'];
@@ -119,7 +120,7 @@ module.exports = {
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
+    productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
 
     // Run the build command with an extra argument to

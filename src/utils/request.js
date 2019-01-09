@@ -20,7 +20,6 @@ const service = axios.create({
 // respone拦截器
 service.interceptors.response.use(
   response => {
-    console.log(response,'ssssss');
     const res = response.data;
     if (res.code !== '200' && !res.success && res.code!=='success') {
       if (res.code === 'shark-512') {
