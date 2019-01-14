@@ -170,7 +170,6 @@ export default {
     handleCommand(command){
       this.warehouse = command
 
-      console.log(1111,command);
       this.setWarehouse()
     },
     setWarehouse(){
@@ -186,9 +185,17 @@ export default {
         if(res.success){
           // sessionStorage.setItem('warehouse',warehouse)
           this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
+            
             this.$message({type:'success',message:'切换仓库成功'})
             
-            this.$router.go(0)
+            // this.$router.go(0)
+
+            //  this.$router.replace({
+            //         path:this.$router.history.current.path,
+                    
+            //     })
+        
+            
           })
         }else{
           this.$message({type:'error',message:'切换仓库失败'})

@@ -89,7 +89,11 @@
             label="操作" >
             <template slot-scope="scope">
                  <template v-for="thisButton in handleButtonMap" >
-                    <el-button :key="thisButton.title" :size="thisButton.size ?thisButton.size : 'size'" :type="thisButton.type ?thisButton.type : 'text'" @click="thisButton.handle(scope.$index, scope.row)">{{thisButton.title}}</el-button>
+
+                    <el-button :key="thisButton.title" :size="thisButton.size ?thisButton.size : 'size'" :type="thisButton.type ?thisButton.type : 'text'" @click="thisButton.handle(scope.$index, scope.row)">
+                      {{(typeof thisButton.formatter !=='function')?thisButton.title:thisButton.formatter(scope.row)}}
+                      <!-- {{typeof thisButton.formatter}} -->
+                      </el-button>
                  </template>
                
             </template>

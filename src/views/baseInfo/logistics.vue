@@ -55,6 +55,8 @@
     import _ from 'lodash'
     import DoubleTable from '@/components/Table/doubleTable'
     import { tableConfig } from './components/config'
+    import { SimpleMsg } from '@/utils/luoFun'
+
     import { getLogisticsList,addLogistics,updateLogistics,deleteLogistics,getLogisticsSearch } from '@/api/logistics'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchLogistics  from './components/search'
@@ -190,23 +192,13 @@
                         
                         if(this.logisticsForm.id){
                             updateLogistics({...this.logisticsForm}).then(res=>{
-                                if(res.success){
-                                    this.$message({type:'success',message:'修改物流公司成功'})
-                                    this.dialogVisible = false
-                                    this.getTableData()
-                                }else{
-                                    this.$message({type:'info',message:'修改物流公司失败'})
-                                }
+                                  SimpleMsg({type:res.success,msgType:'edit',msg:'物流公司',cb:()=>{ this.dialogVisible = false;
+                                    this.getTableData()}})
                             })
                         }else{
                             addLogistics({...this.logisticsForm}).then(res => {
-                                 if(res.success){
-                                    this.$message({type:'success',message:'新增物流公司成功'})
-                                    this.dialogVisible = false
-                                    this.getTableData()
-                                }else{
-                                    this.$message({type:'info',message:'新增物流公司失败'})
-                                }
+                                 SimpleMsg({type:res.success,msgType:'add',msg:'物流公司',cb:()=>{ this.dialogVisible = false;
+                                    this.getTableData()}})
                             })
                         }
                         // this.getCurrentTableData();
@@ -238,13 +230,8 @@
                 type: 'warning'
                 }).then(() => {
                     deleteLogistics(data).then(res => {
-                         if(res.success){
-                            this.$message({type:'success',message:'删除物流公司成功'})
-                            this.dialogVisible = false
-                                    this.getTableData()
-                        }else{
-                            this.$message({type:'info',message:'删除物流公司失败'+res.errorMsg})
-                        }
+                         SimpleMsg({type:res.success,msgType:'delete',msg:'物流公司',cb:()=>{ this.dialogVisible = false;
+                                    this.getTableData()}})
                     })
                 }).catch(() => {
                     this.$message({

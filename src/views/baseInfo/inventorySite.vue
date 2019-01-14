@@ -1,7 +1,7 @@
 <template>
     <div>
         <search-logistics @searchTrigger="submitForm"  @resetSearch="resetForm" :search-forms="ruleForm"></search-logistics>
-        <el-button type="primary" size="small" @click="logisticsHandle('add')" style="">添加</el-button>
+        <el-button type="primary" size="small" @click="formHandle('add')" style="">添加</el-button>
         <double-table 
         :loading="loading" 
         :table-data="tableData" 
@@ -13,36 +13,61 @@
         :pageSize="ruleForm.pageSize"
         :currentPage="ruleForm.pageNum"></double-table>
         <el-dialog
-                :title="dialogTitle+'物流公司'"
+                :title="dialogTitle+'库位'"
                 :visible.sync="dialogVisible"
-                width="420px"
+                width="480px"
         >
-
-            <el-form :model="logisticsForm" class="formInput" :rules="logisticsRules"     ref="subForm"  label-width="70px" label-position="left">
-               
-                <el-form-item label="物流公司名称" label-width="100px" prop="companyName" :rules="[
-              { required: true, message: '该项为必填'},
+            <el-form :model="formParams" ref="subForm"  label-width="70px" label-position="left">
+                <el-form-item label="库区编码"  prop="warehouseAreaCode" label-width="100px" :rules="[
+              { required: true, message: '请选择库区'},
              ]">
-                    <!-- <el-input type="text" size="small" v-model="logisticsForm.companyName" ></el-input> -->
-
-                    <el-autocomplete v-model="logisticsForm.companyName" :debounce="300" size="small" :fetch-suggestions="querySearchAsync" placeholder="请输入物流公司" @select="handleSelect"></el-autocomplete>
-
+                   <el-select v-model="formParams.warehouseAreaCode" 
+                        clearable placeholder="请选择库区" 
+                        :disabled="this.formType!='add'"
+                        size="small">
+                        <el-option
+                        v-for="item in warehouseAreaCodeEnum"
+                        :key="item.warehouseAreaCode"
+                        :label="item.warehouseAreaCode"
+                        :value="item.warehouseAreaCode">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                 <el-form-item label="物流公司编码"  prop="companyCode" label-width="100px" :rules="[
-              { required: true, message: '该选择物流公司'},
+             
+                 <el-form-item label="库位编码"  label-width="100px" :rules="[
+              { required: true, message: '请选择库位'},
              ]">
-                    <el-input type="text" size="small" v-model="logisticsForm.companyCode" disabled></el-input>
-                </el-form-item>
-                 <el-form-item label="联系人"  prop="linkUser" >
-                    <el-input type="text" size="small" v-model="logisticsForm.linkUser" ></el-input>
-                </el-form-item>
-                 <el-form-item label="联系电话"  prop="linkTel" >
-                    <el-input type="text" size="small" v-model="logisticsForm.linkTel" ></el-input>
-                </el-form-item>
-                 <el-form-item label="地址"  prop="linkAddress" >
-                    <el-input type="text" size="small" v-model="logisticsForm.linkAddress" ></el-input>
+                    <div class="inventorySite"> <span class="tip">从</span> 
+                        <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.platoonStart" 
+                            class="siteInput"
+                        ></el-input>
+                         <span class="tip">到</span>
+                         <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.platoonEnd" 
+                            class="siteInput"
+                        ></el-input><span class="tip"></span>
+                     </div>
+                    <div class="inventorySite"> <span class="tip">从第</span> 
+                        <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.columnStart" 
+                            class="siteInput"
+                        ></el-input>
+                         <span class="tip">层到</span>
+                         <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.columnEnd" 
+                            class="siteInput"
+                        ></el-input><span class="tip">层</span>
+                     </div>
+                     <div class="inventorySite"> <span class="tip">库位从第</span> 
+                        <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.floorStart" 
+                            class="siteInput"
+                        ></el-input>
+                         <span class="tip">层到</span>
+                         <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.floorEnd" 
+                            class="siteInput"
+                        ></el-input><span class="tip">层</span>
+                     </div>
+                    
                 </el-form-item>
             </el-form>
+            <div>提示：第一行是货架，第二行是货架层高，第三行是具体库位号</div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitIt">确 定</el-button>
@@ -53,9 +78,13 @@
 
 <script>
     import _ from 'lodash'
-    import DoubleTable from '@/components/Table/doubleTable'
-    import { tableConfig } from './components/config'
-    import { getLogisticsList,addLogistics,updateLogistics,deleteLogistics,getLogisticsSearch } from '@/api/logistics'
+    import { mapGetters } from 'vuex'
+
+    import DoubleTable from '@/components/Table/doubleTableFlex'
+    import { SimpleMsg } from '@/utils/luoFun'
+    import { siteTableConfig } from './components/config'
+    import { getInventorySite,addInventorySite,updateInventorySite,deleteInventorySite, getSelectInventoryAreaList} from '@/api/inventory'
+
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchLogistics  from './components/search'
     const ruleForm = {
@@ -74,11 +103,12 @@
                 dialogData:{},
                 dialogTitle:'',
                 ruleForm,
-                logisticsRules:{},
+                formRules:{},
                 selectData:{//x选中的单据
                     
                 },
                 // searchForms,
+                searchForm:{},
                 tableData:[
                 ],
                 // pageNum:0,
@@ -86,72 +116,98 @@
                 //子表数据名称 为空时不显示不可展开
                 childDataName:'',
                 //表格配置
-                tableConfig:tableConfig,
+                tableConfig:siteTableConfig,
                 // currentPage:1,
                 // pageSize:10,
                 total:0,
                 //主表操作
                 handleButtonMap:[
-                    {title:'修改',handle:(index,data)=>{
-                        this.logisticsHandle('edit')
-                        this.logisticsForm = {...data}
+                    // {title:'修改',handle:(index,data)=>{
+                    //     this.formHandle('edit')
+                    //     this.formParams = {...data}
 
+                    // }},
+                    {title:'状态更改',handle:(index,data)=>{
+                        // this.formHandle('edit')
+                        this.changeStatus()
+
+                        this.formParams = {...data}
+
+                    },formatter:(data)=>{
+                        return data.openStatus ? '禁用':'启用'
                     }},
                     {title:'删除',handle:(index,data)=>{
-                        this.logisticsDelect(data)
+                        this.formDelect(data)
 
                     }}
+                    
                 ],
                 childCanSelect:false,//子表可选择,false不可选，
                 // accordionExpand:true,//手风琴展开
                 multipleSelection:[],//选中的子表数据
                 expandKey:'id',
-                logisticsForm: {},
-                logisticsFilter: []
+                formParams: {},
+                logisticsFilter: [],
+                formType: '',
+                warehouseAreaCodeEnum:[],
+            }
+        },
+         computed:{
+            ...mapGetters([
+            
+            'warehouseMap',
+            'chooseWarehouse',
+            ]),
+        },
+        watch: {
+            chooseWarehouse: {
+                handler: function(val, oldVal){
+                    if(val!=oldVal){
+                        //仓库更改数据重新请求
+                        this.getTableData()
+                         this.warehouseMap.map(item=>{
+                        if(item.warehouseNo == this.chooseWarehouse ){
+                    this.warehouseName = item.warehouseName
+
+                        }
+                    })
+                    }
+                },
+                // 深度观察监听
+                // deep: true
             }
         },
         methods:{
          
-            querySearchAsync(queryString, cb){
-                
-                if(queryString){
-                    getLogisticsSearch({companyName:queryString}).then(res=>{
-                        if(res.success){
-                            if(res.data&&res.data.length>0){
-                                var a = [...res.data]
-                                a.map(item=>{
-                                    item.value = item.companyName
-                                    return item
-                                })
-                                return cb([...a])
-                            }else{
-                                cb([])
-                            }
-                        }else{
-                            cb([])
-                        }    
-                    }).catch(err =>{
-                        cb([])
-                    }) 
-                }else{
-                    cb([])
-                }
-               
-            },
             handleSelect(item){
-                this.logisticsForm.companyCode = item.companyCode
-                
+                this.formParams.companyCode = item.companyCode
             },
-
+             changeStatus(){
+                 this.$confirm('是否确定更改?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    updateInventorySite({...this.formParams,openStatus:this.formParams.openStatus?0:1}).then(res => {
+                         SimpleMsg({result:res.success,msgType:'user',msg:this.formParams.warehouseAreaStatus?'启用':'禁用',cb:()=>{ this.dialogVisible = false;
+                                    this.getTableData()}})
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+            },
             getTableData(){
 
                 this.$router.replace({
-                    path:'/baseInfo/logistics',
+                    path:'/baseInfo/inventorySite',
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
-                let data={...this.ruleForm}
-                getLogisticsList(data).then(res => {
+                let data={...this.ruleForm,warehouseCode:this.chooseWarehouse}
+                getInventorySite(data).then(res => {
                     
                     if(res.success && res.data &&res.data.list){
                         this.tableData = [...res.data.list]
@@ -164,6 +220,16 @@
 
                 }).catch(err=>{
                     this.loading = false;                    
+                })
+                 getSelectInventoryAreaList({warehouseCode:this.chooseWarehouse}).then(res=>{
+                    console.log(res,22333);
+                    if(res.success){
+                        if(res.data&&res.data.length>0){
+                            
+                            this.warehouseAreaCodeEnum = [... res.data]
+                            
+                        }
+                    }
                 })
             },
          
@@ -182,33 +248,30 @@
                 this.getTableData();
                 
             },
+           
             submitIt(){
                 
                 this.$refs['subForm'].validate((valid) => {
                     if (valid) {
                         
-                        
-                        if(this.logisticsForm.id){
-                            updateLogistics({...this.logisticsForm}).then(res=>{
-                                if(res.success){
-                                    this.$message({type:'success',message:'修改物流公司成功'})
-                                    this.dialogVisible = false
-                                    this.getTableData()
-                                }else{
-                                    this.$message({type:'info',message:'修改物流公司失败'})
-                                }
-                            })
-                        }else{
-                            addLogistics({...this.logisticsForm}).then(res => {
-                                 if(res.success){
-                                    this.$message({type:'success',message:'新增物流公司成功'})
-                                    this.dialogVisible = false
-                                    this.getTableData()
-                                }else{
-                                    this.$message({type:'info',message:'新增物流公司失败'})
-                                }
-                            })
+                        if(this.formParams.platoonEnd<this.formParams.platoonStart){
+                            this.$message({type:info,message:'输入货架编号有误，结束编号必须不小于开始编号！'})
+                            return false
                         }
+                        if(this.formParams.columnEnd<this.formParams.columnStart){
+                            this.$message({type:info,message:'输入货架层高编号有误，结束编号必须不小于开始编号！'})
+                            return false
+                        }
+                        if(this.formParams.floorEnd<this.formParams.floorStart){
+                            this.$message({type:info,message:'输入具体库位编号有误，结束编号必须不小于开始编号！'})
+                            return false
+                        }
+                       
+                            addInventorySite({...this.formParams}).then(res => {
+                                SimpleMsg({result:res.success,msgType:'add',msg:'库位',cb:()=>{ this.dialogVisible = false;
+                                    this.getTableData()}})
+                            })
+                        
                         // this.getCurrentTableData();
                     } else {
                         return false;
@@ -220,31 +283,28 @@
                 this.getTableData()
                 
             },
-            logisticsHandle(type){
+            formHandle(type){
                 if(type=='add'){
-                    this.dialogVisible = true
-                    this.dialogTitle = '新增'
-                    // debugger
-                    this.logisticsForm  = {}
+                    this.formParams  = {}
                 }else if(type=='edit'){
-                    this.dialogVisible = true
                     this.dialogTitle = '修改'
+                }else if(type=="watch"){
+                    this.dialogTitle = '查看'
                 }
+                this.formType = type
+
+                this.dialogVisible = true
+
             },
-            logisticsDelect(data){
+            formDelect(data){
                 this.$confirm('是否确定删除?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
                 }).then(() => {
-                    deleteLogistics(data).then(res => {
-                         if(res.success){
-                            this.$message({type:'success',message:'删除物流公司成功'})
-                            this.dialogVisible = false
-                                    this.getTableData()
-                        }else{
-                            this.$message({type:'info',message:'删除物流公司失败'+res.errorMsg})
-                        }
+                    deleteInventorySite(data).then(res => {
+                         SimpleMsg({result:res.success,msgType:'delete',msg:'库位',cb:()=>{ this.dialogVisible = false;
+                                    this.getTableData()}})
                     })
                 }).catch(() => {
                     this.$message({
@@ -266,6 +326,16 @@
     .formInput{
         input{
            width:220px;
+        }
+    }
+    .inventorySite{
+        display:flex;
+        .tip{
+            flex:2;
+            text-align:center;
+        }
+        .siteInput{
+            flex:4;
         }
     }
 </style>

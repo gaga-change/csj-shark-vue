@@ -70,6 +70,7 @@ export default [
         component: _import('inventoryLedger/inventory'),
         hidden: false,
       },
+      
     ]
   },
   {
@@ -84,6 +85,20 @@ export default [
         path: 'logistics',
         meta: { title: '物流公司', noCache: true },
         component: _import('baseInfo/logistics'),
+        hidden: false,
+      },
+      {
+        name: 'inventoryArea',
+        path: 'inventoryArea',
+        meta: { title: '库区', noCache: true },
+        component: _import('baseInfo/inventoryArea'),
+        hidden: false,
+      },
+      {
+        name: 'inventorySite',
+        path: 'inventorySite',
+        meta: { title: '库位', noCache: true },
+        component: _import('baseInfo/inventorySite'),
         hidden: false,
       },
     ]

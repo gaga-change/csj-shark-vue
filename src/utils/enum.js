@@ -136,7 +136,7 @@ export const logisticsStatusEnum = [
   },
 ]
 //登记状态
-export var registerStatusEnum = [
+export const registerStatusEnum = [
   {
     name: '未登记',
     value: 0
@@ -145,4 +145,82 @@ export var registerStatusEnum = [
     name: '已登记',
     value: 1
   },
+]
+
+//库区性质
+export const WarehouseAreaNatureEnum = [
+  {
+    name: '存储区',
+    value: 1
+  },
+  {
+    name: '残次品区',
+    value: 2
+  },
+  {
+    name: '退货区',
+    value: 3
+  },
+]
+//库区状态
+export const WarehouseAreaStatusEnum = [
+  {
+    name: '启用',
+    value: 0
+  },
+  {
+    name: '禁用',
+    value: 1
+  },
+]
+//是否
+export const YesOrNoEnum = [
+  {
+    name: '否',
+    value: 0
+  },
+  {
+    name: '是',
+    value: 1
+  },
+]
+
+export const warehouseSpaceStatus = [
+  {
+    name: '否',
+    value: 0
+  },
+  {
+    name: '是',
+    value: 1
+  },
+]
+//库区编码
+export const AtoZ = [
+  {value:'A',name:'A',isUsed:false,},
+  {value:'B',name:'B',isUsed:false,},
+  {value:'C',name:'C',isUsed:false,},
+  {value:'D',name:'D',isUsed:false,},
+  {value:'E',name:'E',isUsed:false,},
+  {value:'F',name:'F',isUsed:false,},
+  {value:'G',name:'G',isUsed:false,},
+  {value:'H',name:'H',isUsed:false,},
+  {value:'I',name:'I',isUsed:false,},
+  {value:'J',name:'J',isUsed:false,},
+  {value:'K',name:'K',isUsed:false,},
+  {value:'L',name:'L',isUsed:false,},
+  {value:'M',name:'M',isUsed:false,},
+  {value:'N',name:'N',isUsed:false,},
+  {value:'O',name:'O',isUsed:false,},
+  {value:'P',name:'P',isUsed:false,},
+  {value:'Q',name:'Q',isUsed:false,},
+  {value:'R',name:'R',isUsed:false,},
+  {value:'S',name:'S',isUsed:false,},
+  {value:'T',name:'T',isUsed:false,},
+  {value:'U',name:'U',isUsed:false,},
+  {value:'V',name:'V',isUsed:false,},
+  {value:'W',name:'W',isUsed:false,},
+  {value:'X',name:'X',isUsed:false,},
+  {value:'Y',name:'Y',isUsed:false,},
+  {value:'Z',name:'Z',isUsed:false,},
 ]

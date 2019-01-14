@@ -144,7 +144,7 @@
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
                         // debugger
-                        tempList.push({...tempList[0],planCode:'demo123456789'})
+                        // tempList.push({...tempList[0],planCode:'demo123456789'})
                         
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'planCode')
                         this.total = res.data.total
@@ -192,8 +192,8 @@
                                     chooseList = list
                                 }
                                 //debugger
-                                    list.childData = res.data.inWarehousePlanDetailRespList;
-                                    chooseList = list
+                                    // list.childData = res.data.inWarehousePlanDetailRespList;
+                                    // chooseList = list
 
                                 return list
                             })
