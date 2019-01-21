@@ -107,7 +107,7 @@
     import _ from 'lodash'
     import { mapGetters } from 'vuex'
 
-    import DoubleTable from '@/components/Table/doubleTableFlex'
+    import DoubleTable from '@/components/Table/doubleTable'
     import { SimpleMsg } from '@/utils/luoFun'
     import { areaTableConfig } from './components/config'
     import { getInventoryArea,addInventoryArea,updateInventoryArea,deleteInventoryArea, getSelectInventoryAreaList} from '@/api/inventory'
@@ -222,9 +222,11 @@
                         this.tableData = []
                         this.total = 0
                     }
-                    this.loading = false;
+                    // this.loading = false;
 
                 }).catch(err=>{
+                    // this.loading = false;                    
+                }).finally(()=>{
                     this.loading = false;                    
                 })
                 getSelectInventoryAreaList({warehouseCode:this.chooseWarehouse}).then(res=>{

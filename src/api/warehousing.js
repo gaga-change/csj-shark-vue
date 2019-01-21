@@ -18,6 +18,68 @@ export function getInfoDetailWarehousing(data) {
     // data:data
   })
 }
+//获取到货单列表
+/**
+ *
+ *  "warehouseCode": "string //仓库编码",
+  "orderCode": "string //收货单号",
+  "orderType": "int //收货单类型 11:采购入库收货 12：销售退货入库收货",
+  "orderStatus": "int //0:草稿1:待审2:审核通过3:驳回\r      一期只有 审核通过",
+  "planCode": "string //入库计划单",
+  "ownerCode": "string //货主",
+  "ownerName": "string //货主名称",
+  "providerCode": "string //供应商编码",
+  "providerName": "string //供应商名称"
+ * @export
+ * @param {*} data
+ * @returns
+ */
+export function getArrivalList(data) {
+  return request({
+    url: '/webApi/receive/order/list',
+    method: 'post',
+    data:data
+  })
+}
+/**
+ *新增收货单
+ *
+ * @export
+ * @param {*} data
+ * @returns
+ */
+export function addArrival(data) {
+  return request({
+    url: '/webApi/receive/order/add',
+    method: 'post',
+    data:data
+  })
+}
+
+/**
+ *新增上架单
+ *
+ * @export
+ * @param {*} data
+ * @returns
+ */
+export function addPutJob(data) {
+  return request({
+    url: '/webApi/receive/order//add',
+    method: 'post',
+    data:data
+  })
+}
+//获取到货单详情
+export function getArrivalDetail(data) {
+  return request({
+    url: `/webApi/receive/order/detailList/${stringify(data.id)}`,
+    method: 'get',
+    // data:data
+  })
+}
+
+
 //获取入库列表
 export function getInfoInWarehousing(data) {
   return request({

@@ -1,8 +1,5 @@
 <template>
   <div class="ctabel">
-         
-        <!--  -->
-
       <el-table
         v-loading="loading"
         :element-loading-text="elementLoadingText"
@@ -17,12 +14,26 @@
         :expand-row-keys="expands"
         :show-summary="showSummary"
         size="small"
-        :style="tableStyle">
+        :style="tableStyle"
+        @select="handleParentSelection" @select-all="handleParentSelection" 
+        >
+        <el-table-column type="selection" width="55" v-if="canSelect" ></el-table-column>
         <template v-if="childDataName">
           <el-table-column type="expand" fixed>
             <template slot-scope="childTable" v-if="childTable&&childTable.row&&childTable.row[childDataName]">
-               <el-table :data="childTable.row[childDataName]" @select="handleSelection" @select-all="handleSelection" @expand-change="expandChange">
-                 <el-table-column type="selection" width="55" v-if="childCanSelect" @expand-change="expandChange"></el-table-column>
+              <template v-if="canEdit">
+                <edit-table
+                @editDataSelect="editDataSelect"
+                @dataChange="dataChange"
+                :table-data="childTable.row[childDataName]" 
+                :unique="childTable.row[expandKey]"
+                :config='childTableConfigFilter'
+                :childCanSelect="true"
+                ></edit-table>
+              </template>
+             <template v-else>
+               <el-table :data="childTable.row[childDataName]" @select="handleSelection" @select-all="handleSelection" >
+                 <el-table-column type="selection" width="55" v-if="childCanSelect" ></el-table-column>
                 <el-table-column
                   v-for="item in childTableConfigFilter"
                   :fixed="item.fixed"
@@ -31,31 +42,10 @@
                   :label="item.label"
                   :prop="item.prop"
                 >
-                  <!-- <span v-if="item.linkTo">
-                    <router-link :to="{path:item.linkTo,query:mapFormatter(item.query,childTable.row[childDataName])}" style="color:#3399ea">{{item.linkText?  item.linkText:childTable.row[childDataName][item.prop]}}</router-link>
-                  </span>
-                  <span v-else-if="item.useIf == 'files'">
-                    <el-dropdown>
-                              <span class="el-dropdown-link">
-                                查看附件<i class="el-icon-arrow-down el-icon--right"></i>
-                              </span>
-                              <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="(file,i) in childTable.row[childDataName][item.prop]" :key="file.path">
-                                      <a class="el-dropdown-link"  target="blank"   :href="file.path">{{file.name||`附件${i+1}`}}</a>
-                                    </el-dropdown-item>
-                                  
-                              </el-dropdown-menu>
-                            </el-dropdown>
-                  </span>
-                  <span v-else-if="typeof item.formatter == 'function'">
-                    {{item.formatter(childTable.row[childDataName],{},childTable.row[childDataName][item.prop],childTable.row[childDataName].$index)}}
-                  </span>
-                
-                  <span v-else>
-                    {{childTable.row[childDataName][item.prop]}}1231231231231
-                  </span> -->
                 </el-table-column>
               </el-table>
+             </template>
+             
             </template>
           </el-table-column>
         </template>
@@ -98,14 +88,12 @@
             fixed="right"
             label="操作" >
             <template slot-scope="scope">
-                <!-- <div style="width:160px">
-                  {handleButtonMap.map(thisButton => <el-button size="mini" type="primary" onClick={thisButton.handle}>thisButton.title</el-button>)}
-
-                   
-                </div> -->
-                 <!-- <el-button size="mini" type="primary" @click="handleDelete(scope.$index, scope.row)">详情</el-button> -->
                  <template v-for="thisButton in handleButtonMap" >
-                    <el-button :key="thisButton.title" :size="thisButton.size ?thisButton.size : 'size'" :type="thisButton.type ?thisButton.type : 'text'" @click="thisButton.handle(scope.$index, scope.row)">{{thisButton.title}}</el-button>
+
+                    <el-button :key="thisButton.title" :size="thisButton.size ?thisButton.size : 'size'" :type="thisButton.type ?thisButton.type : 'text'" @click="thisButton.handle(scope.$index, scope.row)">
+                      {{(typeof thisButton.formatter !=='function')?thisButton.title:thisButton.formatter(scope.row)}}
+                      <!-- {{typeof thisButton.formatter}} -->
+                      </el-button>
                  </template>
                
             </template>
@@ -133,8 +121,10 @@ import _  from 'lodash';
 import moment from 'moment';
 import { mapGetters } from 'vuex'
 import  * as Enum from "@/utils/enum.js";
+import editTable from './editTable'
 
 export default {
+  components:{editTable},
    props: {
      loading: {
       type: Boolean,
@@ -241,7 +231,15 @@ export default {
     expandsParent:{
       type: Array,
       default:()=>[]
-    }
+    },
+    canEdit:{
+      type: Boolean,
+      default: false
+    },
+    canSelect:{
+      type: Boolean,
+      default: false
+    },
   },
 
   data() {
@@ -318,7 +316,7 @@ export default {
  
   },
 
-   computed: {
+  computed: {
      
     ...mapGetters([
       'mapConfig',
@@ -344,7 +342,12 @@ export default {
 
   },
   methods: { 
-
+    demo(){
+      console.log('emit'); 
+    },
+    dataChange(index,type,changeData){
+      this.$emit('dataChange',index,type,changeData)
+    },
     expandChangeItem(row, expandedRows){
       this.$emit('expandChangePa',row, expandedRows)
     },
@@ -359,35 +362,24 @@ export default {
 
      handleCurrentRadioChange(currentRow, oldCurrentRow){
        if(currentRow){
-          if(this.accordionExpand){
-          this.expands = [];
-          this.expands.push(currentRow[this.expandKey]);
-        }
+        //   if(this.accordionExpand){
+        //   this.expands = [];
+        //   this.expands.push(currentRow[this.expandKey]);
+        // }
         this.$emit('currentRadioChange', currentRow, oldCurrentRow); 
        }
        
      },
      handleSelection(val,row){
-       this.$emit('childDataSelect',val)
+        this.$emit('childDataSelect',val)
      },
-     expandChange(row, expandedRows){
-       console.log(row, expandedRows,123365489645)
+     handleParentSelection(val,row){
+        this.$emit('dataSelect',val)
      },
-      // goeditrow(index,type) {
-       
-      //   let data=_.cloneDeep(this.tableDataEditable);
 
-      //   data[index].editable = !data[index].editable
-      //   this.tableDataEditable=data;
-      //   if(type!='edit'){
-      //     this.$emit('dataChange',index,type,data[index])//触发父组件方法，数据更改
-      //   }
-      // },
-
-      // handleDelete(index, row) {
-      //   this.tableDataEditable.splice(index, 1)
-      //   this.$emit('dataChange',index,'delete')
-      // },
+     editDataSelect(val,row){       
+       this.$emit('childDataSelect',val,row)
+     },
       mapFormatter(target, data){
         let json={};
         target.forEach(item=>{

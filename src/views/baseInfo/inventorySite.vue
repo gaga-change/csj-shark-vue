@@ -1,10 +1,16 @@
 <template>
     <div>
         <search-logistics @searchTrigger="submitForm"  @resetSearch="resetForm" :search-forms="ruleForm"></search-logistics>
-        <el-button type="primary" size="small" @click="formHandle('add')" style="">添加</el-button>
+        <div>
+            <el-button type="primary" size="small" @click="formHandle('add')" >添加</el-button>
+            <el-button type="primary" size="small" @click="printSite" >打印库位码</el-button>
+        </div>
         <double-table 
         :loading="loading" 
         :table-data="tableData" 
+        :can-select="canSelect"
+        @dataSelect='dataSelect'
+
         :handle-button-map="handleButtonMap" :config="tableConfig"   @sizeChange="handleSizeChange"
         @currentChange="handleCurrentChange" 
         :total="total" 
@@ -72,6 +78,23 @@
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitIt">确 定</el-button>
                 </span>
+        </el-dialog>
+ <el-dialog
+                title="打印库位码"
+                :visible.sync="dialogVisibleSite"
+                width="70%"
+            >
+                     <!-- <div style="margin:10px;">预览</div>  -->
+                     <div id="print" class="printSiteCss">
+                         <div v-for="item in multipleParentSelection" class="printItemCss"  :key="item.warehouseSpaceCode">
+                            <bar-code :code="item.warehouseSpaceCode"></bar-code>
+                         </div>
+                     </div>
+                <span slot="footer" class="dialog-footer" v-loading="loading">
+                    <el-button @click="dialogVisibleSite = false">取 消</el-button>
+                   
+                    <el-button type="primary" @click="printIt">打印</el-button>
+                </span>
             </el-dialog>
     </div>
 </template>
@@ -80,12 +103,14 @@
     import _ from 'lodash'
     import { mapGetters } from 'vuex'
 
-    import DoubleTable from '@/components/Table/doubleTableFlex'
+
+    import DoubleTable from '@/components/Table/doubleTable'
     import { SimpleMsg } from '@/utils/luoFun'
     import { siteTableConfig } from './components/config'
     import { getInventorySite,addInventorySite,updateInventorySite,deleteInventorySite, getSelectInventoryAreaList} from '@/api/inventory'
 
     import { uniqueArray } from '@/utils/arrayHandler'
+    import { MakePrint } from '@/utils/luoFun'
     import  SearchLogistics  from './components/search'
     const ruleForm = {
         pageNum: 1,
@@ -142,6 +167,8 @@
                     }}
                     
                 ],
+                canSelect:true,
+                multipleParentSelection:[],//选中的主表
                 childCanSelect:false,//子表可选择,false不可选，
                 // accordionExpand:true,//手风琴展开
                 multipleSelection:[],//选中的子表数据
@@ -150,6 +177,7 @@
                 logisticsFilter: [],
                 formType: '',
                 warehouseAreaCodeEnum:[],
+                dialogVisibleSite:false,
             }
         },
          computed:{
@@ -181,6 +209,42 @@
          
             handleSelect(item){
                 this.formParams.companyCode = item.companyCode
+            },
+            //主表多选
+            dataSelect(selectData){
+                this.multipleParentSelection = [...selectData]
+                // this.parentDataArr = [...selectData]
+                console.log(selectData,'pa');
+                
+            },
+            printSite(){
+                if(this.multipleParentSelection.length>0){
+                    this.dialogVisibleSite = true;
+                }else{
+                    this.$message({
+                        type:'info',
+                        message:'请选择需要打印的库位码'
+                    })
+                }
+            },
+            printIt(){
+                var useStyle=`<style type='text/css'> 
+                                .printSiteCss{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content:space-between;
+                                    align-content:space-between;   
+                                }
+                                .printItemCss{
+                                    width:40mm;
+                                    height:25mm;   
+                                }  
+                                img{
+                                    width: 100%;
+                                    height: 100%;
+                                }
+                               </style>`
+                MakePrint(document.getElementById('print').innerHTML,useStyle)
             },
              changeStatus(){
                  this.$confirm('是否确定更改?', '提示', {
@@ -336,6 +400,20 @@
         }
         .siteInput{
             flex:4;
+        }
+    }
+    .printSiteCss{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:space-between;
+        align-content:space-between;
+        .printItemCss{
+            width:40mm;
+            height:25mm;
+            img{
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 </style>

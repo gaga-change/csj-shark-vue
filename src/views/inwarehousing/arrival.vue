@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import DoubleTable from '@/components/Table/doubleTableFlex'
+    import DoubleTable from '@/components/Table/doubleTable'
     import { arrivalTableConfig, arrivalChildTableConfig } from './components/config'
     import { getInfoWarehousing,getInfoDetailWarehousing } from '@/api/warehousing'
     import { uniqueArray } from '@/utils/arrayHandler'
