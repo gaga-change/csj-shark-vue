@@ -1,52 +1,102 @@
 <template>
     <div>
-        <search-logistics @searchTrigger="submitForm"  @resetSearch="resetForm" :search-forms="ruleForm"></search-logistics>
-        <el-button type="primary" size="small" @click="logisticsHandle('add')" style="">添加</el-button>
+        <search-logistics 
+           @searchTrigger="submitForm"  
+           @resetSearch="resetForm" 
+           :search-forms="ruleForm">
+        </search-logistics>
+
+        <el-button type="primary" 
+          size="small" 
+          @click="logisticsHandle('add')" 
+          style="">
+          添加
+        </el-button>
+
         <double-table 
-        :loading="loading" 
-        :table-data="tableData" 
-        :handle-button-map="handleButtonMap" :config="tableConfig"   @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        :total="total" 
-        :maxTotal="10"
-        :expand-key="expandKey"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
+          :loading="loading" 
+          :table-data="tableData" 
+          :handle-button-map="handleButtonMap" 
+          :config="tableConfig"   
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+          :total="total" 
+          :maxTotal="10"
+          :expand-key="expandKey"
+          :pageSize="ruleForm.pageSize"
+          :currentPage="ruleForm.pageNum">
+        </double-table>
+
         <el-dialog
-                :title="dialogTitle+'物流公司'"
-                :visible.sync="dialogVisible"
-                width="420px"
-        >
+          :title="dialogTitle+'物流公司'"
+          :visible.sync="dialogVisible"
+          width="420px">
 
-            <el-form :model="logisticsForm" class="formInput" :rules="logisticsRules"     ref="subForm"  label-width="70px" label-position="left">
-               
-                <el-form-item label="物流公司名称" label-width="100px" prop="companyName" :rules="[
-              { required: true, message: '该项为必填'},
-             ]">
+            <el-form 
+               :model="logisticsForm" 
+               class="formInput" 
+               :rules="logisticsRules"     
+               ref="subForm"  
+               label-width="70px" 
+               label-position="left">
+
+                 <el-form-item label="物流公司名称" 
+                   label-width="100px" 
+                   prop="companyName" 
+                   :rules="[{ required: true, message: '该项为必填'},]">
                     <!-- <el-input type="text" size="small" v-model="logisticsForm.companyName" ></el-input> -->
+                    <el-autocomplete 
+                      v-model="logisticsForm.companyName" 
+                      :debounce="300" 
+                      size="small" 
+                      :fetch-suggestions="querySearchAsync" 
+                      placeholder="请输入物流公司" 
+                      @select="handleSelect">
+                    </el-autocomplete>
+                </el-form-item>
 
-                    <el-autocomplete v-model="logisticsForm.companyName" :debounce="300" size="small" :fetch-suggestions="querySearchAsync" placeholder="请输入物流公司" @select="handleSelect"></el-autocomplete>
+                 <el-form-item 
+                   label="物流公司编码"  
+                   prop="companyCode" 
+                   label-width="100px" 
+                   :rules="[{ required: true, message: '该选择物流公司'}]">
+                    <el-input type="text" 
+                      size="small" 
+                      v-model="logisticsForm.companyCode" 
+                      disabled>
+                    </el-input>
+                </el-form-item>
 
+                 <el-form-item label="联系人"  
+                    prop="linkUser" >
+                    <el-input type="text" 
+                      size="small" 
+                      v-model="logisticsForm.linkUser" >
+                    </el-input>
                 </el-form-item>
-                 <el-form-item label="物流公司编码"  prop="companyCode" label-width="100px" :rules="[
-              { required: true, message: '该选择物流公司'},
-             ]">
-                    <el-input type="text" size="small" v-model="logisticsForm.companyCode" disabled></el-input>
+
+                 <el-form-item label="联系电话"  
+                    prop="linkTel" >
+                    <el-input type="text" 
+                      size="small" 
+                      v-model="logisticsForm.linkTel" >
+                    </el-input>
                 </el-form-item>
-                 <el-form-item label="联系人"  prop="linkUser" >
-                    <el-input type="text" size="small" v-model="logisticsForm.linkUser" ></el-input>
-                </el-form-item>
-                 <el-form-item label="联系电话"  prop="linkTel" >
-                    <el-input type="text" size="small" v-model="logisticsForm.linkTel" ></el-input>
-                </el-form-item>
-                 <el-form-item label="地址"  prop="linkAddress" >
-                    <el-input type="text" size="small" v-model="logisticsForm.linkAddress" ></el-input>
+
+                 <el-form-item label="地址"  
+                   prop="linkAddress" >
+                    <el-input type="text" 
+                      size="small" 
+                      v-model="logisticsForm.linkAddress" >
+                    </el-input>
                 </el-form-item>
             </el-form>
+
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitIt">确 定</el-button>
                 </span>
+                
             </el-dialog>
     </div>
 </template>

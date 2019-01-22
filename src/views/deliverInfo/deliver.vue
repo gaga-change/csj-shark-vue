@@ -1,23 +1,42 @@
 <template>
     <div>
-        <search-deliver @searchTrigger="submitForm" ref="searchWarhouse" :deliver-company="deliverCompanyAll" @resetSearch="resetForm" :search-forms="ruleForm"></search-deliver>
-        <el-button type="primary" st size="small" @click="logisticsHandle" style="margin-bottom:15px">物流登记</el-button>
+        <search-deliver 
+          @searchTrigger="submitForm" 
+          ref="searchWarhouse" 
+          :deliver-company="deliverCompanyAll" 
+          @resetSearch="resetForm" 
+          :search-forms="ruleForm">
+        </search-deliver>
+
+        <el-button 
+          type="primary" 
+          st 
+          size="small" 
+          @click="logisticsHandle" 
+          style="margin-bottom:15px">
+          物流登记
+        </el-button>
+
         <double-table 
-        :loading="loading" 
-        :table-data="tableData" 
-        :handle-button-map="handleButtonMap" :config="tableConfig"   @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        @currentRadioChange="currentRadioChange"
-        :highlight-current-row="highlightCurrentRow" 
-        :total="total" 
-        :maxTotal="10"
-        :expand-key="expandKey"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
-        <el-dialog
-                :title="'新增物流登记'"
-                :visible.sync="dialogVisible"
-        >
+         :loading="loading" 
+         :table-data="tableData" 
+         :handle-button-map="handleButtonMap" 
+         :config="tableConfig"   
+         @sizeChange="handleSizeChange"
+         @currentChange="handleCurrentChange" 
+         @currentRadioChange="currentRadioChange"
+         :highlight-current-row="highlightCurrentRow" 
+         :total="total" 
+         :maxTotal="10"
+         :expand-key="expandKey"
+         :pageSize="ruleForm.pageSize"
+         :currentPage="ruleForm.pageNum">
+         </double-table>
+
+         <el-dialog
+           :title="'新增物流登记'"
+           :visible.sync="dialogVisible">
+
             <el-row :gutter="10">
                 <el-col :span="12">
                     <span>计划单号：</span>{{selectData.planCode}}
@@ -32,83 +51,130 @@
                     <span>收货地址：</span>{{selectData.receiveAddress}}
                 </el-col>
             </el-row>
-            <el-form :model="logisticsForm" class="formInput" :rules="logisticsRules"     ref="subForm"  label-width="80px" label-position="left">
-               
-                <el-form-item label="物流公司名称" label-width="100px" prop="logisticsComCode" >
-                    <el-select v-model="logisticsForm.logisticsComCode" :rules="[
-                    { required: true, message: '该项为必选'},
-                    ]" 
-                    clearable placeholder="请选择物流公司" 
-                    size="small" prefix-icon="el-icon-search">
+
+            <el-form 
+               :model="logisticsForm" 
+               class="formInput" 
+               :rules="logisticsRules"     
+               ref="subForm"  
+               label-width="80px" 
+               label-position="left">
+                <el-form-item 
+                  label="物流公司名称" 
+                  label-width="100px" 
+                  prop="logisticsComCode" >
+                    <el-select 
+                      v-model="logisticsForm.logisticsComCode" 
+                      :rules="[{ required: true, message: '该项为必选'}]" 
+                      clearable 
+                      placeholder="请选择物流公司" 
+                      size="small" 
+                      prefix-icon="el-icon-search">
                         <el-option
-                        v-for="item in deliverCompanyAll"
-                        :key="item.companyCode"
-                        :label="item.companyName"
-                        :value="item.companyCode">
+                          v-for="item in deliverCompanyAll"
+                          :key="item.companyCode"
+                          :label="item.companyName"
+                          :value="item.companyCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
+
                  <el-form-item label="物流单号"
                     prop="logisticsOrderCode" >
-                    <el-input type="text" size="small" :rules="[
-                    { required: true, message: '该项为必填'},
-                    ]" v-model="logisticsForm.logisticsOrderCode" ></el-input>
+                    <el-input 
+                      type="text" 
+                      size="small"
+                      :rules="[ { required: true, message: '该项为必填'}]" 
+                      v-model="logisticsForm.logisticsOrderCode" >
+                    </el-input>
                 </el-form-item>
-                 <el-form-item label="件数" prop="carrierQty" >
-                    <el-input type="number" size="small" :rules="[
-                    { required: true, message: '该项为必填'},
-                    ]"   v-model="logisticsForm.carrierQty" ></el-input>
+
+                 <el-form-item 
+                   label="件数" 
+                   prop="carrierQty" >
+                    <el-input 
+                       type="number" 
+                       size="small" 
+                       :rules="[{ required: true, message: '该项为必填'}]"  
+                       v-model="logisticsForm.carrierQty" >
+                    </el-input>
                 </el-form-item>
-                <el-form-item label="运费"   :rules="[
-                    { required: true, message: '该项为必填'},
-                    ]" prop="freightAmt" >
-                    <el-input type="number" size="small"  v-model="logisticsForm.freightAmt" ></el-input>
+
+                <el-form-item 
+                  label="运费"   
+                  :rules="[{ required: true, message: '该项为必填'}]" 
+                  prop="freightAmt">
+                    <el-input type="number"
+                      size="small" 
+                      v-model="logisticsForm.freightAmt" >
+                    </el-input>
                 </el-form-item>
-                <el-form-item label="其它费用"  prop="otherAmt" >
-                    <el-input type="number" size="small"  v-model="logisticsForm.otherAmt" ></el-input>
+
+                <el-form-item 
+                   label="其它费用"  
+                   prop="otherAmt" >
+                    <el-input type="number" 
+                      size="small"  
+                      v-model="logisticsForm.otherAmt" >
+                    </el-input>
                 </el-form-item>
-                <el-form-item label="物流总额"  prop="skuAmt" >
-                    <el-input type="number" size="small"  v-model="logisticsForm.skuAmt" disabled></el-input>
+
+                <el-form-item 
+                  label="物流总额"  
+                  prop="skuAmt" >
+                    <el-input type="number" 
+                       size="small" 
+                       v-model="logisticsForm.skuAmt" 
+                       disabled>
+                    </el-input>
                 </el-form-item>
-                 <el-form-item label="运费承担方" label-width="100px"  prop="payType" :rules="[
-                    { required: true, message: '该项为必选'},
-                    ]" >
+
+                 <el-form-item 
+                   label="运费承担方" 
+                   label-width="100px"  
+                   prop="payType" 
+                   :rules="[{ required: true, message: '该项为必选'}]" >
                      <el-select v-model="logisticsForm.payType" 
-                    size="small">
+                     size="small">
                         <el-option
-                        key="我方承担"
-                        label="我方承担"
-                        :value="0">
+                           key="我方承担"
+                           label="我方承担"
+                           :value="0">
                         </el-option>
+
                         <el-option
-                        key="客户承担"
-                        label="客户承担"
-                        :value="1">
+                          key="客户承担"
+                          label="客户承担"
+                          :value="1">
                         </el-option>
                     </el-select>
                 </el-form-item>
                
-                 <el-form-item label="备注"  prop="remarkInfo" >
-                    <el-input type="text" size="small" v-model="logisticsForm.remarkInfo" ></el-input>
+                 <el-form-item 
+                   label="备注"  
+                   prop="remarkInfo" >
+                    <el-input type="text" 
+                       size="small"
+                       v-model="logisticsForm.remarkInfo" >
+                    </el-input>
                 </el-form-item>
             </el-form>
+
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="submitDeliver">确 定</el-button>
             </span>
+
         </el-dialog>
+
          <el-dialog
-                :title="'物流详情'"
-                :visible.sync="dialogVisibleDeliver"
-                
-        >
-           <deliver-detail :detailData="detailData"/>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisibleDeliver = false">关闭</el-button>
-                
+           :title="'物流详情'"
+           :visible.sync="dialogVisibleDeliver">
+            <deliver-detail :detailData="detailData"/>
+              <span slot="footer" class="dialog-footer">
+                <el-button  @click="dialogVisibleDeliver = false">关闭</el-button>
             </span>
         </el-dialog>
-        
     </div>
 </template>
 

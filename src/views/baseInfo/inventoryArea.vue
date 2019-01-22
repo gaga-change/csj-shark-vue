@@ -1,51 +1,80 @@
 <template>
     <div>
-        <search-logistics @searchTrigger="submitForm"  @resetSearch="resetForm" 
-        :search-name="searchName"
-        :search-forms="ruleForm"></search-logistics>
-        <el-button type="primary" size="small" @click="formHandle('add')" style="margin-bottom:15px">添加</el-button>
-        <double-table 
-        :loading="loading" 
-        :table-data="tableData" 
-        :handle-button-map="handleButtonMap" :config="tableConfig"   @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        :total="total" 
-        :maxTotal="10"
-        :expand-key="expandKey"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
-        <el-dialog
-                :title="dialogTitle+'库区'"
-                :visible.sync="dialogVisible"
-                width="420px"
-        >
+        <search-logistics 
+          @searchTrigger="submitForm" 
+          @resetSearch="resetForm" 
+          :search-name="searchName"
+          :search-forms="ruleForm">
+        </search-logistics>
 
-            <el-form :model="formParams" class="formInput"     ref="subForm"  label-width="70px" label-position="left">
-               <el-form-item label="仓库编码"  prop="warehouseCode"  >
-                    <el-input type="text" size="small" v-model="chooseWarehouse" disabled></el-input>
+        <el-button type="primary"
+           size="small" 
+           @click="formHandle('add')" 
+           style="margin-bottom:15px">
+           添加
+        </el-button>
+
+        <double-table 
+          :loading="loading" 
+          :table-data="tableData" 
+          :handle-button-map="handleButtonMap" 
+          :config="tableConfig"   
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+         :total="total" 
+         :maxTotal="10"
+         :expand-key="expandKey"
+         :pageSize="ruleForm.pageSize"
+         :currentPage="ruleForm.pageNum">
+        </double-table>
+
+        <el-dialog
+          :title="dialogTitle+'库区'"
+          :visible.sync="dialogVisible"
+          width="420px">
+            <el-form 
+              :model="formParams" 
+              class="formInput"     
+              ref="subForm"  
+              label-width="70px" 
+              label-position="left">
+
+              <el-form-item label="仓库编码"  
+               prop="warehouseCode"  >
+                 <el-input type="text" 
+                   size="small" 
+                   v-model="chooseWarehouse" 
+                   disabled>
+                 </el-input>
                </el-form-item>
+
                <el-form-item label="仓库名称"  prop="warehouseName" >
-                    <el-input type="text" size="small" v-model="warehouseName" disabled></el-input>
+                  <el-input type="text" 
+                    size="small" 
+                    v-model="warehouseName" 
+                    disabled>
+                  </el-input>
                </el-form-item>
-                <el-form-item label="库区编码"  prop="warehouseAreaCode"  :rules="[
-              { required: true, message: '请选择库区'},
-             ]">
+
+                <el-form-item label="库区编码"  
+                  prop="warehouseAreaCode"  
+                  :rules="[{ required: true, message: '请选择库区'}]">
                    <el-select v-model="formParams.warehouseAreaCode" 
-                        clearable placeholder="请选择库区" 
-                        :disabled="formType!='add'"
-                        size="small">
-                        <el-option
-                        v-for="item in AtoZ"
-                        :key="item.name"
-                        :label="item.name"
-                        :disabled="item.isUsed"
-                        :value="item.value">
-                        </el-option>
+                     clearable placeholder="请选择库区" 
+                     :disabled="formType!='add'"
+                     size="small">
+                     <el-option
+                     v-for="item in AtoZ"
+                     :key="item.name"
+                     :label="item.name"
+                     :disabled="item.isUsed"
+                     :value="item.value">
+                     </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否虚拟区" label-width="90px" :rules="[
-              { required: true, message: '请选择'},
-             ]">
+
+                <el-form-item label="是否虚拟区" label-width="90px" 
+                  :rules="[{ required: true, message: '请选择'}]">
                   <el-select v-model="formParams.isVirtual" 
                         :disabled="formType!='add'"
                         clearable placeholder="请选择" 
@@ -58,9 +87,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                 <el-form-item label="库区状态" label-width="90px" :rules="[
-              { required: true, message: '请选择'},
-             ]">
+
+                 <el-form-item label="库区状态" label-width="90px" :rules="[{ required: true, message: '请选择'}]">
                   <el-select v-model="formParams.warehouseAreaStatus" 
                         :disabled="formType!='add'"
                         clearable placeholder="请选择" 
@@ -73,9 +101,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="库区性质" prop="warehouseAreaNature" :rules="[
-              { required: true, message: '请选择库区性质'},
-             ]">
+
+                <el-form-item label="库区性质" prop="warehouseAreaNature" 
+                  :rules="[{ required: true, message: '请选择库区性质'}]">
                   <el-select v-model="formParams.warehouseAreaNature" 
                         clearable placeholder="请选择库区性质" 
                         :disabled="formType!='add'"
@@ -90,10 +118,14 @@
                 </el-form-item>
              
                  <el-form-item label="库区功能"  prop="warehouseAreaDesc" >
-                    <el-input type="textarea" :maxlength="100" size="small" v-model="formParams.warehouseAreaDesc" 
-                        :disabled="this.formType=='watch'"
-                    ></el-input>
+                    <el-input type="textarea" 
+                      :maxlength="100" 
+                      size="small" 
+                      v-model="formParams.warehouseAreaDesc" 
+                      :disabled="this.formType=='watch'">
+                    </el-input>
                 </el-form-item>
+                
             </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>

@@ -13,16 +13,14 @@ const getters = {
   visitedViews: state => state.tagsView.visitedViews,
   mapConfig:state=>state.map.mapConfig,
   arrivalBill: state => state.tempData.arrivalBill,
+
   menu: state => {
     return asyncRouterMap
   }
   
   // menu: state => {
-
   //   let bakmenus = state.user.userInfo&&state.user.userInfo.menus&&JSON.parse(state.user.userInfo.menus)||[]
-    
   //   let bakmenu = deepExistMenu(bakmenus,asyncRouterMap)
-
   //   const menutemp = []
   //   bakmenu.forEach(item => {
   //     const subchildren = []
@@ -50,12 +48,9 @@ const getters = {
   //       children: subchildren
   //     })
   //   })
-
   //   menutemp.push({
   //     path: '*', redirect: '/404', hidden: true 
   //   })
-
-
   //   return menutemp
   // }
 }

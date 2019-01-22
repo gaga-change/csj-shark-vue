@@ -1,7 +1,20 @@
 <template>
     <div>
-        <search-inventory @searchTrigger="submitForm" ref="searchWarhouse" @resetSearch="resetForm" :search-forms="ruleForm"></search-inventory>
-        <el-button @click="getExport" style="margin-bottom:15px" type="primary" size="small">导出</el-button>
+        <search-inventory
+          @searchTrigger="submitForm" 
+          ref="searchWarhouse" 
+          @resetSearch="resetForm" 
+          :search-forms="ruleForm">
+        </search-inventory>
+
+        <el-button 
+          @click="getExport" 
+          style="margin-bottom:15px" 
+          type="primary" 
+          size="small">
+          导出
+        </el-button>
+        
        <base-table 
         @sizeChange="handleSizeChange"
         @currentChange="handleCurrentChange"

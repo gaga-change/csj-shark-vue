@@ -1,26 +1,58 @@
 <template>
-
     <div>
-        <tab-label :tab-config="BusiBillTypeEnum" @tabSwitch="tabSwitch" :tab-default="tabDefault"></tab-label>
-        <search-warehousing @searchTrigger="submitForm" ref="searchWarhouse"  @resetSearch="resetForm" :search-forms="ruleForm"></search-warehousing>
-        <operation-button :child-data-arr="childDataArr" :plan-print-data="planPrintData" :parent-data-obj="parentDataObj" />
-        <div style="margin-bottom:15px" v-show="planPrintData.length>0">
+        <tab-label 
+          :tab-config="BusiBillTypeEnum" 
+          @tabSwitch="tabSwitch" 
+          :tab-default="tabDefault">
+        </tab-label>
+
+        <search-warehousing 
+          @searchTrigger="submitForm" 
+          ref="searchWarhouse"  
+          @resetSearch="resetForm" 
+          :search-forms="ruleForm">
+        </search-warehousing>
+
+        <operation-button 
+          :child-data-arr="childDataArr" 
+          :plan-print-data="planPrintData" 
+          :parent-data-obj="parentDataObj" />
+          
+        <div style="margin-bottom:15px"
+          v-show="planPrintData.length>0">
             <span>选中的要打印的计划单</span>
-            <el-tag v-for="tag in planPrintData" :key="tag.planCode" closable  @close="closePlanTags(tag)" style="margin:0 0 10px 10px;">{{tag.planCode}}</el-tag>
+            <el-tag v-for="tag in planPrintData" 
+            :key="tag.planCode" 
+            closable 
+            @close="closePlanTags(tag)" 
+            style="margin:0 0 10px 10px;">
+            {{tag.planCode}}
+            </el-tag>
         </div>
-        <double-table :loading="loading" :table-data="tableData"
-        ref="tableChild" :handle-button-map="handleButtonMap"  
-        :expands-parent="expandsParent" :highlight-current-row="highlightCurrentRow" :child-data-name="childDataName" 
-        :config="parentTableConfig"
-        :childTableConfig="childTableConfig" :accordion-expand="accordionExpand" @currentRadioChange="currentRadioChange" 
-        @expandChangePa="expandChange"
-        :child-can-select="childCanSelect" :expand-key="expandKey" @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        :total="total" 
-        :maxTotal="10"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
-       
+
+        <double-table 
+          :loading="loading" 
+          :table-data="tableData"
+          ref="tableChild" 
+          :handle-button-map="handleButtonMap"  
+          :expands-parent="expandsParent" 
+          :highlight-current-row="highlightCurrentRow"
+          :child-data-name="childDataName" 
+          :config="parentTableConfig"
+          :childTableConfig="childTableConfig"
+          :accordion-expand="accordionExpand"
+          @currentRadioChange="currentRadioChange" 
+          @expandChangePa="expandChange"
+          :child-can-select="childCanSelect"
+          :expand-key="expandKey" 
+          @childDataSelect="childDataSelect" 
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+          :total="total" 
+          :maxTotal="10"
+          :pageSize="ruleForm.pageSize"
+          :currentPage="ruleForm.pageNum">
+        </double-table>
     </div>
 </template>
 
@@ -62,8 +94,7 @@
                     
                 },
                 // searchForms,
-                tableData:[
-                ],
+                tableData:[],
                 // pageNum:0,
                 // pageSize:10,
                 //子表数据名称
@@ -102,14 +133,12 @@
                     this.expandsParent = []
                 }else{
                     this.expandsParent = [...arr]
-
                 }
                 this.currentRadioChange(row)
             },
 
             getTableData(){
                 console.log(1);
-                
                 this.$router.replace({
                     path:'/inwarehousing/planIn',
                     query:{data:JSON.stringify(this.ruleForm)}
@@ -120,7 +149,6 @@
                     
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
-                        
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'planCode')
                         this.total = res.data.total
                         var a = this.$refs.tableChild.expands//之前打开过 
@@ -216,15 +244,12 @@
                    this.childDataArr = []
                 //    debugger
                     // this.getTableData()
-
                 }
             },
             closePlanTags(tag){
                 var planPrintData = [...this.planPrintData]
                 var b = [...planPrintData.filter(item => {return item.planCode!=tag.planCode})]
                 this.planPrintData = [...b]
-                
-                
             }
         },
         created(){

@@ -1,101 +1,159 @@
 <template>
     <div>
-        <search-logistics @searchTrigger="submitForm"  @resetSearch="resetForm" :search-forms="ruleForm"></search-logistics>
+        <search-logistics 
+           @searchTrigger="submitForm"  
+           @resetSearch="resetForm" 
+           :search-forms="ruleForm">
+        </search-logistics>
+
         <div>
             <el-button type="primary" size="small" @click="formHandle('add')" >添加</el-button>
             <el-button type="primary" size="small" @click="printSite" >打印库位码</el-button>
         </div>
         <double-table 
-        :loading="loading" 
-        :table-data="tableData" 
-        :can-select="canSelect"
-        @dataSelect='dataSelect'
+          :loading="loading" 
+          :table-data="tableData" 
+          :can-select="canSelect"
+          @dataSelect='dataSelect'
+          :handle-button-map="handleButtonMap" 
+          :config="tableConfig"   
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+          :total="total" 
+          :maxTotal="10"
+          :expand-key="expandKey"
+          :pageSize="ruleForm.pageSize"
+          :currentPage="ruleForm.pageNum">
+        </double-table>
 
-        :handle-button-map="handleButtonMap" :config="tableConfig"   @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        :total="total" 
-        :maxTotal="10"
-        :expand-key="expandKey"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
         <el-dialog
-                :title="dialogTitle+'库位'"
-                :visible.sync="dialogVisible"
-                width="480px"
-        >
-            <el-form :model="formParams" ref="subForm"  label-width="70px" label-position="left">
-                <el-form-item label="库区编码"  prop="warehouseAreaCode" label-width="100px" :rules="[
-              { required: true, message: '请选择库区'},
-             ]">
+          :title="dialogTitle+'库位'"
+          :visible.sync="dialogVisible"
+          width="480px">
+            <el-form :model="formParams" 
+               ref="subForm"  
+               label-width="70px" 
+               label-position="left">
+
+                 <el-form-item label="库区编码"  
+                   prop="warehouseAreaCode" 
+                   label-width="100px" 
+                   :rules="[{ required: true, message: '请选择库区'}]">
                    <el-select v-model="formParams.warehouseAreaCode" 
-                        clearable placeholder="请选择库区" 
-                        :disabled="this.formType!='add'"
-                        size="small">
+                      clearable 
+                      placeholder="请选择库区" 
+                      :disabled="this.formType!='add'"
+                      size="small">
                         <el-option
-                        v-for="item in warehouseAreaCodeEnum"
-                        :key="item.warehouseAreaCode"
-                        :label="item.warehouseAreaCode"
-                        :value="item.warehouseAreaCode">
+                          v-for="item in warehouseAreaCodeEnum"
+                          :key="item.warehouseAreaCode"
+                          :label="item.warehouseAreaCode"
+                          :value="item.warehouseAreaCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
              
-                 <el-form-item label="库位编码"  label-width="100px" :rules="[
-              { required: true, message: '请选择库位'},
-             ]">
-                    <div class="inventorySite"> <span class="tip">从</span> 
-                        <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.platoonStart" 
-                            class="siteInput"
-                        ></el-input>
+                 <el-form-item label="库位编码"  
+                   label-width="100px" 
+                   :rules="[{ required: true, message: '请选择库位'}]">
+                    <div class="inventorySite"> 
+
+                        <span class="tip">从</span> 
+                        <el-input type="text"
+                           size="small" 
+                           placeholder="请输入1-99整数" 
+                           :min="1" 
+                           :max="99" 
+                           v-model="formParams.platoonStart">
+                        </el-input>
+
                          <span class="tip">到</span>
-                         <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.platoonEnd" 
-                            class="siteInput"
-                        ></el-input><span class="tip"></span>
+                         <el-input type="text" 
+                           size="small" 
+                           placeholder="请输入1-99整数" 
+                           :min="1" 
+                           :max="99" 
+                           v-model="formParams.platoonEnd" 
+                           class="siteInput">
+                        </el-input>
+                        <span class="tip"></span>
                      </div>
-                    <div class="inventorySite"> <span class="tip">从第</span> 
-                        <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.columnStart" 
-                            class="siteInput"
-                        ></el-input>
+
+                    <div class="inventorySite"> 
+
+                        <span class="tip">从第</span> 
+                        <el-input type="text" 
+                          size="small" 
+                          placeholder="请输入1-99整数" 
+                          :min="1" 
+                          :max="99" 
+                          v-model="formParams.columnStart" 
+                          class="siteInput">
+                        </el-input>
+
+                        <span class="tip">层到</span>
+                        <el-input type="text" 
+                          size="small" 
+                          placeholder="请输入1-99整数" 
+                          :min="1" 
+                          :max="99" 
+                          v-model="formParams.columnEnd" 
+                          class="siteInput">
+                        </el-input>
+                        <span class="tip">层</span>
+                     </div>
+
+                     <div class="inventorySite"> 
+
+                         <span class="tip">库位从第</span> 
+                         <el-input type="text" 
+                            size="small" 
+                            placeholder="请输入1-99整数" 
+                            :min="1" 
+                            :max="99" 
+                            v-model="formParams.floorStart" 
+                            class="siteInput">
+                        </el-input>
+
                          <span class="tip">层到</span>
-                         <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.columnEnd" 
-                            class="siteInput"
-                        ></el-input><span class="tip">层</span>
+                         <el-input type="text" 
+                           size="small" 
+                           placeholder="请输入1-99整数" 
+                           :min="1" 
+                           :max="99" 
+                           v-model="formParams.floorEnd" 
+                           class="siteInput">
+                         </el-input>
+                         <span class="tip">层</span>
                      </div>
-                     <div class="inventorySite"> <span class="tip">库位从第</span> 
-                        <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.floorStart" 
-                            class="siteInput"
-                        ></el-input>
-                         <span class="tip">层到</span>
-                         <el-input type="text" max="100" size="small" placeholder="请输入1-99整数" :min="1" :max="99" v-model="formParams.floorEnd" 
-                            class="siteInput"
-                        ></el-input><span class="tip">层</span>
-                     </div>
-                    
                 </el-form-item>
             </el-form>
             <div>提示：第一行是货架，第二行是货架层高，第三行是具体库位号</div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="submitIt">确 定</el-button>
-                </span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="submitIt">确 定</el-button>
+            </span>
         </el-dialog>
- <el-dialog
-                title="打印库位码"
-                :visible.sync="dialogVisibleSite"
-                width="70%"
-            >
-                     <!-- <div style="margin:10px;">预览</div>  -->
-                     <div id="print" class="printSiteCss">
-                         <div v-for="item in multipleParentSelection" class="printItemCss"  :key="item.warehouseSpaceCode">
-                            <bar-code :code="item.warehouseSpaceCode"></bar-code>
-                         </div>
-                     </div>
-                <span slot="footer" class="dialog-footer" v-loading="loading">
-                    <el-button @click="dialogVisibleSite = false">取 消</el-button>
-                   
-                    <el-button type="primary" @click="printIt">打印</el-button>
-                </span>
-            </el-dialog>
+
+         <el-dialog
+           title="打印库位码"
+           :visible.sync="dialogVisibleSite"
+           width="70%">
+            <!-- <div style="margin:10px;">预览</div>  -->
+            <div id="print" class="printSiteCss">
+                <div v-for="item in multipleParentSelection" 
+                   class="printItemCss"  
+                   :key="item.warehouseSpaceCode">
+                    <bar-code :code="item.warehouseSpaceCode"></bar-code>
+                </div>
+            </div>
+            <span slot="footer" 
+               class="dialog-footer" 
+               v-loading="loading">
+              <el-button @click="dialogVisibleSite = false">取 消</el-button>
+              <el-button type="primary" @click="printIt">打印</el-button>
+            </span>
+         </el-dialog>
     </div>
 </template>
 

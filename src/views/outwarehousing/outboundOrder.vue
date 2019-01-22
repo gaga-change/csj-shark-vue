@@ -1,18 +1,53 @@
 <template>
     <div>
-        <tab-label :tab-config="BusiBillTypeEnum" @tabSwitch="tabSwitch" :tab-default="tabDefault"></tab-label>
-        <search-warehousing @searchTrigger="submitForm" ref="searchWarhouse" :outbound="outbound" @resetSearch="resetForm"  :search-forms="ruleForm"></search-warehousing>
-         <el-button type="primary" size="small" @click="quickSubmit" :disabled="buttonDisable" v-loading="buttonDisable" style="margin-bottom:15px">确认出库</el-button>
+        <tab-label 
+           :tab-config="BusiBillTypeEnum"
+           @tabSwitch="tabSwitch" 
+           :tab-default="tabDefault">
+        </tab-label>
+
+        <search-warehousing 
+           @searchTrigger="submitForm" 
+           ref="searchWarhouse" 
+           :outbound="outbound"
+           @resetSearch="resetForm"  
+           :search-forms="ruleForm">
+        </search-warehousing>
+
+         <el-button 
+           type="primary" 
+           size="small"
+           @click="quickSubmit" 
+           :disabled="buttonDisable" 
+           v-loading="buttonDisable" 
+           style="margin-bottom:15px">
+           确认出库
+        </el-button>
+
         <double-table 
-        :loading="loading" 
-        :table-data="tableData" 
-        ref="tableChild" :handle-button-map="handleButtonMap"  
-        :highlight-current-row="highlightCurrentRow" :child-data-name="childDataName" :config="tableConfig" :childTableConfig="childTableConfig" :expands-parent="expandsParent" @expandChangePa="expandChange" :accordion-expand="accordionExpand" @currentRadioChange="currentRadioChange" :child-can-select="childCanSelect" :expand-key="expandKey" @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        :total="total" 
-        :maxTotal="10"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
+          :loading="loading" 
+          :table-data="tableData" 
+          ref="tableChild" 
+          :handle-button-map="handleButtonMap"  
+          :highlight-current-row="highlightCurrentRow" 
+          :child-data-name="childDataName" 
+          :config="tableConfig" 
+          :childTableConfig="childTableConfig" 
+          :expands-parent="expandsParent"
+          @expandChangePa="expandChange" 
+          :accordion-expand="accordionExpand" 
+          @currentRadioChange="currentRadioChange" 
+          :child-can-select="childCanSelect" 
+          :expand-key="expandKey" 
+          @childDataSelect="childDataSelect" 
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+          :total="total" 
+          :maxTotal="10"
+          :pageSize="ruleForm.pageSize"
+          :currentPage="ruleForm.pageNum">
+        </double-table>
+        
     </div>
 </template>
 

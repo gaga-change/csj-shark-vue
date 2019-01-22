@@ -1,22 +1,59 @@
 <template>
     <div>
-        <tab-label :tab-config="BusiBillTypeEnum" @tabSwitch="tabSwitch" :tab-default="tabDefault"></tab-label>
-        <search-warehousing @searchTrigger="submitForm" ref="searchWarhouse" @resetSearch="resetForm" :search-forms="ruleForm"></search-warehousing>
-        <operation-button :child-data-arr="childDataArr" :planPrintData="planPrintData" :orderType="currentTab" :parent-data-obj="parentDataObj" />
-         <div style="margin-bottom:15px" v-show="planPrintData.length>0">
+        <tab-label 
+          :tab-config="BusiBillTypeEnum" 
+          @tabSwitch="tabSwitch" 
+          :tab-default="tabDefault">
+        </tab-label>
+
+        <search-warehousing 
+          @searchTrigger="submitForm" 
+          ref="searchWarhouse" 
+          @resetSearch="resetForm" 
+          :search-forms="ruleForm">
+        </search-warehousing>
+
+        <operation-button 
+          :child-data-arr="childDataArr" 
+          :planPrintData="planPrintData" 
+          :orderType="currentTab" 
+          :parent-data-obj="parentDataObj" />
+
+         <div style="margin-bottom:15px" 
+           v-show="planPrintData.length>0">
             <span>选中的要打印的计划单</span>
-            <el-tag v-for="tag in planPrintData" :key="tag.planCode" closable  @close="closePlanTags(tag)" style="margin:0 0 10px 10px;">{{tag.planCode}}</el-tag>
-        </div>
-        <double-table :loading="loading" :table-data="tableData"
-        ref="tableChild" :handle-button-map="handleButtonMap"  :highlight-current-row="highlightCurrentRow" :child-data-name="childDataName" 
-        :config="parentTableConfig"
-        :expands-parent="expandsParent"
-        :childTableConfig="childTableConfig" :accordion-expand="accordionExpand" @expandChangePa="expandChange" @currentRadioChange="currentRadioChange" :child-can-select="childCanSelect" :expand-key="expandKey" @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        :total="total" 
-        :maxTotal="10"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
+            <el-tag v-for="tag in planPrintData" 
+              :key="tag.planCode"
+               closable 
+               @close="closePlanTags(tag)" 
+               style="margin:0 0 10px 10px;">
+               {{tag.planCode}}
+            </el-tag>
+         </div>
+
+        <double-table 
+          :loading="loading" 
+          :table-data="tableData"
+          ref="tableChild" 
+          :handle-button-map="handleButtonMap"  
+          :highlight-current-row="highlightCurrentRow" 
+          :child-data-name="childDataName" 
+          :config="parentTableConfig"
+          :expands-parent="expandsParent"
+          :childTableConfig="childTableConfig" 
+          :accordion-expand="accordionExpand" 
+          @expandChangePa="expandChange" 
+          @currentRadioChange="currentRadioChange" 
+          :child-can-select="childCanSelect" 
+          :expand-key="expandKey" 
+          @childDataSelect="childDataSelect"  
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+          :total="total" 
+          :maxTotal="10"
+          :pageSize="ruleForm.pageSize"
+          :currentPage="ruleForm.pageNum">
+        </double-table>
        
     </div>
 </template>
@@ -156,7 +193,7 @@
                     console.log(123,res.success , res.data , res.data.outWarehousePlanDetailRespList);
                         
                         if(res.success && res.data && res.data.outWarehousePlanDetailRespList && res.data.outWarehousePlanDetailRespList.length>0){
-console.log(125);
+                     console.log(125);
                             var outWarehousePlanDetailRespList = res.data.outWarehousePlanDetailRespList 
                             outWarehousePlanDetailRespList = outWarehousePlanDetailRespList.map(item => {
                                 item.planOutQty = (Number(item.planOutQty)||0).toFixed(0)

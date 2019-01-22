@@ -1,30 +1,54 @@
 <template>
 
     <div>
-        <tab-label :tab-config="BusiBillTypeEnum" @tabSwitch="tabSwitch" :tab-default="tabDefault"></tab-label>
-        <search-warehousing @searchTrigger="submitForm" ref="searchWarhouse"  @resetSearch="resetForm" :search-forms="ruleForm"></search-warehousing>
-        <operation-button :child-data-arr="childDataArr" :plan-print-data="planPrintData" :parent-data-obj="parentDataObj" />
+        <tab-label 
+          :tab-config="BusiBillTypeEnum" 
+          @tabSwitch="tabSwitch" 
+          :tab-default="tabDefault">
+        </tab-label>
+
+        <search-warehousing 
+          @searchTrigger="submitForm" 
+          ref="searchWarhouse"  
+          @resetSearch="resetForm" 
+          :search-forms="ruleForm">
+        </search-warehousing>
+
+        <operation-button 
+          :child-data-arr="childDataArr" 
+          :plan-print-data="planPrintData" 
+          :parent-data-obj="parentDataObj" />
+
         <!-- <div style="margin-bottom:15px" v-show="planPrintData.length>0">
             <span>选中的要上架的到货单号</span>
             <el-tag v-for="tag in planPrintData" :key="tag.planCode" closable  @close="closePlanTags(tag)" style="margin:0 0 10px 10px;">{{tag.planCode}}</el-tag>
         </div> -->
-        <double-table :loading="loading" :table-data="tableData"
-        ref="tableChild" :handle-button-map="handleButtonMap"  
-        :expands-parent="expandsParent" :highlight-current-row="highlightCurrentRow" :child-data-name="childDataName" 
-        :config="parentTableConfig"
-        :childTableConfig="childTableConfig" :accordion-expand="accordionExpand" @currentRadioChange="currentRadioChange" 
-        @expandChangePa="expandChange"
-        :child-can-select="childCanSelect" :expand-key="expandKey" 
-        :can-select="canSelect"
-        :can-edit="true"
-        @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
-        @currentChange="handleCurrentChange" 
-        @dataSelect='dataSelect'
-        @dataChange="dataChange"
-        :total="total" 
-        :maxTotal="10"
-        :pageSize="ruleForm.pageSize"
-        :currentPage="ruleForm.pageNum"></double-table>
+
+        <double-table 
+          :loading="loading" 
+          :table-data="tableData"
+          ref="tableChild" 
+          :handle-button-map="handleButtonMap"  
+          :expands-parent="expandsParent" 
+          :highlight-current-row="highlightCurrentRow" 
+          :child-data-name="childDataName" 
+          :config="parentTableConfig"
+          :childTableConfig="childTableConfig" 
+          :accordion-expand="accordionExpand"
+          @currentRadioChange="currentRadioChange" 
+          @expandChangePa="expandChange"
+          :child-can-select="childCanSelect"
+          :expand-key="expandKey" 
+          :can-select="canSelect"
+          :can-edit="true"
+          @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange" 
+          @dataSelect='dataSelect'
+          @dataChange="dataChange"
+          :total="total" 
+          :maxTotal="10"
+          :pageSize="ruleForm.pageSize"
+          :currentPage="ruleForm.pageNum"></double-table>
        
     </div>
 </template>
@@ -43,12 +67,12 @@
       pageNum: 1,
       pageSize:10,
       durationTime:['',''],//时间，
-        createBeginDate:'',
-        createEndDate:'',
-        planCode:'',
-        providerName:'',
-        execStatus:'',
-        ownerName:'',
+      createBeginDate:'',
+      createEndDate:'',
+      planCode:'',
+      providerName:'',
+      execStatus:'',
+      ownerName:'',
     }
     
     export default {

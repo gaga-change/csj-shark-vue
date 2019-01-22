@@ -10,10 +10,10 @@ export default {
 }
 </script>
 <style lang="scss">
-.el-button{
-  font-size:12px;
-}
-.simpleCard{
+  .el-button{
+    font-size:12px;
+  }
+  .simpleCard{
     padding-bottom: 0;
     margin-bottom: 20px;
     box-shadow: 0 !important;

@@ -4,8 +4,6 @@ import ItemTitle from '@/components/ItemTitle/index'
 import ItemCard from '@/components/ItemCard/index' 
 import TabLabel from '@/components/TabLabel/index' 
 import BarCode from '@/components/BarCode/index' 
-
-
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 
 import 'normalize.css/normalize.css'
@@ -23,7 +21,6 @@ import * as filters from './filters' // global filters
 
 import { EXTENDS } from './assets/extends'
 
-// register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
