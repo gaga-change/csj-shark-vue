@@ -15,8 +15,8 @@
         :show-summary="showSummary"
         size="small"
         :style="tableStyle"
-        @select="handleParentSelection" @select-all="handleParentSelection" 
-        >
+         @select="handleParentSelection"
+         @select-all="handleParentSelection" >
         <el-table-column type="selection" width="55" v-if="canSelect" ></el-table-column>
         <template v-if="childDataName">
           <el-table-column type="expand" fixed>
@@ -25,8 +25,9 @@
                 <edit-table
                 @editDataSelect="editDataSelect"
                 @dataChange="dataChange"
+                :editText="editText"
                 :table-data="childTable.row[childDataName]" 
-                :unique="childTable.row[expandKey]"
+                :unique="String(childTable.row[expandKey])"
                 :config='childTableConfigFilter'
                 :childCanSelect="true"
                 ></edit-table>
@@ -89,10 +90,8 @@
             label="操作" >
             <template slot-scope="scope">
                  <template v-for="thisButton in handleButtonMap" >
-
                     <el-button :key="thisButton.title" :size="thisButton.size ?thisButton.size : 'size'" :type="thisButton.type ?thisButton.type : 'text'" @click="thisButton.handle(scope.$index, scope.row)">
                       {{(typeof thisButton.formatter !=='function')?thisButton.title:thisButton.formatter(scope.row)}}
-                      <!-- {{typeof thisButton.formatter}} -->
                       </el-button>
                  </template>
                
@@ -142,7 +141,12 @@ export default {
       type:Boolean,
       defalut:false
     },
-    
+
+    editText:{
+      type: String,
+      default: "编辑"
+    },
+
     summaryMethod:{
       type: Function,
       default: ()=>{}    
@@ -362,10 +366,6 @@ export default {
 
      handleCurrentRadioChange(currentRow, oldCurrentRow){
        if(currentRow){
-        //   if(this.accordionExpand){
-        //   this.expands = [];
-        //   this.expands.push(currentRow[this.expandKey]);
-        // }
         this.$emit('currentRadioChange', currentRow, oldCurrentRow); 
        }
        

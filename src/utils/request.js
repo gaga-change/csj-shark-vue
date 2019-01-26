@@ -9,15 +9,7 @@ const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
   timeout: 60000 // 请求超时时间
 })
-// service.interceptors.request.use(req=>{
-//   console.log(req,'aaaaaaa');
-//   return req
-// },err => {
-//   console.log(err,'reqerr');
-  
-//   return Promise.resolve(err)
-// })
-// respone拦截器
+
 service.interceptors.response.use(
   response => {
     const res = response.data;
@@ -26,13 +18,8 @@ service.interceptors.response.use(
         Message({type:'error',message:'登录失效，请重新登录',onClose:()=>{
           location.href = `/csj_login`
         },duration:1500})
-        // MessageBox.alert('验证失败,请重新登录').then( _ => {
-        //   location.href = `/csj_login`
-        // }).catch(err=>{
-        //   location.href = `/csj_login`
-        // })
        
-      }else if (res.size&&res.type) {//blob对象，目前没法直接判断类型
+      }else if (res.size&&res.type) {
         return res
       } else {
         let message=res.message||res.errorMsg||'';
@@ -48,8 +35,6 @@ service.interceptors.response.use(
       }
       return Promise.reject(res)
     } else {
-      console.log(2);
-      
       return res;
     }
   },

@@ -1,8 +1,14 @@
 <template>
-  <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
-    <template v-if="tabConfig&&tabConfig.length>0">
-      <el-tab-pane v-for="tab in tabConfig" :label="tab.name" :name="tab.value+''" :key="tab.name" />
-    </template>
+  <el-tabs 
+     v-model="tabName" 
+     type="card" 
+     @tab-click="handleClick" 
+     v-if="tabConfig&&tabConfig.length>0">
+      <el-tab-pane 
+         v-for="tab in tabConfig" 
+         :label="tab.name" 
+         :name="String(tab.value)" 
+         :key="tab.name" />
   </el-tabs>
 </template>
 <script>

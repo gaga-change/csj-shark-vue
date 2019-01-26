@@ -468,8 +468,8 @@ export const TiggerUrl = process.env.NODE_ENV === 'production' ? 'http://scm.csj
  * @param {*} [h=null]
  * @returns
  */
+
 export function MakePrint(content, userStyle, w = null, h = null) {
-  
   // Fixes dual-screen position                         Most browsers      Firefox
   const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
   const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;

@@ -169,7 +169,6 @@ export default {
   methods: {
     handleCommand(command){
       this.warehouse = command
-
       this.setWarehouse()
     },
     setWarehouse(){
@@ -188,7 +187,7 @@ export default {
             
             this.$message({type:'success',message:'切换仓库成功'})
             
-            // this.$router.go(0)
+            this.$router.go(0)
 
             //  this.$router.replace({
             //         path:this.$router.history.current.path,

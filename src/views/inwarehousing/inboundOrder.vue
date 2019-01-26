@@ -73,15 +73,6 @@
         ownerName:'',
         orderStatus:''
     }
-    // const searchForms = {
-    //     durationTime:['',''],//时间，
-    //     createBeginDate:'',
-    //     createEndDate:'',
-    //     busiBillNo:'',
-    //     providerName:'',
-    //     execStatus:'',
-    //     ownerName:'',
-    // }
     export default {
         components: { DoubleTable, SearchWarehousing },
         data(){
@@ -112,10 +103,7 @@
                 total:0,
                 //主表操作
                 handleButtonMap:[
-                    // {title:'详情',handle:(index,data)=>{
-                    //     this.dialogVisible = true
-                    //     this.dialogData = {...data}
-                    // }}
+                 
                 ],
                 childCanSelect:false,//子表可选择,false全选，
                 accordionExpand:true,//手风琴展开

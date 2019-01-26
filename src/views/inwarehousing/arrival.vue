@@ -1,306 +1,264 @@
 <template>
-
     <div>
-        <tab-label 
-          :tab-config="BusiBillTypeEnum" 
-          @tabSwitch="tabSwitch" 
-          :tab-default="tabDefault">
-        </tab-label>
+        <el-card class="simpleCard"  shadow="never"   body-style="padding:12px">
+            <new-search  
+             @submit="submit"
+             :searchForm="searchForm"  
+             ref="arrivalDom" >
+            </new-search>
+            <el-col :span="24" style="margin-bottom:12px;">
+                <el-button type="primary"  size="small"  @click="select">查询</el-button>
+                <el-button type="primary"  size="small" @click="resetForm">重置</el-button>
+            </el-col>
+        </el-card>
 
-        <search-warehousing 
-          @searchTrigger="submitForm" 
-          ref="searchWarhouse"  
-          @resetSearch="resetForm" 
-          :search-forms="ruleForm">
-        </search-warehousing>
-
-        <operation-button 
-          :child-data-arr="childDataArr" 
-          :plan-print-data="planPrintData" 
-          :parent-data-obj="parentDataObj" />
-
-        <!-- <div style="margin-bottom:15px" v-show="planPrintData.length>0">
-            <span>选中的要上架的到货单号</span>
-            <el-tag v-for="tag in planPrintData" :key="tag.planCode" closable  @close="closePlanTags(tag)" style="margin:0 0 10px 10px;">{{tag.planCode}}</el-tag>
-        </div> -->
+        <div style="margin-bottom:12px">
+           <el-button type="primary" size="small" @click="submitOrider" >上架</el-button>
+           <el-button type="danger" 
+            size="small"  
+            :disabled="!activeOrder.orderCode" 
+            @click="deleteOrider"  >
+            <span v-if="activeOrder.orderCode">
+                删除单据 : <span style="font-weight: 600;">{{activeOrder.orderCode}}</span>
+            </span>
+            <span v-else>
+                删除
+            </span>
+            </el-button>
+        </div>
+    
+        <el-dialog
+          title="到货登记"
+          :visible.sync="dialogVisible"
+          width="70%">
+          <div class="alertInfo">
+            <span>入库计划单 : {{activeOrder.planCode}}</span>    
+            <span>供应商 : {{activeOrder.providerName}}</span>    
+            <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>    
+          </div>
+          <web-pagination-table 
+           :loading="false"
+           :config="arrivalAlertConfig" 
+           :allTableData="nowChildDataSelectData"/> 
+        </el-dialog>
 
         <double-table 
-          :loading="loading" 
-          :table-data="tableData"
           ref="tableChild" 
-          :handle-button-map="handleButtonMap"  
-          :expands-parent="expandsParent" 
-          :highlight-current-row="highlightCurrentRow" 
-          :child-data-name="childDataName" 
-          :config="parentTableConfig"
-          :childTableConfig="childTableConfig" 
-          :accordion-expand="accordionExpand"
-          @currentRadioChange="currentRadioChange" 
-          @expandChangePa="expandChange"
-          :child-can-select="childCanSelect"
-          :expand-key="expandKey" 
-          :can-select="canSelect"
+          :loading="loading" 
+          :config="arrivalTableConfig"
+          :table-data="tableData"
+          child-data-name="childData" 
+          :childTableConfig="arrivalChildTableConfig"  
+          :highlight-current-row="true" 
+          :child-can-select="true"
+          :highlightCurrentRow="true"
+          expand-key="id" 
           :can-edit="true"
-          @childDataSelect="childDataSelect"  @sizeChange="handleSizeChange"
-          @currentChange="handleCurrentChange" 
-          @dataSelect='dataSelect'
-          @dataChange="dataChange"
           :total="total" 
-          :maxTotal="10"
-          :pageSize="ruleForm.pageSize"
-          :currentPage="ruleForm.pageNum"></double-table>
-       
+          :pageSize="pageSize"
+          :currentPage="pageNum"
+          editText="修改到货数量"
+          :expands-parent="expandsParent"
+          @expandChangePa="expandChange"
+          @childDataSelect="childDataSelect"  
+          @sizeChange="handleSizeChange"
+          @currentRadioChange="currentRadioChange"
+          @currentChange="handleCurrentChange" 
+          @dataChange="dataChange">
+        </double-table>
     </div>
 </template>
 
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
-    import { arrivalTableConfig, arrivalChildTableConfig } from './components/config'
-    import { getInfoWarehousing,getInfoDetailWarehousing } from '@/api/warehousing'
-    import { uniqueArray } from '@/utils/arrayHandler'
-    import  SearchWarehousing  from './components/search'
-    import operationButton from './components/operationButton'
-
-    import { BusiBillTypeEnum } from "@/utils/enum"
-    const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in'))
-    const ruleForm = {
-      pageNum: 1,
-      pageSize:10,
-      durationTime:['',''],//时间，
-      createBeginDate:'',
-      createEndDate:'',
-      planCode:'',
-      providerName:'',
-      execStatus:'',
-      ownerName:'',
-    }
-    
+    import newSearch from './components/newSearch'
+    import webPaginationTable from '@/components/Table/webPaginationTable'
+    import _  from 'lodash';
+    import moment from 'moment';
+    import { arrivalTableConfig, arrivalChildTableConfig,arrivalAlertConfig } from './components/config'
+    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete } from '@/api/warehousing'
     export default {
-        components: { DoubleTable, SearchWarehousing,operationButton },
+        components: { DoubleTable,newSearch,webPaginationTable },
         data(){
             return {
                 loading:false,
-                dialogVisible:false,
-                dialogData:{},
-                highlightCurrentRow: true,
-                BusiBillTypeEnum:BusiBillTypeEnumFilter,
-                tabDefault:BusiBillTypeEnumFilter[0].value+'',
-                currentTab:BusiBillTypeEnumFilter[0].value+'',
-                ruleForm,
-                selectData:{//x选中的单据
-                    
-                },
-                // searchForms,
-                tableData:[
-                ],
-                // pageNum:0,
-                // pageSize:10,
-                //子表数据名称
-                childDataName:'childData',
-                //表格配置
-                parentTableConfig:arrivalTableConfig,
-                childTableConfig:arrivalChildTableConfig,
-                // currentPage:1,
-                // pageSize:10,
+                arrivalTableConfig,
+                tableData:[],
+                arrivalChildTableConfig,
                 total:0,
-                //主表操作
-                handleButtonMap:[
-                    // {title:'详情',handle:(index,data)=>{
-                    //     this.dialogVisible = true
-                    //     this.dialogData = {...data}
-                    // }}
-                ],
-                canSelect:true,//主表可选择
-                childCanSelect:true,//子表可选择,false全选，
-                accordionExpand:false,//手风琴展开
-                multipleParentSelection:[],//选中的主表
-                multipleSelection:[],//选中的子表数据
-                expandKey:'planCode',
-                //按钮操作所需数据
-                parentDataObj:{},
-                childDataArr:[],
-                parentDataArr:[],
-                //计划单打印的选择数据
-                planPrintData:[],
+                pageSize:10,
+                pageNum:1,
+                searchForm:{
+                  orderType:'',
+                  providerName:'',
+                  planCode:'',
+                  ownerName:'',
+                },
+                activeOrder:{},
                 expandsParent:[],
+                arrivalAlertConfig,
+                nowChildDataSelectData:[],
+                dialogVisible:false
             }
         },
+
+         created(){
+            this.arrivalAlertConfig.forEach(item=>{
+                if(item.useLink){
+                    item.dom=(row, column, cellValue, index)=>{
+                    return <span>输入上架量</span> 
+                    }
+                }
+              }) 
+         },
+
         methods:{
-            //修改子表数据
-            dataChange(index,type,changeData){
-                console.log(index,type,changeData,'arr');
-                let changeIt = changeData ? changeData.unique.split('+') : ''
-                if(changeIt){
-                    this.tableData.map(item=>{
-                        if(item[this.expandKey] == changeIt[0]){
-                            item[this.childDataName].splice(changeIt[1],1,changeData)
-                        }
-                        return item
-                    })
-                }
-                // this.$emit('dataChange',index,type,changeData)
+            moment,
+            submitOrider(){
+              this.dialogVisible=true;
             },
-            //子表是否手风琴展开，
-            expandChange(row, expandedRows){
-                if(this.accordionExpand){
-                    var arr = []
-                    arr.push(row[this.expandKey])
-                    if(this.expandsParent == row[this.expandKey]){
-                        this.expandsParent = []
-                    }else{
-                        this.expandsParent = [...arr]
+            submit(value){
+              this.searchForm=value;
+              this.getCurrentTableData()
+            },
 
-                    }
-                }
+             select(){
+               this.$refs['arrivalDom'].submit()
+             },
+
+             resetForm(){
+               this.$refs['arrivalDom'].resetForm() 
+             },
+
+             handleSizeChange(val){
+               this.pageSize=val;
+               this.pageNum=1;
+               this.getCurrentTableData()
+             },
+
+             handleCurrentChange(val){
+               this.pageNum=val;
+               this.getCurrentTableData()
+             },
+
+             currentRadioChange(currentRow){
+               this.activeOrder=currentRow;
+             },
+
+             deleteOrider(){
+                let json=this.activeOrder;
+                this.$confirm(`  确定要删除到货单号为 ${json.orderCode} 计划单号为 ${json.planCode} 的单据吗？`, '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消'
+                }).then(()=>{
+                    receiveOrderDelete(json.id).then(res=>{
+                      if(res.success){
+                          this.$message({type:'success',message:'操作成功！'});
+                          this.activeOrder={};
+                          this.getCurrentTableData()
+                      } else{
+                          this.$message({type:'error',message:'操作失败'})
+                      }
+                    }).catch(err=>{
+                      console.log(err)
+                      this.$message({type:'error',message:'操作失败'})
+                    }) 
+               }).catch(err=>{
+                  console.log(err)
+               })
+             },
+
+             dataChange(index,type,changeData){
+               orderUpdateReceiveQty({
+                 receiveDetailId:changeData.id,
+                 receiveQty:changeData.receiveQty
+               }).then(res=>{
+                  if(res.success){
+                    this.$message({type:'success',message:'操作成功！'});
+                    this.expandChange({ id:changeData.rowId },{},false)
+                  } else{
+                    this.$message({type:'error',message:'操作失败'})
+                  }
+               }).catch(err=>{
+                   console.log(err)
+                   this.$message({type:'error',message:'操作失败'})
+               })
+             },
+
+             expandChange(json,expandedRows,reserver=true){
                
-                this.currentRadioChange(row)
-            },
-            //主表数据
-            getTableData(){
-                this.$router.replace({
-                    path:'/inwarehousing/arrival',
-                    query:{data:JSON.stringify(this.ruleForm)}
-                })
-                this.loading=true;
-                let data={...this.ruleForm,busiBillType:this.currentTab}
-                getInfoWarehousing(data).then(res => {
-                    
-                    if(res.success && res.data &&res.data.list){
-                        var tempList = [...res.data.list]
-                        // debugger
-                        // tempList.push({...tempList[0],planCode:'demo123456789'})
-                        
-                        this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'planCode')
-                        this.total = res.data.total
-                        var a = this.$refs.tableChild.expands//之前打开过 
-                        if(a&&a.length>0){
-                            
-                            var info = {
-                                childData:[],
-                                planCode:a[0]
-                            }
-                            this.currentRadioChange(info)
-                        }
-                    }else{
-                        this.tableData = []
-                    }
-                    this.loading = false;
+                this.activeOrder=json;
+                if(reserver&&this.expandsParent.includes(json['id'])){
+                    this.expandsParent = []
+                }else{
+                    this.expandsParent = [json['id']]
+                }
+                
+               let tableData= _.cloneDeep(this.tableData);
+               let index=tableData.findIndex(v=>v.id===json.id);
+               if(reserver&&tableData[index]['childData']&&Array.isArray(tableData[index]['childData'])){
+                  return  
+               }
 
+               orderDetailList(json.id).then(res=>{
+                   if(res.success){
+                      tableData[index]['childData']=res.data.map(item=>{
+                          let itemJson=item;
+                          itemJson.rowId=json.id;
+                          return itemJson;
+                      });
+                      this.tableData=tableData;
+                   }
+               }).catch(err=>{
+                   console.log(err)
+               })
+             },
+
+             childDataSelect(val){
+                this.nowChildDataSelectData=_.cloneDeep(val.arr).map(v=>{
+                  let json=v;
+                  json['warehousingArr']=[
+                      {putQty:1,warehouseSpaceCode:'1-2-3'},
+                      {putQty:1,warehouseSpaceCode:'1-2-3'},
+                      {putQty:1,warehouseSpaceCode:'1-2-3'},
+                  ];
+                  return json;
+                });
+             },
+
+             getCurrentTableData(){
+                 this.loading=true;
+                 orderList({
+                   ...this.searchForm,
+                   pageNum:this.pageNum,
+                   pageSize:this.pageSize
+                }).then(res=>{
+                    this.loading=false;
+                    if(res.success){
+                       this.tableData=res.data&&res.data.list||[];
+                       this.total=res.data&&res.data.tatal;
+                    }
                 }).catch(err=>{
-                    console.log(err);
-                    this.tableData = []
-                    this.loading = false;                    
+                    this.loading=false;
+                    console.log(err)
                 })
-            },
-            //子表数据
-            currentRadioChange(data){
-                if(!data.busiBillNo){
-                    return
-                }
-                var templatePlanTag = [...this.planPrintData,data]
-                this.planPrintData = uniqueArray([...templatePlanTag],'planCode')
-               
-                
-                var chooseList = data
-                if(data.childData&&data.childData.length>0){
-                    // chooseList = data
-                   
-                }else{
-                    this.loading = true
-                    getInfoDetailWarehousing({planCode:data.planCode}).then(res=>{
-                        if(res.success && res.data && res.data.inWarehousePlanDetailRespList && res.data.inWarehousePlanDetailRespList.length>0){
-                            // var tempList = [...this.tableData]
-                            this.tableData = this.tableData.map(list => {
-                                if(list.planCode == data.planCode){
-                                    list.childData = res.data.inWarehousePlanDetailRespList;
-                                    chooseList = list
-                                }
-                                //debugger
-                                    // list.childData = res.data.inWarehousePlanDetailRespList;
-                                    // chooseList = list
-
-                                return list
-                            })
-                        }
-                        this.loading = false
-                    }).catch(err => {
-                        this.loading = false
-                    })
-                }
-                this.parentDataObj = { ...data }
-            },
-            //子表多选
-            childDataSelect(selectedData){
-
-               this.multipleSelection = [...selectedData]
-               this.childDataArr = [...selectedData]
-                console.log(selectedData,'ch');
-
-            },
-            //主表多选
-            dataSelect(selectData){
-                this.multipleParentSelection = [...selectData]
-                this.parentDataArr = [...selectData]
-                console.log(selectData,'pa');
-                
-            },
-            //表格大小
-            handleSizeChange(val) {
-                this.ruleForm={...this.ruleForm,pageSize:val,pageNum:1}
-                this.getTableData()
-            },
-
-            handleCurrentChange(val) {
-                this.ruleForm={...this.ruleForm,pageNum:val}
-                this.getTableData()
-            },
-            //查询
-            submitForm(ruleForm) {
-                var   createBeginDate='',createEndDate='';
-                if(ruleForm.durationTime&&ruleForm.durationTime[0]){
-                    createBeginDate = +ruleForm.durationTime[0]
-                    createEndDate = +ruleForm.durationTime[1]
-                }
-                this.ruleForm={...ruleForm,pageSize:10,pageNum:1,createBeginDate,createEndDate,busiBillType:this.currentTab}
-                this.getTableData();
-                
-            },
-            //重置查询
-            resetForm() {
-                this.ruleForm={ ...ruleForm,busiBillType:this.currentTab }
-                this.getTableData()
-            },
-            //tab切换
-            tabSwitch(tab,event){
-                if(tab.name==this.currentTab){
-                    console.log('当前标签')
-                }else{
-                    this.currentTab = tab.name
-                    this.$refs.searchWarhouse.resetForm()
-                    this.planPrintData = []
-                    this.tableData = []
-                    this.parentDataObj = {}
-                    this.childDataArr = []
-                //    debugger
-                    // this.getTableData()
-
-                }
-            },
-            // closePlanTags(tag){
-            //     var planPrintData = [...this.planPrintData]
-            //     var b = [...planPrintData.filter(item => {return item.planCode!=tag.planCode})]
-            //     this.planPrintData = [...b]
-            // }
+             }
         },
-        created(){
-            this.getTableData()
-            // this.demo()
-            // this.currentRedioChange()
+
+        mounted(){
+           this.getCurrentTableData()   
         }
+
     }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
-
+     .alertInfo{
+        margin-bottom: 12px;
+        >span{
+          font-size: 14px;
+          padding-right:20px;
+        }   
+    }
+ 
 </style>

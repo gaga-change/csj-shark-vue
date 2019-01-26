@@ -128,10 +128,10 @@ export function getInfoDetailOutWarehousing(data) {
     // data:data
   })
 }
-//提交入库单
-export function inboundOrderSubmit(data) {
+//新增收货单
+export function orderAdd(data) {
   return request({
-    url: `/webApi/in/add`,
+    url: `/webApi/receive/order/add`,
     method: 'post',
     data:data
   })
@@ -166,6 +166,38 @@ export function getBatchNo(data) {
   return request({
     url: `/webApi/basic/batch/getBatchNo?${stringify(data)}`,
     method: 'get',
-    // data:data
+  })
+}
+
+//查询到货单列表 
+export function orderList(data) {
+  return request({
+    url: `/webApi/receive/order/list`,
+    method: 'post',
+    data:data
+  })
+}
+
+//查询明细列表
+export function orderDetailList(data) {
+  return request({
+    url: `/webApi/receive/order/detailList/${data}`,
+    method: 'get',
+  })
+}
+
+//修改收货数量
+export function orderUpdateReceiveQty(data) {
+  return request({
+    url: `/webApi/receive/order/updateReceiveQty?${stringify(data)}`,
+    method: 'get',
+  })
+}
+
+//删除单据
+export function receiveOrderDelete(data) {
+  return request({
+    url: `/webApi/receive/order/delete/${data}`,
+    method: 'get',
   })
 }

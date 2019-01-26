@@ -1,34 +1,27 @@
 <template>
     <el-card class="simpleCard" shadow="never" body-style="padding:12px">
       <el-form :model="searchForm" :rules="searchRules" ref="searchForm" label-width="70px" label-position="left">
-      <el-row :gutter="10">
-
+      <el-row>
         <el-col :span="6">
-          <el-form-item label="计划单号" prop="planCode">
-            <el-input type="text" size="small" v-model="searchForm.planCode" placehold="后四位"></el-input>
+          <el-form-item label="计划单号" >
+            <el-input type="text" size="small" v-model="searchForm.planCode" placeholder="请输入计划单号"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="6" v-if="inbound">
-          <el-form-item label="入库单号" prop="planCode">
-            <el-input type="text" size="small" v-model="searchForm.orderCode" placehold="后四位"></el-input>
+          <el-form-item label="入库单号" >
+            <el-input type="text" size="small" v-model="searchForm.orderCode" placeholder="请输入入库单号"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="6">
-          <el-form-item label="供应商" label-width="85px"  prop="providerName">
-            <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
+          <el-form-item label="供应商" >
+            <el-input type="text" size="small" v-model="searchForm.providerName" placeholder="请输入供应商" ></el-input>
           </el-form-item>
         </el-col>
         
-       <!-- <el-col :span="6">
-          <el-form-item label="商品名称" label-width="85px"  prop="providerName">
-            <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
-          </el-form-item>
-        </el-col> -->
-
         <el-col :span="6" v-if="!inbound">
-            <el-form-item label-width="70px" label="入库状态" class="postInfo-container-item" prop="execStatus">
+            <el-form-item label-width="70px" label="入库状态" class="postInfo-container-item" >
               <el-select v-model="searchForm.execStatus" 
                filterable clearable placeholder="请选择入库状态" 
               size="small" prefix-icon="el-icon-search">
@@ -43,13 +36,13 @@
         </el-col>  
 
         <el-col :span="6">
-          <el-form-item label="货主" label-width="40px"  prop="ownerName">
-            <el-input type="text" size="small" v-model="searchForm.ownerName" ></el-input>
+          <el-form-item label="货主" label-width="40px" >
+            <el-input type="text" size="small" v-model="searchForm.ownerName" placeholder="请输入货主" ></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="6" v-if="inbound">
-          <el-form-item label="单据状态" prop="orderStatus">
+          <el-form-item label="单据状态" >
             <el-select v-model="searchForm.orderStatus" 
                filterable clearable placeholder="请选择单据状态" 
               size="small" prefix-icon="el-icon-search">
@@ -112,6 +105,7 @@ export default  {
       type:Object,
       default:() => {}
     },
+    
     inbound:{
       type:Boolean,
       default:false
@@ -130,6 +124,7 @@ export default  {
     submitIt(){//查询
       this.$emit('searchTrigger',this.searchForm)
     },
+
     resetForm(){//重置
       this.searchForm = {}
       this.$emit('resetSearch',this.searchForm)

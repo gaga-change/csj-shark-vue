@@ -57,7 +57,6 @@
                 </span>
                 <template v-else-if="item.userIf=='images'">
                   <bar-code :code="scope.row[item.prop]"></bar-code>
-                  <!-- <img :src="scope.row[item.prop]" alt="图片" > -->
                 </template>
 
                 
@@ -78,7 +77,7 @@
             <template slot-scope="scope">
                 <div style="width:160px">
                     <el-button v-if="scope.row.editable" type="success" @click="goeditrow(scope.$index,'confirm',scope.row)" size="mini" >确定</el-button>
-                    <el-button v-else @click="goeditrow(scope.$index,'edit',scope.row)" size="mini" >编辑</el-button>
+                    <el-button v-else @click="goeditrow(scope.$index,'edit',scope.row)" size="mini" >{{editText}}</el-button>
                     <el-button size="mini" type="danger" v-if="deleteNeed" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </div>
             </template>
@@ -161,6 +160,10 @@ export default {
       type: String,
       default: "加载中"
     },
+    editText:{
+      type: String,
+      default: "编辑"
+    },
     elementLoadingBackground:{
       type: String,
       default: "rgba(255, 255, 255, 0.5)"
@@ -207,8 +210,6 @@ export default {
     return {
       tableConfig:[],
       tableDataEditable: [],
-      // changeDataArr:[],
-      // test:'test',
     }
   },
   created(){
@@ -221,8 +222,6 @@ export default {
         item.unique = this.unique + '+' + index
         return item
       })
-      
-      // this.tableDataEditable = [...this.tableData]
     }
     
   },
@@ -310,11 +309,6 @@ export default {
       goeditrow(index,type,changeData) {
        
         let data = _.cloneDeep(this.tableDataEditable);
-
-        // let hadPush = false
-        // let unique = this.unique+'+'+index
-        // let changeDataArr = [..._CHANGEDATAARR]
-
         data[index].editable = !data[index].editable
         
         this.tableDataEditable=data;

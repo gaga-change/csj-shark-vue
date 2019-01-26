@@ -1,32 +1,33 @@
 <template>
    <div style="margin-bottom:10px">
-        <el-button type="primary" size="small" @click="makeInbound">到货入库</el-button>
+        <el-button type="primary" size="small" @click="makeInbound">到货登记</el-button>
         <el-button type="primary" size="small" @click="priviewProductLabel">打印商品标签</el-button>
         <el-button type="primary" size="small" @click="priviewReserve">打印计划单</el-button>
 
         <div>
             <el-dialog
-                title="到货入库"
+                title="到货登记"
                 :visible.sync="dialogVisible"
-                width="70%"
-            >
+                width="70%">
                 <el-row :gutter="20" style="margin-bottom:14px;">
                     <el-col :span="8">入库计划单: {{parentDataObj.planCode}}</el-col>
-                    <el-col :span="8">客户/供应商: {{parentDataObj.providerName}}</el-col>
+                    <el-col :span="8">供应商: {{parentDataObj.providerName}}</el-col>
                     <el-col :span="8">下单时间: {{formateTime(parentDataObj.gmtCreate)}}</el-col>
                 </el-row>
-                <edit-table :config="planChildTableEditConfig" :table-data="childData" :default-edit="false"></edit-table>
+                <edit-table 
+                  :config="planChildTableEditConfig" 
+                  :table-data="childData" 
+                  :default-edit="false"></edit-table>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="submitForm(1)">加入入库单</el-button>
-                    <el-button type="primary" @click="submitForm(2)">确认上架</el-button>
+                    <el-button type="primary" @click="submitForm()">到货确认</el-button>
                 </span>
             </el-dialog>
+
             <el-dialog
                 title="打印商品标签"
                 :visible.sync="dialogVisibleLabel"
-                width="70%"
-            >
+                width="70%">
                  <edit-table :config="planChildTableLabelConfig" :table-data="childData" v-loading="loading" :default-edit="false"></edit-table>
                  <template v-if="!previewIt">
                      <div style="margin:10px;">预览</div> 
@@ -39,7 +40,6 @@
                                  <div class="labelItem"><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
                                  <div class="labelItem"><span class="labelItemLeft">批次</span><span>{{item.batchNo}}</span></div>
                                  <div>
-                                     <!-- <img :src="`/webApi/barcode?msg=${item.skuUnitConvert}&type=code128&width=120&height=80`" alt="条形码" > -->
                                      <bar-code :code="item.batchNo"></bar-code>
                                  </div>
                              </div>
@@ -52,11 +52,11 @@
                     <el-button type="primary" v-if="!previewIt" @click="printLabel">打印</el-button>
                 </span>
             </el-dialog>
+
              <el-dialog
                 title="打印计划单"
                 :visible.sync="dialogVisibleReserve"
-                width="70%"
-            >
+                width="70%">
                 <edit-table :config="planChildTablePrintConfig" :table-data="printPlan" id="printPlanContainer" :default-edit="false"></edit-table>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisibleReserve = false">取 消</el-button>
@@ -70,7 +70,7 @@
 import moment from 'moment'
 import axios from 'axios'
 import editTable from '@/components/Table/editTable'
-import { inboundOrderSubmit, getBatchNo } from '@/api/warehousing'
+import { orderAdd, getBatchNo } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
@@ -165,12 +165,6 @@ export default {
                 this.$message({type:'error',message:'打印张数为正整数'})
                 return false
             }
-            // console.log(batchNoArr, 'aaaaa')
-            // batchNoArr.map(item=>{
-            //     getBatchNo(item).then(res => {
-            //         console.log(res,'res');
-            //     })
-            // })
             var abb = await this.getBatchNoArr(batchNoArr)
             abb.map(item => {
                 if(item.success&&item.data&&item.data.batchNo){
@@ -219,51 +213,39 @@ export default {
           
         },
         printPlanOrder(){
-             var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
-
-            MakePrint(printPlanContainer)
+           var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
+           MakePrint(printPlanContainer)
         },
-        submitForm(orderStatus){//提交
-            var canSubmit = true
-            var items = []
-            var isSubmit = orderStatus==1 ? false : true
-            this.childData.map(item =>{
-                var a = item.planInQty || 0
-                var b = item.realInQty || 0
-                var c = item.tempInQty || 0
-                var limit = a-b-c;
-                if(item.realInQtyIt>limit){//加减操作 if()
-                    canSubmit = false
-                }
-                if(!MoneyPositiveReg.test(item.realInQtyIt)){
-                    canSubmit = false
-                }
-                items.push({realInQty:item.realInQtyIt||0,busiIndex:item.busiIndex,remarkInfo:item.remarkInfo,skuCode:item.skuCode})
 
-            })
-            if(!canSubmit){
-                this.$message({type:'error',message:'数据有误,最多两位小数，请修改'})
-                return false
+        submitForm(){//提交
+          let data=[...this.childData].map(v=>{
+              let json={};
+              ['busiIndex','skuCode','receiveQty'].forEach(item=>{
+                  json[item]=item==='receiveQty'?Number(v[item])||0:v[item]
+              })
+              return json
+          })
+
+          orderAdd({
+            planCode:this.parentDataObj.planCode,
+            receiveOrderDetailReqList:data  
+          }).then(res=>{
+            if(res.success){
+              this.dialogVisible=false;
+              this.$message({type:'success',message:'操作成功！'})
+            } else{
+               this.$message({type:'error',message:'操作失败'})
             }
-            
+          }).catch(err=>{
+              console.log(err)
+              this.$message({type:'error',message:'操作失败'})
+          })
 
-            inboundOrderSubmit({planCode:this.parentData.planCode,isSubmit:isSubmit,items:[...items]}).then(res => {
-                if(res.success){
-                    this.dialogVisible = false
-                    this.$message({type:'success',message:'入库单提交成功',duration:1500,onClose:()=>{
-                        
-                        this.$router.push({path:'/inwarehousing/inboundOrder'})
-                    }})
-                }else{
-                     this.$message({type:'info',message:'入库单提交失败'})
-                }
-            }).catch(err=>{
-                this.$message({type:'info',message:'入库单提交失败'})
-            })
         }
     }
 }
 </script>
+
 <style scoped lang="scss">
  .labelContainer{
      width:80mm;
@@ -288,5 +270,6 @@ export default {
         margin: 0 auto;
     }
  }
+
 </style>
 
