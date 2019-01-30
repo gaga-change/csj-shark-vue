@@ -25,6 +25,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'record',
+        path: 'record',
+        meta: { title: '上架记录', noCache: false },
+        component: _import('inwarehousing/record'),
+        hidden: false,
+      },
+      {
         name: 'inboundOrder',
         path: 'inboundOrder',
         meta: { title: '入库单', noCache: true },
@@ -66,8 +73,16 @@ export default [
       {
         name: 'inventory',
         path: 'inventory',
-        meta: { title: '库存台账', noCache: true },
+        meta: { title: '库位库存', noCache: true },
         component: _import('inventoryLedger/inventory'),
+        hidden: false,
+      },
+
+      {
+        name: 'stream',
+        path: 'stream',
+        meta: { title: '库存流水', noCache: true },
+        component: _import('inventoryLedger/stream'),
         hidden: false,
       },
       
@@ -83,21 +98,21 @@ export default [
       {
         name: 'logistics',
         path: 'logistics',
-        meta: { title: '物流公司', noCache: true },
+        meta: { title: '物流公司管理', noCache: true },
         component: _import('baseInfo/logistics'),
         hidden: false,
       },
       {
         name: 'inventoryArea',
         path: 'inventoryArea',
-        meta: { title: '库区', noCache: true },
+        meta: { title: '库区管理', noCache: true },
         component: _import('baseInfo/inventoryArea'),
         hidden: false,
       },
       {
         name: 'inventorySite',
         path: 'inventorySite',
-        meta: { title: '库位', noCache: true },
+        meta: { title: '库位管理', noCache: true },
         component: _import('baseInfo/inventorySite'),
         hidden: false,
       },

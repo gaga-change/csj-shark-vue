@@ -1,9 +1,7 @@
 export const tableConfig=[// 物流登记
-  // { label:'序号', minWidth:80, prop:'id'},
   { label:'下单时间',prop:'placeOrderTime', width:120,type:'time' },
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', minWidth:90 },
-  // { label:'联系人',prop:'linkUser', width:120 },
   { label:'供应商',prop:'ownerName', width:150 },
   { label:'登记状态',prop:'register', minWidth:90,useLocalEnum:true,type:'registerStatusEnum'},
   { label:'收货人',prop:'receiver', width:120 },
@@ -16,5 +14,4 @@ export const tableConfig=[// 物流登记
   { label:'运费',prop:'freightAmt', width:90,type:'money' },
   { label:'配送状态',prop:'logisticsStatus', width:90,useLocalEnum:true,type:'logisticsStatusEnum' },
   { label:'到达时间',prop:'deliverTime', width:120,type:'time' },
-  // { label:'重量',prop:'createrName', minWidth:90 },
 ]

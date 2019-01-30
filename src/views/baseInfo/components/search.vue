@@ -1,17 +1,15 @@
 <template>
     <el-card class="simpleCard" shadow="never" body-style="padding:12px">
       <el-form :model="searchForm" :rules="searchRules" ref="searchForm" label-width="90px" label-position="left">
-      <el-row :gutter="10" v-if="searchName=='logistics'">
-        
-        <el-col :span="6">
+      <el-row >
+
+        <el-col :span="6" v-if="searchForm.companyName!==undefined">
           <el-form-item label="物流公司名称" prop="companyName">
-            <el-input type="text" size="small" v-model="searchForm.companyName" ></el-input>
+            <el-input type="text" size="small"  placeholder="请输入物流公司名称" v-model="searchForm.companyName" ></el-input>
           </el-form-item>
         </el-col>
-      </el-row>  
-      <el-row :gutter="10" v-else>
-        
-        <el-col :span="6">
+
+        <el-col :span="6" v-if="searchForm.warehouseAreaCode!==undefined">
            <el-form-item label="库区编码"  prop="warehouseAreaCode"  :rules="[
               { required: true, message: '请选择库区'},
              ]">
@@ -27,8 +25,8 @@
                     </el-select>
                 </el-form-item>
         </el-col>
-        <template v-if="searchName=='inventoryArea'">
-          <el-col :span="6">
+
+          <el-col :span="6" v-if="searchForm.isVirtual!==undefined">
            <el-form-item label="是否虚拟区" label-width="90px" >
                   <el-select v-model="searchForm.isVirtual" 
                         clearable placeholder="请选择" 
@@ -42,7 +40,8 @@
                     </el-select>
                 </el-form-item>
           </el-col>
-          <el-col :span="6">
+
+          <el-col :span="6" v-if="searchForm.warehouseAreaNature!==undefined">
               <el-form-item label="库区性质" prop="warehouseAreaNature">
                     <el-select v-model="searchForm.warehouseAreaNature" 
                           clearable placeholder="请选择库区性质" 
@@ -56,26 +55,15 @@
                       </el-select>
                   </el-form-item>
           </el-col>
-        </template>
-        <template v-else>
-          <el-col :span="6">
-           <el-form-item label="库位编码" label-width="90px" >
-                  <el-select v-model="searchForm.isVirtual" 
-                        clearable placeholder="请选择" 
-                        size="small">
-                        <el-option
-                        v-for="item in YesOrNoEnum"
-                        :key="item.name"
-                        :label="item.name"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-          </el-col>
-        </template>
-        
+
+        <el-col :span="6" v-if="searchForm.warehouseSpaceCode!==undefined">
+          <el-form-item label="库位编码" prop="warehouseSpaceCode">
+            <el-input type="text" size="small"  placeholder="请输入库位编码" v-model="searchForm.warehouseSpaceCode" ></el-input>
+          </el-form-item>
+        </el-col>
+
       </el-row>  
-      
+
        <el-row :gutter="10">
         <el-col :span="6">
             <el-form-item label-width="0">
@@ -89,7 +77,6 @@
 </template>
 
 <script>
-// import {  InvoiceType  as invoicetype  } from '@/utils'
  import { WarehouseAreaNatureEnum, YesOrNoEnum, WarehouseAreaStatusEnum,AtoZ } from '@/utils/enum'
 export default  {
   name: 'SearchInventory',

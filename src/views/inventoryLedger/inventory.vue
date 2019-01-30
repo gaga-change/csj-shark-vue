@@ -38,10 +38,10 @@
     const ruleForm = {
         pageNum: 1,
         pageSize:10,
-        warehouseName:'',//仓库名称
-        skuCode:'',//商品编码
-        skuName:'',//商品名称
-        ownerName:'',//货主名称
+        skuCode:'',
+        skuName:'',
+        ownerName:'',
+        warehouseSpaceCode:''
     }
 
     export default {
@@ -49,23 +49,14 @@
         data(){
             return {
                 loading:false,
-                
                 ruleForm,
-              
-                // searchForms,
-                tableData:[
-                ],
-               
-                //表格配置
-               inventoryTableConfig,
-               
+                tableData:[],
+                inventoryTableConfig,
                 total:0,
-             
             }
         },
         methods:{
             getTableData(){
-
                 this.$router.replace({
                     path:'/inventoryLedger/inventory',
                     query:{data:JSON.stringify(this.ruleForm)}
@@ -76,12 +67,10 @@
                     
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
-                        
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'id')
                         this.total = res.data.total
                     }
                     this.loading = false;
-
                 }).catch(err=>{
                     console.log(err);
                     this.loading = false;                    
@@ -98,7 +87,6 @@
                 this.getTableData()
             },
              submitForm(ruleForm) {
-                
                 this.ruleForm={...ruleForm,pageSize:10,pageNum:1}
                 this.getTableData();
                 

@@ -8,8 +8,8 @@
 
         <el-button type="primary" 
           size="small" 
-          @click="logisticsHandle('add')" 
-          style="">
+          style="margin-bottom:12px"
+          @click="logisticsHandle('add')" >
           添加
         </el-button>
 
@@ -44,7 +44,6 @@
                    label-width="100px" 
                    prop="companyName" 
                    :rules="[{ required: true, message: '该项为必填'},]">
-                    <!-- <el-input type="text" size="small" v-model="logisticsForm.companyName" ></el-input> -->
                     <el-autocomplete 
                       v-model="logisticsForm.companyName" 
                       :debounce="300" 
@@ -62,6 +61,7 @@
                    :rules="[{ required: true, message: '该选择物流公司'}]">
                     <el-input type="text" 
                       size="small" 
+                      placeholder="请输入物流公司编码"
                       v-model="logisticsForm.companyCode" 
                       disabled>
                     </el-input>
@@ -71,6 +71,7 @@
                     prop="linkUser" >
                     <el-input type="text" 
                       size="small" 
+                      placeholder="请输入联系人名称"
                       v-model="logisticsForm.linkUser" >
                     </el-input>
                 </el-form-item>
@@ -79,6 +80,7 @@
                     prop="linkTel" >
                     <el-input type="text" 
                       size="small" 
+                      placeholder="请输入联系电话"
                       v-model="logisticsForm.linkTel" >
                     </el-input>
                 </el-form-item>
@@ -87,6 +89,7 @@
                    prop="linkAddress" >
                     <el-input type="text" 
                       size="small" 
+                      placeholder="请输入地址"
                       v-model="logisticsForm.linkAddress" >
                     </el-input>
                 </el-form-item>
@@ -105,8 +108,6 @@
     import _ from 'lodash'
     import DoubleTable from '@/components/Table/doubleTable'
     import { tableConfig } from './components/config'
-    import { SimpleMsg } from '@/utils/luoFun'
-
     import { getLogisticsList,addLogistics,updateLogistics,deleteLogistics,getLogisticsSearch } from '@/api/logistics'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchLogistics  from './components/search'
@@ -163,11 +164,11 @@
             }
         },
         methods:{
-         
             querySearchAsync(queryString, cb){
-                
                 if(queryString){
-                    getLogisticsSearch({companyName:queryString}).then(res=>{
+                    getLogisticsSearch({
+                        companyName:queryString
+                    }).then(res=>{
                         if(res.success){
                             if(res.data&&res.data.length>0){
                                 var a = [...res.data]
@@ -192,11 +193,9 @@
             },
             handleSelect(item){
                 this.logisticsForm.companyCode = item.companyCode
-                
             },
 
             getTableData(){
-
                 this.$router.replace({
                     path:'/baseInfo/logistics',
                     query:{data:JSON.stringify(this.ruleForm)}
@@ -204,7 +203,6 @@
                 this.loading=true;
                 let data={...this.ruleForm}
                 getLogisticsList(data).then(res => {
-                    
                     if(res.success && res.data &&res.data.list){
                         this.tableData = [...res.data.list]
                         this.total = res.data.total
@@ -219,7 +217,6 @@
                 })
             },
          
-            
             handleSizeChange(val) {
                 this.ruleForm={...this.ruleForm,pageSize:val,pageNum:1}
                 this.getTableData()
@@ -232,26 +229,41 @@
              submitForm(ruleForm) {
                 this.ruleForm={...ruleForm,pageSize:10,pageNum:1}
                 this.getTableData();
-                
             },
             submitIt(){
-                
                 this.$refs['subForm'].validate((valid) => {
                     if (valid) {
-                        
-                        
                         if(this.logisticsForm.id){
-                            updateLogistics({...this.logisticsForm}).then(res=>{
-                                  SimpleMsg({type:res.success,msgType:'edit',msg:'物流公司',cb:()=>{ this.dialogVisible = false;
-                                    this.getTableData()}})
+                            updateLogistics({
+                                ...this.logisticsForm
+                            }).then(res=>{
+                                if(res.success){
+                                  this.$message({type:'success',message:'操作成功！'}); 
+                                  this.dialogVisible = false;
+                                  this.getTableData()
+                                } else{
+                                   this.$message({type:'error',message:'操作失败'}) 
+                                }
+                            }).catch(err=>{
+                                this.$message({type:'error',message:'操作失败'})
+                                console.log(err)
                             })
                         }else{
-                            addLogistics({...this.logisticsForm}).then(res => {
-                                 SimpleMsg({type:res.success,msgType:'add',msg:'物流公司',cb:()=>{ this.dialogVisible = false;
-                                    this.getTableData()}})
+                            addLogistics({
+                                ...this.logisticsForm
+                            }).then(res => {
+                                if(res.success){
+                                  this.$message({type:'success',message:'操作成功！'}); 
+                                  this.dialogVisible = false;
+                                  this.getTableData()
+                                } else{
+                                   this.$message({type:'error',message:'操作失败'}) 
+                                }
+                            }).catch(err=>{
+                                this.$message({type:'error',message:'操作失败'})
+                                console.log(err)
                             })
                         }
-                        // this.getCurrentTableData();
                     } else {
                         return false;
                     }
@@ -266,13 +278,13 @@
                 if(type=='add'){
                     this.dialogVisible = true
                     this.dialogTitle = '新增'
-                    // debugger
                     this.logisticsForm  = {}
                 }else if(type=='edit'){
                     this.dialogVisible = true
                     this.dialogTitle = '修改'
                 }
             },
+
             logisticsDelect(data){
                 this.$confirm('是否确定删除?', '提示', {
                 confirmButtonText: '确定',
@@ -280,8 +292,16 @@
                 type: 'warning'
                 }).then(() => {
                     deleteLogistics(data).then(res => {
-                         SimpleMsg({type:res.success,msgType:'delete',msg:'物流公司',cb:()=>{ this.dialogVisible = false;
-                                    this.getTableData()}})
+                        if(res.success){
+                           this.$message({type:'success',message:'操作成功！'}); 
+                           this.dialogVisible = false;
+                           this.getTableData()
+                        } else{
+                           this.$message({type:'error',message:'操作失败'}) 
+                        }
+                    }).catch(err=>{
+                        this.$message({type:'error',message:'操作失败'})
+                        console.log(err)
                     })
                 }).catch(() => {
                     this.$message({
@@ -293,8 +313,6 @@
         },
         created(){
             this.getTableData()
-            // this.demo()
-            // this.currentRedioChange()
         }
     }
 </script>

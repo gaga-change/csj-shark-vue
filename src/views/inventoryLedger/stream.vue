@@ -9,19 +9,11 @@
           :pageName="'stream'">
         </search-inventory>
 
-        <el-button 
-          @click="getExport" 
-          style="margin-bottom:15px" 
-          type="primary" 
-          size="small">
-           导出
-        </el-button>
-
        <base-table 
         @sizeChange="handleSizeChange"
         @currentChange="handleCurrentChange"
         :loading="loading"
-        :config="inventoryTableConfig"  
+        :config="streamTableConfig"  
         :total="total" 
         :maxTotal="10"
         :pageSize="ruleForm.pageSize"
@@ -33,19 +25,18 @@
 
 <script>
     import BaseTable from '@/components/Table'
-    import { inventoryTableConfig } from './components/config'
-    import { getInfoInventory,exportLedger } from '@/api/inventory'
+    import { streamTableConfig } from './components/config'
+    import { querySkuStockRecord } from '@/api/inventory'
     import { uniqueArray } from '@/utils/arrayHandler'
-    import { exportExcelBlob } from '@/utils/exportexcel'
     import  SearchInventory  from './components/search'
     const ruleForm = {
         pageNum: 1,
         pageSize:10,
-        warehouseName:'',//仓库名称
-        skuCode:'',//商品编码
-        skuName:'',//商品名称
-        ownerName:'',//货主名称
-        changeTime: [],//变动时间
+        skuCode:'',
+        skuName:'',
+        ownerName:'',
+        warehouseSpaceCode:'',
+        durationTime: [],
     }
 
     export default {
@@ -53,39 +44,27 @@
         data(){
             return {
                 loading:false,
-                
                 ruleForm,
-              
-                // searchForms,
-                tableData:[
-                ],
-               
-                //表格配置
-               inventoryTableConfig,
-               
+                tableData:[],
+                streamTableConfig,
                 total:0,
-             
             }
         },
         methods:{
             getTableData(){
-
                 this.$router.replace({
-                    path:'/inventoryLedger/inventory',
+                    path:'/inventoryLedger/stream',
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
                 let data={...this.ruleForm}
-                getInfoInventory(data).then(res => {
-                    
+                querySkuStockRecord(data).then(res => {
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
-                        
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'id')
                         this.total = res.data.total
                     }
                     this.loading = false;
-
                 }).catch(err=>{
                     console.log(err);
                     this.loading = false;                    
@@ -116,26 +95,6 @@
                 this.ruleForm={ ...ruleForm }
                 this.getTableData()
             },
-
-            getExport(){
-                this.$prompt('请输入文件名称', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消'
-                }).then(({ value }) => {
-                    exportLedger({...this.ruleForm}).then(res=>{
-                        var name = value ? value : '库存流水'
-                        exportExcelBlob(name,res)
-                    }).catch(err=>{
-                        console.log(err,11111)
-                    })
-                }).catch(err=>{
-                     this.$message({
-                        type: 'info',
-                        message: '已取消导出!'
-                    })
-                })
-                
-            }
         },
         created(){
             this.getTableData()

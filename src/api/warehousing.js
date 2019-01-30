@@ -201,3 +201,58 @@ export function receiveOrderDelete(data) {
     method: 'get',
   })
 }
+
+
+//根据条件查询库位
+export function warehouseSpaceSelect(data) {
+  return request({
+    url: `/webApi/basic/warehouseSpace/select`,
+    method: 'post',
+    data:data
+  })
+}
+
+
+//新增上架任务
+export function jobAdd(data) {
+  return request({
+    url: `/webApi/in/job/add`,
+    method: 'post',
+    data:data
+  })
+}
+
+//查询收货单列表
+export function jobList(data) {
+  return request({
+    url: `/webApi/in/job/list`,
+    method: 'post',
+    data:data
+  })
+}
+
+//添加入库单以及明细
+export function inOrderAdd(data) {
+  return request({
+    url: `/webApi/in/order/add`,
+    method: 'post',
+    data:data
+  })
+}
+
+//查询入库单列表
+export function inOrderList(data) {
+  return request({
+    url: `/webApi/in/order/list`,
+    method: 'post',
+    data:data
+  })
+}
+
+//根据入库单号查询详情列表
+export function inOrderSelectDetailList(orderId) {
+  return request({
+    url: `/webApi/in/order/selectDetailList/${orderId}`,
+    method: 'get',
+  })
+}

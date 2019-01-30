@@ -1,39 +1,29 @@
 export const inventoryTableConfig=[// 库存列表
-  { label:'序号', minWidth:80, prop:'id'},
-  { label:'仓库',prop:'warehouseName', width:150 },
-  { label:'商品编码',prop:'skuCode', width:120 },
-  { label:'商品名称',prop:'skuName', width:120 },
-  { label:'货主',prop:'ownerName', width:150 },
-  // { label:'供应商',prop:'qqownerName', width:120 },
-  { label:'规格型号  ',prop:'skuForma', minWidth:90 },
-  
-  { label:'单位',prop:'skuUnitName', minWidth:90 },
-  { label:'单价',prop:'inPrice', minWidth:90 },
-  { label:'批次',prop:'batchNo', width:120 },
-  { label:'最近入库时间',prop:'lastInTime', width:120,type:'time' },
-  { label:'最近出库时间',prop:'lastOutTime', width:120,type:'time' },
-  { label:'库存',prop:'skuQty', minWidth:90 },
-  
-  // { label:'款项性质',prop:'moneyState',useLocalEnum:true, type:'MoneyStateEnum', minWidth:120, },
+  { label:'商品编码',prop:'skuCode' },
+  { label:'商品名称',prop:'skuName'},
+  { label:'货主',prop:'ownerName' },
+  { label:'规格型号',prop:'skuFormat' },
+  { label:'单位',prop:'skuUnitName'},
+  { label:'单价',prop:'inPrice'},
+  { label:'批次',prop:'batchNo'},
+  { label:'最近入库时间',prop:'lastInTime',type:'time' },
+  { label:'最近出库时间',prop:'lastOutTime',type:'time' },
+  { label:'库存',prop:'skuQty' },
+  { label:'库位',prop:'warehouseSpaceCode' },
 ]
 
-export const streamTableConfig=[// 流水列表 unconfirm
-  { label:'序号', minWidth:80, prop:'id'},
-  { label:'时间',prop:'lastOutTime', width:120,type:'time' },
-  { label:'变动类型',prop:'register', minWidth:90,useLocalEnum:true,type:'registerStatusEnum'},
-
-  { label:'单据号',prop:'warehouseName', width:150 },
-  { label:'货主',prop:'ownerName', width:150 },
-  { label:'供应商',prop:'qqownerName', width:120 },
-  { label:'商品编码',prop:'skuCode', width:120 },
-  { label:'商品名称',prop:'skuName', width:120 },
-
-  { label:'规格型号  ',prop:'skuForma', minWidth:90 },
+export const streamTableConfig=[
+  { label:'变动时间',prop:'gmtCreate',type:'time' },
+  // { label:'变动类型',prop:'',useLocalEnum:true,type:'registerStatusEnum'},
+  // { label:'单据号',prop:'' },
+  { label:'货主',prop:'arrivalName' },
+  { label:'供应商',prop:'providerName' },
+  { label:'商品编码',prop:'skuCode'},
+  { label:'商品名称',prop:'skuName' },
+  { label:'规格型号  ',prop:'skuFormat' },
+  { label:'单位',prop:'skuUnitName'},
+  { label:'数量',prop:'inPrice' },
+  { label:'结算',prop:'batchNo'},
+  { label:'库位',prop:'warehouseSpaceCode'},
   
-  { label:'单位',prop:'skuUnitName', minWidth:90 },
-  { label:'数量',prop:'inPrice', minWidth:90 },//unconfirm
-  { label:'结算',prop:'batchNo', width:120 },//unconfirm
-  { label:'库位',prop:'skuQty', minWidth:90 },//unconfirm
-  
-  // { label:'款项性质',prop:'moneyState',useLocalEnum:true, type:'MoneyStateEnum', minWidth:120, },
 ]

@@ -6,7 +6,7 @@
            :search-forms="ruleForm">
         </search-logistics>
 
-        <div>
+        <div style="margin-bottom:12px;">
             <el-button type="primary" size="small" @click="formHandle('add')" >添加</el-button>
             <el-button type="primary" size="small" @click="printSite" >打印库位码</el-button>
         </div>
@@ -29,15 +29,14 @@
         <el-dialog
           :title="dialogTitle+'库位'"
           :visible.sync="dialogVisible"
-          width="480px">
+          width="600px">
             <el-form :model="formParams" 
                ref="subForm"  
                label-width="70px" 
                label-position="left">
-
                  <el-form-item label="库区编码"  
                    prop="warehouseAreaCode" 
-                   label-width="100px" 
+                   label-width="70px" 
                    :rules="[{ required: true, message: '请选择库区'}]">
                    <el-select v-model="formParams.warehouseAreaCode" 
                       clearable 
@@ -54,12 +53,12 @@
                 </el-form-item>
              
                  <el-form-item label="库位编码"  
-                   label-width="100px" 
+                   label-width="70px" 
                    :rules="[{ required: true, message: '请选择库位'}]">
                     <div class="inventorySite"> 
-
                         <span class="tip">从</span> 
                         <el-input type="text"
+                           style="width:150px"
                            size="small" 
                            placeholder="请输入1-99整数" 
                            :min="1" 
@@ -70,6 +69,7 @@
                          <span class="tip">到</span>
                          <el-input type="text" 
                            size="small" 
+                           style="width:150px"
                            placeholder="请输入1-99整数" 
                            :min="1" 
                            :max="99" 
@@ -139,7 +139,6 @@
            title="打印库位码"
            :visible.sync="dialogVisibleSite"
            width="70%">
-            <!-- <div style="margin:10px;">预览</div>  -->
             <div id="print" class="printSiteCss">
                 <div v-for="item in multipleParentSelection" 
                    class="printItemCss"  
@@ -173,7 +172,8 @@
     const ruleForm = {
         pageNum: 1,
         pageSize:10,
-        companyName:'',
+        warehouseAreaCode:'',
+        warehouseSpaceCode:'',
     }
     
     export default {
@@ -190,32 +190,21 @@
                 selectData:{//x选中的单据
                     
                 },
-                // searchForms,
                 searchForm:{},
                 tableData:[
                 ],
-                // pageNum:0,
-                // pageSize:10,
                 //子表数据名称 为空时不显示不可展开
                 childDataName:'',
                 //表格配置
                 tableConfig:siteTableConfig,
-                // currentPage:1,
-                // pageSize:10,
                 total:0,
                 //主表操作
                 handleButtonMap:[
-                    // {title:'修改',handle:(index,data)=>{
-                    //     this.formHandle('edit')
-                    //     this.formParams = {...data}
-
-                    // }},
-                    {title:'状态更改',handle:(index,data)=>{
-                        // this.formHandle('edit')
-                        this.changeStatus()
-
-                        this.formParams = {...data}
-
+                    {
+                        title:'状态更改',
+                        handle:(index,data)=>{
+                          this.changeStatus()
+                          this.formParams = {...data}
                     },formatter:(data)=>{
                         return data.openStatus ? '禁用':'启用'
                     }},
@@ -228,7 +217,6 @@
                 canSelect:true,
                 multipleParentSelection:[],//选中的主表
                 childCanSelect:false,//子表可选择,false不可选，
-                // accordionExpand:true,//手风琴展开
                 multipleSelection:[],//选中的子表数据
                 expandKey:'id',
                 formParams: {},
@@ -240,9 +228,8 @@
         },
          computed:{
             ...mapGetters([
-            
-            'warehouseMap',
-            'chooseWarehouse',
+              'warehouseMap',
+              'chooseWarehouse',
             ]),
         },
         watch: {
@@ -251,16 +238,13 @@
                     if(val!=oldVal){
                         //仓库更改数据重新请求
                         this.getTableData()
-                         this.warehouseMap.map(item=>{
+                        this.warehouseMap.map(item=>{
                         if(item.warehouseNo == this.chooseWarehouse ){
-                    this.warehouseName = item.warehouseName
-
+                          this.warehouseName = item.warehouseName
                         }
                     })
                     }
                 },
-                // 深度观察监听
-                // deep: true
             }
         },
         methods:{
@@ -271,7 +255,6 @@
             //主表多选
             dataSelect(selectData){
                 this.multipleParentSelection = [...selectData]
-                // this.parentDataArr = [...selectData]
                 console.log(selectData,'pa');
                 
             },
@@ -287,12 +270,6 @@
             },
             printIt(){
                 var useStyle=`<style type='text/css'> 
-                                .printSiteCss{
-                                    display: flex;
-                                    flex-wrap: wrap;
-                                    justify-content:space-between;
-                                    align-content:space-between;   
-                                }
                                 .printItemCss{
                                     width:40mm;
                                     height:25mm;   
@@ -310,9 +287,19 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    updateInventorySite({...this.formParams,openStatus:this.formParams.openStatus?0:1}).then(res => {
-                         SimpleMsg({result:res.success,msgType:'user',msg:this.formParams.warehouseAreaStatus?'启用':'禁用',cb:()=>{ this.dialogVisible = false;
-                                    this.getTableData()}})
+                    updateInventorySite({
+                        id:this.formParams.id,
+                        flag:this.formParams.openStatus?0:1
+                    }).then(res => {
+                         SimpleMsg({
+                             result:res.success,
+                             msgType:'user',
+                             msg:this.formParams.warehouseAreaStatus?'启用':'禁用',
+                             cb:()=>{ 
+                                 this.dialogVisible = false;
+                                 this.getTableData()
+                             }
+                        })
                     })
                 }).catch(() => {
                     this.$message({
@@ -328,9 +315,11 @@
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
-                let data={...this.ruleForm,warehouseCode:this.chooseWarehouse}
-                getInventorySite(data).then(res => {
-                    
+                let data={
+                    ...this.ruleForm,
+                    warehouseCode:this.chooseWarehouse
+                }
+                getInventorySite(data).then(res => {                
                     if(res.success && res.data &&res.data.list){
                         this.tableData = [...res.data.list]
                         this.total = res.data.total
@@ -343,13 +332,12 @@
                 }).catch(err=>{
                     this.loading = false;                    
                 })
-                 getSelectInventoryAreaList({warehouseCode:this.chooseWarehouse}).then(res=>{
-                    console.log(res,22333);
+                 getSelectInventoryAreaList({
+                     warehouseCode:this.chooseWarehouse
+                 }).then(res=>{
                     if(res.success){
                         if(res.data&&res.data.length>0){
-                            
-                            this.warehouseAreaCodeEnum = [... res.data]
-                            
+                         this.warehouseAreaCodeEnum = [...res.data]   
                         }
                     }
                 })
@@ -372,29 +360,42 @@
             },
            
             submitIt(){
-                
                 this.$refs['subForm'].validate((valid) => {
                     if (valid) {
-                        
                         if(this.formParams.platoonEnd<this.formParams.platoonStart){
-                            this.$message({type:info,message:'输入货架编号有误，结束编号必须不小于开始编号！'})
+                            this.$message({
+                                type:'info',
+                                message:'输入货架编号有误，结束编号必须不小于开始编号！'
+                            })
                             return false
                         }
                         if(this.formParams.columnEnd<this.formParams.columnStart){
-                            this.$message({type:info,message:'输入货架层高编号有误，结束编号必须不小于开始编号！'})
+                            this.$message({
+                                type:'info',
+                                message:'输入货架层高编号有误，结束编号必须不小于开始编号！'
+                            })
                             return false
                         }
                         if(this.formParams.floorEnd<this.formParams.floorStart){
-                            this.$message({type:info,message:'输入具体库位编号有误，结束编号必须不小于开始编号！'})
+                            this.$message({
+                                type:'info',
+                                message:'输入具体库位编号有误，结束编号必须不小于开始编号'
+                            })
                             return false
                         }
-                       
-                            addInventorySite({...this.formParams}).then(res => {
-                                SimpleMsg({result:res.success,msgType:'add',msg:'库位',cb:()=>{ this.dialogVisible = false;
-                                    this.getTableData()}})
+                        addInventorySite({
+                            ...this.formParams
+                        }).then(res => {
+                            SimpleMsg({
+                                result:res.success,
+                                msgType:'add',
+                                msg:'库位',
+                                cb:()=>{ 
+                                  this.dialogVisible = false;
+                                  this.getTableData()
+                                }
                             })
-                        
-                        // this.getCurrentTableData();
+                        })
                     } else {
                         return false;
                     }
@@ -425,8 +426,15 @@
                 type: 'warning'
                 }).then(() => {
                     deleteInventorySite(data).then(res => {
-                         SimpleMsg({result:res.success,msgType:'delete',msg:'库位',cb:()=>{ this.dialogVisible = false;
-                                    this.getTableData()}})
+                         SimpleMsg({
+                             result:res.success,
+                             msgType:'delete',
+                             msg:'库位',
+                             cb:()=>{ 
+                                 this.dialogVisible = false;
+                                 this.getTableData()
+                             }
+                         })
                     })
                 }).catch(() => {
                     this.$message({
@@ -438,8 +446,6 @@
         },
         created(){
             this.getTableData()
-            // this.demo()
-            // this.currentRedioChange()
         }
     }
 </script>

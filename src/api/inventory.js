@@ -1,14 +1,21 @@
 import request from '@/utils/request'
 import {stringify} from 'qs';
 
-//获取库位库存列表
+
 export function getInfoInventory(data) {
   return request({
     url: `/webApi/sku/stock/querySkuStock?${stringify(data)}`,
     method: 'get',
-    // data:data
   })
 }
+
+export function querySkuStockRecord(data) {
+  return request({
+    url: `/webApi/sku/stock/querySkuStockRecord?${stringify(data)}`,
+    method: 'get',
+  })
+}
+
 //导出库位库存
 export function exportLedger(data) {
   return request({
@@ -73,9 +80,8 @@ export function addInventorySite(data) {
  */
 export function updateInventorySite(data) {
   return request({
-    url: `/webApi/basic/warehouseSpace/updateLockStatus/${data.id}`,
-    method: 'post',
-    data:data
+    url: `/webApi/basic/warehouseSpace/updateLockStatus/${data.id}?${stringify(data)}`,
+    method: 'get',
   })
 }
 
@@ -183,3 +189,4 @@ export function getSelectInventoryAreaList(data) {
     // data:data
   })
 }
+

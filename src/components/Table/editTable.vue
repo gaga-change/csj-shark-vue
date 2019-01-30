@@ -10,7 +10,8 @@
         :summary-method="summaryMethod"
         :border="border"
         :show-summary="showSummary"
-        @select="handleSelection" @select-all="handleSelection"
+        @select="handleSelection"
+        @select-all="handleSelection"
         size="small"
         :style="tableStyle">
           <el-table-column type="selection" width="55" v-if="childCanSelect" ></el-table-column>
@@ -18,6 +19,7 @@
             v-for="item in tableConfig"
             :fixed="item.fixed"
             :width="item.width"
+            :type="item.columnType"
             :key="item.label"
             :label="item.label">
              <template slot-scope="scope">
@@ -76,8 +78,10 @@
             label="操作" >
             <template slot-scope="scope">
                 <div style="width:160px">
-                    <el-button v-if="scope.row.editable" type="success" @click="goeditrow(scope.$index,'confirm',scope.row)" size="mini" >确定</el-button>
-                    <el-button v-else @click="goeditrow(scope.$index,'edit',scope.row)" size="mini" >{{editText}}</el-button>
+                    <span v-if="useEdit">
+                       <el-button v-if="scope.row.editable" type="success" @click="goeditrow(scope.$index,'confirm',scope.row)" size="mini" >确定</el-button>
+                       <el-button v-else @click="goeditrow(scope.$index,'edit',scope.row)" size="mini" >{{editText}}</el-button>
+                    </span>
                     <el-button size="mini" type="danger" v-if="deleteNeed" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </div>
             </template>
@@ -115,6 +119,10 @@ export default {
     highlightCurrentRow:{
        type: Boolean,
        default: false    
+    },
+    useEdit:{
+      type: true,
+      default: true       
     },
     useRadio:{
       type: Boolean,
@@ -302,7 +310,6 @@ export default {
        this.$emit('currentRedioChange', currentRow, oldCurrentRow); 
      },
      handleSelection(val,row){
-       
         this.$emit('editDataSelect',{arr:[...val],unique:this.unique},row)
      },
     

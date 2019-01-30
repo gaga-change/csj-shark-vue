@@ -31,12 +31,40 @@
             </el-form-item>
           </el-col>
 
+          
+          <el-col :span="6"  style="min-width:300px" v-if="searchForm.orderCode!==undefined">
+            <el-form-item 
+              label="入库单号"  
+              label-width="80px"
+              prop="orderCode"  >
+              <el-input type="text" size="small"    placeholder="请输入入库单号"    v-model.trim="searchForm.orderCode" ></el-input>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.planCode!==undefined">
             <el-form-item 
               label="计划单号"  
               label-width="80px"
               prop="planCode"  >
               <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="searchForm.planCode" ></el-input>
+            </el-form-item>
+          </el-col>
+
+           <el-col :span="6"  style="min-width:300px" v-if="searchForm.receiveOrderCode!==undefined">
+            <el-form-item 
+              label="收货单号"  
+              label-width="80px"
+              prop="receiveOrderCode"  >
+              <el-input type="text" size="small"    placeholder="请输入收货单号"    v-model.trim="searchForm.receiveOrderCode" ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6"  style="min-width:300px" v-if="searchForm.skuName!==undefined">
+            <el-form-item 
+              label="商品名称"  
+              label-width="80px"
+              prop="skuName"  >
+              <el-input type="text" size="small"    placeholder="请输入商品名称"    v-model.trim="searchForm.skuName" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -48,6 +76,33 @@
               <el-input type="text" size="small"    placeholder="请输入货主"    v-model.trim="searchForm.ownerName" ></el-input>
             </el-form-item>
           </el-col>
+
+            <el-col :span="6"  style="min-width:300px" v-if="searchForm.isCreateOrder!==undefined">
+            <el-form-item 
+              label="是否已生成入库单"  
+              label-width="120px"
+              prop="isCreateOrder"  >
+                <el-radio-group v-model="searchForm.isCreateOrder">
+                    <el-radio :label="0">否</el-radio>
+                    <el-radio :label="1">是</el-radio>
+                </el-radio-group>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8" v-if="searchForm.orderEndDate!==undefined">
+            <el-form-item 
+              label="入库日期"
+              label-width="90px"
+              style="width:300px"
+              prop="orderEndDate">
+              <el-date-picker
+                v-model="searchForm.orderEndDate"
+                type="date"
+                size="mini"
+                placeholder="选择日期">
+              </el-date-picker>
+              </el-form-item>
+          </el-col> 
 
       </el-row>  
     </el-form>

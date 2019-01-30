@@ -7,6 +7,7 @@
         :element-loading-background="elementLoadingBackground"
         :data="this._events.SelectionChange?allTableData:tableData"
          size="small"
+        :empty-text="emptyText"
         :border="border"
          @selection-change="handleSelectionChange"
         :style="tableStyle">
@@ -61,6 +62,11 @@ export default {
     pageSizes:{
       type: Array,
       default:()=> [10, 20, 50, 100]
+    },
+
+    emptyText:{
+      type: String,
+      default:"暂无数据"
     },
 
     layout:{

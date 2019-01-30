@@ -57,42 +57,32 @@ export const planChildTablePrintConfig=[// 计划单打印列表
 ]
 
 export const inTableConfig=[// 入库列表
-  { label:'入库时间', width:120, prop:'gmtModify', type:'time' },
-  { label:'入库单号',prop:'orderCode', width:150 },
   { label:'计划单号',prop:'planCode', width:150 },
+  { label:'入库单号',prop:'orderCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
+  { label:'入库时间', width:120, prop:'gmtModify', type:'time' },
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'providerName', width:150 },
   { label:'单据状态',prop:'orderStatus',useLocalEnum:true,type:'OrderStatusEnum', width:90 },
-
-  // { label:'商品总数',prop:'inPlanQty', minWidth:90 },
   { label:'操作人',prop:'modifierName', minWidth:90 },
-
-  // { label:'款项性质',prop:'moneyState',useLocalEnum:true, type:'MoneyStateEnum', minWidth:120, },
 ]
 
 export const inChildTableConfig=[// 入库子列表
-  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
   { label:'商品编码',prop:'skuCode', width:150 },
   { label:'商品名称',prop:'skuName', width:150 },
-  // { label:'商品型号',prop:'skuModel', minWidth:120 },//unconfirm
   { label:'规格型号',prop:'skuFormat', minWidth:120 },
-  // { label:'单位',prop:'skuUnitName', minWidth:120 },
-  // { label:'商品数量',prop:'planInQty', minWidth:120 },
   { label:'入库数量',prop:'realInQty', minWidth:120 },
-  // { label:'待上架数量',prop:'realInQty', minWidth:120 },
-  { label:'批次',prop:'batchNo', minWidth:120 },//unconfirm
+  { label:'批次',prop:'batchNo', minWidth:120 },
   
 ]
 
 export const arrivalTableConfig=[// 到货单列表 unconfirmed
-  { label:'到货时间', prop:'gmtCreate', type:'time' },
   { label:'到货单号',prop:'orderCode' },
   { label:'计划单号',prop:'planCode' },
+  { label:'到货时间', prop:'gmtCreate', type:'time' },
   { label:'单据类型',prop:'orderType',useLocalEnum:true,type:'BusiBillTypeEnum' },
   { label:'货主',prop:'ownerName' },
   { label:'供应商',prop:'providerName'},
-  
   { label:'操作人',prop:'createrName'},
 ]
 // flowChildTableConfig
@@ -121,6 +111,12 @@ export const arrivalAlertConfig=[
   { label:'操作',useLink:true,fixed:'right',width:180},
 ]
 
+export const putQtyConfig=[
+  { label:'序号',type:'index',width:50},
+  { label:'库位(编码)',prop:'warehouseSpaceCode'},
+  { label:'上架数量',prop:'putQty'},
+]
+
 function formatWareHousing(){
   return (row, column, cellValue, index)=>{
      let str='';
@@ -130,3 +126,51 @@ function formatWareHousing(){
      return str.slice(0,-1)
   }
 } 
+
+function Storehouse(){
+  return (row, column, cellValue, index)=>{
+    let str='';
+    row['putSpaceInfoVOList'].forEach(item=>{
+       str+=item.warehouseSpaceCode+' , '
+    })
+    return str.slice(0,-1)
+ }
+}
+
+export const recordListConfig=[
+  { label:'计划单号',prop:'planCode',width:140},
+  { label:'到货单',prop:'receiveOrderCode',width:130},
+  { label:'已生成入库单',type:'Boolean',prop:'isCreateOrder'},
+  { label:'库位',prop:'warehouseSpaceCode'},
+  { label:'商品编码',prop:'skuCode'},
+  { label:'商品名称',prop:'skuName'},
+  { label:'规格型号',prop:'skuFormat'},
+  { label:'单位',prop:'skuUnitCode'},
+  { label:'上架时间',type:'time',prop:'gmtCreate',width:120,format:'YYYY-MM-DD  HH:mm'},
+  { label:'上架数量',prop:'jobQty',editable:true},
+  { label:'操作人',prop:'createrName'},
+]
+
+
+export const inPushOrderConfig=[
+  { label:'计划单号',prop:'orderCode'},
+  { label:'入库单号',prop:'planCode'},
+  { label:'单据类型',prop:'orderType'},
+  { label:'创建时间',prop:'gmtCreate',type:'time'},
+  { label:'推送状态',prop:'isPush'},
+  { label:'货主',prop:'ownerName'},
+  { label:'供应商',prop:'providerName'},
+  { label:'操作人',prop:'createrName'},
+  { label:'操作',useLink:true},
+]
+
+export const inPushOrderDetailConfig=[
+  { label:'商品编码',prop:'skuCode'},
+  { label:'商品名称',prop:'skuName'},
+  { label:'规格型号',prop:'skuFormat'},
+  { label:'单位',prop:'skuUnitCode'},
+  // { label:'商品数量',prop:''},
+  { label:'入库数量',prop:'inQty'},
+  { label:'库位',dom:Storehouse()},
+  // { label:'批次',prop:''},
+]

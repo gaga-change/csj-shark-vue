@@ -38,16 +38,16 @@
            :visible.sync="dialogVisible">
 
             <el-row :gutter="10">
-                <el-col :span="12">
+                <el-col :span="12" style="margin-bottom:12px">
                     <span>计划单号：</span>{{selectData.planCode}}
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="12" style="margin-bottom:12px">
                     <span>下单时间：</span>{{formatTime(selectData.placeOrderTime)}}
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="12" style="margin-bottom:12px">
                     <span>收货人：</span>{{selectData.receiver}}
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="12" style="margin-bottom:12px">
                     <span>收货地址：</span>{{selectData.receiveAddress}}
                 </el-col>
             </el-row>
@@ -56,7 +56,8 @@
                :model="logisticsForm" 
                class="formInput" 
                :rules="logisticsRules"     
-               ref="subForm"  
+               ref="subForm" 
+               :height="200" 
                label-width="80px" 
                label-position="left">
                 <el-form-item 
@@ -84,6 +85,7 @@
                     <el-input 
                       type="text" 
                       size="small"
+                      placeholder="请输入物流单号" 
                       :rules="[ { required: true, message: '该项为必填'}]" 
                       v-model="logisticsForm.logisticsOrderCode" >
                     </el-input>
@@ -95,6 +97,7 @@
                     <el-input 
                        type="number" 
                        size="small" 
+                       placeholder="请输入件数" 
                        :rules="[{ required: true, message: '该项为必填'}]"  
                        v-model="logisticsForm.carrierQty" >
                     </el-input>
@@ -106,6 +109,7 @@
                   prop="freightAmt">
                     <el-input type="number"
                       size="small" 
+                      placeholder="请输入运费" 
                       v-model="logisticsForm.freightAmt" >
                     </el-input>
                 </el-form-item>
@@ -115,6 +119,7 @@
                    prop="otherAmt" >
                     <el-input type="number" 
                       size="small"  
+                      placeholder="请输入其它费用" 
                       v-model="logisticsForm.otherAmt" >
                     </el-input>
                 </el-form-item>
@@ -124,6 +129,7 @@
                   prop="skuAmt" >
                     <el-input type="number" 
                        size="small" 
+                       placeholder="请输入物流总额"
                        v-model="logisticsForm.skuAmt" 
                        disabled>
                     </el-input>
@@ -138,6 +144,7 @@
                      size="small">
                         <el-option
                            key="我方承担"
+                            placeholder="请输入运费承担方"
                            label="我方承担"
                            :value="0">
                         </el-option>
@@ -155,6 +162,7 @@
                    prop="remarkInfo" >
                     <el-input type="text" 
                        size="small"
+                       placeholder="请输入备注"
                        v-model="logisticsForm.remarkInfo" >
                     </el-input>
                 </el-form-item>

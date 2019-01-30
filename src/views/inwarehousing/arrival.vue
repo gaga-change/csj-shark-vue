@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="arrival">
         <el-card class="simpleCard"  shadow="never"   body-style="padding:12px">
             <new-search  
              @submit="submit"
@@ -13,7 +13,11 @@
         </el-card>
 
         <div style="margin-bottom:12px">
-           <el-button type="primary" size="small" @click="submitOrider" >上架</el-button>
+           <el-button 
+            type="primary" 
+            size="small"
+            :disabled="!Array.isArray(nowChildDataSelectData)||nowChildDataSelectData.length<=0"
+            @click="submitOrider" >上架</el-button>
            <el-button type="danger" 
             size="small"  
             :disabled="!activeOrder.orderCode" 
@@ -28,6 +32,7 @@
         </div>
     
         <el-dialog
+          style="z-index:900"
           title="到货登记"
           :visible.sync="dialogVisible"
           width="70%">
@@ -40,7 +45,59 @@
            :loading="false"
            :config="arrivalAlertConfig" 
            :allTableData="nowChildDataSelectData"/> 
+           <div class="alertBottomArr">
+              <el-button type="primary"  size="small" @click="putawayConfirm"  >上架确认</el-button>
+              <el-button type="primary"  size="small"  @click="cancelArrivalAlert" >取消</el-button> 
+           </div>
         </el-dialog>
+        
+         <div class="arrivalAlertChider" v-if="arrivalAlertDisplay">
+            <div class="arrivalAlertChiderBody">
+                <el-form :model="addSearchForm"   label-width="70px" label-position="left">
+                        <el-form-item label-width="40px" label="库位" class="postInfo-container-item" >
+                            <el-select v-model="addSearchForm.warehouseSpaceCode"
+                            filterable clearable placeholder="请选择库位" 
+                            size="small" prefix-icon="el-icon-search">
+                                <el-option
+                                v-for="item in warehouseSpaceCodeConfig"
+                                :key="item.warehouseSpaceCode"
+                                :label="item.warehouseSpaceCode"
+                                :value="item.warehouseSpaceCode">
+                                </el-option>
+                            </el-select>
+                        </el-form-item> 
+
+                        <el-form-item  label-width="40px"  label="数量" >
+                            <el-input-number type="text" 
+                            size="small" 
+                            style="width:200px"
+                            :min="0"
+                            v-model="addSearchForm.putQty" 
+                            placeholder="请输入上架数量">
+                            </el-input-number>
+                        </el-form-item>
+
+                        <el-form-item  class="addButton">
+                            <el-button type="primary"  size="small"  @click="addWarehouseSpaceCode">添加</el-button>
+                        </el-form-item>
+                </el-form>
+
+                <edit-table 
+                :loading="false"
+                @dataChange="deleteByindex"
+                emptyText="请选择库位并输入数量添加数据"
+                :config="putQtyConfig" 
+                :deleteNeed="true"
+                :useEdit="false"
+                :tableData="warehouseSpaceCodeListTable"/> 
+
+                <div class="alertBottomArr">
+                    <el-button type="primary"  size="small"  @click="sureWarehouse">确认</el-button>
+                    <el-button type="primary"  size="small"  @click="cancelWarehouse">取消</el-button> 
+                </div>
+            </div>
+         </div>
+
 
         <double-table 
           ref="tableChild" 
@@ -72,13 +129,14 @@
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
     import newSearch from './components/newSearch'
+    import editTable from '@/components/Table/editTable'
     import webPaginationTable from '@/components/Table/webPaginationTable'
     import _  from 'lodash';
     import moment from 'moment';
-    import { arrivalTableConfig, arrivalChildTableConfig,arrivalAlertConfig } from './components/config'
-    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete } from '@/api/warehousing'
+    import { arrivalTableConfig, arrivalChildTableConfig,arrivalAlertConfig,putQtyConfig } from './components/config'
+    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete,warehouseSpaceSelect ,jobAdd} from '@/api/warehousing'
     export default {
-        components: { DoubleTable,newSearch,webPaginationTable },
+        components: { DoubleTable,newSearch,webPaginationTable,editTable },
         data(){
             return {
                 loading:false,
@@ -94,29 +152,127 @@
                   planCode:'',
                   ownerName:'',
                 },
+                addSearchForm:{
+                  warehouseSpaceCode:'',
+                  putQty:''
+                },
+                putQtyConfig,
                 activeOrder:{},
                 expandsParent:[],
                 arrivalAlertConfig,
+                warehouseSpaceCodeListTable:[],
                 nowChildDataSelectData:[],
-                dialogVisible:false
+                warehouseSpaceCodeConfig:[],
+                dialogVisible:false,
+                arrivalAlertDisplay:false,
+                skuRow:{}
+
             }
         },
 
          created(){
+
             this.arrivalAlertConfig.forEach(item=>{
                 if(item.useLink){
                     item.dom=(row, column, cellValue, index)=>{
-                    return <span>输入上架量</span> 
+                      return <span class="link_dom" onClick={this.upperShelf.bind(this,row)} >输入上架量</span> 
                     }
                 }
-              }) 
+              });
+
+              if(sessionStorage.getItem('warehouse')){
+                warehouseSpaceSelect({
+                   warehouseCode:sessionStorage.getItem('warehouse'),
+                   pageNum:1,
+                   pageSize:1000
+                }).then(res=>{
+                    if(res.success){
+                      this.warehouseSpaceCodeConfig=res.data&&res.data.list||[];
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                })
+              } 
          },
 
         methods:{
             moment,
+
+            putawayConfirm(){
+              let json={};
+              json['orderCode']=this.activeOrder.orderCode;
+              json['putSpaceInfoList']=[];
+              _.cloneDeep(this.nowChildDataSelectData).forEach(item=>{
+                 let arr=item.warehousingArr||[];
+                 arr.forEach(v=>{
+                    let vJson={};
+                    vJson['warehouseAreaCode']=sessionStorage.getItem('warehouse');
+                    vJson['warehouseSpaceCode']=v.warehouseSpaceCode;
+                    vJson['putQty']=v.putQty;
+                    vJson['orderDetailId']=item.id;
+                    json['putSpaceInfoList'].push(vJson)
+                 })
+              });
+              jobAdd(json).then(res=>{
+                  if(res.success){
+                    this.dialogVisible=false;
+                    this.$message({type:'success',message:'操作成功！'})
+                  } else{
+                     this.$message({type:'error',message:'操作失败！'})   
+                  }
+              }).catch(err=>{
+                  this.$message({type:'error',message:'操作失败！'})
+                  console.log(err)
+              })
+            },
+            
+            deleteByindex(index, row){
+               let warehouseSpaceCodeListTable= _.cloneDeep(this.warehouseSpaceCodeListTable);
+               warehouseSpaceCodeListTable.splice(index,1);
+               this.warehouseSpaceCodeListTable=warehouseSpaceCodeListTable;
+            },
+
+            sureWarehouse(){
+              let nowChildDataSelectData= _.cloneDeep(this.nowChildDataSelectData);
+              let index=nowChildDataSelectData.findIndex(v=>v.id===this.skuRow.id);
+              if(index<0){
+                  return 
+              }
+              nowChildDataSelectData[index]['warehousingArr']=this.warehouseSpaceCodeListTable;
+              this.nowChildDataSelectData=nowChildDataSelectData;
+              this.arrivalAlertDisplay=false;
+              this.warehouseSpaceCodeListTable=[];
+              this.addSearchForm={};
+            },
+
+            cancelWarehouse(){
+              this.arrivalAlertDisplay=false;
+              this.warehouseSpaceCodeListTable=[];
+              this.addSearchForm={};
+            },
+
+            addWarehouseSpaceCode(){
+              let json={id:moment().valueOf(),...this.addSearchForm};
+              this.warehouseSpaceCodeListTable.push(json)
+            },
+
+            upperShelf(row){
+              this.arrivalAlertDisplay=true;
+              this.skuRow=row;
+            },
+
+            cancelArrivalAlert(){
+              this.dialogVisible=false;
+              this.nowChildDataSelectData=[];
+              this.warehouseSpaceCodeListTable=[];
+              let tableData=_.cloneDeep(this.tableData);
+              this.tableData=tableData;
+            },
+
             submitOrider(){
               this.dialogVisible=true;
             },
+
             submit(value){
               this.searchForm=value;
               this.getCurrentTableData()
@@ -217,11 +373,7 @@
              childDataSelect(val){
                 this.nowChildDataSelectData=_.cloneDeep(val.arr).map(v=>{
                   let json=v;
-                  json['warehousingArr']=[
-                      {putQty:1,warehouseSpaceCode:'1-2-3'},
-                      {putQty:1,warehouseSpaceCode:'1-2-3'},
-                      {putQty:1,warehouseSpaceCode:'1-2-3'},
-                  ];
+                  json['warehousingArr']=[];
                   return json;
                 });
              },
@@ -252,13 +404,61 @@
     }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" >
+    .el-popper[x-placement^=bottom]{
+        z-index: 3001 !important;
+    }
+   .arrival{
      .alertInfo{
         margin-bottom: 12px;
         >span{
           font-size: 14px;
           padding-right:20px;
         }   
-    }
- 
+     }
+     .link_dom{
+       color: rgb(51, 153, 234);
+       cursor: pointer;
+     }
+     .alertBottomArr{
+         display: flex;
+         justify-content: flex-end;
+         padding-top: 12px;
+     }
+
+     .arrivalAlertChider{
+         position: fixed;
+         width: 100%;
+         height: 100%;
+         left: 0;
+         top:0;
+         z-index: 3000;
+         background: rgba(0,0,0,0.3);
+         .arrivalAlertChiderBody{
+             padding: 12px;
+             position: absolute;
+             left: 50%;
+             top: 50%;
+             transform: translate(-50%,-50%);
+             min-width:600px;
+             min-height: 200px;
+             background: #fff;
+         }
+     }
+
+     .el-form {
+        display: flex;
+        .el-form-item{
+           margin-right: 12px;
+        }
+        .addButton{
+            >div{
+              margin-left: 20px !important;
+            }
+        }
+     }
+
+   }
+
+
 </style>

@@ -149,7 +149,9 @@
     const ruleForm = {
         pageNum: 1,
         pageSize:10,
-        companyName:'',
+        warehouseAreaCode:'',
+        isVirtual:0,
+        warehouseAreaNature:''
     }
     
     export default {

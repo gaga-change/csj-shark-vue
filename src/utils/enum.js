@@ -195,6 +195,18 @@ export const warehouseSpaceStatus = [
     value: 1
   },
 ]
+
+export const warehouseSpaceStatusEnum = [
+  {
+    name: '空库位',
+    value: 0
+  },
+  {
+    name: '有货',
+    value: 1
+  },
+]
+
 //库区编码
 export const AtoZ = [
   {value:'A',name:'A',isUsed:false,},
