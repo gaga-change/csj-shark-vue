@@ -14,6 +14,7 @@
 
          <el-col :span="24" style="margin-bottom:12px;">
             <el-button type="primary"  :disabled="!SelectionData.length>0" size="small"  @click="outOrder">生成出库单</el-button>
+            <el-button type="danger"  :disabled="!SelectionData.length>0" size="small"  @click="outOrder('delete')">删除</el-button>
          </el-col>  
 
         <web-pagination-table 
@@ -29,7 +30,7 @@
     import moment from 'moment';
     import newSearch from './components/newSearch'
     import { temporaryStorageConfig } from './components/config'
-    import { selectOutWarehouseJobDetail,createOutWareHouseOrder } from '@/api/warehousing'
+    import { selectOutWarehouseJobDetail,createOutWareHouseOrder,deleteByIds } from '@/api/warehousing'
     import webPaginationTable from '@/components/Table/webPaginationTable'
     export default {
         components: { newSearch,webPaginationTable },
@@ -45,20 +46,6 @@
                 SelectionData:[]
             }
         },
-
-        created(){
-
-            this.temporaryStorageConfig.forEach(element => {
-                if(element.useDom){
-                  element.dom=(row, column, cellValue, index)=>{   
-                  return  <span class="tableBtnBox">
-                              删除
-                          </span>
-                  }
-                }
-            }); 
-        },
-
         mounted(){
            this.getCurrentTableData();
         },
@@ -83,20 +70,26 @@
                 this.SelectionData=val; 
              },
 
-             outOrder(){
+             outOrder(type){
                 let src='';
                 this.SelectionData.forEach(v=>{
-                    src+=` ${v.planCode} , `
+                    src+=` ${v.pickOrderCode} , `
                 })
-                this.$confirm(`你当前选中的单据计划单号为${src},确认要生成出库单吗?`, '提示', {
+                let tips=`你当前选中的单据拣货单号为${src},确认要生成出库单吗?`;
+                let Api=createOutWareHouseOrder;
+                let data={sortTaskIds:this.SelectionData.map(v=>v.id)}
+                if(type==='delete'){
+                   tips=`你当前选中的单据拣货单号为${src},确认要删除吗?`; 
+                   data=this.SelectionData.map(v=>v.jobId)
+                   Api=deleteByIds
+                }
+                this.$confirm(tips, '提示', {
                      confirmButtonText: '确定',
                      cancelButtonText: '取消',
                    }).then(() => {
-                       createOutWareHouseOrder({
-                          sortTaskIds:this.SelectionData.map(v=>v.id)
-                       }).then(res=>{
+                       Api(data).then(res=>{
                            if(res.success){
-                             this.$message({type: 'success',message: '操作成功,可到出库单页面查看！'});
+                             this.$message({type: 'success',message: '操作成功'});
                            } else{
                               this.$message({type: 'info',message: '操作失败'});      
                            }
@@ -119,7 +112,7 @@
                        json[i]=this.searchForm[i];
                    }
                }
-               selectOutWarehouseJobDetail({...json,isCreateOrder:0}).then(res=>{
+               selectOutWarehouseJobDetail({...json,isCreateOrder:0,jobStatus:4}).then(res=>{
                  this.loding=false;
                  if(res.success){
                     this.TableData=res.data||[]

@@ -153,8 +153,8 @@ export const recordListConfig=[
 
 
 export const inPushOrderConfig=[
-  { label:'计划单号',prop:'orderCode'},
-  { label:'入库单号',prop:'planCode'},
+  { label:'计划单号',prop:'planCode'},
+  { label:'入库单号',prop:'orderCode'},
   { label:'单据类型',prop:'orderType'},
   { label:'创建时间',prop:'gmtCreate',type:'time'},
   { label:'推送状态',prop:'isPush'},

@@ -325,3 +325,12 @@ export function createOutWareHouseOrder(data) {
     data:data
   })
 }
+
+//根据出库计划单号列表删除出库作业
+export function deleteByIds(data) {
+  return request({
+    url: `/webApi/outWarehouse/job/deleteByIds`,
+    method:'delete',
+    data:data
+  })
+}

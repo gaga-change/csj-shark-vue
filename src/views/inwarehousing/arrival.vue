@@ -41,10 +41,12 @@
             <span>供应商 : {{activeOrder.providerName}}</span>    
             <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>    
           </div>
+
           <web-pagination-table 
            :loading="false"
            :config="arrivalAlertConfig" 
            :allTableData="nowChildDataSelectData"/> 
+
            <div class="alertBottomArr">
               <el-button type="primary"  size="small" @click="putawayConfirm"  >上架确认</el-button>
               <el-button type="primary"  size="small"  @click="cancelArrivalAlert" >取消</el-button> 
@@ -82,14 +84,14 @@
                         </el-form-item>
                 </el-form>
 
-                <edit-table 
-                :loading="false"
-                @dataChange="deleteByindex"
-                emptyText="请选择库位并输入数量添加数据"
-                :config="putQtyConfig" 
-                :deleteNeed="true"
-                :useEdit="false"
-                :tableData="warehouseSpaceCodeListTable"/> 
+                    <edit-table 
+                    :loading="false"
+                    @dataChange="deleteByindex"
+                    emptyText="请选择库位并输入数量添加数据"
+                    :config="putQtyConfig" 
+                    :deleteNeed="true"
+                    :useEdit="false"
+                    :tableData="warehouseSpaceCodeListTable"/> 
 
                 <div class="alertBottomArr">
                     <el-button type="primary"  size="small"  @click="sureWarehouse">确认</el-button>
@@ -154,7 +156,7 @@
                 },
                 addSearchForm:{
                   warehouseSpaceCode:'',
-                  putQty:''
+                  putQty:1
                 },
                 putQtyConfig,
                 activeOrder:{},
@@ -217,6 +219,7 @@
                   if(res.success){
                     this.dialogVisible=false;
                     this.$message({type:'success',message:'操作成功！'})
+                    this.warehouseSpaceCodeListTable=[];
                   } else{
                      this.$message({type:'error',message:'操作失败！'})   
                   }
@@ -233,6 +236,7 @@
             },
 
             sureWarehouse(){
+              console.log(this.warehouseSpaceCodeListTable)
               let nowChildDataSelectData= _.cloneDeep(this.nowChildDataSelectData);
               let index=nowChildDataSelectData.findIndex(v=>v.id===this.skuRow.id);
               if(index<0){
@@ -252,21 +256,46 @@
             },
 
             addWarehouseSpaceCode(){
+              for(let i in this.addSearchForm){
+                  if(this.addSearchForm[i]===''){
+                     this.$message({type:'error',message:'库位和数量都是必填参数'});
+                     return 
+                  }
+              }
+              if(this.addSearchForm['putQty']===0){
+                 this.$message({type:'error',message:'数量不能为0'});
+                 return 
+              }
+
+              let putQtyAll=this.warehouseSpaceCodeListTable.reduce((a,b)=>{
+                  return a+b.putQty
+              },0)
+              
+              if(putQtyAll+this.addSearchForm['putQty']>this.skuRow.receiveQty){
+                 this.$message({type:'error',message:'上架数量不能大于到货量'});
+                 return 
+              }
               let json={id:moment().valueOf(),...this.addSearchForm};
-              this.warehouseSpaceCodeListTable.push(json)
+              let index=this.warehouseSpaceCodeListTable.findIndex(v=>v.warehouseSpaceCode===this.addSearchForm.warehouseSpaceCode)
+              if(index===-1){
+                 this.warehouseSpaceCodeListTable.push(json);  
+              } else{
+                  this.warehouseSpaceCodeListTable[index]['putQty']+=this.addSearchForm['putQty']
+              }
+
+
+             
             },
 
             upperShelf(row){
               this.arrivalAlertDisplay=true;
               this.skuRow=row;
+              this.warehouseSpaceCodeListTable=row.warehousingArr;
             },
 
             cancelArrivalAlert(){
               this.dialogVisible=false;
-              this.nowChildDataSelectData=[];
               this.warehouseSpaceCodeListTable=[];
-              let tableData=_.cloneDeep(this.tableData);
-              this.tableData=tableData;
             },
 
             submitOrider(){

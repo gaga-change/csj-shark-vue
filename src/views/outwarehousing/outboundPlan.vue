@@ -272,6 +272,9 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
+//  .el-table__row.expanded{
+//    background: green;
+//    color: #fff;
+//  }
 
 </style>
