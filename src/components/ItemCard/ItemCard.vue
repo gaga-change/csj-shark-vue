@@ -92,6 +92,7 @@ export default {
           }else if(typeof userFormatter=='function'){
               return userFormatter(value)
           }  else{
+            console.log(value)
             switch(type){
               case 'time': return moment(value).format(format||'YYYY-MM-DD');
               case 'boolean': return Number(value)?'是':'否';

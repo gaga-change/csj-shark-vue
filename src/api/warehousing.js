@@ -256,3 +256,72 @@ export function inOrderSelectDetailList(orderId) {
     method: 'get',
   })
 }
+
+//新增拣货单
+export function pickOrderAdd(data) {
+  return request({
+    url: `/webApi/pick/order/add`,
+    method: 'post',
+    data:data
+  })
+}
+
+//查询拣货单列表
+export function pickOrderList(data) {
+  return request({
+    url: `/webApi/pick/order/list?${stringify(data)}`,
+    method: 'get',
+  })
+}
+
+//查询出库暂存列表
+export function selectOutWarehouseJobDetail(data) {
+  return request({
+    url: `/webApi/outWarehouse/job/selectOutWarehouseJobDetail?${stringify(data)}`,
+    method: 'get',
+  })
+}
+
+
+//根据拣货单id获取拣货单详情信息
+export function pickOrderDetail(id) {
+  return request({
+    url: `/webApi/pick/order/detail/${id}`,
+    method: 'get',
+  })
+}
+
+//拣货确认
+export function orderPickConfirm(data) {
+  return request({
+    url: `/webApi/pick/order/pickConfirm`,
+    method: 'post',
+    data:data
+  })
+}
+
+
+//删除拣货单
+export function orderDelete(pickOrderId) {
+  return request({
+    url: `/webApi/pick/order/delete/${pickOrderId}`,
+    method:'delete',
+  })
+}
+
+//拣货终止
+export function orderPickStop(pickOrderId) {
+  return request({
+    url: `/webApi/pick/order/pickStop/${pickOrderId}`,
+    method:'post',
+  })
+}
+
+//根据拣货任务生成出库单
+export function createOutWareHouseOrder(data) {
+  return request({
+    url: `/webApi/outWarehouse/order/createOutWareHouseOrder`,
+    method:'post',
+    data:data
+  })
+}

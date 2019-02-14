@@ -8,6 +8,7 @@
         :highlight-current-row="highlightCurrentRow"
         @current-change="handleCurrentRedioChange"
         :summary-method="summaryMethod"
+        @selection-change="handleSelectionChange"
         :border="border"
         :show-summary="showSummary"
         size="small"
@@ -17,6 +18,7 @@
             v-for="item in tableConfig"
             :formatter="item.formatter"
             :fixed="item.fixed"
+            :type="item.columnType"
             :width="item.width"
             :key="item.lable"
             :prop="item.prop"
@@ -237,7 +239,11 @@ export default {
 
      handleCurrentRedioChange(currentRow, oldCurrentRow){
        this.$emit('currentRedioChange', currentRow, oldCurrentRow); 
-     }
+     },
+
+     handleSelectionChange(val){
+       this.$emit('SelectionChange', val); 
+     },
 
 
 

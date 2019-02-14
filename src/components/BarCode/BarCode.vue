@@ -15,8 +15,8 @@ export default {
       required:true
     },
     imgStyle:{
-      type:Object,
-      default:()=>{return {}}
+      type:String,
+      default:""
     },
     imgAlt:{
       type: String,

@@ -171,16 +171,9 @@
                 })
             },
             currentRadioChange(data){
-                // if(!data.busiBillNo){
-                //     console.log(33333333);
-                    
-                //     return
-                // }
                 var chooseList = data
-                
-                
                 if(data.childData&&data.childData.length>0){
-                    // chooseList = data
+
                   
                 }else{
                     this.loading = true

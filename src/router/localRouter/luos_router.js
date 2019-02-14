@@ -43,15 +43,29 @@ export default [
   {
     path: '/outwarehousing',
     component: Layout,
-    redirect: 'outwarehousing/outboundWork',
+    redirect: 'outwarehousing/outboundPlan',
     meta: { title: '出库管理', noCache: true,icon: 'out' },
     hidden: false,
     children: [
       {
-        name: 'outboundWork',
-        path: 'outboundWork',
-        meta: { title: '出库作业', noCache: true },
-        component: _import('outwarehousing/outboundWork'),
+        name: 'outboundPlan',
+        path: 'outboundPlan',
+        meta: { title: '出库计划单', noCache: true },
+        component: _import('outwarehousing/outboundPlan'),
+        hidden: false,
+      },
+      {
+        name: 'pickingtask',
+        path: 'pickingtask',
+        meta: { title: '拣货任务', noCache: true },
+        component: _import('outwarehousing/pickingtask'),
+        hidden: false,
+      },
+      {
+        name: 'temporaryStorage',
+        path: 'temporaryStorage',
+        meta: { title: '出库暂存', noCache: true },
+        component: _import('outwarehousing/temporaryStorage'),
         hidden: false,
       },
       {

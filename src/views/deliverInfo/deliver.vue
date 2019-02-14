@@ -13,8 +13,10 @@
           st 
           size="small" 
           @click="logisticsHandle" 
+         :disabled="selectdisabled"
           style="margin-bottom:15px">
-          物流登记
+          <span>物流登记</span>
+          <span v-if="!selectdisabled">{{`( 当前选中的单号为 ${selectData.planCode} )`}}</span>
         </el-button>
 
         <double-table 
@@ -36,22 +38,11 @@
          <el-dialog
            :title="'新增物流登记'"
            :visible.sync="dialogVisible">
-
-            <el-row :gutter="10">
-                <el-col :span="12" style="margin-bottom:12px">
-                    <span>计划单号：</span>{{selectData.planCode}}
-                </el-col>
-                <el-col :span="12" style="margin-bottom:12px">
-                    <span>下单时间：</span>{{formatTime(selectData.placeOrderTime)}}
-                </el-col>
-                <el-col :span="12" style="margin-bottom:12px">
-                    <span>收货人：</span>{{selectData.receiver}}
-                </el-col>
-                <el-col :span="12" style="margin-bottom:12px">
-                    <span>收货地址：</span>{{selectData.receiveAddress}}
-                </el-col>
-            </el-row>
-
+             <item-title text="基本信息"/>
+             <item-card :config="baseInfoConfig" :loading="false" boxStyle="padding-bottom: 0;"  :cardData="selectData" /> 
+             <div style="padding-top:12px;">
+                <item-title text="待填信息"/>
+             </div>
             <el-form 
                :model="logisticsForm" 
                class="formInput" 
@@ -60,25 +51,25 @@
                :height="200" 
                label-width="80px" 
                label-position="left">
-                <el-form-item 
-                  label="物流公司名称" 
-                  label-width="100px" 
-                  prop="logisticsComCode" >
-                    <el-select 
-                      v-model="logisticsForm.logisticsComCode" 
-                      :rules="[{ required: true, message: '该项为必选'}]" 
-                      clearable 
-                      placeholder="请选择物流公司" 
-                      size="small" 
-                      prefix-icon="el-icon-search">
-                        <el-option
-                          v-for="item in deliverCompanyAll"
-                          :key="item.companyCode"
-                          :label="item.companyName"
-                          :value="item.companyCode">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                  <el-form-item 
+                    label="物流公司名称" 
+                    label-width="100px" 
+                    prop="logisticsComCode" >
+                        <el-select 
+                        v-model="logisticsForm.logisticsComCode" 
+                        :rules="[{ required: true, message: '该项为必选'}]" 
+                        clearable 
+                        placeholder="请选择物流公司" 
+                        size="small" 
+                        prefix-icon="el-icon-search">
+                            <el-option
+                            v-for="item in deliverCompanyAll"
+                            :key="item.companyCode"
+                            :label="item.companyName"
+                            :value="item.companyCode">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
 
                  <el-form-item label="物流单号"
                     prop="logisticsOrderCode" >
@@ -172,7 +163,6 @@
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="submitDeliver">确 定</el-button>
             </span>
-
         </el-dialog>
 
          <el-dialog
@@ -189,7 +179,7 @@
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
     import moment from 'moment'
-    import { tableConfig } from './components/config'
+    import { tableConfig,baseInfoConfig } from './components/config'
     import { addLogisticsRegister, getLogisticsRegisterInfo,getLogisticsRegisterList,getLogisticsSelectList } from '@/api/logistics'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchDeliver  from './components/search'
@@ -251,6 +241,8 @@
                 dialogVisibleDeliver:false,
                 deliverCompanyAll:[],
                 highlightCurrentRow: true,
+                baseInfoConfig,
+                selectdisabled:true
             }
         },
         computed:{
@@ -265,7 +257,6 @@
             logisticsForm:{
                 handler(val,oldval){
                     this.logisticsForm.skuAmt = (this.logisticsForm.freightAmt||0)-0+((this.logisticsForm.otherAmt||0)-0)
-                    console.log(63333333,this.logisticsForm.skuAmt);
                     
                 },
                 deep:true,
@@ -384,7 +375,7 @@
                 }
             },
             currentRadioChange(data){//选中某行
-                
+                this.selectdisabled=false;
                 this.selectData = { ...data }
             },
             getLogisticsList(){
@@ -400,8 +391,6 @@
         created(){
             this.getTableData()
             this.getLogisticsList()
-            // this.demo()
-            // this.currentRedioChange()
         }
     }
 </script>
@@ -412,4 +401,14 @@
            width:220px;
         }
     }
+    .baseInfo{
+      display: flex;
+      line-height: 24px;
+      margin-bottom: 12px;
+    }
+
+    .el-dialog__body{
+        padding-top: 0;
+    }
+
 </style>

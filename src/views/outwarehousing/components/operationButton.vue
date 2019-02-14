@@ -1,15 +1,17 @@
 <template>
    <div style="margin-bottom:10px">
-         <el-button type="primary" size="small" @click="makeOutbound">出库登记</el-button>
-        <el-button type="primary" size="small" @click="priviewBoxLabel">打印装箱单</el-button>
+         <!-- <el-button type="primary" size="small" @click="makeOutbound">出库登记</el-button> -->
+         <div style="margin-bottom:12px;font-size:12px">
+            <span>操作说明：按单拣货和打印装箱单，仅支持对某一条计划单下的明细进行操作，故若你需要此操作，请展开该条数据并选择你所要打印的商品</span>
+         </div>
         <el-button type="primary" size="small" @click="priviewReserve">打印计划单</el-button>
-
+        <el-button type="primary" size="small" @click="PickingOrder">按单拣货  <span v-if="activePlanCode">{{`( ${activePlanCode} )`}}</span></el-button>
+        <el-button type="primary" size="small" @click="priviewBoxLabel">打印装箱单 <span v-if="activePlanCode">{{`( ${activePlanCode} )`}}</span> </el-button>
         <div>
             <el-dialog
                 title="出库登记"
                 :visible.sync="dialogVisible"
-                width="70%"
-            >
+                width="70%">
                 <el-row :gutter="20" style="margin-bottom:14px;">
                     <el-col :span="6">出库计划单：{{parentData.planCode}}</el-col>
                     <el-col :span="6">供应商：{{parentData.arrivalName}}</el-col>
@@ -29,10 +31,9 @@
             <el-dialog
                 title="打印装箱单"
                 :visible.sync="dialogVisibleLabel"
-                width="70%"
-            >
+                width="70%">
                 <div id="print">
-                    <div class="border"><span>客户编码：</span><span class="marginRight5">{{parentData.arrivalCode}}</span>    <span>客户名称：</span><span>{{parentData.arrivalName}}</span><span>{{parentData.arrivalAddress}}</span></div>
+                    <div class="border" style="margin-bottom:12px;"><span>客户编码：</span><span class="marginRight5">{{parentData.arrivalCode}}</span>    <span>客户名称：</span><span>{{parentData.arrivalName}}</span><span>{{parentData.arrivalAddress}}</span></div>
                     <edit-table :config="planChildTableLabelConfig" 
                     :default-canedit="defaultCanedit" :table-data="childData" v-loading="loading" :default-edit="false"></edit-table>
                 </div>
@@ -46,8 +47,7 @@
              <el-dialog
                 title="打印计划单"
                 :visible.sync="dialogVisibleReserve"
-                width="70%"
-            >
+                width="70%">
                 <edit-table :config="planChildTablePrintConfig" :table-data="printPlan" id="printPlanContainer" :default-edit="false"></edit-table>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisibleReserve = false">取 消</el-button>
@@ -60,7 +60,7 @@
 <script>
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
-import { outboundOrderSubmit } from '@/api/warehousing'
+import { outboundOrderSubmit,pickOrderAdd } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
@@ -103,28 +103,33 @@ export default {
         orderType:{
             type:String,
             default:''
+        },
+        activePlanCode:{
+           type:String,
+           default:'' 
         }
     },
     methods:{
         formateTime(val){
             return moment(Number(val)).format('YYYY-MM-DD HH:MM:SS')
         },
+
         makeOutbound(){
             var usable =  this.checkDataUsable();
             if(usable.objectUsabel&&usable.arrUsabel){
                 this.dialogVisible = true;    
             }else{
-                this.$message({type:'info',message:'请选择单据和商品'})
+                this.$message({type:'info',message:'请将某一条单据展开并选择所属商品'})
             }
-            
         },
+
         priviewBoxLabel(){
             var usable =  this.checkDataUsable();
             if(usable.objectUsabel&&usable.arrUsabel){
                 this.dialogVisibleLabel = true
                 this.defaultCanedit = true
             }else{
-                this.$message({type:'info',message:'请选择单据和商品'})
+                this.$message({type:'info',message:'请将某一条单据展开并选择所属商品'})
             }
         },
       
@@ -149,16 +154,54 @@ export default {
             var a = {...this.parentDataObj}
             var b = this.childDataArr.map(item => {item.editable = true;item.printNum = item.realOutQty;return item})
             this.childData=[...b]
-            
             this.parentData = {...a}
-            
-            
             var objectUsabel = Object.keys(a).length>0
             var arrUsabel = b.length>0
             return {
-                objectUsabel,arrUsabel
+               objectUsabel,arrUsabel
             }
         },
+
+        PickingOrder(){
+           var usable =  this.checkDataUsable();
+           if(this.planPrintData.length>0&&usable.objectUsabel&&usable.arrUsabel){
+               this.$prompt(`是否将您选中的计划单 ${this.activePlanCode} 生成拣货任务?如果是,请输入拣货人姓名并确定！`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({value}) => {
+                    pickOrderAdd({
+                      pickType:0,
+                      pickOperatorId:0,
+                      pickOperatorName:value,
+                      pickOrderDetailAddReqList:this.childData.map(v=>{
+                          return {...v,sortQty:v.planOutQty}
+                      })
+
+                    }).then(res=>{
+                        if(res.success){
+                            this.$message({
+                                type: 'success',
+                                message: '拣货单生成成功，可到拣货任务页面查看！'
+                            });
+                        } else{
+                            this.$message({
+                              type: 'info',
+                              message: '操作失败'
+                            });   
+                        }
+                    })
+             
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败'
+                    });          
+                });
+            }else{
+                this.$message({type:'info',message:'请将某一条单据展开并选择所属商品'})
+            }
+        },
+
         priviewReserve(){
             if(this.planPrintData.length>0){
                 this.dialogVisibleReserve = true
@@ -166,14 +209,12 @@ export default {
             }else{
                 this.$message({type:'info',message:'请选择单据'})
             }
-          
         },
         printPlanOrder(){
-             var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
-
+            var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
             MakePrint(printPlanContainer)
         },
-        submitFormIt(orderStatus){//提交
+        submitFormIt(orderStatus){
             var canSubmit = true
             var items = []
            
@@ -182,14 +223,11 @@ export default {
                 var b = item.realOutQty || 0
                 var c = item.tempOutQty || 0
                 var limit = a-b-c;
-               if(item.realOutQtyIt>limit){//加减操作 if()
-               console.log(1);
-               
-                    canSubmit = false
+               if(item.realOutQtyIt>limit){
+                  canSubmit = false
                 }
                 if(!MoneyPositiveReg.test(item.realOutQtyIt)){
-                    
-                    canSubmit = false
+                  canSubmit = false
                 }
                 items.push({batchNo:item.batchNo,busiIndex:item.busiIndex,skuCode:item.skuCode,realOutQty:item.realOutQtyIt,remarkInfo:item.remarkInfo})
             })
@@ -197,9 +235,6 @@ export default {
                 this.$message({type:'error',message:'数据错误，最多两位小数，请修改'})
                 return false
             }
-            
-           
-            // debugger
             outboundOrderSubmit({...this.parentData,orderStatus:orderStatus,ownerCode:this.parentData.ownerCode ,customerCode:this.parentData.arrivalCode,customerName:this.parentData.arrivalName,warehouseCode:this.$store.getters.chooseWarehouse,orderType:this.orderType,addOutWareHouseOrderVO:[...items]}).then(res => {
                 if(res.success){
                     this.dialogVisible = false
@@ -217,6 +252,7 @@ export default {
     }
 }
 </script>
+
 <style scoped lang="scss">
  .labelContainer{
      width:180px;

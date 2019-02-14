@@ -4,28 +4,23 @@
       <el-row :gutter="10">
         
        <el-col :span="6">
-          <el-form-item label="计划单号" prop="planCode">
-            <el-input type="text" size="small" v-model="searchForm.planCode" placehold="
+          <el-form-item label="计划单号"  prop="planCode">
+            <el-input type="text" size="small" placeholder="请输入计划单号" v-model="searchForm.planCode" placehold="
 后四位"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6" v-if="outbound">
-          <el-form-item label="出库单号" prop="planCode">
-            <el-input type="text" size="small" v-model="searchForm.orderCode" placehold="
+          <el-form-item label="出库单号"   prop="planCode">
+            <el-input type="text" size="small"  placeholder="请输入出库单号" v-model="searchForm.orderCode" placehold="
 后四位"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="供应商名称" label-width="85px"  prop="providerName">
-            <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
+          <el-form-item label="供应商名称" label-width="85px"    prop="providerName">
+            <el-input type="text" size="small" placeholder="请输入供应商名称" v-model="searchForm.providerName" ></el-input>
           </el-form-item>
         </el-col>
         
-       <!-- <el-col :span="6">
-          <el-form-item label="商品名称" label-width="85px"  prop="providerName">
-            <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
-          </el-form-item>
-        </el-col> -->
         <el-col :span="6">
             <el-form-item label-width="70px" label="出库状态" class="postInfo-container-item" prop="execStatus">
               <el-select v-model="searchForm.execStatus" 
@@ -59,7 +54,7 @@
         </el-col>  
         <el-col :span="6">
           <el-form-item label="货主" label-width="40px"  prop="ownerName">
-            <el-input type="text" size="small" v-model="searchForm.ownerName" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入货主"  v-model="searchForm.ownerName" ></el-input>
           </el-form-item>
         </el-col>
          <el-col :span="12">
@@ -68,6 +63,7 @@
               v-model="searchForm.durationTime"
               type="daterange"
               size="small"
+              style="width:400px"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">

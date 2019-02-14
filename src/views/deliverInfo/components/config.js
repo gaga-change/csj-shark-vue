@@ -15,3 +15,10 @@ export const tableConfig=[// 物流登记
   { label:'配送状态',prop:'logisticsStatus', width:90,useLocalEnum:true,type:'logisticsStatusEnum' },
   { label:'到达时间',prop:'deliverTime', width:120,type:'time' },
 ]
+
+export const baseInfoConfig=[
+  {title:'计划单号',prop:'planCode',span:8},
+  {title:'下单时间',prop:'placeOrderTime',type:'time',span:8},
+  {title:'收货人',prop:'receiver',span:8},
+  {title:'收货地址',prop:'receiveAddress',span:8},
+]

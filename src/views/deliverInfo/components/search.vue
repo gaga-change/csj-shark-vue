@@ -9,23 +9,7 @@
 后四位"></el-input>
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="6" v-if="outbound">
-          <el-form-item label="出库单号" prop="planCode">
-            <el-input type="text" size="small" v-model="searchForm.orderCode" placehold="
-后四位"></el-input>
-          </el-form-item>
-        </el-col> -->
-        <!-- <el-col :span="6">
-          <el-form-item label="供应商名称" label-width="85px"  prop="providerName">
-            <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
-          </el-form-item>
-        </el-col>
-        
-       <el-col :span="6">
-          <el-form-item label="商品名称" label-width="85px"  prop="providerName">
-            <el-input type="text" size="small" v-model="searchForm.providerName" ></el-input>
-          </el-form-item>
-        </el-col> -->
+
          <el-col :span="6">
             <el-form-item label-width="70px" label="物流公司" class="postInfo-container-item" prop="logisticsComCode">
               <el-select v-model="searchForm.logisticsComCode" 
@@ -65,6 +49,7 @@
               v-model="searchForm.durationTime"
               type="daterange"
               size="small"
+              style="width:400px"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
@@ -85,7 +70,6 @@
 </template>
 
 <script>
-// import {  InvoiceType  as invoicetype  } from '@/utils'
 import { ExecStatusEnum,registerStatusEnum } from '@/utils/enum';  
 export default  {
   name: 'SearchWarehousing',

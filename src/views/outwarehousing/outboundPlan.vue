@@ -17,11 +17,12 @@
           :child-data-arr="childDataArr" 
           :planPrintData="planPrintData" 
           :orderType="currentTab" 
+          :activePlanCode="activePlanCode"
           :parent-data-obj="parentDataObj" />
 
          <div style="margin-bottom:15px" 
            v-show="planPrintData.length>0">
-            <span>选中的要打印的计划单</span>
+            <span style="font-size:13px">当前选中的计划单</span>
             <el-tag v-for="tag in planPrintData" 
               :key="tag.planCode"
                closable 
@@ -97,9 +98,6 @@
                 // searchForms,
                 tableData:[
                 ],
-                // pageNum:0,
-                // pageSize:10,
-                //子表数据名称
                 childDataName:'childData',
                 //表格配置
                 parentTableConfig:planOrderTableConfig,
@@ -108,12 +106,7 @@
                 // pageSize:10,
                 total:0,
                 //主表操作
-                handleButtonMap:[
-                    // {title:'详情',handle:(index,data)=>{
-                    //     this.dialogVisible = true
-                    //     this.dialogData = {...data}
-                    // }}
-                ],
+                handleButtonMap:[ ],
                 childCanSelect:true,//子表可选择,false全选，
                 accordionExpand:true,//手风琴展开
                 multipleSelection:[],//选中的子表数据
@@ -124,29 +117,35 @@
                 childDataArr:[],
                 //计划单打印的选择数据
                  planPrintData:[],
+                 activePlanCode:'',
+                 activeOwnerCode:''
             }
         },
         methods:{
             expandChange(row, expandedRows){
+                this.planPrintData=[];
+                this.childDataArr=[];
+                
                 var arr = []
                 arr.push(row[this.expandKey])
                  if(this.expandsParent == row[this.expandKey]){
                     this.expandsParent = []
                 }else{
                     this.expandsParent = [...arr]
-
                 }
-                // this.expandsParent = [...arr]
                 this.currentRadioChange(row)
+                this.activePlanCode=row.planCode;
+                this.activeOwnerCode=row.ownerCode;
             },
             getTableData(){
 
                 this.$router.replace({
-                    path:'/outwarehousing/outboundWork',
+                    path:'/outwarehousing/outboundPlan',
                     query:{data:JSON.stringify({...this.ruleForm,busiBillType:this.currentTab})}
                 })
                 this.loading=true;
                 let data={...this.ruleForm,busiBillType:this.currentTab}
+
                 getInfoPlanOutWarehousing(data).then(res => {
                     
                     if(res.success && res.data &&res.data.list){
@@ -183,26 +182,17 @@
                 var chooseList = data
                 
                 if(data.childData&&data.childData.length>0){
-                    // chooseList = data
-                    console.log(data)
+
                 }else{
                     this.loading = true
-                    console.log(122);
-                    
                      getInfoPlanDetailOutWarehousing({planCode:data.planCode}).then(res=>{
-                    console.log(123,res.success , res.data , res.data.outWarehousePlanDetailRespList);
-                        
                         if(res.success && res.data && res.data.outWarehousePlanDetailRespList && res.data.outWarehousePlanDetailRespList.length>0){
-                     console.log(125);
                             var outWarehousePlanDetailRespList = res.data.outWarehousePlanDetailRespList 
                             outWarehousePlanDetailRespList = outWarehousePlanDetailRespList.map(item => {
                                 item.planOutQty = (Number(item.planOutQty)||0).toFixed(0)
                                 item.realOutQty = (Number(item.realOutQty)||0).toFixed(0)
-                                console.log(item,111111);
-                                
                                 return item
                             })
-                    console.log(124,outWarehousePlanDetailRespList);
 
                             var tempList = [...this.tableData]
                             this.tableData = tempList.map(list => {
@@ -224,7 +214,12 @@
             childDataSelect(selectedData){
 
                this.multipleSelection = [...selectedData]
-               this.childDataArr = [...selectedData]
+               this.childDataArr = [...selectedData].map(v=>{
+                   return {
+                   ...v,
+                   planCode:this.activePlanCode,
+                   ownerCode:this.activeOwnerCode}
+               })
             },
             handleSizeChange(val) {
                 this.ruleForm={...this.ruleForm,pageSize:val,pageNum:1}
@@ -268,14 +263,10 @@
                 var b = [...planPrintData.filter(item => {console.log('in',item.planCode!=tag.planCode);
                 ;return item.planCode!=tag.planCode})]
                 this.planPrintData = [...b]
-                console.log(b,'b',tag);
-                
             }
         },
         created(){
             this.getTableData()
-            // this.demo()
-            // this.currentRedioChange()
         }
     }
 </script>

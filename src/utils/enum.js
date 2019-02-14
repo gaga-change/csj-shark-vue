@@ -196,6 +196,25 @@ export const warehouseSpaceStatus = [
   },
 ]
 
+export const orderStatus = [
+  {
+    name: '未执行',
+    value: 0
+  },
+  {
+    name: '执行中',
+    value: 1
+  },
+  {
+    name: '执行完成',
+    value: 2
+  },
+  {
+    name: '终止',
+    value: 3
+  },
+]
+
 export const warehouseSpaceStatusEnum = [
   {
     name: '空库位',
