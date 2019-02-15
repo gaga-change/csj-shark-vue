@@ -14,6 +14,7 @@
         </search-warehousing>
 
         <operation-button 
+          @lodash="lodash"
           :child-data-arr="childDataArr" 
           :plan-print-data="planPrintData" 
           :parent-data-obj="parentDataObj" />
@@ -122,6 +123,7 @@
                 //计划单打印的选择数据
                 planPrintData:[],
                 expandsParent:[],
+                activePlanCode:''
             }
         },
         methods:{
@@ -135,6 +137,12 @@
                     this.expandsParent = [...arr]
                 }
                 this.currentRadioChange(row)
+            },
+
+            lodash(){
+              this.getInfoDetailWarehousingApi({
+                  planCode:this.activePlanCode
+              })
             },
 
             getTableData(){
@@ -171,6 +179,7 @@
                     this.loading = false;                    
                 })
             },
+
             currentRadioChange(data){
                 if(!data.busiBillNo){
                     return
@@ -184,25 +193,38 @@
                     // chooseList = data
                    
                 }else{
-                    this.loading = true
-                    getInfoDetailWarehousing({planCode:data.planCode}).then(res=>{
-                        if(res.success && res.data && res.data.inWarehousePlanDetailRespList && res.data.inWarehousePlanDetailRespList.length>0){
-                            var tempList = [...this.tableData]
-                            this.tableData = tempList.map(list => {
-                                if(list.planCode == data.planCode){
-                                    list.childData = res.data.inWarehousePlanDetailRespList;
-                                    chooseList = list
-                                }
-                                return list
-                            })
-                        }
-                        this.loading = false
-                    }).catch(err => {
-                        this.loading = false
-                    })
+                   this.activePlanCode=data.planCode;
+                   this.getInfoDetailWarehousingApi({
+                       planCode:data.planCode
+                   })
                 }
                 this.parentDataObj = { ...data }
             },
+
+            getInfoDetailWarehousingApi(data){
+                this.loading = true
+                getInfoDetailWarehousing(data).then(res=>{
+                    if(res.success && res.data && res.data.inWarehousePlanDetailRespList && res.data.inWarehousePlanDetailRespList.length>0){
+                        var tempList = [...this.tableData]
+                        this.tableData = tempList.map(list => {
+                            if(list.planCode == data.planCode){
+                                list.childData = res.data.inWarehousePlanDetailRespList.map(v=>{
+                                    v.hasReceiveQty=v.receiveQty||0;
+                                    v.receiveQty=v.planInQty-v.receiveQty||0
+                                    return v
+                                    });
+                                chooseList = list
+                            }
+                            return list
+                        })
+                    }
+                    this.loading = false
+                }).catch(err => {
+                    this.loading = false
+                })
+            },
+
+
             childDataSelect(selectedData){
 
                this.multipleSelection = [...selectedData]

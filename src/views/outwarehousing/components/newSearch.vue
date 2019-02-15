@@ -38,6 +38,18 @@
             </el-form-item>
           </el-col>
 
+          <el-col :span="6"  style="min-width:300px" v-if="searchForm.isCreateOrder!==undefined">
+            <el-form-item 
+              label="是否已生成出库单"  
+              label-width="120px"
+              prop="isCreateOrder"  >
+                <el-radio-group v-model="searchForm.isCreateOrder">
+                    <el-radio :label="0">否</el-radio>
+                    <el-radio :label="1">是</el-radio>
+                </el-radio-group>
+            </el-form-item>
+          </el-col>
+
           
       </el-row>  
     </el-form>

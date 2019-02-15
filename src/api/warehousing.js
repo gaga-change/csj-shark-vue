@@ -334,3 +334,12 @@ export function deleteByIds(data) {
     data:data
   })
 }
+
+//确认出库
+export function confirmOutOfTheLibrary(data) {
+  return request({
+    url: `/webApi/outWarehouse/order/confirmOutOfTheLibrary`,
+    method:'post',
+    data:data
+  })
+}

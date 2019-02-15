@@ -18,6 +18,7 @@ export const planChildTableConfig=[// 计划单子列表
   { label:'单位',prop:'skuUnitName', minWidth:120 },
   { label:'商品数量',prop:'planInQty', minWidth:120 },
   { label:'入库数量',prop:'realInQty', minWidth:120 },
+  { label:'到货数量',prop:'hasReceiveQty', minWidth:120 },
 ]
 
 export const planChildTableEditConfig=[// 计划单操作列表
@@ -28,7 +29,8 @@ export const planChildTableEditConfig=[// 计划单操作列表
   { label:'单位',prop:'skuUnitName', minWidth:120 },
   { label:'总数量',prop:'planInQty', minWidth:120 },
   { label:'已入库',prop:'realInQty', minWidth:120 },
-  { label:'到货量',prop:'receiveQty', width:120,editable:true ,fixed:'right'},
+  { label:'已到货量',prop:'hasReceiveQty' },
+  { label:'本次到货量',prop:'receiveQty', width:120,editable:true ,fixed:'right'},
 ]
 
 export const planChildTableLabelConfig=[// 计划单商品条码打印列表
@@ -94,7 +96,7 @@ export const arrivalChildTableConfig=[// 到货单子列表 unconfirmed
   { label:'单位',prop:'skuUnitName',},
   { label:'商品数量',prop:'planQty',},
   { label:'到货数量',prop:'receiveQty',editable:true  },
-  { label:'已入库数量',prop:'realIntQty',},
+  { label:'已入库数量',prop:'realInQty',},
 ]
 
 

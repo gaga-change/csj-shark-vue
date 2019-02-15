@@ -218,6 +218,11 @@ export default {
         },
 
         submitForm(){//提交
+          let isSubmit=this.childData.some(v=>v.planInQty-v.hasReceiveQty<v.receiveQty||v.receiveQty<=0);
+          if(isSubmit){
+            this.$message({type:'error',message:'本次到货量应小于总数量-已到货量,且要大于0'});
+            return 
+          }
           let data=[...this.childData].map(v=>{
               let json={};
               ['busiIndex','skuCode','receiveQty'].forEach(item=>{
@@ -233,6 +238,7 @@ export default {
             if(res.success){
               this.dialogVisible=false;
               this.$message({type:'success',message:'操作成功！'})
+              this.$emit('lodash')
             } else{
                this.$message({type:'error',message:'操作失败'})
             }

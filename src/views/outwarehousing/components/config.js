@@ -29,7 +29,7 @@ export const orderTableConfig=[// 出库单列表
   { label:'出库单号',prop:'orderCode' },
   { label:'计划单号',prop:'planCode' },
   { label:'单据类型',prop:'orderType',useLocalEnum:true,type:'BusiBillTypeEnum'},
-  { label:'单据状态',prop:'orderStatus',useLocalEnum:true,type:'OutOrderStatusEnum'},
+  { label:'单据状态',prop:'orderStatus',useLocalEnum:true,type:'outboundOrderStatus'},
   { label:'客户/供应商',prop:'ownerName',  },
   { label:'操作人',prop:'createrName'},
 ]
@@ -85,7 +85,7 @@ export const pickingtaskConfig=[
   { label:'拣货总数',prop:'realPickQty'},
   { label:'应拣货总量',prop:'pickQty'},
   { label:'状态',prop:'orderStatus',type:'orderStatus',useLocalEnum:true},
-  { label:'创建时间',prop:'gmtCreate'},
+  { label:'创建时间',prop:'gmtCreate',type:'time'},
   { label:'操作',useDom:true,width:300},
 ]
 

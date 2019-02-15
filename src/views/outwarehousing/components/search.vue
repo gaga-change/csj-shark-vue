@@ -15,26 +15,7 @@
 后四位"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="供应商名称" label-width="85px"    prop="providerName">
-            <el-input type="text" size="small" placeholder="请输入供应商名称" v-model="searchForm.providerName" ></el-input>
-          </el-form-item>
-        </el-col>
-        
-        <el-col :span="6">
-            <el-form-item label-width="70px" label="出库状态" class="postInfo-container-item" prop="execStatus">
-              <el-select v-model="searchForm.execStatus" 
-               filterable clearable placeholder="请选择出库状态" 
-              size="small" prefix-icon="el-icon-search">
-                <el-option
-                  v-for="item in OutExecStatusEnum"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-        </el-col>  
+ 
          <el-col :span="6" v-if="outbound">
             <el-form-item label-width="70px" label="单据状态" class="postInfo-container-item" prop="orderStatus">
               <el-select v-model="searchForm.orderStatus" 
@@ -53,11 +34,11 @@
             </el-form-item>
         </el-col>  
         <el-col :span="6">
-          <el-form-item label="货主" label-width="40px"  prop="ownerName">
+          <el-form-item label="客户/供应商" label-width="80px"  prop="ownerName">
             <el-input type="text" size="small" placeholder="请输入货主"  v-model="searchForm.ownerName" ></el-input>
           </el-form-item>
         </el-col>
-         <el-col :span="12">
+         <!-- <el-col :span="12">
           <el-form-item label="下单时间" label-width="70px"  prop="durationTime">
             <el-date-picker
               v-model="searchForm.durationTime"
@@ -69,7 +50,7 @@
               end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">

@@ -61,7 +61,7 @@
                 querySkuStockRecord(data).then(res => {
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
-                        this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'id')
+                        this.tableData = tempList.map(list => {list.childData=[];return list})
                         this.total = res.data.total
                     }
                     this.loading = false;

@@ -38,7 +38,8 @@
             return {
                 searchForm:{
                   pickOrderCode:'',
-                  planCode:''
+                  planCode:'',
+                  isCreateOrder:0
                 },
                 loding:false,
                 temporaryStorageConfig,
@@ -112,7 +113,7 @@
                        json[i]=this.searchForm[i];
                    }
                }
-               selectOutWarehouseJobDetail({...json,isCreateOrder:0,jobStatus:4}).then(res=>{
+               selectOutWarehouseJobDetail({...json,jobStatus:4}).then(res=>{
                  this.loding=false;
                  if(res.success){
                     this.TableData=res.data||[]
