@@ -6,11 +6,11 @@
     <div class="plant-text">
       供应链协同操作管理平台
     </div>
-    <!-- <ul class="top-nav">
+    <ul class="top-nav">
       <li>
-        <a :href="TiggerUrl" target="_blank">供应链</a>
+        <a href="./wms1.0/index.html" target="_blank">前往wms1.0</a>
       </li>
-    </ul> -->
+    </ul>
      <el-dropdown class="avatar-container warehouse" @command="handleCommand">
       <div class="avatar-wrapper">
         <span class="welcome">
@@ -308,8 +308,8 @@ export default {
 }
 .top-nav {
   position: absolute;
-  right: 250px;
-  top: -1px;
+  right: 300px;
+  top: 2px;
   list-style: none;
   margin: 0;
   padding: 0;
