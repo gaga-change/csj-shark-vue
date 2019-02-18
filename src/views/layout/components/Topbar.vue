@@ -6,11 +6,11 @@
     <div class="plant-text">
       供应链协同操作管理平台
     </div>
-    <ul class="top-nav">
+    <!-- <ul class="top-nav">
       <li>
         <a href="./wms1.0/index.html" target="_blank">前往wms1.0</a>
       </li>
-    </ul>
+    </ul> -->
      <el-dropdown class="avatar-container warehouse" @command="handleCommand">
       <div class="avatar-wrapper">
         <span class="welcome">

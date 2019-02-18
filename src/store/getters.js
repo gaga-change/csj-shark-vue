@@ -51,7 +51,7 @@ const getters = {
     menutemp.push({
       path: '*', redirect: '/404', hidden: true 
     })
-    return menutemp
+    return menutemp.filter(v=>v.meta&&v.meta.Edition==='1.1')
   }
 }
 export default getters
