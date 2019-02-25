@@ -180,11 +180,15 @@ export default {
         })
         return false
       }
+
+       console.log(this.userInfo)
        setWarehouseCode({operaterId:this.userInfo.id,warehouseCode:warehouse}).then(res => {
         if(res.success){
           this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
             this.$message({type:'success',message:'切换仓库成功'})
-            this.$router.go(0)
+            // this.$router.go(0)
+            console.log(this.userInfo)
+            window.location.href=`${window.location.host}${'/'}`
           })
         }else{
           this.$message({type:'error',message:'切换仓库失败'})
