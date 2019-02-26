@@ -237,6 +237,17 @@ export const warehouseSpaceStatusEnum = [
   },
 ]
 
+export const isPushStateEnum=[
+  {
+    name: '未推送',
+    value: 0
+  },
+  {
+    name: '已推送',
+    value: 1
+  },
+]
+
 //库区编码
 export const AtoZ = [
   {value:'A',name:'A',isUsed:false,},

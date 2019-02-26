@@ -2,7 +2,6 @@
     <div>
         <search-logistics 
           @searchTrigger="submitForm" 
-          @resetSearch="resetForm" 
           :search-name="searchName"
           :search-forms="ruleForm">
         </search-logistics>
@@ -146,14 +145,7 @@
     import { uniqueArray } from '@/utils/arrayHandler'
     import { WarehouseAreaNatureEnum, YesOrNoEnum, WarehouseAreaStatusEnum,AtoZ } from '@/utils/enum'
     import  SearchLogistics  from './components/search'
-    const ruleForm = {
-        pageNum: 1,
-        pageSize:10,
-        warehouseAreaCode:'',
-        isVirtual:0,
-        warehouseAreaNature:''
-    }
-    
+
     export default {
         components: { DoubleTable, SearchLogistics },
         data(){
@@ -163,7 +155,13 @@
                 dialogVisible:false,
                 dialogData:{},
                 dialogTitle:'',
-                ruleForm,
+                ruleForm:{
+                    pageNum: 1,
+                    pageSize:10,
+                    warehouseAreaCode:'',
+                    isVirtual:0,
+                    warehouseAreaNature:'' 
+                },
                 YesOrNoEnum,
                 WarehouseAreaNatureEnum,
                 WarehouseAreaStatusEnum,
@@ -326,11 +324,7 @@
                     }
                 });
             },
-            resetForm() {
-                this.ruleForm={ ...ruleForm }
-                this.getTableData()
-                
-            },
+
             formHandle(type){
                 if(type=='add'){
                     this.formParams  = {}

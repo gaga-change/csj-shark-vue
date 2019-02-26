@@ -2,7 +2,6 @@
     <div>
         <search-logistics 
            @searchTrigger="submitForm"  
-           @resetSearch="resetForm" 
            :search-forms="ruleForm">
         </search-logistics>
 
@@ -111,12 +110,7 @@
     import { getLogisticsList,addLogistics,updateLogistics,deleteLogistics,getLogisticsSearch } from '@/api/logistics'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchLogistics  from './components/search'
-    const ruleForm = {
-        pageNum: 1,
-        pageSize:10,
-        companyName:'',
-    }
-    
+
     export default {
         components: { DoubleTable, SearchLogistics },
         data(){
@@ -126,7 +120,11 @@
                 dialogVisible:false,
                 dialogData:{},
                 dialogTitle:'',
-                ruleForm,
+                ruleForm:{
+                    pageNum: 1,
+                    pageSize:10,
+                    companyName:'',  
+                },
                 logisticsRules:{},
                 selectData:{//x选中的单据
                     
@@ -268,11 +266,6 @@
                         return false;
                     }
                 });
-            },
-            resetForm() {
-                this.ruleForm={ ...ruleForm }
-                this.getTableData()
-                
             },
             logisticsHandle(type){
                 if(type=='add'){

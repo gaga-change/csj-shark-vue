@@ -4,7 +4,6 @@
         <search-inventory 
           @searchTrigger="submitForm" 
           ref="searchWarhouse" 
-          @resetSearch="resetForm" 
           :search-forms="ruleForm" 
           :pageName="'stream'">
         </search-inventory>
@@ -29,22 +28,21 @@
     import { querySkuStockRecord } from '@/api/inventory'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchInventory  from './components/search'
-    const ruleForm = {
-        pageNum: 1,
-        pageSize:10,
-        skuCode:'',
-        skuName:'',
-        ownerName:'',
-        warehouseSpaceCode:'',
-        durationTime: [],
-    }
 
     export default {
         components: { BaseTable, SearchInventory },
         data(){
             return {
                 loading:false,
-                ruleForm,
+                ruleForm:{
+                    pageNum: 1,
+                    pageSize:10,
+                    skuCode:'',
+                    skuName:'',
+                    ownerName:'',
+                    warehouseSpaceCode:'',
+                    durationTime: [],
+                },
                 tableData:[],
                 streamTableConfig,
                 total:0,
@@ -89,11 +87,6 @@
                 this.ruleForm={...ruleForm,pageSize:10,pageNum:1,createBeginDate,createEndDate}
                 this.getTableData();
                 
-            },
-
-            resetForm() {
-                this.ruleForm={ ...ruleForm }
-                this.getTableData()
             },
         },
         created(){

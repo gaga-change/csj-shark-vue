@@ -3,7 +3,6 @@
         <search-inventory
           @searchTrigger="submitForm" 
           ref="searchWarhouse" 
-          @resetSearch="resetForm" 
           :search-forms="ruleForm">
         </search-inventory>
 
@@ -35,21 +34,20 @@
     import { uniqueArray } from '@/utils/arrayHandler'
     import { exportExcelBlob } from '@/utils/exportexcel'
     import  SearchInventory  from './components/search'
-    const ruleForm = {
-        pageNum: 1,
-        pageSize:10,
-        skuCode:'',
-        skuName:'',
-        ownerName:'',
-        warehouseSpaceCode:''
-    }
 
     export default {
         components: { BaseTable, SearchInventory },
         data(){
             return {
                 loading:false,
-                ruleForm,
+                ruleForm:{
+                    pageNum: 1,
+                    pageSize:10,
+                    skuCode:'',
+                    skuName:'',
+                    ownerName:'',
+                    warehouseSpaceCode:''  
+                },
                 tableData:[],
                 inventoryTableConfig,
                 total:0,
@@ -89,12 +87,6 @@
              submitForm(ruleForm) {
                 this.ruleForm={...ruleForm,pageSize:10,pageNum:1}
                 this.getTableData();
-                
-            },
-
-            resetForm() {
-                this.ruleForm={ ...ruleForm }
-                this.getTableData()
             },
 
             getExport(){

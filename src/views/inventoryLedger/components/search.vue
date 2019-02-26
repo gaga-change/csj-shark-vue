@@ -1,40 +1,40 @@
 <template>
     <el-card class="simpleCard" shadow="never" body-style="padding:12px">
-      <el-form :model="searchForm" :rules="searchRules" ref="searchForm" label-width="70px" label-position="left">
+      <el-form :model="searchForms" :rules="searchRules" ref="searchForm" label-width="70px" label-position="left">
       <el-row :gutter="10">
-        <el-col :span="6" v-if="searchForm.warehouseName!==undefined">
+        <el-col :span="6" v-if="searchForms.warehouseName!==undefined">
           <el-form-item label="仓库名称" prop="warehouseName">
-            <el-input type="text" size="small" placeholder="请输入仓库名称"  v-model="searchForm.warehouseName" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入仓库名称"  v-model="searchForms.warehouseName" ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6"  v-if="searchForm.skuCode!==undefined">
+        <el-col :span="6"  v-if="searchForms.skuCode!==undefined">
           <el-form-item label="商品编码"  prop="skuCode">
-            <el-input type="text" size="small" placeholder="请输入商品编码" v-model="searchForm.skuCode" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入商品编码" v-model="searchForms.skuCode" ></el-input>
           </el-form-item>
         </el-col>
         
-        <el-col :span="6" v-if="searchForm.skuName!==undefined">
+        <el-col :span="6" v-if="searchForms.skuName!==undefined">
           <el-form-item label="商品名称"  prop="skuName">
-            <el-input type="text" size="small" placeholder="请输入商品名称" v-model="searchForm.skuName" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入商品名称" v-model="searchForms.skuName" ></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="6" v-if="searchForm.ownerName!==undefined">
+        <el-col :span="6" v-if="searchForms.ownerName!==undefined">
           <el-form-item label="货主名称"  prop="ownerName">
-            <el-input type="text" size="small" placeholder="请输入货主名称" v-model="searchForm.ownerName" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入货主名称" v-model="searchForms.ownerName" ></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="6" v-if="searchForm.warehouseSpaceCode!==undefined">
+        <el-col :span="6" v-if="searchForms.warehouseSpaceCode!==undefined">
           <el-form-item label="库位编码"  prop="warehouseSpaceCode">
-            <el-input type="text" size="small" placeholder="请输入库位编码" v-model="searchForm.warehouseSpaceCode" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入库位编码" v-model="searchForms.warehouseSpaceCode" ></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="12" style="min-width:400px" v-if="searchForm.durationTime!==undefined">
+        <el-col :span="12" style="min-width:400px" v-if="searchForms.durationTime!==undefined">
           <el-form-item label="变动时间">
             <el-date-picker
-              v-model="searchForm.durationTime"
+              v-model="searchForms.durationTime"
               type="daterange"
               size="small"
               style="min-width:400px"
@@ -65,7 +65,6 @@ export default  {
   data() {
     return {
       searchRules:{},
-      searchForm:{},
     }
   },
   props:{
@@ -75,21 +74,22 @@ export default  {
     },
   },
 
-  
-  created(){
-    this.searchForm = {...this.searchForms}
-  },
 
-  
   methods:{
-
     submitIt(){//查询
-      this.$emit('searchTrigger',this.searchForm)
+      this.$emit('searchTrigger',this.searchForms)
     },
 
     resetForm(){//重置
-      this.searchForm = {}
-      this.$emit('resetSearch',this.searchForm)
+      let json={};
+      for(let i in this.searchForms){
+        if(Array.isArray(this.searchForms)){
+          json[i]=[]
+        } else{
+          json[i]=''
+        }
+      }
+      this.$emit('searchTrigger',json)
     }
   }
 

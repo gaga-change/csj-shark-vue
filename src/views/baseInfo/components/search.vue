@@ -1,19 +1,19 @@
 <template>
     <el-card class="simpleCard" shadow="never" body-style="padding:12px">
-      <el-form :model="searchForm" :rules="searchRules" ref="searchForm" label-width="90px" label-position="left">
+      <el-form :model="searchForms" :rules="searchRules" ref="searchForm" label-width="90px" label-position="left">
       <el-row >
 
-        <el-col :span="6" v-if="searchForm.companyName!==undefined">
+        <el-col :span="6" v-if="searchForms.companyName!==undefined">
           <el-form-item label="物流公司名称" prop="companyName">
-            <el-input type="text" size="small"  placeholder="请输入物流公司名称" v-model="searchForm.companyName" ></el-input>
+            <el-input type="text" size="small"  placeholder="请输入物流公司名称" v-model="searchForms.companyName" ></el-input>
           </el-form-item>
         </el-col>
 
-        <el-col :span="6" v-if="searchForm.warehouseAreaCode!==undefined">
+        <el-col :span="6" v-if="searchForms.warehouseAreaCode!==undefined">
            <el-form-item label="库区编码"  prop="warehouseAreaCode"  :rules="[
               { required: true, message: '请选择库区'},
              ]">
-                   <el-select v-model="searchForm.warehouseAreaCode" 
+                   <el-select v-model="searchForms.warehouseAreaCode" 
                         clearable placeholder="请选择库区" 
                         size="small">
                         <el-option
@@ -26,9 +26,9 @@
                 </el-form-item>
         </el-col>
 
-          <el-col :span="6" v-if="searchForm.isVirtual!==undefined">
+          <el-col :span="6" v-if="searchForms.isVirtual!==undefined">
            <el-form-item label="是否虚拟区" label-width="90px" >
-                  <el-select v-model="searchForm.isVirtual" 
+                  <el-select v-model="searchForms.isVirtual" 
                         clearable placeholder="请选择" 
                         size="small">
                         <el-option
@@ -41,9 +41,9 @@
                 </el-form-item>
           </el-col>
 
-          <el-col :span="6" v-if="searchForm.warehouseAreaNature!==undefined">
+          <el-col :span="6" v-if="searchForms.warehouseAreaNature!==undefined">
               <el-form-item label="库区性质" prop="warehouseAreaNature">
-                    <el-select v-model="searchForm.warehouseAreaNature" 
+                    <el-select v-model="searchForms.warehouseAreaNature" 
                           clearable placeholder="请选择库区性质" 
                           size="small">
                           <el-option
@@ -56,9 +56,9 @@
                   </el-form-item>
           </el-col>
 
-        <el-col :span="6" v-if="searchForm.warehouseSpaceCode!==undefined">
+        <el-col :span="6" v-if="searchForms.warehouseSpaceCode!==undefined">
           <el-form-item label="库位编码" prop="warehouseSpaceCode">
-            <el-input type="text" size="small"  placeholder="请输入库位编码" v-model="searchForm.warehouseSpaceCode" ></el-input>
+            <el-input type="text" size="small"  placeholder="请输入库位编码" v-model="searchForms.warehouseSpaceCode" ></el-input>
           </el-form-item>
         </el-col>
 
@@ -85,7 +85,6 @@ export default  {
     return {
       searchRules: { 
       },
-      searchForm:{},
       WarehouseAreaNatureEnum,
       YesOrNoEnum,
       WarehouseAreaStatusEnum,
@@ -103,20 +102,27 @@ export default  {
     }
   },
   
-  created(){
-    this.searchForm = {...this.searchForms}
-  },
 
   
   methods:{
 
     
     submitIt(){//查询
-      this.$emit('searchTrigger',this.searchForm)
+      this.$emit('searchTrigger',this.searchForms)
     },
+
     resetForm(){//重置
-      this.searchForm = {}
-      this.$emit('resetSearch',this.searchForm)
+      let json={};
+      for(let i in this.searchForms){
+        if(Array.isArray(this.searchForms)){
+          json[i]=[]
+        } else if(i==='isVirtual'){
+          json[i]=0
+        } else{
+          json[i]=''
+        }
+      }
+      this.$emit('searchTrigger',{...json})
     }
   }
 
