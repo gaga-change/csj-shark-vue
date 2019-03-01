@@ -174,13 +174,9 @@
                 })
             },
             currentRadioChange(data){
-                 if(!data.busiBillNo){
-                    return
-                }
                 var templatePlanTag = [...this.planPrintData,data]
                 this.planPrintData = uniqueArray([...templatePlanTag],'planCode')
                 var chooseList = data
-                
                 if(data.childData&&data.childData.length>0){
 
                 }else{
