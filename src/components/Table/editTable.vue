@@ -1,6 +1,7 @@
 <template>
   <div class="ctabel">
     <el-table
+      ref="multipleTable"
       v-loading="loading"
       :element-loading-text="elementLoadingText"
       :element-loading-background="elementLoadingBackground"
@@ -47,7 +48,8 @@
           </span>
           <span v-else-if="item.useIf == 'files'">
             <el-dropdown>
-              <span class="el-dropdown-link">查看附件
+              <span class="el-dropdown-link">
+                查看附件
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -221,9 +223,12 @@ export default {
     unique: {
       type: String,
       default: ""
+    },
+    selected: {
+      type: Array,
+      defalut: []
     }
   },
-
   data() {
     return {
       tableConfig: [],
@@ -231,13 +236,17 @@ export default {
     };
   },
   created() {},
+  mounted() {
+    this.initSelected();
+  },
   watch: {
-    tableData() {
+    tableData(val, newVal) {
       let tableDataEditable = [...this.tableData];
       this.tableDataEditable = tableDataEditable.map((item, index) => {
         item.unique = this.unique + "+" + index;
         return item;
       });
+      this.initSelected();
     }
   },
   activated() {},
@@ -321,6 +330,26 @@ export default {
   },
 
   methods: {
+    initSelected() {
+      this.$nextTick(() => {
+        let ids = this.selected
+          ? this.selected.map(v => v.id).join(",") + ","
+          : "";
+        if (ids) {
+          let rows = [];
+          this.tableDataEditable.forEach(item => {
+            if (~ids.indexOf(item.id)) {
+              rows.push(item);
+            }
+          });
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      });
+    },
     handleSizeChange(val) {
       this.$emit("sizeChange", val);
     },
@@ -335,7 +364,6 @@ export default {
     handleSelection(val, row) {
       this.$emit("editDataSelect", { arr: [...val], unique: this.unique }, row);
     },
-
     goeditrow(index, type, changeData) {
       let data = _.cloneDeep(this.tableDataEditable);
       data[index].editable = !data[index].editable;

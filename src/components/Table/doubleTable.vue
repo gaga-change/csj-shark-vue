@@ -33,6 +33,7 @@
                 :table-data="childTable.row[childDataName]"
                 :unique="String(childTable.row[expandKey])"
                 :config="childTableConfigFilter"
+                :selected="tableSonSelection[String(childTable.row[expandKey])] || []"
                 :childCanSelect="true"
               ></edit-table>
             </template>
@@ -260,7 +261,8 @@ export default {
       tableConfig: [],
       tableDataEditable: [],
       childTableConfigFilter: [],
-      expands: []
+      expands: [],
+      tableSonSelection: {}
     };
   },
   created() {},
@@ -429,9 +431,6 @@ export default {
     }
   },
   methods: {
-    demo() {
-      console.log("emit");
-    },
     dataChange(index, type, changeData) {
       this.$emit("dataChange", index, type, changeData);
     },
@@ -458,8 +457,9 @@ export default {
     handleParentSelection(val, row) {
       this.$emit("dataSelect", val);
     },
-
     editDataSelect(val, row) {
+      this.tableSonSelection = {} // 清空上次选中内容，避免选中多个
+      this.tableSonSelection[val.unique] = val.arr || []
       this.$emit("childDataSelect", val, row);
     },
     mapFormatter(target, data) {
