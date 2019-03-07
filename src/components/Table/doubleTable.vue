@@ -20,7 +20,7 @@
     >
       <el-table-column type="selection" width="55" v-if="canSelect"></el-table-column>
       <template v-if="childDataName">
-        <el-table-column type="expand" fixed>
+        <el-table-column type="expand">
           <template
             slot-scope="childTable"
             v-if="childTable&&childTable.row&&childTable.row[childDataName]"
@@ -40,10 +40,15 @@
             <template v-else>
               <el-table
                 :data="childTable.row[childDataName]"
-                @select="handleSelection"
-                @select-all="handleSelection"
+                ref="multipleTable"
+                @select="(...key) => handleSelection(String(childTable.row[expandKey]), ...key)"
+                @select-all="(...key) => handleSelection(String(childTable.row[expandKey]), ...key)"
               >
-                <el-table-column type="selection" width="55" v-if="childCanSelect"></el-table-column>
+                <el-table-column
+                  type="selection"
+                  width="55"
+                  v-if="childCanSelect"
+                ></el-table-column>
                 <el-table-column
                   v-for="item in childTableConfigFilter"
                   :fixed="item.fixed"
@@ -74,7 +79,8 @@
           </span>
           <span v-else-if="item.useIf == 'files'">
             <el-dropdown>
-              <span class="el-dropdown-link">查看附件
+              <span class="el-dropdown-link">
+                查看附件
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -435,6 +441,29 @@ export default {
       this.$emit("dataChange", index, type, changeData);
     },
     expandChangeItem(row, expandedRows) {
+      if (!this.canEdit) {
+        let key = row[this.expandKey];
+        let selected = this.tableSonSelection[key] || [];
+        let ids = selected.length
+          ? selected.map(v => v.skuCode).join(",") + ","
+          : "";
+        if (ids) {
+          let rows = [];
+          row[this.childDataName].forEach(item => {
+            if (~ids.indexOf(item.skuCode)) {
+              rows.push(item);
+            }
+          });
+          this.$nextTick(() => {
+            let table = this.$refs.multipleTable;
+            if (table) {
+              rows.forEach(row => {
+                table.toggleRowSelection(row);
+              });
+            }
+          });
+        }
+      }
       this.$emit("expandChangePa", row, expandedRows);
     },
 
@@ -451,15 +480,19 @@ export default {
         this.$emit("currentRadioChange", currentRow, oldCurrentRow);
       }
     },
-    handleSelection(val, row) {
+    handleSelection(key, val, row) {
+      this.tableSonSelection = {}; // 清空上次选中内容，避免选中多个
+      if (val.length) {
+        this.tableSonSelection[key] = val;
+      }
       this.$emit("childDataSelect", val);
     },
     handleParentSelection(val, row) {
       this.$emit("dataSelect", val);
     },
     editDataSelect(val, row) {
-      this.tableSonSelection = {} // 清空上次选中内容，避免选中多个
-      this.tableSonSelection[val.unique] = val.arr || []
+      this.tableSonSelection = {}; // 清空上次选中内容，避免选中多个
+      this.tableSonSelection[val.unique] = val.arr || [];
       this.$emit("childDataSelect", val, row);
     },
     mapFormatter(target, data) {
