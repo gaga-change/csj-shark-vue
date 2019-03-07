@@ -84,6 +84,7 @@ export const pickingtaskConfig=[
   { label:'拣货单号',prop:'orderCode'},
   { label:'拣货总数',prop:'realPickQty'},
   { label:'应拣货总量',prop:'pickQty'},
+  { label:'出库单号',prop:'outOrderCode'},
   { label:'状态',prop:'orderStatus',type:'orderStatus',useLocalEnum:true},
   { label:'创建时间',prop:'gmtCreate',type:'time'},
   { label:'操作',useDom:true,width:300},
