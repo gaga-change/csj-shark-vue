@@ -199,7 +199,6 @@
                     }},
                     {title:'删除',handle:(index,data)=>{
                         this.formDelete(data)
-
                     }}
                     
                 ],
