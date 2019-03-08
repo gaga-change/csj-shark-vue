@@ -14,6 +14,7 @@
       :expand-row-keys="expands"
       :show-summary="showSummary"
       size="small"
+      ref="doubleTable"
       :style="tableStyle"
       @select="handleParentSelection"
       @select-all="handleParentSelection"
@@ -97,7 +98,7 @@
           <span
             v-else-if="typeof item.formatter == 'function'"
           >{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
-          
+
           <span v-else>{{scope.row[item.prop]}}</span>
         </template>
       </el-table-column>
@@ -105,6 +106,7 @@
         <template slot-scope="scope">
           <template v-for="thisButton in handleButtonMap">
             <el-button
+              v-if="!thisButton.isHide || thisButton.isHide(scope.row)"
               :key="thisButton.title"
               :size="thisButton.size ?thisButton.size : 'size'"
               :type="thisButton.type ?thisButton.type : 'text'"
@@ -309,7 +311,7 @@ export default {
               tableConfig[i].formatter = (row, column, cellValue, index) =>
                 cellValue
                   ? moment(Number(cellValue)).format(
-                      tableConfig[i].format || "YYYY-MM-DD"
+                      tableConfig[i].format || "YYYY-MM-DD HH:mm:ss"
                     )
                   : "";
               break;
@@ -474,7 +476,9 @@ export default {
     handleCurrentChange(val) {
       this.$emit("currentChange", val);
     },
-
+    setCurrentRow() {
+      this.$refs['doubleTable'].setCurrentRow()
+    },
     handleCurrentRadioChange(currentRow, oldCurrentRow) {
       if (currentRow) {
         this.$emit("currentRadioChange", currentRow, oldCurrentRow);
@@ -514,4 +518,3 @@ export default {
   }
 }
 </style>
-

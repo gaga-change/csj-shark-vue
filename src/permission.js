@@ -1,4 +1,4 @@
-import NProgress from 'nprogress' 
+import NProgress from 'nprogress'
 
 import router from './router'
 import store from './store'
@@ -13,19 +13,16 @@ router.beforeEach((to, from, next) => {
   if (whiteList.includes(to.path)) {
     next()
   } else if (store.getters.userInfo == null) {
-      store.dispatch('GetInfo').then(res => { 
+      store.dispatch('GetInfo').then(res => {
         if(res.success){
           store.dispatch('gitMap');
           router.addRoutes(store.getters.menu)
           next({ ...to, replace: true })
         } else{
-          debugger;
           store.dispatch('SetWarehouse','')
           location.href = `/csj_logout`
         }
-       
       }).catch((err) => {
-        debugger;
         store.dispatch('SetWarehouse','')
         location.href = `/csj_logout`
       })
@@ -37,5 +34,5 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from) => {
-  NProgress.done() 
+  NProgress.done()
 })

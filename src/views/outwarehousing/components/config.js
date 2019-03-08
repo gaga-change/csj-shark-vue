@@ -1,10 +1,11 @@
 export const planOrderTableConfig=[// 出库计划单列表
   { label:'下单时间', width:120, prop:'gmtCreate', type:'time' },
+  { label:'拣货状态',prop:'sortStatus',useLocalEnum:true,type:'SortStatus', width:90 },
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'arrivalName', width:150 },
-  { label:'商品总数',prop:'outPlanQty', minWidth:90 }, 
+  { label:'商品总数',prop:'outPlanQty', minWidth:90 },
   { label:'出库状态',prop:'execStatus', minWidth:90,useLocalEnum:true,type:'OutExecStatusEnum', },
   { label:'收货人',prop:'arrivalLinkName', minWidth:90 },
   { label:'收货地址',prop:'arrivalAddress', width:120 },
@@ -22,7 +23,7 @@ export const planOrderChildTableConfig=[// 出库计划单子列表
   { label:'出库数量',prop:'realOutQty', minWidth:120 },
   // { label:'出库批次',prop:'batchNo', minWidth:120 },
   { label:'备注',prop:'remarkInfo', minWidth:120 },
-  
+
 ]
 export const orderTableConfig=[// 出库单列表
   { label:'出库时间', prop:'gmtCreate', type:'time' },
@@ -58,7 +59,7 @@ export const planChildTableEditConfig=[// 计划单操作列表
   { label:'本次出库',prop:'realOutQtyIt', width:120,editable:true,fixed:'right' },//unconfirm
   // { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
   { label:'备注',prop:'remarkInfo', width:120,editable:true,fixed:'right' },//unconfirm
-  
+
 ]
 export const planChildTableLabelConfig=[// 计划单打印列表
   // { label:'业务行号',prop:'busiIndex', minWidth:80 },
@@ -76,7 +77,7 @@ export const planChildTablePrintConfig=[// 计划单打印列表
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'arrivalName', width:150 },
   { label:'应出/已出',prop:'planReal', minWidth:120 },
- 
+
   { label:'条形码',prop:'planCode', width:150,userIf:'images' },//unconfirm
 ]
 

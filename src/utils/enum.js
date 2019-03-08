@@ -1,6 +1,23 @@
+//入库状态
+export const SortStatus = [
+
+  {
+    name: '未拣货',
+    value: 0
+  },
+
+  {
+    name: '拣货中',
+    value: 1
+  },
+  {
+    name: '拣货完成',
+    value: 2
+  },
+];
 //单据类型
 export const BusiBillTypeEnum = [
-  
+
   {
     name: '采购入库',
     value: 11,
@@ -37,7 +54,7 @@ export const BusiBillTypeEnum = [
 
 //入库状态
 export const ExecStatusEnum = [
-  
+
   {
     name: '未入库',
     value: 0
@@ -54,7 +71,7 @@ export const ExecStatusEnum = [
 ];
 //出库状态
 export const OutExecStatusEnum = [
-  
+
   {
     name: '未出库',
     value: 0
@@ -72,7 +89,7 @@ export const OutExecStatusEnum = [
 
 //单据状态
 export const OrderStatusEnum = [
-  
+
   {
     name: '草稿',
     value: 0,
@@ -97,7 +114,7 @@ export const OrderStatusEnum = [
 ];
 //
 export const OutOrderStatusEnum = [
-  
+
   {
     name: '草稿',
     value: 0,
@@ -244,6 +261,17 @@ export const isPushStateEnum=[
   },
   {
     name: '已推送',
+    value: 1
+  },
+]
+
+export const isVirtualenum=[
+  {
+    name: '否',
+    value: 0
+  },
+  {
+    name: '是',
     value: 1
   },
 ]

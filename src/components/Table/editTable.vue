@@ -16,7 +16,7 @@
       size="small"
       :style="tableStyle"
     >
-      <el-table-column type="selection" width="55" v-if="childCanSelect"></el-table-column>
+      <el-table-column type="selection" :selectable="checkSelectable" width="55" v-if="childCanSelect"></el-table-column>
       <el-table-column
         v-for="item in tableConfig"
         :fixed="item.fixed"
@@ -70,7 +70,7 @@
           <span
             v-else-if="typeof item.formatter == 'function'"
           >{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
-          
+
           <span v-else>{{scope.row[item.prop]}}</span>
         </template>
       </el-table-column>
@@ -110,7 +110,7 @@
       size="small"
       :page-size="tablePageSize"
       :layout="layout"
-      v-if="total>maxTotal"
+      v-if="total>tablePageSize"
       :total="total"
     ></el-pagination>
   </div>
@@ -145,6 +145,10 @@ export default {
       defalut: false
     },
     summaryMethod: {
+      type: Function,
+      default: () => {}
+    },
+    checkSelectable: {
       type: Function,
       default: () => {}
     },
@@ -405,4 +409,3 @@ export default {
   }
 }
 </style>
-

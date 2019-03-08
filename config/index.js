@@ -18,7 +18,7 @@ let proxyTable={};
 
 proxyTableArr.forEach(item=>{
   proxyTable[item]={
-    target: ip, 
+    target: ip,
     changeOrigin: true
   }
 })
