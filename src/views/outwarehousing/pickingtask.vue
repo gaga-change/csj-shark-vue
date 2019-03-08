@@ -52,7 +52,7 @@
               </div>
 
               <div style="margin-bottom:12px;display:flex">
-                   <BarCode :code="activeRow.orderCode" imgStyle="height:100px;width:200px"/>
+                   <BarCode :code="activeRow.orderCode" imgStyle="height:100px;width:600px"/>
               </div>
 
                

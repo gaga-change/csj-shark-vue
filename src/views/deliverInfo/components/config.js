@@ -1,5 +1,5 @@
 export const tableConfig=[// 物流登记
-  { label:'下单时间',prop:'placeOrderTime', width:120,type:'time' },
+  { label:'下单时间',prop:'placeOrderTime', width:140,type:'time' },
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', minWidth:90 },
   { label:'供应商',prop:'ownerName', width:150 },
