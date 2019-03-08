@@ -121,4 +121,5 @@ export const temporaryStorageConfig=[
   { label:'规格型号',prop:'skuFormat'},
   { label:'商品数量',prop:'realSortQty'},
   { label:'库位',prop:'warehouseSpaceCode'},
+  { label:'创建时间', width:120, prop:'gmtCreate', type:'time' },
 ]

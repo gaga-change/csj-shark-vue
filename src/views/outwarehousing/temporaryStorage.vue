@@ -44,6 +44,7 @@
                 loding:false,
                 temporaryStorageConfig,
                 TableData:[],
+                total: 0,
                 SelectionData:[]
             }
         },
@@ -116,7 +117,8 @@
                selectOutWarehouseJobDetail({...json,jobStatus:4}).then(res=>{
                  this.loding=false;
                  if(res.success){
-                    this.TableData=res.data||[]
+                    this.total=res.data&&res.data.total;
+                    this.TableData=res.data&&res.data.list||[]
                  }
                }).catch(err=>{
                  console.log(err)
