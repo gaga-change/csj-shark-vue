@@ -116,7 +116,7 @@
                selectOutWarehouseJobDetail({...json,jobStatus:4}).then(res=>{
                  this.loding=false;
                  if(res.success){
-                    this.TableData=res.data||[]
+                    this.TableData=(res.data&&res.data.list)||[]
                  }
                }).catch(err=>{
                  console.log(err)
