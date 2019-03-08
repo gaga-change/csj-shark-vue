@@ -14,6 +14,7 @@
       :expand-row-keys="expands"
       :show-summary="showSummary"
       size="small"
+      ref="doubleTable"
       :style="tableStyle"
       @select="handleParentSelection"
       @select-all="handleParentSelection"
@@ -97,7 +98,7 @@
           <span
             v-else-if="typeof item.formatter == 'function'"
           >{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
-          
+
           <span v-else>{{scope.row[item.prop]}}</span>
         </template>
       </el-table-column>
@@ -474,7 +475,9 @@ export default {
     handleCurrentChange(val) {
       this.$emit("currentChange", val);
     },
-
+    setCurrentRow() {
+      this.$refs['doubleTable'].setCurrentRow()
+    },
     handleCurrentRadioChange(currentRow, oldCurrentRow) {
       if (currentRow) {
         this.$emit("currentRadioChange", currentRow, oldCurrentRow);
@@ -514,4 +517,3 @@ export default {
   }
 }
 </style>
-

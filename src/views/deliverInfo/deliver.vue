@@ -1,34 +1,34 @@
 <template>
     <div>
-        <search-deliver 
-          @searchTrigger="submitForm" 
-          ref="searchWarhouse" 
-          :deliver-company="deliverCompanyAll" 
-          @resetSearch="resetForm" 
+        <search-deliver
+          @searchTrigger="submitForm"
+          ref="searchWarhouse"
+          :deliver-company="deliverCompanyAll"
+          @resetSearch="resetForm"
           :search-forms="ruleForm">
         </search-deliver>
 
-        <el-button 
-          type="primary" 
-          st 
-          size="small" 
-          @click="logisticsHandle" 
+        <el-button
+          type="primary"
+          st
+          size="small"
+          @click="logisticsHandle"
          :disabled="selectdisabled"
           style="margin-bottom:15px">
           <span>物流登记</span>
           <span v-if="!selectdisabled">{{`( 当前选中的单号为 ${selectData.planCode} )`}}</span>
         </el-button>
 
-        <double-table 
-         :loading="loading" 
-         :table-data="tableData" 
-         :handle-button-map="handleButtonMap" 
-         :config="tableConfig"   
+        <double-table
+         :loading="loading"
+         :table-data="tableData"
+         :handle-button-map="handleButtonMap"
+         :config="tableConfig"
          @sizeChange="handleSizeChange"
-         @currentChange="handleCurrentChange" 
+         @currentChange="handleCurrentChange"
          @currentRadioChange="currentRadioChange"
-         :highlight-current-row="highlightCurrentRow" 
-         :total="total" 
+         :highlight-current-row="highlightCurrentRow"
+         :total="total"
          :maxTotal="10"
          :expand-key="expandKey"
          :pageSize="ruleForm.pageSize"
@@ -39,28 +39,28 @@
            :title="'新增物流登记'"
            :visible.sync="dialogVisible">
              <item-title text="基本信息"/>
-             <item-card :config="baseInfoConfig" :loading="false" boxStyle="padding-bottom: 0;"  :cardData="selectData" /> 
+             <item-card :config="baseInfoConfig" :loading="false" boxStyle="padding-bottom: 0;"  :cardData="selectData" />
              <div style="padding-top:12px;">
                 <item-title text="待填信息"/>
              </div>
-            <el-form 
-               :model="logisticsForm" 
-               class="formInput" 
-               :rules="logisticsRules"     
-               ref="subForm" 
-               :height="200" 
-               label-width="80px" 
+            <el-form
+               :model="logisticsForm"
+               class="formInput"
+               :rules="logisticsRules"
+               ref="subForm"
+               :height="200"
+               label-width="80px"
                label-position="left">
-                  <el-form-item 
-                    label="物流公司名称" 
-                    label-width="100px" 
+                  <el-form-item
+                    label="物流公司名称"
+                    label-width="100px"
+                    :rules="[{ required: true, message: '该项为必选'}]"
                     prop="logisticsComCode" >
-                        <el-select 
-                        v-model="logisticsForm.logisticsComCode" 
-                        :rules="[{ required: true, message: '该项为必选'}]" 
-                        clearable 
-                        placeholder="请选择物流公司" 
-                        size="small" 
+                        <el-select
+                        v-model="logisticsForm.logisticsComCode"
+                        clearable
+                        placeholder="请选择物流公司"
+                        size="small"
                         prefix-icon="el-icon-search">
                             <el-option
                             v-for="item in deliverCompanyAll"
@@ -72,66 +72,66 @@
                     </el-form-item>
 
                  <el-form-item label="物流单号"
+                  :rules="[ { required: true, message: '该项为必填'}]"
                     prop="logisticsOrderCode" >
-                    <el-input 
-                      type="text" 
+                    <el-input
+                      type="text"
                       size="small"
-                      placeholder="请输入物流单号" 
-                      :rules="[ { required: true, message: '该项为必填'}]" 
+                      placeholder="请输入物流单号"
                       v-model="logisticsForm.logisticsOrderCode" >
                     </el-input>
                 </el-form-item>
 
-                 <el-form-item 
-                   label="件数" 
+                 <el-form-item
+                   label="件数"
+                   :rules="[{ required: true, message: '该项为必填'}]"
                    prop="carrierQty" >
-                    <el-input 
-                       type="number" 
-                       size="small" 
-                       placeholder="请输入件数" 
-                       :rules="[{ required: true, message: '该项为必填'}]"  
-                       v-model="logisticsForm.carrierQty" >
+                    <el-input
+                       type="number"
+                       size="small"
+                       placeholder="请输入件数"
+                       v-model.number="logisticsForm.carrierQty" >
                     </el-input>
                 </el-form-item>
 
-                <el-form-item 
-                  label="运费"   
-                  :rules="[{ required: true, message: '该项为必填'}]" 
+                <el-form-item
+                  label="运费"
+                  :rules="[{ required: true, message: '该项为必填'}]"
                   prop="freightAmt">
                     <el-input type="number"
-                      size="small" 
-                      placeholder="请输入运费" 
+                      size="small"
+                      placeholder="请输入运费"
                       v-model="logisticsForm.freightAmt" >
                     </el-input>
                 </el-form-item>
 
-                <el-form-item 
-                   label="其它费用"  
+                <el-form-item
+                   label="其它费用"
                    prop="otherAmt" >
-                    <el-input type="number" 
-                      size="small"  
-                      placeholder="请输入其它费用" 
+                    <el-input type="number"
+                      size="small"
+                      placeholder="请输入其它费用"
                       v-model="logisticsForm.otherAmt" >
                     </el-input>
                 </el-form-item>
 
-                <el-form-item 
-                  label="物流总额"  
+                <el-form-item
+                  label="物流总额"
                   prop="skuAmt" >
-                    <el-input type="number" 
-                       size="small" 
+                    <el-input type="number"
+                       size="small"
                        placeholder="请输入物流总额"
-                       v-model="logisticsForm.skuAmt" 
+                       v-model="logisticsForm.skuAmt"
                        disabled>
                     </el-input>
                 </el-form-item>
 
-                 <el-form-item 
-                   label="运费承担方" 
-                   label-width="100px"  
-                   prop="payType" 
+                 <el-form-item
+                   label="运费承担方"
+                   label-width="100px"
+                   prop="payType"
                    :rules="[{ required: true, message: '该项为必选'}]" >
-                     <el-select v-model="logisticsForm.payType" 
+                     <el-select v-model="logisticsForm.payType"
                      size="small">
                         <el-option
                            key="我方承担"
@@ -147,11 +147,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-               
-                 <el-form-item 
-                   label="备注"  
+
+                 <el-form-item
+                   label="备注"
                    prop="remarkInfo" >
-                    <el-input type="text" 
+                    <el-input type="text"
                        size="small"
                        placeholder="请输入备注"
                        v-model="logisticsForm.remarkInfo" >
@@ -196,7 +196,7 @@
         ownerName:'',
         durationTime:[],
     }
-    
+
     export default {
         components: { DoubleTable, SearchDeliver, DeliverDetail },
         data(){
@@ -209,7 +209,7 @@
                 ruleForm,
                 logisticsRules:{},
                 selectData:{//x选中的单据
-                    
+
                 },
                 // searchForms,
                 tableData:[
@@ -226,7 +226,7 @@
                 //主表操作
                 handleButtonMap:[
                     {title:'物流跟踪',handle:(index,data)=>{
-                        
+
                         this.logisticsRecord(data)
                         this.logisticsForm = {...data}
 
@@ -249,7 +249,7 @@
             skuAmt:function(){
                 var a = (this.logisticsForm.freightAmt||0)-0+(this.logisticsForm.otherAmt||0)
                 this.logisticsForm.skuAmt = a
-                
+
                 return a
             }
         },
@@ -257,7 +257,7 @@
             logisticsForm:{
                 handler(val,oldval){
                     this.logisticsForm.skuAmt = (this.logisticsForm.freightAmt||0)-0+((this.logisticsForm.otherAmt||0)-0)
-                    
+
                 },
                 deep:true,
                 immediate:true
@@ -274,7 +274,7 @@
                 this.loading=true;
                 let data={...this.ruleForm}
                 getLogisticsRegisterList(data).then(res => {
-                    
+
                     if(res.success && res.data &&res.data.list){
                         this.tableData = [...res.data.list]
                         this.total = res.data.total
@@ -283,10 +283,10 @@
 
                 }).catch(err=>{
                     console.log(err);
-                    this.loading = false;                    
+                    this.loading = false;
                 })
             },
-         
+
             formatTime(val){
                 return moment(val).format('YYYY-MM-DD')
             },
@@ -307,10 +307,10 @@
                   }
                 this.ruleForm={...ruleForm,pageSize:10,pageNum:1,placeOrderStartDate,placeOrderEndDate}
                 this.getTableData();
-                
+
             },
             submitDeliver(){
-                
+
                 this.$refs['subForm'].validate((valid) => {
                     if (valid) {
                         addLogisticsRegister({...this.logisticsForm,id:this.selectData.id}).then(res => {
@@ -322,7 +322,7 @@
                                 this.$message({type:'info',message:'新增物流登记失败'})
                             }
                          })
-                        
+
                         // this.getCurrentTableData();
                     } else {
                         return false;
@@ -332,7 +332,7 @@
             resetForm() {
                 this.ruleForm={ ...ruleForm }
                 this.getTableData()
-                
+
             },
             logisticsHandle(){
                 this.logisticsForm = {}
@@ -347,7 +347,7 @@
                 }
             },
             logisticsRecord(data){
-                
+
                 if(data.register){
                     getLogisticsRegisterInfo({logisticsComCode:data.logisticsComCode,
                     logisticsOrderCode:data.logisticsOrderCode,
@@ -385,8 +385,8 @@
                     }
                 })
             }
-            
-           
+
+
         },
         created(){
             this.getTableData()
