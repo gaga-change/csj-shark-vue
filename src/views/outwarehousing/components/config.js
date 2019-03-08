@@ -1,5 +1,5 @@
 export const planOrderTableConfig=[// 出库计划单列表
-  { label:'下单时间', width:120, prop:'gmtCreate', type:'time' },
+  { label:'下单时间', width:140, prop:'gmtCreate', type:'time' },
   { label:'拣货状态',prop:'sortStatus',useLocalEnum:true,type:'SortStatus', width:90 },
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },

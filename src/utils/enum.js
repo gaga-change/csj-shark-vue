@@ -243,6 +243,21 @@ export const orderStatus = [
   },
 ]
 
+export const receiveStatusEnum=[
+  {
+    name: '未到货',
+    value: 0
+  },
+  {
+    name: '部分到货',
+    value: 1
+  },
+  {
+    name:'全部到货',
+    value: 2
+  },
+]
+
 export const warehouseSpaceStatusEnum = [
   {
     name: '空库位',

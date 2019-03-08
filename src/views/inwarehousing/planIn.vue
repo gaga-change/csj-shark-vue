@@ -154,14 +154,12 @@
                 this.loading=true;
                 let data={...this.ruleForm,busiBillType:this.currentTab}
                 getInfoWarehousing(data).then(res => {
-                    
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'planCode')
                         this.total = res.data.total
                         var a = this.$refs.tableChild.expands//之前打开过 
                         if(a&&a.length>0){
-                            
                             var info = {
                                 childData:[],
                                 planCode:a[0]
@@ -181,16 +179,10 @@
             },
 
             currentRadioChange(data){
-                if(!data.busiBillNo){
-                    return
-                }
                 var templatePlanTag = [...this.planPrintData,data]
                 this.planPrintData = uniqueArray([...templatePlanTag],'planCode')
-               
-                
                 var chooseList = data
                 if(data.childData&&data.childData.length>0){
-                    // chooseList = data
                    
                 }else{
                    this.activePlanCode=data.planCode;
@@ -264,8 +256,6 @@
                    this.tableData = []
                    this.parentDataObj = {}
                    this.childDataArr = []
-                //    debugger
-                    // this.getTableData()
                 }
             },
             closePlanTags(tag){
@@ -276,8 +266,6 @@
         },
         created(){
             this.getTableData()
-            // this.demo()
-            // this.currentRedioChange()
         }
     }
 </script>
