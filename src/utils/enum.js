@@ -265,6 +265,17 @@ export const isPushStateEnum=[
   },
 ]
 
+export const isVirtualenum=[
+  {
+    name: '否',
+    value: 0
+  },
+  {
+    name: '是',
+    value: 1
+  },
+]
+
 //库区编码
 export const AtoZ = [
   {value:'A',name:'A',isUsed:false,},
