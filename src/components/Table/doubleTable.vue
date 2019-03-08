@@ -309,7 +309,7 @@ export default {
               tableConfig[i].formatter = (row, column, cellValue, index) =>
                 cellValue
                   ? moment(Number(cellValue)).format(
-                      tableConfig[i].format || "YYYY-MM-DD"
+                      tableConfig[i].format || "YYYY-MM-DD HH:mm:ss"
                     )
                   : "";
               break;
