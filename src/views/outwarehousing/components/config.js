@@ -113,7 +113,6 @@ export const printinConfig=[
 
 
 export const temporaryStorageConfig=[
-  { columnType:'selection',width:50},
   { label:'拣货单号',prop:'pickOrderCode'},
   { label:'计划单号',prop:'planCode'},
   { label:'商品编码',prop:'skuCode'},

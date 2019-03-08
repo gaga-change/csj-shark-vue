@@ -150,7 +150,7 @@ export default {
     },
     checkSelectable: {
       type: Function,
-      default: () => {}
+      default: () => true
     },
     tableData: {
       type: Array,
