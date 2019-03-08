@@ -19,13 +19,10 @@ router.beforeEach((to, from, next) => {
           router.addRoutes(store.getters.menu)
           next({ ...to, replace: true })
         } else{
-          debugger;
           store.dispatch('SetWarehouse','')
           location.href = `/csj_logout`
         }
-       
       }).catch((err) => {
-        debugger;
         store.dispatch('SetWarehouse','')
         location.href = `/csj_logout`
       })

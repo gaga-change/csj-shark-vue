@@ -105,6 +105,7 @@
         <template slot-scope="scope">
           <template v-for="thisButton in handleButtonMap">
             <el-button
+              v-if="!thisButton.isHide || thisButton.isHide(scope.row)"
               :key="thisButton.title"
               :size="thisButton.size ?thisButton.size : 'size'"
               :type="thisButton.type ?thisButton.type : 'text'"
