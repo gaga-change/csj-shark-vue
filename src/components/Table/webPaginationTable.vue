@@ -117,7 +117,7 @@ export default {
             tableConfig[i].formatter=(row, column, cellValue, index)=>Enum[tableConfig[i].type]&&Enum[tableConfig[i].type].find(v=>v.value==cellValue)&&Enum[tableConfig[i].type].find(v=>v.value==cellValue).name||cellValue
          } else{
           switch(tableConfig[i].type){
-            case 'time':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?moment(cellValue).format(tableConfig[i].format||'YYYY-MM-DD'):'';break;
+            case 'time':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?moment(cellValue).format(tableConfig[i].format||'YYYY-MM-DD HH:mm:ss'):'';break;
             case 'rate':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue+'%';break;
             case 'Boolean':tableConfig[i].formatter=(row, column, cellValue, index)=>cellValue?'是':'否' ;break;
             case 'index':tableConfig[i].formatter=(row, column, cellValue, index)=>(this.pageSize)*(this.currentPage-1)+index+1;break;
