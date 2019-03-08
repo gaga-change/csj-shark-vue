@@ -1,9 +1,9 @@
 <template>
     <div class="arrival">
         <el-card class="simpleCard"  shadow="never"   body-style="padding:12px">
-            <new-search  
+            <new-search
              @submit="submit"
-             :searchForm="searchForm"  
+             :searchForm="searchForm"
              ref="arrivalDom" >
             </new-search>
             <el-col :span="24" style="margin-bottom:12px;">
@@ -13,52 +13,53 @@
         </el-card>
 
         <div style="margin-bottom:12px">
-           <el-button 
-            type="primary" 
+           <el-button
+            type="primary"
             size="small"
             :disabled="!Array.isArray(nowChildDataSelectData)||nowChildDataSelectData.length<=0"
             @click="submitOrider" >上架</el-button>
-           <el-button type="danger" 
-            size="small"  
-            :disabled="!activeOrder.orderCode" 
+           <el-button type="danger"
+            size="small"
+            :disabled="!activeOrder.orderCode"
             @click="deleteOrider"  >
             <span v-if="activeOrder.orderCode">
                 删除单据 : <span style="font-weight: 600;">{{activeOrder.orderCode}}</span>
+                <i class="el-icon-close" style="pointer:cursor" @click.stop="clearRow"></i>
             </span>
             <span v-else>
                 删除
             </span>
             </el-button>
         </div>
-    
+
         <el-dialog
           style="z-index:900"
           title="到货登记"
           :visible.sync="dialogVisible"
           width="70%">
           <div class="alertInfo">
-            <span>入库计划单 : {{activeOrder.planCode}}</span>    
-            <span>供应商 : {{activeOrder.providerName}}</span>    
-            <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>    
+            <span>入库计划单 : {{activeOrder.planCode}}</span>
+            <span>供应商 : {{activeOrder.providerName}}</span>
+            <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>
           </div>
 
-          <web-pagination-table 
+          <web-pagination-table
            :loading="false"
-           :config="arrivalAlertConfig" 
-           :allTableData="nowChildDataSelectData"/> 
+           :config="arrivalAlertConfig"
+           :allTableData="nowChildDataSelectData"/>
 
            <div class="alertBottomArr">
               <el-button type="primary"  size="small" @click="putawayConfirm"  >上架确认</el-button>
-              <el-button type="primary"  size="small"  @click="cancelArrivalAlert" >取消</el-button> 
+              <el-button type="primary"  size="small"  @click="cancelArrivalAlert" >取消</el-button>
            </div>
         </el-dialog>
-        
+
          <div class="arrivalAlertChider" v-if="arrivalAlertDisplay">
             <div class="arrivalAlertChiderBody">
                 <el-form :model="addSearchForm"   label-width="70px" label-position="left">
                         <el-form-item label-width="40px" label="库位" class="postInfo-container-item" >
                             <el-select v-model="addSearchForm.warehouseSpaceCode"
-                            filterable clearable placeholder="请选择库位" 
+                            filterable clearable placeholder="请选择库位"
                             size="small" prefix-icon="el-icon-search">
                                 <el-option
                                 v-for="item in warehouseSpaceCodeConfig"
@@ -67,14 +68,14 @@
                                 :value="item.warehouseSpaceCode">
                                 </el-option>
                             </el-select>
-                        </el-form-item> 
+                        </el-form-item>
 
                         <el-form-item  label-width="40px"  label="数量" >
-                            <el-input-number type="text" 
-                            size="small" 
+                            <el-input-number type="text"
+                            size="small"
                             style="width:200px"
                             :min="0"
-                            v-model="addSearchForm.putQty" 
+                            v-model="addSearchForm.putQty"
                             placeholder="请输入上架数量">
                             </el-input-number>
                         </el-form-item>
@@ -84,45 +85,45 @@
                         </el-form-item>
                 </el-form>
 
-                    <edit-table 
+                    <edit-table
                     :loading="false"
                     @dataChange="deleteByindex"
                     emptyText="请选择库位并输入数量添加数据"
-                    :config="putQtyConfig" 
+                    :config="putQtyConfig"
                     :deleteNeed="true"
                     :useEdit="false"
-                    :tableData="warehouseSpaceCodeListTable"/> 
+                    :tableData="warehouseSpaceCodeListTable"/>
 
                 <div class="alertBottomArr">
                     <el-button type="primary"  size="small"  @click="sureWarehouse">确认</el-button>
-                    <el-button type="primary"  size="small"  @click="cancelWarehouse">取消</el-button> 
+                    <el-button type="primary"  size="small"  @click="cancelWarehouse">取消</el-button>
                 </div>
             </div>
          </div>
 
 
-        <double-table 
-          ref="tableChild" 
-          :loading="loading" 
+        <double-table
+          ref="tableChild"
+          :loading="loading"
           :config="arrivalTableConfig"
           :table-data="tableData"
-          child-data-name="childData" 
-          :childTableConfig="arrivalChildTableConfig"  
-          :highlight-current-row="true" 
+          child-data-name="childData"
+          :childTableConfig="arrivalChildTableConfig"
+          :highlight-current-row="true"
           :child-can-select="true"
           :highlightCurrentRow="true"
-          expand-key="id" 
+          expand-key="id"
           :can-edit="true"
-          :total="total" 
+          :total="total"
           :pageSize="pageSize"
           :currentPage="pageNum"
           editText="修改到货数量"
           :expands-parent="expandsParent"
           @expandChangePa="expandChange"
-          @childDataSelect="childDataSelect"  
+          @childDataSelect="childDataSelect"
           @sizeChange="handleSizeChange"
           @currentRadioChange="currentRadioChange"
-          @currentChange="handleCurrentChange" 
+          @currentChange="handleCurrentChange"
           @dataChange="dataChange">
         </double-table>
     </div>
@@ -177,7 +178,7 @@
             this.arrivalAlertConfig.forEach(item=>{
                 if(item.useLink){
                     item.dom=(row, column, cellValue, index)=>{
-                      return <span class="link_dom" onClick={this.upperShelf.bind(this,row)} >输入上架量</span> 
+                      return <span class="link_dom" onClick={this.upperShelf.bind(this,row)} >输入上架量</span>
                     }
                 }
               });
@@ -194,7 +195,7 @@
                 }).catch(err=>{
                     console.log(err)
                 })
-              } 
+              }
          },
 
         methods:{
@@ -221,14 +222,14 @@
                     this.$message({type:'success',message:'操作成功！'})
                     this.warehouseSpaceCodeListTable=[];
                   } else{
-                     this.$message({type:'error',message:'操作失败！'})   
+                     this.$message({type:'error',message:'操作失败！'})
                   }
               }).catch(err=>{
                   this.$message({type:'error',message:'操作失败！'})
                   console.log(err)
               })
             },
-            
+
             deleteByindex(index, row){
                let warehouseSpaceCodeListTable= _.cloneDeep(this.warehouseSpaceCodeListTable);
                warehouseSpaceCodeListTable.splice(index,1);
@@ -240,7 +241,7 @@
               let nowChildDataSelectData= _.cloneDeep(this.nowChildDataSelectData);
               let index=nowChildDataSelectData.findIndex(v=>v.id===this.skuRow.id);
               if(index<0){
-                  return 
+                  return
               }
               nowChildDataSelectData[index]['warehousingArr']=this.warehouseSpaceCodeListTable;
               this.nowChildDataSelectData=nowChildDataSelectData;
@@ -259,32 +260,32 @@
               for(let i in this.addSearchForm){
                   if(this.addSearchForm[i]===''){
                      this.$message({type:'error',message:'库位和数量都是必填参数'});
-                     return 
+                     return
                   }
               }
               if(this.addSearchForm['putQty']===0){
                  this.$message({type:'error',message:'数量不能为0'});
-                 return 
+                 return
               }
 
               let putQtyAll=this.warehouseSpaceCodeListTable.reduce((a,b)=>{
                   return a+b.putQty
               },0)
-              
+
               if(putQtyAll+this.addSearchForm['putQty']>this.skuRow.receiveQty){
                  this.$message({type:'error',message:'上架数量不能大于到货量'});
-                 return 
+                 return
               }
               let json={id:moment().valueOf(),...this.addSearchForm};
               let index=this.warehouseSpaceCodeListTable.findIndex(v=>v.warehouseSpaceCode===this.addSearchForm.warehouseSpaceCode)
               if(index===-1){
-                 this.warehouseSpaceCodeListTable.push(json);  
+                 this.warehouseSpaceCodeListTable.push(json);
               } else{
                   this.warehouseSpaceCodeListTable[index]['putQty']+=this.addSearchForm['putQty']
               }
 
 
-             
+
             },
 
             upperShelf(row){
@@ -312,7 +313,7 @@
              },
 
              resetForm(){
-               this.$refs['arrivalDom'].resetForm() 
+               this.$refs['arrivalDom'].resetForm()
              },
 
              handleSizeChange(val){
@@ -325,7 +326,10 @@
                this.pageNum=val;
                this.getCurrentTableData()
              },
-
+             clearRow() {
+               this.$refs['tableChild'].setCurrentRow()
+               this.activeOrder = {}
+             },
              currentRadioChange(currentRow){
                this.activeOrder=currentRow;
              },
@@ -347,7 +351,7 @@
                     }).catch(err=>{
                       console.log(err)
                       this.$message({type:'error',message:'操作失败'})
-                    }) 
+                    })
                }).catch(err=>{
                   console.log(err)
                })
@@ -371,18 +375,18 @@
              },
 
              expandChange(json,expandedRows,reserver=true){
-               
+
                 this.activeOrder=json;
                 if(reserver&&this.expandsParent.includes(json['id'])){
                     this.expandsParent = []
                 }else{
                     this.expandsParent = [json['id']]
                 }
-                
+
                let tableData= _.cloneDeep(this.tableData);
                let index=tableData.findIndex(v=>v.id===json.id);
                if(reserver&&tableData[index]['childData']&&Array.isArray(tableData[index]['childData'])){
-                  return  
+                  return
                }
 
                orderDetailList(json.id).then(res=>{
@@ -427,7 +431,7 @@
         },
 
         mounted(){
-           this.getCurrentTableData()   
+           this.getCurrentTableData()
         }
 
     }
@@ -443,7 +447,7 @@
         >span{
           font-size: 14px;
           padding-right:20px;
-        }   
+        }
      }
      .link_dom{
        color: rgb(51, 153, 234);

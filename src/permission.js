@@ -1,4 +1,4 @@
-import NProgress from 'nprogress' 
+import NProgress from 'nprogress'
 
 import router from './router'
 import store from './store'
@@ -13,7 +13,7 @@ router.beforeEach((to, from, next) => {
   if (whiteList.includes(to.path)) {
     next()
   } else if (store.getters.userInfo == null) {
-      store.dispatch('GetInfo').then(res => { 
+      store.dispatch('GetInfo').then(res => {
         if(res.success){
           store.dispatch('gitMap');
           router.addRoutes(store.getters.menu)
@@ -34,5 +34,5 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from) => {
-  NProgress.done() 
+  NProgress.done()
 })
