@@ -280,6 +280,17 @@ export const isPushStateEnum=[
   },
 ]
 
+export const openStatusEnum=[
+  {
+    name: '启用',
+    value: 0
+  },
+  {
+    name: '禁用',
+    value: 1
+  },
+]
+
 export const isVirtualenum=[
   {
     name: '否',

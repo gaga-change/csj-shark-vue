@@ -184,13 +184,9 @@
               });
 
               if(sessionStorage.getItem('warehouse')){
-                warehouseSpaceSelect({
-                   warehouseCode:sessionStorage.getItem('warehouse'),
-                   pageNum:1,
-                   pageSize:1000
-                }).then(res=>{
+                warehouseSpaceSelect().then(res=>{
                     if(res.success){
-                      this.warehouseSpaceCodeConfig=res.data&&res.data.list||[];
+                      this.warehouseSpaceCodeConfig=res.data||[];
                     }
                 }).catch(err=>{
                     console.log(err)
@@ -209,7 +205,7 @@
                  let arr=item.warehousingArr||[];
                  arr.forEach(v=>{
                     let vJson={};
-                    vJson['warehouseAreaCode']=sessionStorage.getItem('warehouse');
+                    vJson['warehouseAreaCode']=this.warehouseSpaceCodeConfig.find(item=>item.warehouseSpaceCode===v.warehouseSpaceCode).warehouseAreaCode
                     vJson['warehouseSpaceCode']=v.warehouseSpaceCode;
                     vJson['putQty']=v.putQty;
                     vJson['orderDetailId']=item.id;
@@ -245,6 +241,7 @@
               }
               nowChildDataSelectData[index]['warehousingArr']=this.warehouseSpaceCodeListTable;
               this.nowChildDataSelectData=nowChildDataSelectData;
+              console.log(this.nowChildDataSelectData)
               this.arrivalAlertDisplay=false;
               this.warehouseSpaceCodeListTable=[];
               this.addSearchForm={};

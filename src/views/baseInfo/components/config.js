@@ -18,7 +18,7 @@ export const areaTableConfig=[// 库区列表
 export const siteTableConfig=[// 库位列表
   { label:'库区编码',prop:'warehouseAreaCode', minWidth:120 },
   { label:'库位编码',prop:'warehouseSpaceCode', minWidth:120 },
-  { label:'状态',prop:'warehouseSpaceStatus', width:80,useLocalEnum:true,type:'warehouseSpaceStatusEnum', },
+  { label:'状态',prop:'openStatus', width:80,useLocalEnum:true,type:'openStatusEnum', },
   { label:'创建人',prop:'createrName', minWidth:90 },
   { label:'创建时间',prop:'gmtCreate', minWdth:120,type:'time' },
 ]

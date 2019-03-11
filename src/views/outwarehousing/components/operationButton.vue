@@ -1,54 +1,80 @@
 <template>
    <div style="margin-bottom:10px">
-         <!-- <el-button type="primary" size="small" @click="makeOutbound">出库登记</el-button> -->
-         <div style="margin-bottom:12px;font-size:12px">
-            <span>操作说明：按单拣货和打印装箱单，仅支持对某一条计划单下的明细进行操作，故若你需要此操作，请展开该条数据并选择你所要打印的商品</span>
-         </div>
-        <el-button type="primary" size="small" @click="priviewReserve">打印计划单</el-button>
-        <el-button type="primary" size="small" @click="PickingOrder">按单拣货  <span v-if="activePlanCode">{{`( ${activePlanCode} )`}}</span></el-button>
-        <el-button type="primary" size="small" @click="priviewBoxLabel">打印装箱单 <span v-if="activePlanCode">{{`( ${activePlanCode} )`}}</span> </el-button>
+        <el-button 
+           type="primary" 
+           size="small" 
+           :disabled="!planPrintData.length"
+           @click="priviewReserve">
+            打印计划单
+        </el-button>
+
+        <el-button 
+          type="primary" 
+          size="small" 
+          @click="PickingOrder">
+            按单拣货  
+        </el-button>
+
+        <el-button 
+           type="primary" 
+           size="small" 
+           @click="priviewBoxLabel">
+           打印装箱单 
+        </el-button>
+
         <div>
             <el-dialog
-                title="出库登记"
+                title="按单拣货"
                 :visible.sync="dialogVisible"
-                width="70%">
-                <el-row :gutter="20" style="margin-bottom:14px;">
-                    <el-col :span="6">出库计划单：{{parentData.planCode}}</el-col>
-                    <el-col :span="6">供应商：{{parentData.arrivalName}}</el-col>
-                     <el-col :span="6">货主：{{parentData.ownerName}}</el-col>
-                    <el-col :span="6">下单时间：{{formateTime(parentDataObj.gmtCreate)}}</el-col>
-                     <el-col :span="6">收货人：{{parentData.arrivalLinkName}}</el-col>
-                     <el-col :span="6">收货地址：{{parentData.arrivalAddress}}</el-col>
-                     <el-col :span="6">联系电话{{parentData.arrivalLinkTel}}</el-col>
-                </el-row>
-                <edit-table :config="planChildTableEditConfig" :table-data="childData" :default-edit="false"></edit-table>
-                <span slot="footer" class="dialog-footer">
+                width="90%">
+                <span>拣货人姓名:</span>
+                <el-input 
+                  type="text" 
+                  size="small" 
+                  style="width:200px;margin-bottom:12px;"
+                  placeholder="请输入拣货人姓名"
+                  v-model="pickOperatorName" >
+                  </el-input>
+                <edit-table 
+                  :config="planChildTableEditConfig" 
+                  :table-data="PickingOrderData" 
+                  :default-edit="false">
+                </edit-table>
+                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                     <el-button type="primary" @click="submitFormIt(1)">加入出库单</el-button>
-                    <el-button type="primary" @click="submitFormIt(2)">确认出库</el-button>
+                    <el-button @click="surePicking"  type="primary" >确认</el-button>
                 </span>
             </el-dialog>
+
             <el-dialog
                 title="打印装箱单"
                 :visible.sync="dialogVisibleLabel"
                 width="70%">
                 <div id="print">
-                    <div class="border" style="margin-bottom:12px;"><span>客户编码：</span><span class="marginRight5">{{parentData.arrivalCode}}</span>    <span>客户名称：</span><span>{{parentData.arrivalName}}</span><span>{{parentData.arrivalAddress}}</span></div>
-                    <edit-table :config="planChildTableLabelConfig" 
-                    :default-canedit="defaultCanedit" :table-data="childData" v-loading="loading" :default-edit="false"></edit-table>
+                    <edit-table 
+                      :config="planChildTableLabelConfig" 
+                      :default-canedit="defaultCanedit" 
+                      :table-data="childData" 
+                      v-loading="loading" 
+                      :default-edit="false">
+                    </edit-table>
                 </div>
-                
                 <span slot="footer" class="dialog-footer" v-loading="loading">
                     <el-button @click="dialogVisibleLabel = false">取 消</el-button>
-                     <el-button type="primary" v-if="defaultCanedit" @click="defaultCanedit=false">预览</el-button>
-                    <el-button type="primary" v-else @click="printLabel">确 定</el-button>
+                    <el-button type="primary" @click="printLabel">确 定</el-button>
                 </span>
             </el-dialog>
+
              <el-dialog
                 title="打印计划单"
                 :visible.sync="dialogVisibleReserve"
                 width="70%">
-                <edit-table :config="planChildTablePrintConfig" :table-data="printPlan" id="printPlanContainer" :default-edit="false"></edit-table>
+                <edit-table 
+                  :config="planChildTablePrintConfig" 
+                  :table-data="printPlan" 
+                  id="printPlanContainer" 
+                  :default-edit="false">
+                </edit-table>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisibleReserve = false">取 消</el-button>
                     <el-button type="primary" @click="printPlanOrder">打印</el-button>
@@ -78,13 +104,14 @@ export default {
             dialogVisibleReserve:false,
             previewIt:true,
             loading:false,
-            parentData:{},
             childData:[],
             planChildTableEditConfig,
             planChildTableLabelConfig,
             planChildTablePrintConfig,
             printPlan:[],//打印计划单
             defaultCanedit:true,
+            PickingOrderData:[],
+            pickOperatorName:''
         }
     },
     props:{
@@ -107,148 +134,98 @@ export default {
         activePlanCode:{
            type:String,
            default:'' 
+        },
+        selectChiledByPlanCode:{
+            type:Object,
+            default:()=>{}
         }
     },
     methods:{
-        formateTime(val){
-            return moment(Number(val)).format('YYYY-MM-DD HH:MM:SS')
-        },
 
-        makeOutbound(){
-            var usable =  this.checkDataUsable();
-            if(usable.objectUsabel&&usable.arrUsabel){
-                this.dialogVisible = true;    
-            }else{
-                this.$message({type:'info',message:'请将某一条单据展开并选择所属商品'})
+        surePicking(){
+          let json={};
+          json.pickOrderDetailAddReqList=this.PickingOrderData;
+          if(json.pickOrderDetailAddReqList.some(v=>{
+            if(v.sortQty<0||v.sortQty>v.planOutQty-v.save_sortQty){
+                this.$message({type:'error',message:`计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty-v.save_sortQty} 之间`})
+                return false
             }
+          })){
+            return 
+          }
+          json.pickOperatorId='666';
+          json.pickType=0;
+          json.pickOperatorName=this.pickOperatorName;
+          if(json.pickOperatorName===''){
+            this.$message({type: 'error',message: '拣货人姓名必填'});   
+            return    
+          }
+          pickOrderAdd(json).then(res=>{
+            if(res.success){
+               this.$message({type: 'success',message: '操作成功!'});
+               this.dialogVisible=false;
+            }
+          }).catch(err=>{
+              console.log(err)
+          })
         },
 
+        //打印装箱单
         priviewBoxLabel(){
-            var usable =  this.checkDataUsable();
-            if(usable.objectUsabel&&usable.arrUsabel){
-                this.dialogVisibleLabel = true
-                this.defaultCanedit = true
-            }else{
-                this.$message({type:'info',message:'请将某一条单据展开并选择所属商品'})
-            }
+          this.dialogVisibleLabel = true
+          this.defaultCanedit = true
+          let arr=[]
+          for(let i in this.selectChiledByPlanCode){
+            arr=[...arr,...this.selectChiledByPlanCode[i]]
+          }
+          this.childData=arr.map(v=>{
+              v.editable=true;
+              v.printNum=Number(v.realOutQty).toFixed(0);
+              return v
+          })
         },
       
         printLabel(){
             var childData = [...this.childData]
-            var canPriview = true
-            childData.map(item => {if(!PositiveIntegerReg.test(item.printNum)){
-                canPriview = false
-            }})
-            if(!canPriview){
-                this.$message({type:'error',message:'数量为正整数'})
-                this.defaultCanedit = true
-                return false
-            }
-            this.childData=[...childData]
-            var label = document.getElementById('print').innerHTML
-            //样式暂时不可配，需优化
-            var style = "<style type='text/css'>.border{border:1px solid #666;width:530px;display:inline-block;padding:10px;} .marginRight5{margin-right:5px;} table {font-family: verdana,arial,sans-serif;font-size:11px;color:#333333;border-width: 1px;border-color: #666666;border-collapse: collapse;}table th {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #dedede;}table td {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #ffffff;} img{max-width:130px;} .card-list{margin-bottom: 6px;width:25%;display:inline-block} .el-dropdown{display:inline-block} </style>"
-            MakePrint(label,style)
-        },
-        checkDataUsable(){
-            var a = {...this.parentDataObj}
-            var b = this.childDataArr.map(item => {item.editable = true;item.printNum = item.realOutQty;return item})
-            this.childData=[...b]
-            this.parentData = {...a}
-            var objectUsabel = Object.keys(a).length>0
-            var arrUsabel = b.length>0
-            return {
-               objectUsabel,arrUsabel
-            }
+            this.childData=childData.map(v=>{
+                 v.editable=false;
+                 return v
+            })
+
+            setTimeout(()=>{
+               let label = document.getElementById('print').innerHTML
+               //样式暂时不可配，需优化
+               let style = "<style type='text/css'>.border{border:1px solid #666;width:530px;display:inline-block;padding:10px;} .marginRight5{margin-right:5px;} table {font-family: verdana,arial,sans-serif;font-size:11px;color:#333333;border-width: 1px;border-color: #666666;border-collapse: collapse;}table th {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #dedede;}table td {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #ffffff;} img{max-width:130px;} .card-list{margin-bottom: 6px;width:25%;display:inline-block} .el-dropdown{display:inline-block} </style>"
+               MakePrint(label,style)
+            },500)
+
+           
         },
 
         PickingOrder(){
-           var usable =  this.checkDataUsable();
-           if(this.planPrintData.length>0&&usable.objectUsabel&&usable.arrUsabel){
-               this.$prompt(`是否将您选中的计划单 ${this.activePlanCode} 生成拣货任务?如果是,请输入拣货人姓名并确定！`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({value}) => {
-                    pickOrderAdd({
-                      pickType:0,
-                      pickOperatorId:0,
-                      pickOperatorName:value,
-                      pickOrderDetailAddReqList:this.childData.map(v=>{
-                          return {...v,sortQty:v.planOutQty}
-                      })
-
-                    }).then(res=>{
-                        if(res.success){
-                            this.$message({
-                                type: 'success',
-                                message: '拣货单生成成功，可到拣货任务页面查看！'
-                            });
-                        } else{
-                            this.$message({
-                              type: 'info',
-                              message: '操作失败'
-                            });   
-                        }
-                    })
-             
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败'
-                    });          
-                });
-            }else{
-                this.$message({type:'info',message:'请将某一条单据展开并选择所属商品'})
-            }
+          this.dialogVisible=true;
+          let arr=[]
+          for(let i in this.selectChiledByPlanCode){
+            arr=[...arr,...this.selectChiledByPlanCode[i]]
+          }
+          this.PickingOrderData=arr.map(v=>{
+              v.editable=true;
+              v.tempOutQty=v.sortQty-v.realSortQty;
+              v.save_sortQty=v.sortQty;
+              v.sortQty=v.planOutQty-v.sortQty;
+              return v
+          })
         },
 
         priviewReserve(){
-            if(this.planPrintData.length>0){
-                this.dialogVisibleReserve = true
-                this.printPlan = [...printPlanDataFn([...this.planPrintData])]
-            }else{
-                this.$message({type:'info',message:'请选择单据'})
-            }
+            this.dialogVisibleReserve = true
+            this.printPlan = [...printPlanDataFn([...this.planPrintData])]
         },
+
         printPlanOrder(){
             var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
             MakePrint(printPlanContainer)
         },
-        submitFormIt(orderStatus){
-            var canSubmit = true
-            var items = []
-           
-            this.childData.map(item =>{
-                var a = item.planOutQty || 0
-                var b = item.realOutQty || 0
-                var c = item.tempOutQty || 0
-                var limit = a-b-c;
-               if(item.realOutQtyIt>limit){
-                  canSubmit = false
-                }
-                if(!MoneyPositiveReg.test(item.realOutQtyIt)){
-                  canSubmit = false
-                }
-                items.push({batchNo:item.batchNo,busiIndex:item.busiIndex,skuCode:item.skuCode,realOutQty:item.realOutQtyIt,remarkInfo:item.remarkInfo})
-            })
-            if(!canSubmit){
-                this.$message({type:'error',message:'数据错误，最多两位小数，请修改'})
-                return false
-            }
-            outboundOrderSubmit({...this.parentData,orderStatus:orderStatus,ownerCode:this.parentData.ownerCode ,customerCode:this.parentData.arrivalCode,customerName:this.parentData.arrivalName,warehouseCode:this.$store.getters.chooseWarehouse,orderType:this.orderType,addOutWareHouseOrderVO:[...items]}).then(res => {
-                if(res.success){
-                    this.dialogVisible = false
-                    this.$message({type:'success',message:'出库单提交成功',duration:1500,onClose:()=>{
-                        this.$router.push({path:'/outwarehousing/outboundOrder'})
-                    }})
-                }else{
-                     this.$message({type:'info',message:'出库单提交失败'})
-                }
-            }).catch(err=>{
-                this.$message({type:'info',message:'出库单提交失败'})
-            })
-            
-        }
     }
 }
 </script>

@@ -204,11 +204,10 @@ export function receiveOrderDelete(data) {
 
 
 //根据条件查询库位
-export function warehouseSpaceSelect(data) {
+export function warehouseSpaceSelect() {
   return request({
-    url: `/webApi/basic/warehouseSpace/select`,
-    method: 'post',
-    data:data
+    url: `/webApi/basic/warehouseSpace/list`,
+    method: 'get',
   })
 }
 
@@ -339,6 +338,25 @@ export function deleteByIds(data) {
 export function confirmOutOfTheLibrary(data) {
   return request({
     url: `/webApi/outWarehouse/order/confirmOutOfTheLibrary`,
+    method:'post',
+    data:data
+  })
+}
+
+//取消出库
+export function cancelOutOfTheLibrary(data) {
+  return request({
+    url: `/webApi/outWarehouse/order/cancelOutOfTheLibrary`,
+    method:'post',
+    data:data
+  })
+}
+
+
+//到货并入库
+export function receiveAndInStock(data) {
+  return request({
+    url: `/webApi/receive/order/receiveAndInStock`,
     method:'post',
     data:data
   })

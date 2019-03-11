@@ -16,9 +16,8 @@
         <operation-button 
           :child-data-arr="childDataArr" 
           :planPrintData="planPrintData" 
-          :orderType="currentTab" 
-          :activePlanCode="activePlanCode"
-          :parent-data-obj="parentDataObj" />
+          :selectChiledByPlanCode="selectChiledByPlanCode"
+          :orderType="currentTab"/>
 
          <div style="margin-bottom:15px" 
            v-show="planPrintData.length>0">
@@ -36,20 +35,18 @@
           :loading="loading" 
           :table-data="tableData"
           ref="tableChild" 
-          :handle-button-map="handleButtonMap"  
           :highlight-current-row="highlightCurrentRow" 
-          :child-data-name="childDataName" 
+          child-data-name="outWarehousePlanDetailRespList" 
           :config="parentTableConfig"
           :expands-parent="expandsParent"
           :childTableConfig="childTableConfig" 
-          :accordion-expand="accordionExpand" 
-          @expandChangePa="expandChange" 
-          @currentRadioChange="currentRadioChange" 
-          :child-can-select="childCanSelect" 
-          :expand-key="expandKey" 
+          :accordion-expand="true"        
+          :child-can-select="true" 
+          expand-key="planCode" 
           @childDataSelect="childDataSelect"  
           @sizeChange="handleSizeChange"
           @currentChange="handleCurrentChange" 
+          @currentRadioChange="currentRadioChange" 
           :total="total" 
           :maxTotal="10"
           :pageSize="ruleForm.pageSize"
@@ -69,16 +66,16 @@
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
     const ruleForm = {
-      pageNum: 1,
-      pageSize:10,
-      durationTime:['',''],//时间，
-        createBeginDate:'',
-        createEndDate:'',
-        planCode:'',
-        providerName:'',
-        execStatus:'',
-        ownerName:'',
-    }
+        pageNum: 1,
+        pageSize:10,
+        durationTime:['',''],//时间，
+            createBeginDate:'',
+            createEndDate:'',
+            planCode:'',
+            providerName:'',
+            execStatus:'',
+            ownerName:'',
+        }
     
     export default {
         components: { DoubleTable, SearchWarehousing, operationButton },
@@ -92,53 +89,27 @@
                 tabDefault:BusiBillTypeEnumFilter[0].value+'',
                 currentTab:BusiBillTypeEnumFilter[0].value+'',
                 ruleForm,
-                selectData:{//x选中的单据
-                    
-                },
-                // searchForms,
-                tableData:[
-                ],
-                childDataName:'childData',
-                //表格配置
+                selectData:{},
+                tableData:[],
                 parentTableConfig:planOrderTableConfig,
                 childTableConfig:planOrderChildTableConfig,
-                // currentPage:1,
-                // pageSize:10,
                 total:0,
-                //主表操作
-                handleButtonMap:[ ],
-                childCanSelect:true,//子表可选择,false全选，
-                accordionExpand:true,//手风琴展开
-                multipleSelection:[],//选中的子表数据
-                expandKey:'planCode',
+                multipleSelection:[],
                 expandsParent:[],
-                //按钮操作所需数据
-                parentDataObj:{},
                 childDataArr:[],
-                //计划单打印的选择数据
                  planPrintData:[],
-                 activePlanCode:'',
-                 activeOwnerCode:''
+                 activeOwnerCode:'',
+                 selectChiledByPlanCode:{},
             }
         },
         methods:{
-            expandChange(row, expandedRows){
-                this.planPrintData=[];
-                this.childDataArr=[];
-                
-                var arr = []
-                arr.push(row[this.expandKey])
-                 if(this.expandsParent == row[this.expandKey]){
-                    this.expandsParent = []
-                }else{
-                    this.expandsParent = [...arr]
-                }
-                this.currentRadioChange(row)
-                this.activePlanCode=row.planCode;
-                this.activeOwnerCode=row.ownerCode;
-            },
-            getTableData(){
 
+            currentRadioChange(row){
+              this.planPrintData.push(row)
+
+            },
+
+            getTableData(){
                 this.$router.replace({
                     path:'/outwarehousing/outboundPlan',
                     query:{data:JSON.stringify({...this.ruleForm,busiBillType:this.currentTab})}
@@ -147,76 +118,43 @@
                 let data={...this.ruleForm,busiBillType:this.currentTab}
 
                 getInfoPlanOutWarehousing(data).then(res => {
-                    
                     if(res.success && res.data &&res.data.list){
-                        var tempList = [...res.data.list]
-                        
-                        this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'planCode')
+                        var tempList = [...res.data.list].map(v=>{
+                            v.outWarehousePlanDetailRespList=v.outWarehousePlanDetailRespList.map(item=>{
+                                item.planCode=v.planCode;
+                                item.ownerCode=v.ownerCode;
+                                return item
+                            })
+                            return v;
+                        })
+                        this.tableData = uniqueArray([...tempList],'planCode')
                         this.total = res.data.total
                         var a = this.$refs.tableChild.expands//之前打开过 
-                        if(a&&a.length>0){
-                            
-                            var info = {
-                                childData:[],
-                                planCode:a[0]
-                            }
-                            this.currentRadioChange(info)
-                        }
-                    }else{
-                        this.tableData = []
-                    }
+                     }
                     this.loading = false;
-
                 }).catch(err=>{
                     console.log(err);
                     this.tableData = []
                     this.loading = false;                    
                 })
-            },
-            currentRadioChange(data){
-                var templatePlanTag = [...this.planPrintData,data]
-                this.planPrintData = uniqueArray([...templatePlanTag],'planCode')
-                var chooseList = data
-                if(data.childData&&data.childData.length>0){
+             },
 
-                }else{
-                    this.loading = true
-                     getInfoPlanDetailOutWarehousing({planCode:data.planCode}).then(res=>{
-                        if(res.success && res.data && res.data.outWarehousePlanDetailRespList && res.data.outWarehousePlanDetailRespList.length>0){
-                            var outWarehousePlanDetailRespList = res.data.outWarehousePlanDetailRespList 
-                            outWarehousePlanDetailRespList = outWarehousePlanDetailRespList.map(item => {
-                                item.planOutQty = (Number(item.planOutQty)||0).toFixed(0)
-                                item.realOutQty = (Number(item.realOutQty)||0).toFixed(0)
-                                return item
-                            })
 
-                            var tempList = [...this.tableData]
-                            this.tableData = tempList.map(list => {
-                                if(list.planCode == data.planCode){
-                                    list.childData = outWarehousePlanDetailRespList;
-                                    chooseList = list
-                                }
-                                return list
-                            })
-                        }     
-                        this.loading = false
-                    }).catch(err => {
-                        
-                        this.loading = false
-                    })
-                }
-                this.parentDataObj = { ...chooseList }
-            },
-            childDataSelect(selectedData){
-
+            childDataSelect(selectedData,arr){
+               if(selectedData.length){
+                 this.selectChiledByPlanCode[selectedData[0].planCode]=selectedData
+               } else{
+                 this.selectChiledByPlanCode[arr[0].planCode]=[]
+               }
                this.multipleSelection = [...selectedData]
                this.childDataArr = [...selectedData].map(v=>{
                    return {
                    ...v,
-                   planCode:this.activePlanCode,
                    ownerCode:this.activeOwnerCode}
                })
             },
+
+
             handleSizeChange(val) {
                 this.ruleForm={...this.ruleForm,pageSize:val,pageNum:1}
                 this.getTableData()
@@ -226,6 +164,7 @@
                 this.ruleForm={...this.ruleForm,pageNum:val}
                 this.getTableData()
             },
+
              submitForm(ruleForm) {
                 var   createBeginDate='',createEndDate='';
                 if(ruleForm.durationTime&&ruleForm.durationTime[0]){
@@ -241,6 +180,7 @@
                 this.ruleForm={ ...ruleForm,busiBillType:this.currentTab }
                 this.getTableData()
             },
+
             tabSwitch(tab,event){
                 if(tab.name==this.currentTab){
                     console.log('当前标签')
@@ -249,28 +189,22 @@
                     this.$refs.searchWarhouse.resetForm()
                     this.planPrintData = []
                     this.tableData = []
-                    this.parentDataObj = {}
                     this.childDataArr = []
 
                 }
             },
+
              closePlanTags(tag){
                 var planPrintData = [...this.planPrintData]
                 var b = [...planPrintData.filter(item => {console.log('in',item.planCode!=tag.planCode);
                 ;return item.planCode!=tag.planCode})]
                 this.planPrintData = [...b]
             }
-        },
+         },
+
         created(){
-            this.getTableData()
+          this.getTableData()
         }
     }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-//  .el-table__row.expanded{
-//    background: green;
-//    color: #fff;
-//  }
-
-</style>

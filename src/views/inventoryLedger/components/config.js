@@ -9,6 +9,7 @@ export const inventoryTableConfig=[// 库存列表
   { label:'批次',prop:'batchNo'},
   { label:'最近入库时间',prop:'lastInTime',type:'time' },
   { label:'最近出库时间',prop:'lastOutTime',type:'time' },
+  { label:'冻结数量',prop:'blockQty' },
   { label:'库存',prop:'skuQty' },
 ]
 

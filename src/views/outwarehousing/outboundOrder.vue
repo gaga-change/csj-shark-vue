@@ -28,6 +28,16 @@
            确认出库
         </el-button>
 
+       <el-button 
+           type="primary" 
+           size="small"
+           @click="quickSubmit('cancel')" 
+           :disabled="buttonDisable" 
+           v-loading="buttonDisable" 
+           style="margin-bottom:15px">
+          取消出库
+        </el-button>
+
         <div style="margin-bottom:15px" 
            v-show="planPrintData.length>0">
             <span style="font-size:13px">当前选中的单据</span>
@@ -70,7 +80,7 @@
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
     import { orderTableConfig, orderChildTableConfig } from './components/config'
-    import { getInfoOutWarehousing, getInfoDetailOutWarehousing,confirmOutOfTheLibrary } from '@/api/warehousing'
+    import { getInfoOutWarehousing, getInfoDetailOutWarehousing,confirmOutOfTheLibrary,cancelOutOfTheLibrary} from '@/api/warehousing'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchWarehousing  from './components/search'
     import { BusiBillTypeEnum } from "@/utils/enum"
@@ -210,15 +220,21 @@
                this.planPrintData.splice(index,1)
              },
 
-             quickSubmit(){
+             quickSubmit(type){
                 if(!this.planPrintData.length){
                    this.$message({type: 'error',message: '请至少选择一条数据,或当前数据都已确认出库过'}); 
                    return      
                 }
-                confirmOutOfTheLibrary({
+
+                let Api=confirmOutOfTheLibrary;
+                if(type==='cancel'){
+                    Api=cancelOutOfTheLibrary
+                }
+                Api({
                     ids:this.planPrintData.map(v=>v.id)
                 }).then(res=>{
                    if(res.success){
+                     this.getTableData()
                      this.$message({type: 'success',message: '操作成功'});
                    } else{
                        this.$message({type: 'error',message: '操作失败'});     

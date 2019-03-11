@@ -11,13 +11,13 @@
     <el-col :span="24" style="margin-bottom:12px;">
       <el-button
         type="primary"
-        :disabled="!SelectionData.length>0"
+        :disabled="!SelectionData.length>0||searchForm.isCreateOrder"
         size="small"
         @click="outOrder"
       >生成出库单</el-button>
       <el-button
         type="danger"
-        :disabled="!SelectionData.length>0"
+        :disabled="!SelectionData.length>0||searchForm.isCreateOrder"
         size="small"
         @click="outOrder('delete')"
       >删除</el-button>

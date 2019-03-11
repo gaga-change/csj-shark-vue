@@ -7,7 +7,7 @@ export default [
     path: '/inwarehousing',
     component: Layout,
     redirect: 'inwarehousing/arrival',
-    meta: { title: '入库管理',Edition: '1.1', noCache: true,icon: 'in' },
+    meta: { title: '入库管理', noCache: true,icon: 'in' },
     hidden: false,
     children: [
       {
@@ -44,7 +44,7 @@ export default [
     path: '/outwarehousing',
     component: Layout,
     redirect: 'outwarehousing/outboundPlan',
-    meta: { title: '出库管理', Edition: '1.1',noCache: true,icon: 'out' },
+    meta: { title: '出库管理',noCache: true,icon: 'out' },
     hidden: false,
     children: [
       {
@@ -81,7 +81,7 @@ export default [
     path: '/inventoryLedger',
     component: Layout,
     redirect: 'inventoryLedger/inventory',
-    meta: { title: '库存台账',Edition: '1.1', noCache: true,icon: 'download' },
+    meta: { title: '库存台账', noCache: true,icon: 'download' },
     hidden: false,
     children: [
       {
@@ -106,7 +106,7 @@ export default [
     path: '/baseInfo',
     component: Layout,
     redirect: 'baseInfo/logistics',
-    meta: { title: '基础资料', Edition: '1.1',noCache: true,icon: 'info' },
+    meta: { title: '基础资料',noCache: true,icon: 'info' },
     hidden: false,
     children: [
       {
@@ -136,7 +136,7 @@ export default [
     path: '/deliverInfo',
     component: Layout,
     redirect: 'deliverInfo/deliver',
-    meta: { title: '配送管理', Edition: '1.1',noCache: true,icon: 'deliver' },
+    meta: { title: '配送管理',noCache: true,icon: 'deliver' },
     hidden: false,
     children: [
       {

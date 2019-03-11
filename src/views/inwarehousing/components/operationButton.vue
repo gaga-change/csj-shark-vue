@@ -21,6 +21,7 @@
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitForm()">到货确认</el-button>
+                    <el-button type="primary" @click="submitForm('inwarehousing')">到货并入库</el-button>
                 </span>
             </el-dialog>
 
@@ -70,7 +71,7 @@
 import moment from 'moment'
 import axios from 'axios'
 import editTable from '@/components/Table/editTable'
-import { orderAdd, getBatchNo } from '@/api/warehousing'
+import { orderAdd, getBatchNo,receiveAndInStock } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
@@ -217,7 +218,7 @@ export default {
            MakePrint(printPlanContainer)
         },
 
-        submitForm(){//提交
+        submitForm(type){//提交
           let isSubmit=this.childData.some(v=>v.planInQty-v.hasReceiveQty<v.receiveQty||v.receiveQty<=0);
           if(isSubmit){
             this.$message({type:'error',message:'本次到货量应小于总数量-已到货量,且要大于0'});
@@ -231,7 +232,11 @@ export default {
               return json
           })
 
-          orderAdd({
+          let Api=orderAdd;
+          if(type==='inwarehousing'){
+            Api=receiveAndInStock
+          }
+          Api({
             planCode:this.parentDataObj.planCode,
             receiveOrderDetailReqList:data  
           }).then(res=>{

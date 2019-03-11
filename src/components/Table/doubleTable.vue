@@ -42,8 +42,8 @@
               <el-table
                 :data="childTable.row[childDataName]"
                 ref="multipleTable"
-                @select="(...key) => handleSelection(String(childTable.row[expandKey]), ...key)"
-                @select-all="(...key) => handleSelection(String(childTable.row[expandKey]), ...key)"
+                @select="(...key) => handleSelection(String(childTable.row[expandKey]), ...key,childTable.row[childDataName])"
+                @select-all="(...key) => handleSelection(String(childTable.row[expandKey]), ...key,childTable.row[childDataName])"
               >
                 <el-table-column
                   type="selection"
@@ -400,6 +400,7 @@ export default {
                 index
               ) => this.pageSize * (this.currentPage - 1) + index + 1;
               break;
+          
             case "toFixed":
               childTableConfigFilter[i].formatter = (
                 row,
@@ -489,7 +490,7 @@ export default {
       if (val.length) {
         this.tableSonSelection[key] = val;
       }
-      this.$emit("childDataSelect", val);
+      this.$emit("childDataSelect", val,row);
     },
     handleParentSelection(val, row) {
       this.$emit("dataSelect", val);

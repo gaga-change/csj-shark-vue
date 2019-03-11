@@ -48,26 +48,23 @@ export const orderChildTableConfig=[// 出库单子列表
 ]
 
 export const planChildTableEditConfig=[// 计划单操作列表
-  { label:'业务行号',prop:'busiIndex', minWidth:80 },
+  { label:'计划单号',prop:'planCode', minWidth:150 },
   { label:'商品编码',prop:'skuCode', width:150 },
   { label:'商品名称',prop:'skuName', width:150 },
   { label:'规格型号',prop:'skuFormat', minWidth:120 },
-  { label:'单位',prop:'skuUnitName', minWidth:120 },
-  { label:'商品数量',prop:'planOutQty', minWidth:120 },//unconfirm
-  { label:'已出库数量',prop:'realOutQty', minWidth:120 },//unconfirm
-  { label:'待出库数量',prop:'tempOutQty', minWidth:120, },//unconfirm
-  { label:'本次出库',prop:'realOutQtyIt', width:120,editable:true,fixed:'right' },//unconfirm
-  // { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
-  { label:'备注',prop:'remarkInfo', width:120,editable:true,fixed:'right' },//unconfirm
-
+  { label:'单位',prop:'skuUnitName', minWidth:100 },
+  { label:'商品数量',prop:'planOutQty', minWidth:120 },
+  { label:'已出库数量',prop:'realOutQty', minWidth:100 },
+  { label:'待出库数量',prop:'tempOutQty', minWidth:100, },
+  { label:'本次出库',prop:'sortQty', width:120,editable:true,fixed:'right' },
 ]
 export const planChildTableLabelConfig=[// 计划单打印列表
-  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
-  // { label:'商品编码',prop:'skuCode', width:150 },
-  { label:'商品名称',prop:'skuName', width:150 },
-  { label:'规格型号',prop:'skuFormat', width:200 },
-  { label:'数量',prop:'printNum', width:120,editable:true,editType:'number' },
-  { label:'单位',prop:'skuUnitName', width:80 },
+  { label:'计划单号',prop:'planCode', minWidth:150 },
+  { label:'商品编码',prop:'skuCode'},
+  { label:'商品名称',prop:'skuName' },
+  { label:'规格型号',prop:'skuFormat'},
+  { label:'数量',prop:'printNum',editable:true,editType:'number' },
+  { label:'单位',prop:'skuUnitName' },
 ]
 export const planChildTablePrintConfig=[// 计划单打印列表
   // { label:'业务行号',prop:'busiIndex', minWidth:80 },
