@@ -102,6 +102,8 @@
                  selectChiledByPlanCode:{},
             }
         },
+   
+    
         methods:{
 
             currentRadioChange(row){

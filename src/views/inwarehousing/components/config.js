@@ -108,7 +108,7 @@ export const arrivalAlertConfig=[
   { label:'商品规格',prop:'skuFormat'},
   { label:'单位',prop:'skuUnitCode'},
   { label:'总数量',prop:'planQty'},
-  { label:'已入库',prop:'realIntQty'},
+  { label:'已入库',prop:'realInQty'},
   { label:'到货量',prop:'receiveQty'},
   { label:'上架量/货位',dom:formatWareHousing()},
   { label:'操作',useLink:true,fixed:'right',width:180},

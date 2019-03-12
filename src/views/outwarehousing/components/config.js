@@ -82,7 +82,7 @@ export const pickingtaskConfig=[
   { label:'拣货单号',prop:'orderCode'},
   { label:'拣货总数',prop:'realPickQty'},
   { label:'应拣货总量',prop:'pickQty'},
-  { label:'出库单号',prop:'outOrderCode'},
+  // { label:'出库单号',prop:'outOrderCode'},
   { label:'状态',prop:'orderStatus',type:'orderStatus',useLocalEnum:true},
   { label:'创建时间',prop:'gmtCreate',type:'time'},
   { label:'操作',useDom:true,width:300},
@@ -117,5 +117,5 @@ export const temporaryStorageConfig=[
   { label:'规格型号',prop:'skuFormat'},
   { label:'商品数量',prop:'realSortQty'},
   { label:'库位',prop:'warehouseSpaceCode'},
-  { label:'创建时间', width:120, prop:'gmtCreate', type:'time' },
+  { label:'创建时间', width:150, prop:'gmtCreate', type:'time' },
 ]

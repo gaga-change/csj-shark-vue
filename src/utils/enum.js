@@ -147,6 +147,10 @@ export const outboundOrderStatus=[
     name: '确认出库',
     value: 1
   },
+  {
+    name: '取消出库',
+    value: 2
+  },
 ]
 //物流状态
 export const logisticsStatusEnum = [

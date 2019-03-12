@@ -145,15 +145,6 @@ export default {
             }))
         },
         async getCode(){
-            // this.loading = true
-            // getBarCode().then(res => {
-            //     if(res.success){
-            //         this.previewIt =false
-            //     }
-
-            // }).catch(err=>{
-            //     this.loading = false
-            // })
             var childData = [...this.childData]
             var batchNoArr = []
             var canPriview = true

@@ -13,10 +13,10 @@
 
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.outOrderCode!==undefined">
             <el-form-item 
-              label="出库单号"  
+              label="计划单号"  
               label-width="80px"
               prop="outOrderCode"  >
-              <el-input type="text" size="small"    placeholder="请输入出库单号"    v-model.trim="searchForm.outOrderCode" ></el-input>
+              <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="searchForm.outOrderCode" ></el-input>
             </el-form-item>
           </el-col>
 

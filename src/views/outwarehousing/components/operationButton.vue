@@ -3,7 +3,6 @@
         <el-button 
            type="primary" 
            size="small" 
-           :disabled="!planPrintData.length"
            @click="priviewReserve">
             打印计划单
         </el-button>
@@ -17,7 +16,7 @@
 
         <el-button 
            type="primary" 
-           size="small" 
+           size="small"
            @click="priviewBoxLabel">
            打印装箱单 
         </el-button>
@@ -111,7 +110,7 @@ export default {
             printPlan:[],//打印计划单
             defaultCanedit:true,
             PickingOrderData:[],
-            pickOperatorName:''
+            pickOperatorName:'',
         }
     },
     props:{
@@ -140,15 +139,16 @@ export default {
             default:()=>{}
         }
     },
-    methods:{
 
+
+    methods:{
         surePicking(){
           let json={};
           json.pickOrderDetailAddReqList=this.PickingOrderData;
           if(json.pickOrderDetailAddReqList.some(v=>{
             if(v.sortQty<0||v.sortQty>v.planOutQty-v.save_sortQty){
                 this.$message({type:'error',message:`计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty-v.save_sortQty} 之间`})
-                return false
+                return true
             }
           })){
             return 
@@ -172,8 +172,6 @@ export default {
 
         //打印装箱单
         priviewBoxLabel(){
-          this.dialogVisibleLabel = true
-          this.defaultCanedit = true
           let arr=[]
           for(let i in this.selectChiledByPlanCode){
             arr=[...arr,...this.selectChiledByPlanCode[i]]
@@ -183,6 +181,13 @@ export default {
               v.printNum=Number(v.realOutQty).toFixed(0);
               return v
           })
+
+         if(!this.childData.length){
+            this.$message({type: 'error',message: '未选择子表里商品'});   
+            return 
+         }
+          this.dialogVisibleLabel = true
+          this.defaultCanedit = true
         },
       
         printLabel(){
@@ -198,12 +203,9 @@ export default {
                let style = "<style type='text/css'>.border{border:1px solid #666;width:530px;display:inline-block;padding:10px;} .marginRight5{margin-right:5px;} table {font-family: verdana,arial,sans-serif;font-size:11px;color:#333333;border-width: 1px;border-color: #666666;border-collapse: collapse;}table th {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #dedede;}table td {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #ffffff;} img{max-width:130px;} .card-list{margin-bottom: 6px;width:25%;display:inline-block} .el-dropdown{display:inline-block} </style>"
                MakePrint(label,style)
             },500)
-
-           
         },
 
-        PickingOrder(){
-          this.dialogVisible=true;
+       PickingOrder(){
           let arr=[]
           for(let i in this.selectChiledByPlanCode){
             arr=[...arr,...this.selectChiledByPlanCode[i]]
@@ -215,11 +217,22 @@ export default {
               v.sortQty=v.planOutQty-v.sortQty;
               return v
           })
-        },
+
+        if(!this.PickingOrderData.length){
+            this.$message({type: 'error',message: '未选择子表里商品'});   
+            return 
+        }
+        this.dialogVisible=true;
+
+      },
 
         priviewReserve(){
-            this.dialogVisibleReserve = true
             this.printPlan = [...printPlanDataFn([...this.planPrintData])]
+            if(!this.printPlan.length){
+                this.$message({type: 'error',message: '未选择单据,可点击任意行选择'});   
+                return 
+            }
+             this.dialogVisibleReserve = true
         },
 
         printPlanOrder(){
