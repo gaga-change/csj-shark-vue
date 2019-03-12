@@ -36,9 +36,7 @@ export default {
   methods:{
     setUserWarehouse(){
         var chooseWarehouse = sessionStorage.getItem('warehouse')
-          // var userWarehouse = this.$store.getters.userInfo.roles
           var warehouseMap =  this.$store.getters.warehouseMap 
-          // this.$store.getters.userInfo.warehouses.filter(item=> userWarehouse.includes(item.warehouseNo))
           if(this.$store.getters.chooseWarehouse||chooseWarehouse){
             if(this.$store.getters.chooseWarehouse != chooseWarehouse){
               chooseWarehouse = chooseWarehouse ? chooseWarehouse : this.$store.getters.chooseWarehouse
@@ -47,12 +45,7 @@ export default {
            
           }else{
             const h = this.$createElement
-            // if(warehouseMap&&warehouseMap.length>0){
-            //    chooseWarehouse = warehouseMap[0].warehouseNo
-
-            // }
             if(!(warehouseMap&&warehouseMap.length>0)){
-                // this.$alert({title:'您还未关联仓库，请关联仓库后操作',closable:false})
                 this.$msgbox(
               {
                 title: '未关联仓库',
@@ -97,7 +90,6 @@ export default {
                   )]),  
                   showCancelButton: false,
                   confirmButtonText: '确定',
-                  // center:true,
                   showClose:false,
                   confirmButtonClass:'buttonRight',
                   closeOnClickModal:false,
@@ -125,7 +117,6 @@ export default {
     setWarehouse(warehouse,cb,errcb,fcb){
       setWarehouseCode({operaterId:this.$store.getters.userInfo.id,warehouseCode:warehouse}).then(res => {
         if(res.success){
-          // sessionStorage.setItem('warehouse',warehouse)
           this.$store.dispatch('SetWarehouse',warehouse)
           if(cb&&typeof cb == 'function'){
             cb(res)

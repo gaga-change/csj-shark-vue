@@ -6,11 +6,6 @@
     <div class="plant-text">
       供应链协同操作管理平台
     </div>
-    <!-- <ul class="top-nav">
-      <li>
-        <a href="./wms1.0/index.html" target="_blank">前往wms1.0</a>
-      </li>
-    </ul> -->
      <el-dropdown class="avatar-container warehouse" @command="handleCommand">
       <div class="avatar-wrapper">
         <span class="welcome">
@@ -38,18 +33,7 @@
             主页
           </el-dropdown-item>
         </router-link>
-         <!-- <el-dropdown-item divided>
-          仓库：<el-select v-model="warehouse" style="display:inline-block"
-               placeholder="请选择仓库"  @change="setWarehouse"
-              size="small" prefix-icon="el-icon-search">
-                <el-option
-                  v-for="item in warehouseMap"
-                  :key="item.warehouseNo"
-                  :label="item.warehouseName"
-                  :value="item.warehouseNo">
-                </el-option>
-              </el-select>
-        </el-dropdown-item> -->
+
         <el-dropdown-item divided>
           <span @click="modifyPasswordShow = true" style="display:block;">修改密码</span>
         </el-dropdown-item>
@@ -186,7 +170,6 @@ export default {
         if(res.success){
           this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
             this.$message({type:'success',message:'切换仓库成功'})
-            // this.$router.go(0)
             console.log(this.userInfo)
             window.location.href=`${window.location.host}${'/'}`
           })
