@@ -31,7 +31,6 @@ const user = {
     SET_WAREHOUSEENUM:(state,info) => {
       state.roles = info.roles
       state.warehouseMap = info.warehouses
-      //后台已控制.filter(item=> state.roles.includes(item.warehouseNo))
     }
   },
 

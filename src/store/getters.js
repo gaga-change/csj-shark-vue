@@ -8,7 +8,7 @@ import { asyncRouterMap }  from '@/router'
 const getters = {
   sidebar: state => state.app.sidebar,
   userInfo: state => state.user.userInfo,
-  chooseWarehouse: state => state.user.chooseWarehouse,
+  chooseWarehouse: state => state.user.chooseWarehouse||sessionStorage.getItem('warehouse'),
   warehouseMap: state => state.user.warehouseMap,
   visitedViews: state => state.tagsView.visitedViews,
   mapConfig:state=>state.map.mapConfig,

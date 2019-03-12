@@ -12,6 +12,14 @@
          </el-col >
       </el-row>
       <app-main></app-main>
+      <div class="warehouseBox" v-if="showWarehouse">
+          <div class="warehouseBox_alert">
+              <div class="warehouseBox_alert_title">仓库选择</div>
+              <ul>
+                <li  v-for="item in $store.getters.warehouseMap" :key="item.warehouseNo"  @click="choosewarehouse(item)" >{{item.warehouseName}}</li>
+              </ul>
+          </div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,115 +36,32 @@ export default {
     TagsView,
     Topbar
   },
+
+  data(){
+    return {
+      showWarehouse:!sessionStorage.getItem('warehouse')
+    }
+  },
+
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar
     }
   },
   methods:{
-    setUserWarehouse(){
-        var chooseWarehouse = sessionStorage.getItem('warehouse')
-          var warehouseMap =  this.$store.getters.warehouseMap 
-          if(this.$store.getters.chooseWarehouse||chooseWarehouse){
-            if(this.$store.getters.chooseWarehouse != chooseWarehouse){
-              chooseWarehouse = chooseWarehouse ? chooseWarehouse : this.$store.getters.chooseWarehouse
-              this.setWarehouse(chooseWarehouse)
-            }
-           
-          }else{
-            const h = this.$createElement
-            if(!(warehouseMap&&warehouseMap.length>0)){
-                this.$msgbox(
-              {
-                title: '未关联仓库',
-                message:'您还未关联仓库，请关联仓库后操作' ,  
-                type:'info',
-                showCancelButton: false,
-                showConfirmButton:false,
-                confirmButtonText: '确定',
-                center:true,
-                showClose:true,
-                confirmButtonClass:'buttonRight',
-                closeOnClickModal:false,
-                beforeClose: (action, instance, done) => {
-                  this.$message({type:'info',message:'配置仓库后重新登录',duration:1500,onClose:()=>{
-                    this.$store.dispatch('SetWarehouse','')
-                    location.href = `/csj_logout`
-                  }})
-                    
-                }
-              }
-            )
-            }else{
-              chooseWarehouse = warehouseMap[0].warehouseNo
-              if(warehouseMap.length<2){
-                
-                  this.setWarehouse(chooseWarehouse,(res)=>{   
-                        this.$message({
-                          type:'success',
-                          message:`您当前默认的仓库是${warehouseMap[0].warehouseName}`
-                        })
-                        
-                  },(err)=>{
-                      this.$message({
-                          type:'info',
-                          message:`默认的仓库选择失败，请手动选择`
-                        })
-                  })
-              }else{
-                this.$msgbox({
-                  title: '请选择仓库',
-                  message: h('div',{},[h('span',{style:"margin-right:10px;"},'仓库'),h('Select',{props:{value:''},class:'el-select',style:'height:26px;',on:{'change':(event)=>{chooseWarehouse = event.target.value;console.log(chooseWarehouse)}}}, warehouseMap.map(item=> h('Option',{attrs:{value:item.warehouseNo}},item.warehouseName))
-                  )]),  
-                  showCancelButton: false,
-                  confirmButtonText: '确定',
-                  showClose:false,
-                  confirmButtonClass:'buttonRight',
-                  closeOnClickModal:false,
-                  beforeClose: (action, instance, done) => {
-                    if (action === 'confirm') {
-                      instance.confirmButtonLoading = true;
-                      instance.confirmButtonText = '执行中...';
-                      this.setWarehouse(chooseWarehouse,function(){
-                        done();
-                      
-                        
-                        setTimeout(() => {
-                          instance.confirmButtonLoading = false;
-                        }, 300);
-                      })
-                    } 
-                  }
-                })
-              }
-              
-            }
-            
-          }
-    },
-    setWarehouse(warehouse,cb,errcb,fcb){
-      setWarehouseCode({operaterId:this.$store.getters.userInfo.id,warehouseCode:warehouse}).then(res => {
+    choosewarehouse(value){ 
+      setWarehouseCode({
+         operaterId:this.$store.getters.userInfo.id,
+         warehouseCode:value.warehouseNo
+      }).then(res => {
         if(res.success){
-          this.$store.dispatch('SetWarehouse',warehouse)
-          if(cb&&typeof cb == 'function'){
-            cb(res)
-          }
-        }
-        if(fcb&&typeof fcb == 'function'){
-          fcb(res)
+          this.showWarehouse=false;
+          this.$store.dispatch('SetWarehouse',value.warehouseNo)
         }
       }).catch(err=>{
-        if(errcb&&typeof errcb == 'function'){
-          errcb(err)
-        }
-        if(fcb&&typeof fcb == 'function'){
-          fcb(err)
-        }
+         console.log(err)
       })
-    }
-  },
-  created(){
-    this.setUserWarehouse()
+    },
   },
 }
 </script>
@@ -160,6 +85,49 @@ export default {
   }
   .el-message-box--center .el-message-box__btns{
     text-align: right !important;
+  }
+
+  .warehouseBox{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height:100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index:9999;
+    .warehouseBox_alert{
+      background: #fff;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      .warehouseBox_alert_title{
+        font-size: 24px;
+        text-align: center;
+        line-height: 32px;
+        padding-top: 16px;
+        font-weight: 600;
+      }
+      ul{
+         width: 464px;
+         padding:0;
+         margin: 0;
+         >li{
+          list-style: none;
+          padding: 0;
+          margin: 16px;
+          width: 200px; 
+          height: 50px;
+          line-height: 50px;
+          border: 1px solid #000;
+          text-align: center;
+          cursor: pointer;
+          float: left;
+        }
+      }
+    
+    }
+
   }
 </style>
 

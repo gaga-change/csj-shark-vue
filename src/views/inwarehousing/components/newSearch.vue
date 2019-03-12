@@ -89,19 +89,22 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8" v-if="searchForm.orderEndDate!==undefined">
+          <el-col :span="8" v-if="searchForm.orderTime!==undefined">
             <el-form-item 
               label="入库日期"
               label-width="90px"
               style="width:300px"
-              prop="orderEndDate">
-              <el-date-picker
-                v-model="searchForm.orderEndDate"
-                type="date"
-                size="mini"
-                placeholder="选择日期">
-              </el-date-picker>
+              prop="orderTime">
+                <el-date-picker
+                    v-model="searchForm.orderTime"
+                    type="daterange"
+                    size="small"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
               </el-form-item>
+
           </el-col> 
 
       </el-row>  

@@ -58,7 +58,7 @@ export default {
         providerName:'',
         orderCode:'',
         ownerName:'',
-        orderEndDate:''
+        orderTime:''
       },
       pageSize:10,
       pageNum:1,
@@ -134,6 +134,10 @@ export default {
         if(this.searchForm[i]!==''){
           json[i]=this.searchForm[i]
         }
+      }
+      if(json.orderTime&&Array.isArray(json.orderTime)){
+        json['orderStartDate']=moment(json.orderTime[0]).valueOf()
+        json['orderEndDate']=moment(json.orderTime[1]).valueOf()
       }
       console.log({...json,pageSize:this.pageSize,pageNum:this.pageNum})
       inOrderList({

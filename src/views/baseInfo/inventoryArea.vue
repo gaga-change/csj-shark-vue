@@ -261,7 +261,6 @@ export default {
         this.loading = false;
       })
       getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
-        console.log(res, 22333);
         if (res.success) {
           if (res.data && res.data.length > 0) {
             let tempList = [...this.AtoZ]
@@ -275,8 +274,6 @@ export default {
               return item
             })
             this.AtoZ = [...tempList]
-            // this.AtoZ.push([...tempList])
-            console.log(tempList, 444444);
 
           }
         }
@@ -308,16 +305,15 @@ export default {
           this.formParams.warehouseAreaName = this.formParams.warehouseAreaCode
           if (this.formParams.id) {
             updateInventoryArea({ ...this.formParams }).then(res => {
-              SimpleMsg({                result: res.success, msgType: 'edit', msg: '库区', cb: () => {                this.dialogVisible = false;
+              SimpleMsg({ result: res.success, msgType: 'edit', msg: '库区', cb: () => { this.dialogVisible = false;
                   this.getTableData()                }              })
             })
           } else {
             addInventoryArea({ ...this.formParams }).then(res => {
               SimpleMsg({                result: res.success, msgType: 'add', msg: '库区', cb: () => {                this.dialogVisible = false;
-                  this.getTableData()                }              })
+                  this.getTableData()   }              })
             })
           }
-          // this.getCurrentTableData();
         } else {
           return false;
         }
@@ -357,7 +353,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-
       'warehouseMap',
       'chooseWarehouse',
     ]),
@@ -385,14 +380,13 @@ export default {
     this.warehouseMap.map(item => {
       if (item.warehouseNo == this.chooseWarehouse) {
         this.warehouseName = item.warehouseName
-
+        
       }
     })
     // this.demo()
     // this.currentRedioChange()
   },
   activated() {
-    console.log(12);
     this.warehouseMap.map(item => {
       if (item.warehouseNo == this.chooseWarehouse) {
         this.warehouseName = item.warehouseName

@@ -148,7 +148,7 @@ export default {
   },
   created(){
     this.preWarehouse = this.chooseWarehouse
-    this.warehouse = this.chooseWarehouse
+    this.warehouse = this.chooseWarehouse||sessionStorage.getItem('warehouse')
   },
   methods: {
     handleCommand(command){
@@ -164,14 +164,11 @@ export default {
         })
         return false
       }
-
-       console.log(this.userInfo)
        setWarehouseCode({operaterId:this.userInfo.id,warehouseCode:warehouse}).then(res => {
         if(res.success){
           this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
             this.$message({type:'success',message:'切换仓库成功'})
-            console.log(this.userInfo)
-            window.location.href=`${window.location.host}${'/'}`
+            window.location.reload()
           })
         }else{
           this.$message({type:'error',message:'切换仓库失败'})
@@ -212,7 +209,6 @@ export default {
         cancelButtonText: '取消'
       }).then(action => {
         if (action === 'confirm') {
-          // sessionStorage.setItem('warehouse','')
            this.$store.dispatch('SetWarehouse','')
           location.href = `/csj_logout`
         }

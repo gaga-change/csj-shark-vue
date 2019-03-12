@@ -156,7 +156,7 @@ export const inPushOrderConfig=[
   { label:'计划单号',prop:'planCode'},
   { label:'入库单号',prop:'orderCode'},
   { label:'单据类型',prop:'orderType',useLocalEnum:true,type:'BusiBillTypeEnum'},
-  { label:'创建时间',prop:'gmtCreate',type:'time'},
+  { label:'入库日期',prop:'gmtCreate',type:'time'},
   { label:'推送状态',prop:'isPush',useLocalEnum:true,type:'isPushStateEnum'},
   { label:'货主',prop:'ownerName'},
   { label:'供应商',prop:'providerName'},
