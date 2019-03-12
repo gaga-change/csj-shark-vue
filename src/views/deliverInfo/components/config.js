@@ -7,7 +7,7 @@ export const tableConfig=[// 物流登记
   { label:'收货人',prop:'receiver', width:120 },
   { label:'收获地址',prop:'receiveAddress', width:120 },
   { label:'联系电话',prop:'linkTel', width:150 },
-  { label:'物流公司',prop:'logisticsComCode', width:150 },
+  { label:'物流公司',prop:'logisticsComName', width:150 },
   { label:'物流单号',prop:'logisticsOrderCode', width:150 },
   { label:'件数',prop:'carrierQty', width:150 },
   { label:'运费承担方',prop:'payType', width:150,formatter:(a,b,c,d)=>{return c?'客户付':'我方付'} },

@@ -48,7 +48,7 @@
             <el-dialog
                 title="打印装箱单"
                 :visible.sync="dialogVisibleLabel"
-                width="70%">
+                width="841px">
                 <div id="print">
                     <edit-table 
                       :config="planChildTableLabelConfig" 
@@ -67,7 +67,7 @@
              <el-dialog
                 title="打印计划单"
                 :visible.sync="dialogVisibleReserve"
-                width="70%">
+                width="841px">
                 <edit-table 
                   :config="planChildTablePrintConfig" 
                   :table-data="printPlan" 

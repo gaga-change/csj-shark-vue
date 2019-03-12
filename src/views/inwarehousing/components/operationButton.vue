@@ -57,7 +57,7 @@
              <el-dialog
                 title="打印计划单"
                 :visible.sync="dialogVisibleReserve"
-                width="70%">
+                width="841px">
                 <edit-table :config="planChildTablePrintConfig" :table-data="printPlan" id="printPlanContainer" :default-edit="false"></edit-table>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisibleReserve = false">取 消</el-button>

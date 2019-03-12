@@ -29,6 +29,7 @@ export const orderTableConfig=[// 出库单列表
   { label:'出库时间', prop:'gmtCreate', type:'time' },
   { label:'出库单号',prop:'orderCode' },
   { label:'计划单号',prop:'planCode' },
+  { label:'推送状态',prop:'isPush',useLocalEnum:true,type:'isPushStateEnum'},
   { label:'单据类型',prop:'orderType',useLocalEnum:true,type:'BusiBillTypeEnum'},
   { label:'单据状态',prop:'orderStatus',useLocalEnum:true,type:'outboundOrderStatus'},
   { label:'客户/供应商',prop:'ownerName',  },
@@ -67,14 +68,11 @@ export const planChildTableLabelConfig=[// 计划单打印列表
   { label:'单位',prop:'skuUnitName' },
 ]
 export const planChildTablePrintConfig=[// 计划单打印列表
-  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
   { label:'计划单号',prop:'planCode', width:150 },
-  // { label:'单据类型',prop:'skuName', width:150 },
-  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
+  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:100 },
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'arrivalName', width:150 },
-  { label:'应出/已出',prop:'planReal', minWidth:120 },
-
+  { label:'应出/已出',prop:'planReal', minWidth:100 },
   { label:'条形码',prop:'planCode', width:150,userIf:'images' },//unconfirm
 ]
 
@@ -116,6 +114,7 @@ export const temporaryStorageConfig=[
   { label:'商品名称',prop:'skuName'},
   { label:'规格型号',prop:'skuFormat'},
   { label:'商品数量',prop:'realSortQty'},
+  { label:'是否已生成出库单',prop:'isCreateOrder',type:'Boolean'},
   { label:'库位',prop:'warehouseSpaceCode'},
   { label:'创建时间', width:150, prop:'gmtCreate', type:'time' },
 ]

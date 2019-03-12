@@ -47,15 +47,22 @@
          width="60%"
         :before-close="handleClose">
             <div id="pickingOrder">
-              <div style="margin-bottom:12px;">
-                 <span>拣货单号:</span> <span>{{activeRow.orderCode}}</span>
+              <div style="display: flex;">
+                 <div style="margin-right: 50px;line-height: 26px;">
+                    <span>拣货单号:</span> <span>{{activeRow.orderCode}}</span><br>
+                    <span >拣货人:</span> <span>{{activeRow.pickOperatorName}}</span><br>
+                    <span >仓库:</span> <span>{{warehouseName}}</span> 
+                 </div>
+                 <div style="width:200px;padding-top:5px">
+                   <BarCode :code="activeRow.orderCode"/>
+                 </div>
               </div>
 
-              <div style="margin-bottom:12px;display:flex">
-                   <BarCode :code="activeRow.orderCode" imgStyle="height:100px;width:600px"/>
+              <div style=" display: flex;justify-content: flex-end;margin-bottom:12px">
+                   <span style="padding-right:12px">打印时间 :</span> 
+                   <span>{{this.moment().format("YYYY-MM-DD HH:mm:ss")}}</span> 
               </div>
 
-               
               <web-pagination-table 
               :loading="detailLoding"
               :config="printinConfig" 
@@ -74,6 +81,7 @@
 <script>
     import _  from 'lodash';
     import moment from 'moment';
+    import { mapGetters } from 'vuex'
     import newSearch from './components/newSearch'
     import BaseTable from '@/components/Table/index'
     import { pickingtaskConfig,pickingtaskdetailConfig,printinConfig } from './components/config'
@@ -101,12 +109,22 @@
                 activeRow:'',
                 SelectionData:[],
                 printingAlert:false,
-                printinConfig
+                printinConfig,
+                warehouseName:''
             }
         },
 
-        created(){
+       computed: {
+          ...mapGetters([
+            'userInfo',
+          ]),
+        },
 
+        created(){
+            if(sessionStorage.getItem('warehouse')&&this.userInfo.warehouses&&Array.isArray(this.userInfo.warehouses)){
+               let warehousesConfig=this.userInfo.warehouses.find(v=>v.warehouseNo===sessionStorage.getItem('warehouse'))
+               this.warehouseName=warehousesConfig.warehouseName;
+            }
             this.pickingtaskConfig.forEach(element => {
                 if(element.useDom){
                   element.dom=(row, column, cellValue, index)=>{   

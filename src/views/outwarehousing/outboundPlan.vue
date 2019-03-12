@@ -73,7 +73,7 @@
             createEndDate:'',
             planCode:'',
             providerName:'',
-            execStatus:'',
+            execStatus:0,
             ownerName:'',
         }
     

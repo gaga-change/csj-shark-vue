@@ -48,15 +48,12 @@ export const planChildTableLabelConfig=[// 计划单商品条码打印列表
 ]
 
 export const planChildTablePrintConfig=[// 计划单打印列表
-  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
   { label:'计划单号',prop:'planCode', width:150 },
-  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
-  // { label:'单据类型',prop:'skuName', width:100 },
+  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:100 },
   { label:'货主',prop:'ownerName', width:150 },
   { label:'供应商',prop:'providerName', width:150 },
-  { label:'应入/已入',prop:'planReal', minWidth:120 },
- 
-  { label:'条形码',prop:'planCode', width:150,userIf:'images' },//unconfirm
+  { label:'应入/已入',prop:'planReal',width:100 },
+  { label:'条形码',prop:'planCode', width:150,userIf:'images'},
 ]
 
 export const inTableConfig=[// 入库列表

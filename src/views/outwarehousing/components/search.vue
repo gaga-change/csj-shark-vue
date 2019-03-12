@@ -16,29 +16,29 @@
           </el-form-item>
         </el-col>
  
-         <el-col :span="6" v-if="outbound">
-            <el-form-item label-width="70px" label="单据状态" class="postInfo-container-item" prop="orderStatus">
-              <el-select v-model="searchForm.orderStatus" 
-               filterable clearable placeholder="请选择出库状态" 
-              size="small" prefix-icon="el-icon-search">
-              <template v-for="item in OutOrderStatusEnum">
-                <el-option
-                  v-if="item.show"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
-                </el-option>
-              </template>
-                
-              </el-select>
-            </el-form-item>
-        </el-col>  
         <el-col :span="6">
           <el-form-item label="客户/供应商" label-width="80px"  prop="ownerName">
             <el-input type="text" size="small" placeholder="请输入货主"  v-model="searchForm.ownerName" ></el-input>
           </el-form-item>
         </el-col>
-         <!-- <el-col :span="12">
+         
+          <el-col :span="6"  v-if="'execStatus' in  searchForm">
+            <el-form-item label-width="70px" label="出库状态" class="postInfo-container-item" prop="execStatus">
+              <el-select v-model="searchForm.execStatus" 
+               filterable clearable placeholder="请选择出库状态" 
+              size="small" prefix-icon="el-icon-search">
+              <template v-for="item in OutExecStatusEnum">
+                <el-option
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </template>
+              </el-select>
+            </el-form-item>
+        </el-col> 
+
+         <el-col :span="12" v-if="'createBeginDate' in  searchForm">
           <el-form-item label="下单时间" label-width="70px"  prop="durationTime">
             <el-date-picker
               v-model="searchForm.durationTime"
@@ -50,7 +50,11 @@
               end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-        </el-col> -->
+        </el-col>
+
+         
+
+
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
@@ -65,8 +69,7 @@
 </template>
 
 <script>
-// import {  InvoiceType  as invoicetype  } from '@/utils'
-import { OutExecStatusEnum, OutOrderStatusEnum } from '@/utils/enum';  
+import { OutExecStatusEnum, OutOrderStatusEnum} from '@/utils/enum';  
 export default  {
   name: 'SearchWarehousing',
 

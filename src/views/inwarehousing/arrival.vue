@@ -361,7 +361,7 @@
                }).then(res=>{
                   if(res.success){
                     this.$message({type:'success',message:'操作成功！'});
-                    this.expandChange({ id:changeData.rowId },{},false)
+                    this.expandChange(this.activeOrder,{},false)
                   } else{
                     this.$message({type:'error',message:'操作失败'})
                   }
