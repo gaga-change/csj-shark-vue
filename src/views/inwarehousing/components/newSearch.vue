@@ -44,7 +44,7 @@
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.planCode!==undefined">
             <el-form-item 
               label="计划单号"  
-              label-width="80px"
+              label-width="70px"
               prop="planCode"  >
               <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="searchForm.planCode" ></el-input>
             </el-form-item>
@@ -71,7 +71,7 @@
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.ownerName!==undefined">
             <el-form-item 
               label="货主"  
-              label-width="80px"
+              label-width="40px"
               prop="ownerName"  >
               <el-input type="text" size="small"    placeholder="请输入货主"    v-model.trim="searchForm.ownerName" ></el-input>
             </el-form-item>

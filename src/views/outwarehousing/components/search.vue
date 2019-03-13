@@ -1,30 +1,30 @@
 <template>
     <el-card class="simpleCard" shadow="never" body-style="padding:12px">
-      <el-form :model="searchForm" :rules="searchRules" ref="searchForm" label-width="70px" label-position="left">
+      <el-form :model="searchForms" :rules="searchRules" ref="searchForms" label-width="70px" label-position="left">
       <el-row :gutter="10">
         
        <el-col :span="6">
           <el-form-item label="计划单号"  prop="planCode">
-            <el-input type="text" size="small" placeholder="请输入计划单号" v-model="searchForm.planCode" placehold="
+            <el-input type="text" size="small" placeholder="请输入计划单号" v-model="searchForms.planCode" placehold="
 后四位"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6" v-if="outbound">
           <el-form-item label="出库单号"   prop="planCode">
-            <el-input type="text" size="small"  placeholder="请输入出库单号" v-model="searchForm.orderCode" placehold="
+            <el-input type="text" size="small"  placeholder="请输入出库单号" v-model="searchForms.orderCode" placehold="
 后四位"></el-input>
           </el-form-item>
         </el-col>
  
         <el-col :span="6">
           <el-form-item label="客户/供应商" label-width="80px"  prop="ownerName">
-            <el-input type="text" size="small" placeholder="请输入货主"  v-model="searchForm.ownerName" ></el-input>
+            <el-input type="text" size="small" placeholder="请输入货主"  v-model="searchForms.ownerName" ></el-input>
           </el-form-item>
         </el-col>
          
-          <el-col :span="6"  v-if="'execStatus' in  searchForm">
+          <el-col :span="6"  v-if="'execStatus' in  searchForms">
             <el-form-item label-width="70px" label="出库状态" class="postInfo-container-item" prop="execStatus">
-              <el-select v-model="searchForm.execStatus" 
+              <el-select v-model="searchForms.execStatus" 
                filterable clearable placeholder="请选择出库状态" 
               size="small" prefix-icon="el-icon-search">
               <template v-for="item in OutExecStatusEnum">
@@ -38,10 +38,27 @@
             </el-form-item>
         </el-col> 
 
-         <el-col :span="12" v-if="'createBeginDate' in  searchForm">
-          <el-form-item label="下单时间" label-width="70px"  prop="durationTime">
+          <el-col :span="6"  v-if="'orderStatus' in  searchForms">
+            <el-form-item label-width="70px" label="单据状态" class="postInfo-container-item" prop="orderStatus">
+              <el-select v-model="searchForms.orderStatus" 
+               filterable clearable placeholder="请选择出库状态" 
+              size="small" prefix-icon="el-icon-search">
+              <template v-for="item in outboundOrderStatus">
+                <el-option
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </template>
+              </el-select>
+            </el-form-item>
+        </el-col> 
+
+
+         <el-col :span="12" v-if="'durationTime' in  searchForms">
+          <el-form-item :label="searchForms.text||'下单时间'" label-width="70px"  prop="durationTime">
             <el-date-picker
-              v-model="searchForm.durationTime"
+              v-model="searchForms.durationTime"
               type="daterange"
               size="small"
               style="width:400px"
@@ -69,7 +86,7 @@
 </template>
 
 <script>
-import { OutExecStatusEnum, OutOrderStatusEnum} from '@/utils/enum';  
+import { OutExecStatusEnum, OutOrderStatusEnum,outboundOrderStatus} from '@/utils/enum';  
 export default  {
   name: 'SearchWarehousing',
 
@@ -77,9 +94,9 @@ export default  {
     return {
       searchRules: { 
       },
-      searchForm:{},
       OutExecStatusEnum,
       OutOrderStatusEnum,
+      outboundOrderStatus,
     }
   },
   props:{
@@ -93,21 +110,17 @@ export default  {
     }
   },
   
-  created(){
-    this.searchForm = {...this.searchForms}
-  },
 
   
   methods:{
 
-    
     submitIt(){//查询
-      this.$emit('searchTrigger',this.searchForm)
+      this.$emit('searchTrigger',this.searchForms)
     },
-    resetForm(){//重置
-      this.searchForm = {}
-      this.$emit('resetSearch',this.searchForm)
-    }
+
+    resetForm() {
+       this.$emit('resetSearch') 
+    },
   }
 
 }

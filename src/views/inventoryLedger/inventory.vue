@@ -5,14 +5,19 @@
           ref="searchWarhouse" 
           :search-forms="ruleForm">
         </search-inventory>
+         
+         <div class="export_box" v-if="SumSkuQty">
+             <el-button 
+                @click="getExport" 
+                type="primary" 
+                size="small">
+                导出
+             </el-button>
+             <div class="Total">
+                 <span>库存合计 ：</span> <span>{{SumSkuQty}}</span>
+             </div>
+         </div>
 
-        <el-button 
-          @click="getExport" 
-          style="margin-bottom:15px" 
-          type="primary" 
-          size="small">
-          导出
-        </el-button>
         
        <base-table 
         @sizeChange="handleSizeChange"
@@ -30,7 +35,7 @@
 <script>
     import BaseTable from '@/components/Table'
     import { inventoryTableConfig } from './components/config'
-    import { getInfoInventory,exportLedger } from '@/api/inventory'
+    import { getInfoInventory,exportLedger,selectSumSkuQty} from '@/api/inventory'
     import { uniqueArray } from '@/utils/arrayHandler'
     import { exportExcelBlob } from '@/utils/exportexcel'
     import  SearchInventory  from './components/search'
@@ -46,11 +51,13 @@
                     skuCode:'',
                     skuName:'',
                     ownerName:'',
-                    warehouseSpaceCode:''  
+                    warehouseSpaceCode:'' ,
+
                 },
                 tableData:[],
                 inventoryTableConfig,
                 total:0,
+                SumSkuQty:0
             }
         },
         methods:{
@@ -61,8 +68,14 @@
                 })
                 this.loading=true;
                 let data={...this.ruleForm}
+                selectSumSkuQty(data).then(res=>{
+                    if(res.success){
+                      this.SumSkuQty=res.data;
+                    }
+                }).catch(err=>{
+                    console.log(err); 
+                })
                 getInfoInventory(data).then(res => {
-                    
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
                         this.tableData = uniqueArray([...tempList.map(list => {list.childData=[];return list})],'id')
@@ -117,5 +130,15 @@
 
 <style rel="stylesheet/scss" lang="scss">
 
+ .export_box{
+     display: flex;
+     justify-content: space-between;
+     margin-bottom: 16px;
+     font-size: 12px;
+     align-items:flex-end;
+     .Total{
+         padding-right: 20px;
+     }
 
+ }
 </style>

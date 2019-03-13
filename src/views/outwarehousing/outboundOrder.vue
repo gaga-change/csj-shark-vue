@@ -1,11 +1,5 @@
 <template>
     <div>
-        <tab-label 
-           :tab-config="BusiBillTypeEnum"
-           @tabSwitch="tabSwitch" 
-           :tab-default="tabDefault">
-        </tab-label>
-
         <search-warehousing 
            @searchTrigger="submitForm" 
            ref="searchWarhouse" 
@@ -85,18 +79,6 @@
     import  SearchWarehousing  from './components/search'
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
-    const ruleForm = {
-      pageNum: 1,
-      pageSize:10,
-      durationTime:['',''],//时间，
-        createBeginDate:'',
-        createEndDate:'',
-        planCode:'',
-        orderCode:'',
-        providerName:'',
-        execStatus:'',
-        ownerName:'',
-    }
     export default {
         components: { DoubleTable, SearchWarehousing },
         data(){
@@ -108,32 +90,27 @@
                 BusiBillTypeEnum:BusiBillTypeEnumFilter,
                 tabDefault:BusiBillTypeEnumFilter[0].value+'',
                 currentTab:BusiBillTypeEnumFilter[0].value+'',
-                ruleForm,
-                selectData:{//x选中的单据
-                    
+                ruleForm:{
+                    pageNum: 1,
+                    pageSize:10,
+                    planCode:'',
+                    orderCode:'',
+                    providerName:'',
+                    ownerName:'',
+                    orderStatus:'',
+                    durationTime:[],
+                    text:'出库时间'
                 },
-                // searchForms,
-                tableData:[
-                ],
-                // pageNum:0,
-                // pageSize:10,
-                //子表数据名称
-                //表格配置
+                selectData:{},
+                tableData:[],
                 tableConfig:orderTableConfig,
                 childTableConfig:orderChildTableConfig,
-                // currentPage:1,
-                // pageSize:10,
                 total:0,
                 //主表操作
-                handleButtonMap:[
-                    // {title:'详情',handle:(index,data)=>{
-                    //     this.dialogVisible = true
-                    //     this.dialogData = {...data}
-                    // }}
-                ],
-                childCanSelect:false,//子表可选择,false全选，
-                accordionExpand:true,//手风琴展开
-                multipleSelection:[],//选中的子表数据
+                handleButtonMap:[],
+                childCanSelect:false,
+                accordionExpand:true,
+                multipleSelection:[],
                 expandsParent:[],
                 expandKey:'orderCode',
                 quickSubmitData:{},
@@ -143,6 +120,7 @@
             }
         },
         methods:{
+
             expandChange(row, expandedRows){
                 var arr = []
                 arr.push(row[this.expandKey])
@@ -153,8 +131,8 @@
                 }
                 this.currentRadioChange(row)
             },
-            getTableData(){
 
+            getTableData(){
                 this.$router.replace({
                     path:'/outwarehousing/outboundOrder',
                     query:{data:JSON.stringify({...this.ruleForm,busiBillType:this.currentTab})}
@@ -162,7 +140,6 @@
                 this.loading=true;
                 let data={...this.ruleForm,busiBillType:this.currentTab}
                 getInfoOutWarehousing(data).then(res => {
-                    
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
                         this.tableData = uniqueArray(tempList,'orderCode')
@@ -177,7 +154,6 @@
                         }
                     }
                     this.loading = false;
-
                 }).catch(err=>{
                     console.log(err);
                     this.loading = false;                    
@@ -244,10 +220,11 @@
                     this.$message({type: 'error',message: '操作失败'});    
                 })
              },
-            childDataSelect(selectedData){
 
+            childDataSelect(selectedData){
                this.multipleSelection = [...selectedData]
             },
+
             handleSizeChange(val) {
                 this.ruleForm={...this.ruleForm,pageSize:val,pageNum:1}
                 this.getTableData()
@@ -257,37 +234,31 @@
                 this.ruleForm={...this.ruleForm,pageNum:val}
                 this.getTableData()
             },
+
              submitForm(ruleForm) {
-                var   createBeginDate='',createEndDate='';
-                if(ruleForm.durationTime&&ruleForm.durationTime[0]){
-                    createBeginDate = +ruleForm.durationTime[0]
-                    createEndDate = +ruleForm.durationTime[1]
+                let   startDate='',endDate='';
+                if(Array.isArray(ruleForm.durationTime)&&ruleForm.durationTime.length){
+                     startDate = +ruleForm.durationTime[0]
+                     endDate = +ruleForm.durationTime[1]
                 }
-                // this.ruleForm={...ruleForm,pageSize:10,pageNum:1,createBeginDate,createEndDate,busiBillType:this.currentTab}
-                this.ruleForm={...ruleForm,pageSize:10,pageNum:1,busiBillType:this.currentTab}
-                this.getTableData();
-                
+                this.ruleForm={...ruleForm,startDate,endDate,pageSize:10,pageNum:1}
+                this.getTableData(); 
             },
 
             resetForm() {
-                this.ruleForm={ ...ruleForm,busiBillType:this.currentTab }
-                this.getTableData()
-            },
-            tabSwitch(tab,event){
-                if(tab.name==this.currentTab){
-                    console.log('当前标签')
-                }else{
-                    this.currentTab = tab.name
-                    this.$refs.searchWarhouse.resetForm()
-                   
-
+                for(let i in this.ruleForm){
+                    if(Array.isArray(this.ruleForm[i])){
+                      this.ruleForm[i]=[] 
+                    } else{
+                      this.ruleForm[i]=''  
+                    }
                 }
+                this.ruleForm={...this.ruleForm,text:'出库时间',pageNum: 1,pageSize:10,}
+                this.getTableData()
             },
         },
         created(){
             this.getTableData()
-            // this.demo()
-            // this.currentRedioChange()
         }
     }
 </script>

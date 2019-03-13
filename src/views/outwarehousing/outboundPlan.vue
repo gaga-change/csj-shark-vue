@@ -65,17 +65,6 @@
     import operationButton from './components/operationButton'
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
-    const ruleForm = {
-        pageNum: 1,
-        pageSize:10,
-        durationTime:['',''],//时间，
-            createBeginDate:'',
-            createEndDate:'',
-            planCode:'',
-            providerName:'',
-            execStatus:0,
-            ownerName:'',
-        }
     
     export default {
         components: { DoubleTable, SearchWarehousing, operationButton },
@@ -88,7 +77,15 @@
                 BusiBillTypeEnum:BusiBillTypeEnumFilter,
                 tabDefault:BusiBillTypeEnumFilter[0].value+'',
                 currentTab:BusiBillTypeEnumFilter[0].value+'',
-                ruleForm,
+                ruleForm:{
+                    pageNum: 1,
+                    pageSize:10,
+                    durationTime:[],//时间，
+                    planCode:'',
+                    providerName:'',
+                    execStatus:0,
+                    ownerName:'',
+                },
                 selectData:{},
                 tableData:[],
                 parentTableConfig:planOrderTableConfig,
@@ -179,7 +176,16 @@
             },
 
             resetForm() {
-                this.ruleForm={ ...ruleForm,busiBillType:this.currentTab }
+                 for(let i in this.ruleForm){
+                    if(Array.isArray(this.ruleForm[i])){
+                      this.ruleForm[i]=[] 
+                    } else if(i==='execStatus'){
+                      this.ruleForm[i]=0 
+                    } else{
+                      this.ruleForm[i]=''  
+                    }
+                }
+                this.ruleForm={...this.ruleForm,pageNum: 1,pageSize:10,busiBillType:this.currentTab}
                 this.getTableData()
             },
 

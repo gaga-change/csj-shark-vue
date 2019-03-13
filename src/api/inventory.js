@@ -190,3 +190,13 @@ export function getSelectInventoryAreaList(data) {
   })
 }
 
+export function selectSumSkuQty(data) {
+  return request({
+    url: `/webApi/sku/stock/selectSumSkuQty?${stringify(data)}`,
+    method: 'get',
+  })
+}
+
+
+
+
