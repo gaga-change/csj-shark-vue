@@ -92,7 +92,7 @@
           <el-col :span="8" v-if="searchForm.orderTime!==undefined">
             <el-form-item 
               label="入库日期"
-              label-width="90px"
+              label-width="80px"
               style="width:300px"
               prop="orderTime">
                 <el-date-picker
