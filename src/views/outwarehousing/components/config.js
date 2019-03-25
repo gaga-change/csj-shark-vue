@@ -21,8 +21,9 @@ export const planOrderChildTableConfig=[// 出库计划单子列表
   { label:'单位',prop:'skuUnitName', minWidth:120 },
   { label:'商品数量',prop:'planOutQty', minWidth:120 },
   { label:'出库数量',prop:'realOutQty', minWidth:120 },
-  // { label:'出库批次',prop:'batchNo', minWidth:120 },
-  { label:'备注',prop:'remarkInfo', minWidth:120 },
+  { label:'已通知拣货数量',prop:'sortQty', minWidth:120 },
+  { label:'已拣货数量',prop:'realSortQty', minWidth:120 },
+  { label:'暂存区数量',prop:'realSortQty', minWidth:120 },
 
 ]
 export const orderTableConfig=[// 出库单列表
@@ -57,7 +58,7 @@ export const planChildTableEditConfig=[// 计划单操作列表
   { label:'商品数量',prop:'planOutQty', minWidth:120 },
   { label:'已出库数量',prop:'realOutQty', minWidth:100 },
   { label:'待出库数量',prop:'tempOutQty', minWidth:100, },
-  { label:'本次出库',prop:'sortQty', width:120,editable:true,fixed:'right' },
+  { label:'通知拣货数量',prop:'sortQty', width:120,editable:true,fixed:'right' },
 ]
 export const planChildTableLabelConfig=[// 计划单打印列表
   { label:'计划单号',prop:'planCode', minWidth:150 },

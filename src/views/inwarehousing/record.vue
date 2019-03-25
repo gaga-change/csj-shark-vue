@@ -99,9 +99,9 @@ export default {
         receiveOrderCodeList.push(item.receiveOrderCode)
       })
       this.$confirm(
-        `本次要生成的入库单为 ${receiveOrderCodeList.join(
+        `确定要为 ${receiveOrderCodeList.join(
           ' , '
-        )},确定要生成吗?`,
+        )} 生成入库单吗?`,
         '生成入库单',
         {
           confirmButtonText: '确定',
