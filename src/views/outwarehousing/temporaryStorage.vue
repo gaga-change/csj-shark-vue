@@ -103,11 +103,11 @@ export default {
       this.SelectionData.forEach(v => {
         src += ` ${v.pickOrderCode} , `
       })
-      let tips = `你当前选中的单据拣货单号为${src},确认要生成出库单吗?`;
+      let tips = `确定要为 ${src} 生成出库单吗?`;
       let Api = createOutWareHouseOrder;
       let data = { sortTaskIds: this.SelectionData.map(v => v.id) }
       if (type === 'delete') {
-        tips = `你当前选中的单据拣货单号为${src},确认要删除吗?`;
+        tips = `确定要删除 ${src} 吗?`;
         data = this.SelectionData.map(v => v.jobId)
         Api = deleteByIds
       }
