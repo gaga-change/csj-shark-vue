@@ -4,7 +4,7 @@ export const planOrderTableConfig=[// 出库计划单列表
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
   { label:'货主',prop:'ownerName', width:150 },
-  { label:'供应商',prop:'arrivalName', width:150 },
+  { label:'客户',prop:'arrivalName', width:150 },
   { label:'商品总数',prop:'outPlanQty', minWidth:90 },
   { label:'出库状态',prop:'execStatus', minWidth:90,useLocalEnum:true,type:'OutExecStatusEnum', },
   { label:'收货人',prop:'arrivalLinkName', minWidth:90 },
@@ -72,7 +72,7 @@ export const planChildTablePrintConfig=[// 计划单打印列表
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:100 },
   { label:'货主',prop:'ownerName', width:150 },
-  { label:'供应商',prop:'arrivalName', width:150 },
+  { label:'客户',prop:'arrivalName', width:150 },
   { label:'应出/已出',prop:'planReal', minWidth:100 },
   { label:'条形码',prop:'planCode', width:150,userIf:'images' },//unconfirm
 ]
