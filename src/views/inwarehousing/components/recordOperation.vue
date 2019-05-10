@@ -1,17 +1,68 @@
 <template>
    <div style="margin-bottom:10px">
-        <el-button type="primary" size="small" @click="priviewReserve">打印</el-button>
+        <el-button type="primary" size="small" @click="makeInbound">收货登记</el-button>
+        <el-button type="primary" size="small" @click="priviewProductLabel">打印商品标签</el-button>
+
         <div>
-          <el-dialog
-            title="打印计划单"
-            :visible.sync="dialogVisibleReserve"
-            width="841px">
-            <edit-table :config="planChildTablePrintConfig" :table-data="printPlan" id="printPlanContainer" :default-edit="false"></edit-table>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisibleReserve = false">取 消</el-button>
-                <el-button type="primary" @click="printPlanOrder">打印</el-button>
-            </span>
-          </el-dialog>
+            <el-dialog
+                title="收货登记"
+                :visible.sync="dialogVisible"
+                width="70%">
+                <el-row :gutter="20" style="margin-bottom:14px;">
+                    <el-col :span="8">入库计划单: {{parentDataObj.planCode}}</el-col>
+                    <el-col :span="8">供应商: {{parentDataObj.providerName}}</el-col>
+                    <el-col :span="8">下单时间: {{formateTime(parentDataObj.gmtCreate)}}</el-col>
+                </el-row>
+                <edit-table 
+                  :config="planChildTableEditConfig" 
+                  :table-data="childData" 
+                  :default-edit="false"></edit-table>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="submitForm()">收货确认</el-button>
+                    <el-button type="primary" @click="submitForm('inwarehousing')">收货并入库</el-button>
+                </span>
+            </el-dialog>
+
+            <el-dialog
+                title="打印商品标签"
+                :visible.sync="dialogVisibleLabel"
+                width="70%">
+                 <edit-table :config="planChildTableLabelConfig" :table-data="childData" v-loading="loading" :default-edit="false"></edit-table>
+                 <template v-if="!previewIt">
+                     <div style="margin:10px;">预览</div> 
+                     <div id="print" style="width:80mm;height:40mm;overflow:auto;margin:10px;">
+                         <div v-for="item in childData" :key="item.skuCode">
+                             <div v-for="i in Number(item.printNum)" :key="i" class="labelContainer">
+                                 <div class="labelItem"><span class="labelItemLeft" >商品编码</span><span>{{item.skuCode}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">商品名称</span><span>{{item.skuName}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">规格型号</span><span>{{item.skuFormat}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
+                                 <div class="labelItem"><span class="labelItemLeft">批次</span><span>{{item.batchNo}}</span></div>
+                                 <div>
+                                     <bar-code :code="item.batchNo"></bar-code>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </template>
+                <span slot="footer" class="dialog-footer" v-loading="loading">
+                    <el-button @click="dialogVisibleLabel = false">取 消</el-button>
+                    <el-button type="primary" @click="getCode">预览</el-button>
+                    <el-button type="primary" v-if="!previewIt" @click="printLabel">打印</el-button>
+                </span>
+            </el-dialog>
+
+             <!-- <el-dialog
+                title="打印计划单"
+                :visible.sync="dialogVisibleReserve"
+                width="841px">
+                <edit-table :config="planChildTablePrintConfig" :table-data="printPlan" id="printPlanContainer" :default-edit="false"></edit-table>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleReserve = false">取 消</el-button>
+                    <el-button type="primary" @click="printPlanOrder">打印</el-button>
+                </span>
+            </el-dialog> -->
         </div>
     </div>
 </template>
@@ -19,7 +70,7 @@
 import moment from 'moment'
 import axios from 'axios'
 import editTable from '@/components/Table/editTable'
-import { orderAdd, getBatchNo,receiveAndInStock, modifyPrintState } from '@/api/warehousing'
+import { orderAdd, getBatchNo,receiveAndInStock } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
@@ -28,7 +79,7 @@ import { printPlanDataFn } from './dataHandler'
 export default {
     name:'operationButton',
     components:{
-        editTable
+        editTable,
     },
     data(){
         return {
@@ -134,8 +185,14 @@ export default {
         },
         checkDataUsable(){
             var a = {...this.parentDataObj}
-            var b = this.childDataArr.map(item => {item.editable = true;item.printNum = item.realInQty;item.ownerName=a.ownerName;item.providerName=a.providerName;return item})
+            var b = this.childDataArr.map((item,index) => {
+              item.editable = true;
+              item.printNum = item.realInQty;
+              item.ownerName=a.ownerName;item.providerName=a.providerName;
+              return item
+            })
             this.childData=[...b]
+            console.log(this.childData)
             this.parentData = {...a}
             var objectUsabel = Object.keys(a).length>0
             var arrUsabel = b.length>0
@@ -153,29 +210,27 @@ export default {
           
         },
         printPlanOrder(){
-           let data=[]
-           this.planPrintData.map(item=>{
-            data.push(item.id)
-           })
-           modifyPrintState({ids:data}).then(res=>{
-
-           }).catch(err=>{
-            console.log(err)
-           })
            var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
            MakePrint(printPlanContainer)
         },
 
         submitForm(type){//提交
-          let isSubmit=this.childData.some(v=>v.planInQty-v.hasReceiveQty<v.receiveQty||v.receiveQty<=0);
+          let isSubmit=this.childData.some(v=>v.planInQty-(v.hasReceiveQty+v.badReceiveQty)<v.receiveQty||v.receiveQty<0);
+          console.log(isSubmit)
           if(isSubmit){
-            this.$message({type:'error',message:'本次到货量应小于总数量-已到货量,且要大于0'});
+            this.$message({type:'error',message:'正品与残次品之和应小于总数量-已到货量,且要大于0'});
             return 
           }
           let data=[...this.childData].map(v=>{
               let json={};
-              ['busiIndex','skuCode','receiveQty'].forEach(item=>{
-                  json[item]=item==='receiveQty'?Number(v[item])||0:v[item]
+              ['busiIndex','skuCode','receiveQty', 'badReceiveQty'].forEach(item=>{
+                  if(item==='receiveQty'){
+                    json[item]=Number(v[item])||0
+                  }else if(item==='badReceiveQty'){
+                    json[item]=Number(v[item])||0
+                  }else{
+                    json[item]=v[item]
+                  }
               })
               return json
           })

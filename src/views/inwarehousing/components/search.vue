@@ -7,7 +7,6 @@
             <el-input type="text" size="small" v-model="searchForm.planCode" placeholder="请输入计划单号"></el-input>
           </el-form-item>
         </el-col>
-
         <el-col :span="6" v-if="inbound">
           <el-form-item label="入库单号" >
             <el-input type="text" size="small" v-model="searchForm.orderCode" placeholder="请输入入库单号"></el-input>
@@ -40,7 +39,7 @@
             <el-input type="text" size="small" v-model="searchForm.ownerName" placeholder="请输入货主" ></el-input>
           </el-form-item>
         </el-col>
-
+      
         <el-col :span="6" v-if="inbound">
           <el-form-item label="单据状态" >
             <el-select v-model="searchForm.orderStatus" 
@@ -56,8 +55,35 @@
               </el-select>
             </el-form-item>
         </el-col>
-
-         <el-col :span="12">
+        <el-col :span="6">
+          <el-form-item label="单据类型" >
+            <el-select v-model="searchForm.busiBillType" 
+               filterable clearable placeholder="请选择" 
+              size="small" prefix-icon="el-icon-search">
+                <el-option
+                  v-for="item in BusiBillTypeEnum"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="收货状态" >
+            <el-select v-model="searchForm.receiveStates" 
+               filterable clearable placeholder="请选择" 
+              size="small" prefix-icon="el-icon-search">
+                <el-option
+                  v-for="item in receiveState"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+        </el-col>
+        <el-col :span="12">
           <el-form-item :label="inbound?'入库时间':'下单时间'" label-width="70px"  prop="durationTime">
             <el-date-picker
               v-model="searchForm.durationTime"
@@ -69,9 +95,8 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-
+        
       </el-row>
-
       <el-row :gutter="10">
         <el-col :span="6">
             <el-form-item label-width="0">
@@ -87,7 +112,8 @@
 
 <script>
 // import {  InvoiceType  as invoicetype  } from '@/utils'
-import { ExecStatusEnum,OrderStatusEnum } from '@/utils/enum';  
+import { ExecStatusEnum, OrderStatusEnum, receiveState, BusiBillTypeEnum } from '@/utils/enum'; 
+const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in')) 
 export default  {
   name: 'SearchWarehousing',
 
@@ -98,6 +124,8 @@ export default  {
       searchForm:{},
       ExecStatusEnum,
       OrderStatusEnum,
+      receiveState,
+      BusiBillTypeEnum:BusiBillTypeEnumFilter
     }
   },
   props:{

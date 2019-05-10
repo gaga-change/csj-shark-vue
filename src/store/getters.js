@@ -52,6 +52,25 @@ const getters = {
       path: '*', redirect: '/404', hidden: true 
     })
     return menutemp
-  }
+  },
+  totalmenu: state => {
+    let bakmenus = state.user.userInfo&&state.user.userInfo.menus&&JSON.parse(state.user.userInfo.menus)||[]
+    let totalmenu = deepExistMenu(bakmenus,asyncRouterMap)
+    const nameArray = []
+    if (!totalmenu) {
+      return []
+    }
+    function getnameArray(totalmenu){
+      totalmenu.map(item=>{
+        if(item.children && item.children.length>0){
+          getnameArray(item.children)
+        }else{
+          nameArray.push(item.name)
+        }
+      })
+    }
+    getnameArray(totalmenu)
+    return nameArray
+  },
 }
 export default getters

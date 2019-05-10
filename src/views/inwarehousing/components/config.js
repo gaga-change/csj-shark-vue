@@ -6,10 +6,25 @@ export const planTableConfig=[// 计划单列表
   { label:'供应商',prop:'providerName', width:150 },
   { label:'商品总数',prop:'inPlanQty', minWidth:90 },
   { label:'入库状态',prop:'execStatus',useLocalEnum:true, type:'ExecStatusEnum', minWidth:120 },
-  { label:'到货状态',prop:'receiveStatus',useLocalEnum:true, type:'receiveStatusEnum', minWidth:120 },
+  { label:'收货状态',prop:'receiveStatus',useLocalEnum:true, type:'receiveState', minWidth:120 },
   { label:'制单人',prop:'createrName', minWidth:90 },
   { label:'已入库数量',prop:'inQty', minWidth:90 },
 ]
+
+export const printplanTableConfig=[// 计划单列表
+  { label:'下单时间', width:140, prop:'gmtCreate', type:'time' },
+  { label:'计划单号',prop:'planCode', width:150 },
+  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:130 },
+  { label:'货主',prop:'ownerName', width:150 },
+  { label:'供应商',prop:'providerName', width:150 },
+  { label:'商品总数',prop:'inPlanQty', minWidth:90 },
+  { label:'入库状态',prop:'execStatus',useLocalEnum:true, type:'ExecStatusEnum', minWidth:120 },
+  { label:'收货状态',prop:'receiveStatus',useLocalEnum:true, type:'receiveStatusEnum', minWidth:120 },
+  { label:'制单人',prop:'createrName', minWidth:90 },
+  { label:'应入/已入',prop:'printplanReal', minWidth:90 },
+  { label:'打印状态',prop:'isPrint', useLocalEnum:true, type:'printState', minWidth:90 },
+]
+
 // flowChildTableConfig
 export const planChildTableConfig=[// 计划单子列表
   { label:'业务行号',prop:'busiIndex', minWidth:80 },
@@ -19,7 +34,7 @@ export const planChildTableConfig=[// 计划单子列表
   { label:'单位',prop:'skuUnitName', minWidth:120 },
   { label:'商品数量',prop:'planInQty', minWidth:120 },
   { label:'入库数量',prop:'realInQty', minWidth:120 },
-  { label:'到货数量',prop:'hasReceiveQty', minWidth:120 },
+  { label:'收货数量',prop:'hasReceiveQty', minWidth:120 },
 ]
 
 export const planChildTableEditConfig=[// 计划单操作列表
@@ -30,8 +45,9 @@ export const planChildTableEditConfig=[// 计划单操作列表
   { label:'单位',prop:'skuUnitName', minWidth:120 },
   { label:'总数量',prop:'planInQty', minWidth:120 },
   { label:'已入库',prop:'realInQty', minWidth:120 },
-  { label:'已到货量',prop:'hasReceiveQty' },
-  { label:'本次到货量',prop:'receiveQty', width:120,editable:true ,fixed:'right'},
+  { label:'已收货量',prop:'hasReceiveQty' },
+  { label:'正品',prop:'receiveQty', width:120,editable:true},
+  { label:'残次品',prop:'badReceiveQty', width:120,editable:true ,fixed:'right'}
 ]
 
 export const planChildTableLabelConfig=[// 计划单商品条码打印列表
@@ -44,7 +60,7 @@ export const planChildTableLabelConfig=[// 计划单商品条码打印列表
   { label:'入库数量',prop:'realInQty', minWidth:120 },
  
   { label:'批次',prop:'skuUnitConvert', minWidth:120 },//unconfirm
-  { label:'打印张数',prop:'printNum', width:120,editable:true,editType:'number',fixed:'right', },//unconfirm 
+  { label:'打印张数',prop:'printNum', width:120,editable:true,editType:'number',fixed:'right' },//unconfirm 
 ]
 
 export const planChildTablePrintConfig=[// 计划单打印列表
@@ -76,24 +92,39 @@ export const inChildTableConfig=[// 入库子列表
   
 ]
 
-export const arrivalTableConfig=[// 到货单列表 unconfirmed
-  { label:'到货单号',prop:'orderCode' },
+export const arrivalTableConfig=[// 收货单列表 unconfirmed
   { label:'计划单号',prop:'planCode' },
-  { label:'到货时间', prop:'gmtCreate', type:'time' },
+  { label:'供应商',prop:'providerName'},
+  { label:'商品编码',prop:'skuCode'},
+  { label:'商品名称',prop:'skuName'},
+  { label:'残次品数量',prop:'badReceiveQty'},
+  { label:'入库数量',prop:'badRealInQty'},
+  { label:'发生时间', prop:'gmtModify', type:'time' },
+  { label:'状态',prop:'execStatus',useLocalEnum:true,type:'badStatuslist' },
+  { label:'操作',useDom:true,width:100},
+]
+
+export const arrivalConfig=[// 收货单列表 unconfirmed
+  { label:'收货单号',prop:'orderCode' },
+  { label:'计划单号',prop:'planCode' },
+  { label:'上架状态',prop:'execStatus',useLocalEnum:true,type:'execStatuslist' },
+  { label:'收货时间', prop:'gmtCreate', type:'time' },
   { label:'单据类型',prop:'orderType',useLocalEnum:true,type:'BusiBillTypeEnum' },
   { label:'货主',prop:'ownerName' },
   { label:'供应商',prop:'providerName'},
   { label:'操作人',prop:'createrName'},
 ]
+
+
 // flowChildTableConfig
-export const arrivalChildTableConfig=[// 到货单子列表 unconfirmed
+export const arrivalChildTableConfig=[// 收货单子列表 unconfirmed
   { label:'业务行号',prop:'busiIndex',  },
   { label:'商品编码',prop:'skuCode',  },
   { label:'商品名称',prop:'skuName',  },
   { label:'规格型号',prop:'skuFormat',  },
   { label:'单位',prop:'skuUnitName',},
   { label:'商品数量',prop:'planQty',},
-  { label:'到货数量',prop:'receiveQty',editable:true  },
+  { label:'收货数量',prop:'receiveQty',editable:true  },
   { label:'已入库数量',prop:'realInQty',},
 ]
 
@@ -106,7 +137,7 @@ export const arrivalAlertConfig=[
   { label:'单位',prop:'skuUnitCode'},
   { label:'总数量',prop:'planQty'},
   { label:'已入库',prop:'realInQty'},
-  { label:'到货量',prop:'receiveQty'},
+  { label:'收货量',prop:'receiveQty'},
   { label:'上架量/货位',dom:formatWareHousing()},
   { label:'操作',useLink:true,fixed:'right',width:180},
 ]
@@ -125,7 +156,7 @@ function formatWareHousing(){
      })
      return str.slice(0,-1)
   }
-} 
+}
 
 function Storehouse(){
   return (row, column, cellValue, index)=>{
@@ -139,7 +170,7 @@ function Storehouse(){
 
 export const recordListConfig=[
   { label:'计划单号',prop:'planCode',width:140},
-  { label:'到货单',prop:'receiveOrderCode',width:130},
+  { label:'收货单',prop:'receiveOrderCode',width:130},
   { label:'已生成入库单',type:'Boolean',prop:'isCreateOrder'},
   { label:'库位',prop:'warehouseSpaceCode'},
   { label:'商品编码',prop:'skuCode'},

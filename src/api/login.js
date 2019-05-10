@@ -25,6 +25,12 @@ export function setWarehouseCode(data) {
   })
 }
 
-
+//获取代办
+export function todolist() {
+  return request({
+    url: '/webApi/front/index/statistics',
+    method: 'get'
+  })
+}
 
 

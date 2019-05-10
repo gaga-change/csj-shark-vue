@@ -13,8 +13,15 @@ export default [
       {
         name: 'planIn',
         path: 'planIn',
-        meta: { title: '入库计划单', noCache: true },
+        meta: { title: '打印入库计划单', noCache: true },
         component: _import('inwarehousing/planIn'),
+        hidden: false,
+      },
+      {
+        name: 'inrecord',
+        path: 'inrecord',
+        meta: { title: '到货登记', noCache: true },
+        component: _import('inwarehousing/inrecord'),
         hidden: false,
       },
       {
@@ -37,6 +44,13 @@ export default [
         meta: { title: '入库单', noCache: true },
         component: _import('inwarehousing/inboundOrder'),
         hidden: false,
+      },
+      {
+        name: 'badproduct',
+        path: 'badproduct',
+        meta: { title: '残次品记录', noCache: true },
+        component: _import('inwarehousing/badproduct'),
+        hidden: false
       },
     ]
   },

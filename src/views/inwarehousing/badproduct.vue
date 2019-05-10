@@ -12,7 +12,7 @@
             </el-col>
         </el-card>
 
-        <div style="margin-bottom:12px">
+        <!-- <div style="margin-bottom:12px">
            <el-button
             type="primary"
             size="small"
@@ -30,11 +30,11 @@
                 删除
             </span>
             </el-button>
-        </div>
+        </div> -->
 
-        <el-dialog
+       <!--  <el-dialog
           style="z-index:900"
-          title="收货登记"
+          title="到货登记"
           :visible.sync="dialogVisible"
           width="70%">
           <div class="alertInfo">
@@ -49,11 +49,10 @@
            :allTableData="nowChildDataSelectData"/>
 
            <div class="alertBottomArr">
-              <el-button type="primary"  size="small" @click="addConfirm"  >上架并生成入库单</el-button>
-              <el-button type="primary"  size="small" @click="putawayConfirm"  >仅上架</el-button>
+              <el-button type="primary"  size="small" @click="putawayConfirm"  >上架确认</el-button>
               <el-button type="primary"  size="small"  @click="cancelArrivalAlert" >取消</el-button>
            </div>
-        </el-dialog>
+        </el-dialog> -->
 
          <div class="arrivalAlertChider" v-if="arrivalAlertDisplay">
             <div class="arrivalAlertChiderBody">
@@ -102,49 +101,33 @@
             </div>
          </div>
 
-
-        <double-table
-          ref="tableChild"
-          :loading="loading"
-          :config="arrivalConfig"
-          :table-data="tableData"
-          child-data-name="childData"
-          :childTableConfig="arrivalChildTableConfig"
-          :highlight-current-row="true"
-          :child-can-select="true"
-          :highlightCurrentRow="true"
-          expand-key="id"
-          :can-edit="true"
-          :total="total"
-          :pageSize="pageSize"
-          :currentPage="pageNum"
-          editText="修改到货数量"
-          :expands-parent="expandsParent"
-          @expandChangePa="expandChange"
-          @childDataSelect="childDataSelect"
-          @sizeChange="handleSizeChange"
-          @currentRadioChange="currentRadioChange"
-          @currentChange="handleCurrentChange"
-          @dataChange="dataChange">
-        </double-table>
+        <base-table 
+        @sizeChange="handleSizeChange"
+        @currentChange="handleCurrentChange"
+        :loading="loading"
+        :config="arrivalTableConfig"  
+        :total="total" 
+        :pageSize="pageSize"
+        :currentPage="pageNum"
+        :tableData="tableData"/>
     </div>
 </template>
 
 <script>
-    import DoubleTable from '@/components/Table/doubleTable'
-    import newSearch from './components/newSearch'
+    import BaseTable from '@/components/Table/index'
+    import newSearch from './components/badSearch'
     import editTable from '@/components/Table/editTable'
     import webPaginationTable from '@/components/Table/webPaginationTable'
     import _  from 'lodash';
     import moment from 'moment';
-    import { arrivalConfig, arrivalChildTableConfig,arrivalAlertConfig,putQtyConfig } from './components/config'
-    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete,warehouseSpaceSelect, jobAdd, jobAddIn} from '@/api/warehousing'
+    import { arrivalTableConfig, arrivalChildTableConfig,arrivalAlertConfig,putQtyConfig } from './components/config'
+    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete,warehouseSpaceSelect ,jobAdd, badproductlist} from '@/api/warehousing'
     export default {
-        components: { DoubleTable,newSearch,webPaginationTable,editTable },
+        components: { BaseTable,newSearch,webPaginationTable,editTable },
         data(){
             return {
                 loading:false,
-                arrivalConfig,
+                arrivalTableConfig,
                 tableData:[],
                 arrivalChildTableConfig,
                 total:0,
@@ -156,8 +139,7 @@
                   planCode:'',
                   ownerName:'',
                   execStatus:9,
-                  execState:'',
-                  orderCode:''
+                  execState:''
                 },
                 addSearchForm:{
                   warehouseSpaceCode:'',
@@ -178,15 +160,18 @@
         },
 
          created(){
-
-            this.arrivalAlertConfig.forEach(item=>{
-                if(item.useLink){
-                    item.dom=(row, column, cellValue, index)=>{
-                      return <span class="link_dom" onClick={this.upperShelf.bind(this,row)} >输入上架量</span>
-                    }
+            
+            this.arrivalTableConfig.forEach(element => {
+                if(element.useDom){
+                  element.dom=(row, column, cellValue, index)=>{   
+                  return  <span class="tableBtnBox">
+                            {
+                              <span onClick={this.upperShelf.bind(this,row)}>入库</span>
+                            } 
+                          </span>
+                  }
                 }
-              });
-
+            }); 
               if(sessionStorage.getItem('warehouse')){
                 warehouseSpaceSelect().then(res=>{
                     if(res.success){
@@ -203,6 +188,7 @@
 
             putawayConfirm(){
               let json={};
+              json['isBad']=1
               json['orderCode']=this.activeOrder.orderCode;
               json['putSpaceInfoList']=[];
               _.cloneDeep(this.nowChildDataSelectData).forEach(item=>{
@@ -212,14 +198,10 @@
                     vJson['warehouseAreaCode']=this.warehouseSpaceCodeConfig.find(item=>item.warehouseSpaceCode===v.warehouseSpaceCode).warehouseAreaCode
                     vJson['warehouseSpaceCode']=v.warehouseSpaceCode;
                     vJson['putQty']=v.putQty;
-                    vJson['orderDetailId']=item.id;
+                    vJson['orderDetailId']=item.receiveOrderDetailId;
                     json['putSpaceInfoList'].push(vJson)
                  })
               });
-              if(json['putSpaceInfoList'].length<=0){
-                this.$message({type:'error',message:'请先输入上架量！'})
-                return
-              }
               jobAdd(json).then(res=>{
                   if(res.success){
                     this.dialogVisible=false;
@@ -233,38 +215,7 @@
                   console.log(err)
               })
             },
-            addConfirm(){
-              let json={};
-              json['orderCode']=this.activeOrder.orderCode;
-              json['putSpaceInfoList']=[];
-              _.cloneDeep(this.nowChildDataSelectData).forEach(item=>{
-                 let arr=item.warehousingArr||[];
-                 arr.forEach(v=>{
-                    let vJson={};
-                    vJson['warehouseAreaCode']=this.warehouseSpaceCodeConfig.find(item=>item.warehouseSpaceCode===v.warehouseSpaceCode).warehouseAreaCode
-                    vJson['warehouseSpaceCode']=v.warehouseSpaceCode;
-                    vJson['putQty']=v.putQty;
-                    vJson['orderDetailId']=item.id;
-                    json['putSpaceInfoList'].push(vJson)
-                 })
-              });
-              if(json['putSpaceInfoList'].length<=0){
-                this.$message({type:'error',message:'请先输入上架量！'})
-                return
-              }
-              jobAddIn(json).then(res=>{
-                  if(res.success){
-                    this.dialogVisible=false;
-                    this.$message({type:'success',message:'操作成功！'})
-                    this.warehouseSpaceCodeListTable=[];
-                  } else{
-                     this.$message({type:'error',message:'操作失败！'})
-                  }
-              }).catch(err=>{
-                  this.$message({type:'error',message:'操作失败！'})
-                  console.log(err)
-              })
-            },
+
             deleteByindex(index, row){
                let warehouseSpaceCodeListTable= _.cloneDeep(this.warehouseSpaceCodeListTable);
                warehouseSpaceCodeListTable.splice(index,1);
@@ -272,7 +223,7 @@
             },
 
             sureWarehouse(){
-              console.log(this.warehouseSpaceCodeListTable)
+              // console.log(this.warehouseSpaceCodeListTable)
               let nowChildDataSelectData= _.cloneDeep(this.nowChildDataSelectData);
               let index=nowChildDataSelectData.findIndex(v=>v.id===this.skuRow.id);
               if(index<0){
@@ -280,10 +231,11 @@
               }
               nowChildDataSelectData[index]['warehousingArr']=this.warehouseSpaceCodeListTable;
               this.nowChildDataSelectData=nowChildDataSelectData;
-              console.log(this.nowChildDataSelectData)
+              // console.log(this.nowChildDataSelectData)
               this.arrivalAlertDisplay=false;
               this.warehouseSpaceCodeListTable=[];
               this.addSearchForm={};
+              this.putawayConfirm()
             },
 
             cancelWarehouse(){
@@ -303,12 +255,12 @@
                  this.$message({type:'error',message:'数量不能为0'});
                  return
               }
-
+              console.log(this.warehouseSpaceCodeListTable)
               let putQtyAll=this.warehouseSpaceCodeListTable.reduce((a,b)=>{
                   return a+b.putQty
               },0)
 
-              if(putQtyAll+this.addSearchForm['putQty']>this.skuRow.receiveQty){
+              if(putQtyAll+this.addSearchForm['putQty']>this.skuRow.badReceiveQty){
                  this.$message({type:'error',message:'上架数量不能大于到货量'});
                  return
               }
@@ -320,15 +272,16 @@
                   this.warehouseSpaceCodeListTable[index]['putQty']+=this.addSearchForm['putQty']
               }
 
-
-
             },
 
             upperShelf(row){
               this.arrivalAlertDisplay=true;
               this.skuRow=row;
+              row['warehousingArr']=[]
+              this.nowChildDataSelectData=[]
+              this.nowChildDataSelectData.push(row)
+              this.activeOrder=row
               this.warehouseSpaceCodeListTable=row.warehousingArr;
-              
             },
 
             cancelArrivalAlert(){
@@ -453,7 +406,7 @@
 
              getCurrentTableData(){
                  this.loading=true;
-                 orderList({
+                 badproductlist({
                    ...this.searchForm,
                    pageNum:this.pageNum,
                    pageSize:this.pageSize
@@ -461,7 +414,7 @@
                     this.loading=false;
                     if(res.success){
                        this.tableData=res.data&&res.data.list||[];
-                       this.total=res.data&&res.data.tatal;
+                       this.total=res.data&&res.data.total;
                     }
                 }).catch(err=>{
                     this.loading=false;
@@ -518,7 +471,13 @@
              background: #fff;
          }
      }
-
+     .tableBtnBox{
+       font-size: 12px;
+       span{
+         color: #3399ea;
+         cursor: pointer;
+       }
+     }
      .el-form {
         display: flex;
         .el-form-item{

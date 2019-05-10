@@ -22,6 +22,23 @@
             </el-form-item>
           </el-col>
 
+          <el-col :span="6"  style="min-width:300px" v-if="searchForm.execStatus!==undefined">
+             <el-form-item 
+               label="上架状态" 
+               prop="orderType" 
+              >
+              <el-select v-model="searchForm.execState" 
+              size="small"  filterable clearable placeholder="请选择上架状态" prefix-icon="el-icon-search">
+                <el-option
+                  v-for="item in execStatuslist"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.providerName!==undefined">
             <el-form-item 
               label="供应商名称"  
@@ -32,14 +49,14 @@
           </el-col>
 
           
-          <el-col :span="6"  style="min-width:300px" v-if="searchForm.orderCode!==undefined">
+          <!-- <el-col :span="6"  style="min-width:300px" v-if="searchForm.orderCode!==undefined">
             <el-form-item 
               label="入库单号"  
               label-width="80px"
               prop="orderCode"  >
               <el-input type="text" size="small"    placeholder="请输入入库单号"    v-model.trim="searchForm.orderCode" ></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
 
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.planCode!==undefined">
             <el-form-item 
@@ -74,6 +91,15 @@
               label-width="40px"
               prop="ownerName"  >
               <el-input type="text" size="small"    placeholder="请输入货主"    v-model.trim="searchForm.ownerName" ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6"  style="min-width:300px" v-if="searchForm.orderCode!==undefined">
+            <el-form-item 
+              label="收货单号"  
+              label-width="80px"
+              prop="ownerName"  >
+              <el-input type="text" size="small"    placeholder="请输入收货单号"    v-model.trim="searchForm.orderCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -114,11 +140,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { BusiBillTypeEnum } from '@/utils/enum'
+import { BusiBillTypeEnum, execStatuslist } from '@/utils/enum'
 export default {
   data() {
     return {
-       BusiBillTypeEnum
+       BusiBillTypeEnum,
+       execStatuslist
     }
   },
 

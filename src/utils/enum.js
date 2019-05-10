@@ -335,3 +335,59 @@ export const AtoZ = [
   {value:'Y',name:'Y',isUsed:false,},
   {value:'Z',name:'Z',isUsed:false,},
 ]
+
+export const printState=[
+  {
+    name: '未打印',
+    value: 0
+  },
+  {
+    name: '已打印',
+    value: 1
+  },
+]
+
+export const receiveState=[
+  {
+    name: '未收货',
+    value: 0
+  },
+  {
+    name: '部分收货',
+    value: 1
+  },
+  {
+    name: '全部收货',
+    value: 2
+  }
+]
+
+export const execStatuslist=[
+  {
+    name: '未上架',
+    value: 0
+  },
+  {
+    name: '部分上架',
+    value: 1
+  },
+  {
+    name: '全部上架',
+    value: 2
+  }
+]
+
+export const badStatuslist=[
+  {
+    name: '未入库',
+    value: 0
+  },
+  {
+    name: '部分入库',
+    value: 1
+  },
+  {
+    name: '全部入库',
+    value: 2
+  }
+]

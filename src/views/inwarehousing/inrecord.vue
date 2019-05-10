@@ -6,20 +6,26 @@
           @resetSearch="resetForm" 
           :search-forms="ruleForm">
         </search-warehousing>
-
         <operation-button 
           @lodash="lodash"
           :child-data-arr="childDataArr" 
           :plan-print-data="planPrintData" 
           :parent-data-obj="parentDataObj" />
-
         <double-table 
           :loading="loading" 
           :table-data="tableData"
           ref="tableChild" 
           :handle-button-map="handleButtonMap"  
+          :expands-parent="expandsParent" 
           :highlight-current-row="highlightCurrentRow"
+          :child-data-name="childDataName" 
           :config="parentTableConfig"
+          :childTableConfig="childTableConfig"
+          :accordion-expand="accordionExpand"
+          @currentRadioChange="currentRadioChange" 
+          @expandChangePa="expandChange"
+          :child-can-select="childCanSelect"
+          :expand-key="expandKey" 
           @childDataSelect="childDataSelect" 
           @sizeChange="handleSizeChange"
           @currentChange="handleCurrentChange" 
@@ -32,26 +38,27 @@
 </template>
 
 <script>
-    import DoubleTable from '@/components/Table/printTable'
-    import { printplanTableConfig, planChildTableConfig } from './components/config'
+    import DoubleTable from '@/components/Table/doubleTable'
+    import { planTableConfig, planChildTableConfig } from './components/config'
     import { getInfoWarehousing,getInfoDetailWarehousing } from '@/api/warehousing'
     import { uniqueArray } from '@/utils/arrayHandler'
-    import  SearchWarehousing  from './components/printsearch'
-    import operationButton from './components/operationButton'
+    import  SearchWarehousing  from './components/search'
+    import operationButton from './components/recordOperation'
 
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in'))
     const ruleForm = {
-        pageNum: 1,
-        pageSize:10,
-        durationTime:['',''],//时间，
+      pageNum: 1,
+      pageSize:10,
+      durationTime:['',''],//时间，
         createBeginDate:'',
         createEndDate:'',
         planCode:'',
         providerName:'',
         execStatus:'',
         ownerName:'',
-        isPrint: 0,
+        receiveStatus: 9,
+        receiveStates:'',
         busiBillType:11
     }
     
@@ -77,7 +84,7 @@
                 //子表数据名称
                 childDataName:'childData',
                 //表格配置
-                parentTableConfig:printplanTableConfig,
+                parentTableConfig:planTableConfig,
                 childTableConfig:planChildTableConfig,
                 // currentPage:1,
                 // pageSize:10,
@@ -89,6 +96,8 @@
                     //     this.dialogData = {...data}
                     // }}
                 ],
+                childCanSelect:true,//子表可选择,false全选，
+                accordionExpand:true,//手风琴展开
                 multipleSelection:[],//选中的子表数据
                 expandKey:'planCode',
                 //按钮操作所需数据
@@ -101,15 +110,28 @@
             }
         },
         methods:{
+
+            expandChange(row, expandedRows){
+                var arr = []
+                arr.push(row[this.expandKey])
+                if(this.expandsParent == row[this.expandKey]){
+                    this.expandsParent = []
+                }else{
+                    this.expandsParent = [...arr]
+                }
+                this.currentRadioChange(row)
+            },
+
             lodash(){
               this.getInfoDetailWarehousingApi({
                   planCode:this.activePlanCode
               })
             },
+
             getTableData(){
                 console.log(1);
                 this.$router.replace({
-                    path:'/inwarehousing/planIn',
+                    path:'/inwarehousing/inrecord',
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
@@ -127,9 +149,6 @@
                             }
                             this.currentRadioChange(info)
                         }
-                        this.tableData.map(item=>{
-                            item.printplanReal=item.inPlanQty+'/'+item.inQty
-                        })
                     }else{
                         this.tableData = []
                     }
@@ -141,18 +160,57 @@
                     this.loading = false;                    
                 })
             },
+
+            currentRadioChange(data){
+                var templatePlanTag = [...this.planPrintData,data]
+                this.planPrintData = uniqueArray([...templatePlanTag],'planCode')
+                var chooseList = data
+                if(data.childData&&data.childData.length>0){
+                   
+                }else{
+                   this.activePlanCode=data.planCode;
+                   this.getInfoDetailWarehousingApi({
+                       planCode:data.planCode
+                   })
+                }
+                this.parentDataObj = { ...data }
+            },
+
+            getInfoDetailWarehousingApi(data){
+                this.loading = true
+                getInfoDetailWarehousing(data).then(res=>{
+                    if(res.success && res.data && res.data.inWarehousePlanDetailRespList && res.data.inWarehousePlanDetailRespList.length>0){
+                        var tempList = [...this.tableData]
+                        this.tableData = tempList.map(list => {
+                            if(list.planCode == data.planCode){
+                                list.childData = res.data.inWarehousePlanDetailRespList.map(v=>{
+                                    v.hasReceiveQty=v.receiveQty||0;
+                                    v.receiveQty=v.planInQty-v.receiveQty||0
+                                    v.editable=true
+                                    v.printNum=0
+                                    return v
+                                    });
+                                chooseList = list
+                            }
+                            return list
+                        })
+                    }
+                    this.loading = false
+                }).catch(err => {
+                    this.loading = false
+                })
+            },
+
+
             childDataSelect(selectedData){
-               this.multipleSelection=[]
-               this.childDataArr=[]
-               this.planPrintData=[]
                this.multipleSelection = [...selectedData]
                this.childDataArr = [...selectedData]
-               this.planPrintData= [...selectedData]
             },
             handleSizeChange(val) {
                 this.ruleForm={...this.ruleForm,pageSize:val,pageNum:1}
                 this.getTableData()
             },
+
             handleCurrentChange(val) {
                 this.ruleForm={...this.ruleForm,pageNum:val}
                 this.getTableData()
@@ -164,15 +222,34 @@
                     createEndDate = +ruleForm.durationTime[1]
                 }
                 this.ruleForm={...ruleForm,pageSize:10,pageNum:1,createBeginDate,createEndDate}
+                 this.ruleForm.receiveStatus=ruleForm.receiveStates
                 this.getTableData();
                 
             },
+
             resetForm() {
                 ruleForm.busiBillType=''
-                ruleForm.isPrint=''
-                this.ruleForm={ ...ruleForm}
+                ruleForm.receiveStatus=''
+                this.ruleForm={ ...ruleForm }
                 this.getTableData()
-            }
+            },
+            // tabSwitch(tab,event){
+            //     if(tab.name==this.currentTab){
+            //         console.log('当前标签')
+            //     }else{
+            //         this.currentTab = tab.name
+            //         this.$refs.searchWarhouse.resetForm()
+            //        this.planPrintData = []
+            //        this.tableData = []
+            //        this.parentDataObj = {}
+            //        this.childDataArr = []
+            //     }
+            // },
+            // closePlanTags(tag){
+            //     var planPrintData = [...this.planPrintData]
+            //     var b = [...planPrintData.filter(item => {return item.planCode!=tag.planCode})]
+            //     this.planPrintData = [...b]
+            // }
         },
         created(){
             this.getTableData()

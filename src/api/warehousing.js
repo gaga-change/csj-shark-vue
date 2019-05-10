@@ -96,6 +96,16 @@ export function getInfoDetailInWarehousing(data) {
     // data:data
   })
 }
+
+//更改打印状态
+export function modifyPrintState(data) {
+  return request({
+    url: '/webApi/plan/in/print',
+    method: 'post',
+    data: data
+  })
+}
+
 //获取出库计划单列表
 export function getInfoPlanOutWarehousing(data) {
   return request({
@@ -216,6 +226,15 @@ export function warehouseSpaceSelect() {
 export function jobAdd(data) {
   return request({
     url: `/webApi/in/job/add`,
+    method: 'post',
+    data:data
+  })
+}
+
+//上架并入库
+export function jobAddIn(data) {
+  return request({
+    url: `/webApi/in/job/addAndOrder`,
     method: 'post',
     data:data
   })
@@ -357,6 +376,15 @@ export function cancelOutOfTheLibrary(data) {
 export function receiveAndInStock(data) {
   return request({
     url: `/webApi/receive/order/receiveAndInStock`,
+    method:'post',
+    data:data
+  })
+}
+
+//获取残次品列表
+export function badproductlist(data) {
+  return request({
+    url: `/webApi/receive/order/bad/list`,
     method:'post',
     data:data
   })
