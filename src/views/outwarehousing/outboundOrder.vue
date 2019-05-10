@@ -8,7 +8,7 @@
            :search-forms="ruleForm">
         </search-warehousing>
 
-         <div style="margin-bottom:12px;font-size:12px">
+<!--          <div style="margin-bottom:12px;font-size:12px">
             <span>操作说明：当你点击某一行的同时，即为选中了当前的单据,在确认出库的下方你可以点击叉号取消选择</span>
          </div>
 
@@ -42,7 +42,12 @@
                style="margin:0 0 10px 10px;">
                {{tag.planCode}}
             </el-tag>
-         </div>
+         </div> -->
+        <operation-button 
+          :child-data-arr="childDataArr" 
+          :planPrintData="planPrintData" 
+          :selectChiledByPlanCode="selectChiledByPlanCode"
+        />
 
         <double-table 
           :loading="loading" 
@@ -77,10 +82,11 @@
     import { getInfoOutWarehousing, getInfoDetailOutWarehousing,confirmOutOfTheLibrary,cancelOutOfTheLibrary} from '@/api/warehousing'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchWarehousing  from './components/search'
+    import operationButton from './components/outButton'
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
     export default {
-        components: { DoubleTable, SearchWarehousing },
+        components: { DoubleTable, SearchWarehousing, operationButton },
         data(){
             return {
                 loading:false,
@@ -108,7 +114,7 @@
                 total:0,
                 //主表操作
                 handleButtonMap:[],
-                childCanSelect:false,
+                childCanSelect:true,
                 accordionExpand:true,
                 multipleSelection:[],
                 expandsParent:[],
@@ -116,7 +122,9 @@
                 quickSubmitData:{},
                 buttonDisable:false,
                 outbound:true,
-                planPrintData:[]
+                planPrintData:[],
+                childDataArr:[],
+                selectChiledByPlanCode:{}
             }
         },
         methods:{
@@ -144,6 +152,17 @@
                         var tempList = [...res.data.list]
                         this.tableData = uniqueArray(tempList,'orderCode')
                         this.total = res.data.total
+                        this.tableData.map(item=>{
+                          if(item.queryOutWarehouseOrderDetailVOList && item.queryOutWarehouseOrderDetailVOList.length>0){
+                            item.queryOutWarehouseOrderDetailVOList.map(childitem=>{
+                              childitem.printNum=0
+                              childitem.planCode=item.planCode
+                              childitem.customerCode=item.customerCode
+                              childitem.customerName=item.customerName
+                              childitem.arrivalAddress=item.arrivalAddress
+                            })
+                          }
+                        })
                          var a = this.$refs.tableChild.expands//之前打开过 
                         if(a&&a.length>0){
                             var info = {
@@ -161,8 +180,8 @@
             },
             currentRadioChange(data){
                 var chooseList = data
-                var templatePlanTag = [...this.planPrintData,data].filter(v=>v.orderStatus===0)
-                this.planPrintData = uniqueArray([...templatePlanTag],'id')
+                // var templatePlanTag = [...this.planPrintData,data].filter(v=>v.orderStatus===0)
+                // this.planPrintData = uniqueArray([...templatePlanTag],'id')
                 if(data.childData&&data.childData.length>0){
 
                 }else{
@@ -170,8 +189,15 @@
                     getInfoDetailOutWarehousing({orderCode:data.orderCode}).then(res=>{
                         
                         if(res.success && res.data[0] && res.data[0].queryOutWarehouseOrderDetailVOSList && res.data[0].queryOutWarehouseOrderDetailVOSList.length>0){
-                            var queryOutWarehouseOrderDetailVOSList = res.data[0].queryOutWarehouseOrderDetailVOSList 
+                            var queryOutWarehouseOrderDetailVOSList = res.data[0].queryOutWarehouseOrderDetailVOSList
+                            let owndata=res.data[0]
+                            queryOutWarehouseOrderDetailVOSList.map(item=>{
+                              item.printNum=0
+                              item.planCode=owndata.planCode
+                            }) 
+                            // console.log(queryOutWarehouseOrderDetailVOSList)
                             var tempList = [...this.tableData]
+                            console.log(tempList)
                             this.tableData = tempList.map(list => {
                                
                                 if(list.orderCode == data.orderCode){
@@ -222,7 +248,24 @@
              },
 
             childDataSelect(selectedData){
-               this.multipleSelection = [...selectedData]
+              this.multipleSelection=[]
+              this.childDataArr=[]
+              if(selectedData.length){
+                 this.selectChiledByPlanCode[selectedData[0].planCode]=selectedData
+                  this.multipleSelection = [...selectedData]
+                   this.childDataArr = [...selectedData].map(v=>{
+                       return {
+                       ...v
+                       }
+                   })
+                   this.planPrintData= [...selectedData]
+               } else{
+                 this.selectChiledByPlanCode={}
+                 this.multipleSelection=[]
+                 this.childDataArr=[]
+               }
+              // console.log(selectedData)
+              
             },
 
             handleSizeChange(val) {

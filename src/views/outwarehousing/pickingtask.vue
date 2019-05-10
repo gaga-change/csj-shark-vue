@@ -139,7 +139,7 @@
 
                             {
                               [0,1].includes(row.orderStatus)&&
-                              <span  onClick={this.pickingDetail.bind(this,row,false)}>确认拣货</span>
+                              <span  onClick={this.pickingDetail.bind(this,row,false)}>拣货</span>
                             }
                             { 
                               [0,1].includes(row.orderStatus)&&

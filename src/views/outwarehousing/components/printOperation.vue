@@ -29,7 +29,7 @@
 <script>
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
-import { outboundOrderSubmit,pickOrderAdd } from '@/api/warehousing'
+import { outboundOrderSubmit,pickOrderAdd, modifyOutPrint } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
@@ -180,8 +180,17 @@ export default {
         },
 
         printPlanOrder(){
-            var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
-            MakePrint(printPlanContainer)
+          let data=[]
+          this.printPlan.map(item=>{
+            data.push(item.id)
+          })
+          modifyOutPrint({ids:data}).then(res=>{
+
+          }).catch(err=>{
+            console.log(err)
+          })
+          var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
+          MakePrint(printPlanContainer)
         },
     }
 }

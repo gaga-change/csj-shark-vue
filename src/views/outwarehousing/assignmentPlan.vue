@@ -1,6 +1,6 @@
 <template>
     <div>
-       <!--  <tab-label 
+        <!-- <tab-label 
           :tab-config="BusiBillTypeEnum" 
           @tabSwitch="tabSwitch" 
           :tab-default="tabDefault">
@@ -19,7 +19,7 @@
           :selectChiledByPlanCode="selectChiledByPlanCode"
           :orderType="currentTab"/>
 
-         <!-- <div style="margin-bottom:15px" 
+         <div style="margin-bottom:15px" 
            v-show="planPrintData.length>0">
             <span style="font-size:13px">当前选中的计划单</span>
             <el-tag v-for="tag in planPrintData" 
@@ -29,24 +29,9 @@
                style="margin:0 0 10px 10px;">
                {{tag.planCode}}
             </el-tag>
-         </div> -->
-        
-         <double-table 
-          :loading="loading" 
-          :table-data="tableData"
-          ref="tableChild" 
-          :highlight-current-row="highlightCurrentRow"
-          :config="parentTableConfig"
-          @childDataSelect="childDataSelect" 
-          @sizeChange="handleSizeChange"
-          @currentChange="handleCurrentChange" 
-          :total="total" 
-          :maxTotal="10"
-          :pageSize="ruleForm.pageSize"
-          :currentPage="ruleForm.pageNum">
-        </double-table>
+         </div>
 
-        <!-- <double-table 
+        <double-table 
           :loading="loading" 
           :table-data="tableData"
           ref="tableChild" 
@@ -66,18 +51,18 @@
           :maxTotal="10"
           :pageSize="ruleForm.pageSize"
           :currentPage="ruleForm.pageNum">
-        </double-table> -->
+        </double-table>
        
     </div>
 </template>
 
 <script>
-    import DoubleTable from '@/components/Table/printTable'
-    import { planTableConfig, planOrderChildTableConfig } from './components/config'
+    import DoubleTable from '@/components/Table/doubleTable'
+    import { planOrderTableConfig, planOrderChildTableConfig } from './components/config'
     import { getInfoPlanOutWarehousing,getInfoPlanDetailOutWarehousing } from '@/api/warehousing'
     import { uniqueArray } from '@/utils/arrayHandler'
-    import  SearchWarehousing  from './components/printsearch'
-    import operationButton from './components/printOperation'
+    import  SearchWarehousing  from './components/search'
+    import operationButton from './components/operationButton'
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
     
@@ -95,13 +80,18 @@
                 ruleForm:{
                     pageNum: 1,
                     pageSize:10,
+                    durationTime:[],//时间，
                     planCode:'',
+                    providerName:'',
+                    execStatus:0,
+                    ownerName:'',
                     busiBillType:21,
-                    isPrint: 0,
+                    sortStatus:9,
+                    sortState:''
                 },
                 selectData:{},
                 tableData:[],
-                parentTableConfig:planTableConfig,
+                parentTableConfig:planOrderTableConfig,
                 childTableConfig:planOrderChildTableConfig,
                 total:0,
                 multipleSelection:[],
@@ -123,7 +113,7 @@
 
             getTableData(){
                 this.$router.replace({
-                    path:'/outwarehousing/outboundPlan',
+                    path:'/outwarehousing/assignmentPlan',
                     query:{data:JSON.stringify({...this.ruleForm})}
                 })
                 this.loading=true;
@@ -140,9 +130,6 @@
                             return v;
                         })
                         this.tableData = uniqueArray([...tempList],'planCode')
-                        this.tableData.map(item=>{
-                          item.printplanReal=item.outPlanQty+'/'+item.outQty
-                        })
                         this.total = res.data.total
                         var a = this.$refs.tableChild.expands//之前打开过 
                      }
@@ -155,26 +142,18 @@
              },
 
 
-            childDataSelect(selectedData){
-              this.multipleSelection=[]
-              this.childDataArr=[]
-              this.planPrintData=[]
+            childDataSelect(selectedData,arr){
                if(selectedData.length){
                  this.selectChiledByPlanCode[selectedData[0].planCode]=selectedData
-                 this.multipleSelection = [...selectedData]
-                 this.childDataArr = [...selectedData].map(v=>{
-                     return {
-                     ...v,
-                     ownerCode:this.activeOwnerCode}
-                 })
-                 this.planPrintData= [...selectedData]
                } else{
-                this.multipleSelection=[]
-                this.childDataArr=[]
-                this.planPrintData=[]
-                 this.selectChiledByPlanCode={}
+                 this.selectChiledByPlanCode[arr[0].planCode]=[]
                }
-               
+               this.multipleSelection = [...selectedData]
+               this.childDataArr = [...selectedData].map(v=>{
+                   return {
+                   ...v,
+                   ownerCode:this.activeOwnerCode}
+               })
             },
 
 
@@ -189,7 +168,15 @@
             },
 
              submitForm(ruleForm) {
-                this.ruleForm={...ruleForm,pageSize:10,pageNum:1}
+                var   createBeginDate='',createEndDate='';
+                if(ruleForm.durationTime&&ruleForm.durationTime[0]){
+                    createBeginDate = +ruleForm.durationTime[0]
+                    createEndDate = +ruleForm.durationTime[1]
+                }
+                if(this.ruleForm.sortState===0 || this.ruleForm.sortState){
+                  this.ruleForm.sortStatus=this.ruleForm.sortState
+                }
+                this.ruleForm={...ruleForm,pageSize:10,pageNum:1,createBeginDate,createEndDate}
                 this.getTableData();
                 
             },

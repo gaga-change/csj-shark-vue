@@ -218,7 +218,7 @@ export default {
           let isSubmit=this.childData.some(v=>v.planInQty-(v.hasReceiveQty+v.badReceiveQty)<v.receiveQty||v.receiveQty<0);
           console.log(isSubmit)
           if(isSubmit){
-            this.$message({type:'error',message:'正品与残次品之和应小于总数量-已到货量,且要大于0'});
+            this.$message({type:'error',message:'正品与残次品之和应小于总数量-已收货量,且要大于0'});
             return 
           }
           let data=[...this.childData].map(v=>{

@@ -7,51 +7,33 @@
             打印计划单
         </el-button> -->
 
-        <el-button 
+        <!-- <el-button 
           type="primary" 
           size="small" 
           @click="PickingOrder">
             分配拣货任务  
-        </el-button>
+        </el-button> -->
 
-        <!-- <el-button 
+        <el-button 
            type="primary" 
            size="small"
            @click="priviewBoxLabel">
            打印装箱单 
-        </el-button> -->
+        </el-button>
 
         <div>
-            <el-dialog
-                title="按单拣货"
-                :visible.sync="dialogVisible"
-                width="90%">
-                <span>拣货人姓名:</span>
-                <el-input 
-                  type="text" 
-                  size="small" 
-                  style="width:200px;margin-bottom:12px;"
-                  placeholder="请输入拣货人姓名"
-                  v-model="pickOperatorName" >
-                  </el-input>
-                <edit-table 
-                  :config="planChildTableEditConfig" 
-                  :table-data="PickingOrderData" 
-                  :default-edit="false">
-                </edit-table>
-                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button @click="surePicking"  type="primary" >确认</el-button>
-                </span>
-            </el-dialog>
-
             <el-dialog
                 title="打印装箱单"
                 :visible.sync="dialogVisibleLabel"
                 width="841px">
                 <div id="print">
+                  <el-row :gutter="20" style="margin-bottom:14px;">
+                    <el-col :span="6">客户编码: {{childData.length>0?childData[0].customerCode:''}}</el-col>
+                    <el-col :span="6">客户名称: {{childData.length>0?childData[0].customerName:''}}</el-col>
+                    <el-col :span="12">地址: {{childData.length>0?childData[0].arrivalAddress:''}}</el-col>
+                  </el-row>
                     <edit-table 
-                      :config="planChildTableLabelConfig" 
+                      :config="outChildTableLabelConfig" 
                       :default-canedit="defaultCanedit" 
                       :table-data="childData" 
                       v-loading="loading" 
@@ -63,22 +45,6 @@
                     <el-button type="primary" @click="printLabel">确 定</el-button>
                 </span>
             </el-dialog>
-
-             <el-dialog
-                title="打印计划单"
-                :visible.sync="dialogVisibleReserve"
-                width="841px">
-                <edit-table 
-                  :config="planChildTablePrintConfig" 
-                  :table-data="printPlan" 
-                  id="printPlanContainer" 
-                  :default-edit="false">
-                </edit-table>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisibleReserve = false">取 消</el-button>
-                    <el-button type="primary" @click="printPlanOrder">打印</el-button>
-                </span>
-            </el-dialog>
         </div>
     </div>
 </template>
@@ -88,7 +54,7 @@ import editTable from '@/components/Table/editTable'
 import { outboundOrderSubmit,pickOrderAdd } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
-import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
+import { planChildTableEditConfig,outChildTableLabelConfig,planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
 
 export default {
@@ -105,7 +71,7 @@ export default {
             loading:false,
             childData:[],
             planChildTableEditConfig,
-            planChildTableLabelConfig,
+            outChildTableLabelConfig,
             planChildTablePrintConfig,
             printPlan:[],//打印计划单
             defaultCanedit:true,
@@ -142,33 +108,33 @@ export default {
 
 
     methods:{
-        surePicking(){
-          let json={};
-          json.pickOrderDetailAddReqList=this.PickingOrderData;
-          if(json.pickOrderDetailAddReqList.some(v=>{
-            if(v.sortQty<0||v.sortQty>v.planOutQty-v.save_sortQty){
-                this.$message({type:'error',message:`计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty-v.save_sortQty} 之间`})
-                return true
-            }
-          })){
-            return 
-          }
-          json.pickOperatorId='666';
-          json.pickType=0;
-          json.pickOperatorName=this.pickOperatorName;
-          if(json.pickOperatorName===''){
-            this.$message({type: 'error',message: '拣货人姓名必填'});   
-            return    
-          }
-          pickOrderAdd(json).then(res=>{
-            if(res.success){
-               this.$message({type: 'success',message: '操作成功!'});
-               this.dialogVisible=false;
-            }
-          }).catch(err=>{
-              console.log(err)
-          })
-        },
+        // surePicking(){
+        //   let json={};
+        //   json.pickOrderDetailAddReqList=this.PickingOrderData;
+        //   if(json.pickOrderDetailAddReqList.some(v=>{
+        //     if(v.sortQty<0||v.sortQty>v.planOutQty-v.save_sortQty){
+        //         this.$message({type:'error',message:`计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty-v.save_sortQty} 之间`})
+        //         return true
+        //     }
+        //   })){
+        //     return 
+        //   }
+        //   json.pickOperatorId='666';
+        //   json.pickType=0;
+        //   json.pickOperatorName=this.pickOperatorName;
+        //   if(json.pickOperatorName===''){
+        //     this.$message({type: 'error',message: '拣货人姓名必填'});   
+        //     return    
+        //   }
+        //   pickOrderAdd(json).then(res=>{
+        //     if(res.success){
+        //        this.$message({type: 'success',message: '操作成功!'});
+        //        this.dialogVisible=false;
+        //     }
+        //   }).catch(err=>{
+        //       console.log(err)
+        //   })
+        // },
 
         //打印装箱单
         priviewBoxLabel(){
@@ -176,9 +142,9 @@ export default {
           for(let i in this.selectChiledByPlanCode){
             arr=[...arr,...this.selectChiledByPlanCode[i]]
           }
+          // console.log(this.selectChiledByPlanCode)
           this.childData=arr.map(v=>{
-              v.editable=true;
-              v.printNum=Number(v.realOutQty).toFixed(0);
+              v.printNum=v.realOutQty
               return v
           })
 
@@ -192,10 +158,10 @@ export default {
       
         printLabel(){
             var childData = [...this.childData]
-            this.childData=childData.map(v=>{
-                 v.editable=false;
-                 return v
-            })
+            // this.childData=childData.map(v=>{
+            //      v.editable=false;
+            //      return v
+            // })
 
             setTimeout(()=>{
                let label = document.getElementById('print').innerHTML
@@ -205,26 +171,26 @@ export default {
             },500)
         },
 
-       PickingOrder(){
-          let arr=[]
-          for(let i in this.selectChiledByPlanCode){
-            arr=[...arr,...this.selectChiledByPlanCode[i]]
-          }
-          this.PickingOrderData=arr.map(v=>{
-              v.editable=true;
-              v.tempOutQty=v.sortQty-v.realSortQty;
-              v.save_sortQty=v.sortQty;
-              v.sortQty=v.planOutQty-v.sortQty;
-              return v
-          })
+      //  PickingOrder(){
+      //     let arr=[]
+      //     for(let i in this.selectChiledByPlanCode){
+      //       arr=[...arr,...this.selectChiledByPlanCode[i]]
+      //     }
+      //     this.PickingOrderData=arr.map(v=>{
+      //         v.editable=true;
+      //         v.tempOutQty=v.sortQty-v.realSortQty;
+      //         v.save_sortQty=v.sortQty;
+      //         v.sortQty=v.planOutQty-v.sortQty;
+      //         return v
+      //     })
 
-        if(!this.PickingOrderData.length){
-            this.$message({type: 'error',message: '未选择子表里商品'});   
-            return 
-        }
-        this.dialogVisible=true;
+      //   if(!this.PickingOrderData.length){
+      //       this.$message({type: 'error',message: '未选择子表里商品'});   
+      //       return 
+      //   }
+      //   this.dialogVisible=true;
 
-      },
+      // },
 
         priviewReserve(){
             this.printPlan = [...printPlanDataFn([...this.planPrintData])]
@@ -235,10 +201,10 @@ export default {
              this.dialogVisibleReserve = true
         },
 
-        printPlanOrder(){
-            var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
-            MakePrint(printPlanContainer)
-        },
+        // printPlanOrder(){
+        //     var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
+        //     MakePrint(printPlanContainer)
+        // },
     }
 }
 </script>

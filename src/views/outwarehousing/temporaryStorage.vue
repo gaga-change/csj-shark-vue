@@ -1,59 +1,49 @@
 <template>
   <div class="pickingtask">
-    <el-card class="simpleCard" shadow="never" body-style="padding:12px">
+    <el-card shadow="never" body-style="padding:12px" class="confirmstyle">
       <new-search @submit="submit" :searchForm="searchForm" ref="arrivalDom"></new-search>
-      <el-col :span="24" style="margin-bottom:12px;">
-        <el-button type="primary" size="small" @click="select">查询</el-button>
-        <el-button type="primary" size="small" @click="resetForm">重置</el-button>
-      </el-col>
     </el-card>
-
-    <el-col :span="24" style="margin-bottom:12px;">
+    <div style="margin-left:280px;">
+      <el-col :span="24" style="margin-bottom:12px;">
       <el-button
         type="primary"
-        :disabled="!SelectionData.length>0||searchForm.isCreateOrder"
+        :disabled="!SelectionData.length>0"
         size="small"
         @click="outOrder"
-      >生成出库单</el-button>
+      >复核(生成出库单)</el-button>
       <el-button
         type="danger"
-        :disabled="!SelectionData.length>0||searchForm.isCreateOrder"
+        :disabled="!SelectionData.length>0"
         size="small"
         @click="outOrder('delete')"
       >删除</el-button>
     </el-col>
-    <edit-table
-      :loading="loding"
-      :config="temporaryStorageConfig"
-      :tableData="TableData"
-      :useEdit="true"
-      :defaultEdit="false"
-      :childCanSelect="true"
-      editText="修改上架数量"
-      :pageSizes="[10, 20, 50]"
-      :pageSize="pageSize"
-      @currentChange="currentChange"
-      @sizeChange="sizeChange"
-      :currentPage="currentPage"
-      :total="total"
-      @editDataSelect="SelectionChange"
-    />
+      <edit-table
+        :loading="loding"
+        :config="temporaryStorageConfig"
+        :tableData="TableData"
+        :useEdit="true"
+        :defaultEdit="false"
+        :childCanSelect="true"
+        @currentChange="currentChange"
+        @editDataSelect="SelectionChange"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
 import moment from 'moment';
-import newSearch from './components/newSearch'
+import newSearch from './components/confirmSearch'
 import { temporaryStorageConfig } from './components/config'
 import { selectOutWarehouseJobDetail, createOutWareHouseOrder, deleteByIds } from '@/api/warehousing'
-import editTable from '@/components/Table/editTable'
+import editTable from '@/components/Table/outTable'
 export default {
   components: { newSearch, editTable },
   data() {
     return {
       searchForm: {
-        pickOrderCode: '',
         planCode: '',
         isCreateOrder: 0
       },
@@ -64,11 +54,12 @@ export default {
       SelectionData: [],
       pageIndex: 1,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
+      isShow:false
     }
   },
   mounted() {
-    this.getCurrentTableData();
+    // this.getCurrentTableData();
   },
 
   methods: {
@@ -97,7 +88,6 @@ export default {
     SelectionChange(val) {
       this.SelectionData = val.arr;
     },
-
     outOrder(type) {
       let src = '';
       this.SelectionData.forEach(v => {
@@ -140,12 +130,19 @@ export default {
           json[i] = this.searchForm[i];
         }
       }
-      selectOutWarehouseJobDetail({pageNum: this.pageIndex, pageSize: this.pageSize, ...json, jobStatus: 4 }).then(res => {
+      if(!json.planCode){
+        this.TableData=[]
+        this.loding = false
+        return
+      }
+      selectOutWarehouseJobDetail({ ...json }).then(res => {
         this.loding = false;
         if (res.success) {
-          this.total = res.data && res.data.total;
-          this.TableData = res.data && res.data.list || []
-          this.currentPage = res.data.pageNum
+          if(res.data && res.data.length>0){
+            this.TableData = res.data
+          }else{
+            this.TableData = []
+          }
         }
       }).catch(err => {
         console.log(err)
@@ -169,6 +166,11 @@ export default {
       }
     }
   }
+}
+.confirmstyle{
+  float:left;
+  width:260px;
+  min-height:400px;
 }
 
 .el-dialog__body {

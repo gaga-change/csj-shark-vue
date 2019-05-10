@@ -12,6 +12,21 @@ export const planOrderTableConfig=[// 出库计划单列表
   { label:'联系电话',prop:'arrivalLinkTel', width:150 },
   { label:'已出库数量',prop:'outQty', minWidth:90 },
 ]
+
+export const planTableConfig=[// 打印出库计划单列表
+  { label:'计划单号',prop:'planCode', width:150 },
+  { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:90 },
+  { label:'货主名称',prop:'ownerName', width:150 },
+  { label:'客户名称',prop:'arrivalName', width:150 },
+  { label:'应出/已出',prop:'printplanReal', minWidth:90 },
+  { label:'打印状态',prop:'isPrint', useLocalEnum:true, type:'printState', minWidth:90 }
+]
+
+export const outTableConfig=[// 计划单号列表
+  { label:'序号', prop:'index'},
+  { label:'计划单号',prop:'value', width:150 },
+]
+
 // orderTableConfig, orderChildTableConfig
 export const planOrderChildTableConfig=[// 出库计划单子列表
   // { label:'业务行号',prop:'busiIndex', minWidth:80 },
@@ -68,6 +83,16 @@ export const planChildTableLabelConfig=[// 计划单打印列表
   { label:'数量',prop:'printNum',editable:true,editType:'number' },
   { label:'单位',prop:'skuUnitName' },
 ]
+
+export const outChildTableLabelConfig=[// 计划单打印列表
+  { label:'计划单号',prop:'planCode' },
+  { label:'商品编码',prop:'skuCode'},
+  { label:'商品名称',prop:'skuName' },
+  { label:'规格型号',prop:'skuModel'},
+  { label:'数量',prop:'realOutQty' },
+  { label:'单位',prop:'skuUnitCode' },
+]
+
 export const planChildTablePrintConfig=[// 计划单打印列表
   { label:'计划单号',prop:'planCode', width:150 },
   { label:'单据类型',prop:'busiBillType',useLocalEnum:true,type:'BusiBillTypeEnum', width:100 },
@@ -114,7 +139,7 @@ export const temporaryStorageConfig=[
   { label:'商品编码',prop:'skuCode'},
   { label:'商品名称',prop:'skuName'},
   { label:'规格型号',prop:'skuFormat'},
-  { label:'商品数量',prop:'realSortQty'},
+  { label:'商品数量',prop:'sortQty'},
   { label:'是否已生成出库单',prop:'isCreateOrder',type:'Boolean'},
   { label:'库位',prop:'warehouseSpaceCode'},
   { label:'创建时间', width:150, prop:'gmtCreate', type:'time' },

@@ -69,6 +69,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'assignmentPlan',
+        path: 'assignmentPlan',
+        meta: { title: '波次分配', noCache: true },
+        component: _import('outwarehousing/assignmentPlan'),
+        hidden: false,
+      },
+      {
         name: 'pickingtask',
         path: 'pickingtask',
         meta: { title: '拣货任务', noCache: true },

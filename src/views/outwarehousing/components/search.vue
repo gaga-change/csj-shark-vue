@@ -2,7 +2,7 @@
     <el-card class="simpleCard" shadow="never" body-style="padding:12px">
       <el-form :model="searchForms" :rules="searchRules" ref="searchForms" label-width="70px" label-position="left">
       <el-row :gutter="10">
-        <!-- <el-col :span="6"  v-if="'busiBillType' in  searchForms">
+        <el-col :span="6"  v-if="'busiBillType' in  searchForms">
           <el-form-item label-width="70px" label="单据类型" class="postInfo-container-item">
             <el-select v-model="searchForms.busiBillType" 
              filterable clearable placeholder="请选择单据类型" 
@@ -16,7 +16,7 @@
             </template>
             </el-select>
           </el-form-item>
-        </el-col> -->
+        </el-col>
        <el-col :span="6">
           <el-form-item label="计划单号"  prop="planCode">
             <el-input type="text" size="small" placeholder="请输入计划单号" v-model="searchForms.planCode" placehold="
@@ -68,6 +68,21 @@
             </el-form-item>
         </el-col> 
 
+        <el-col :span="6"  v-if="'sortStatus' in  searchForms">
+          <el-form-item label-width="70px" label="拣货状态" class="postInfo-container-item">
+            <el-select v-model="searchForms.sortState" 
+             filterable clearable placeholder="请选择拣货状态" 
+            size="small" prefix-icon="el-icon-search">
+            <template v-for="item in SortStatus">
+              <el-option
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+              </el-option>
+            </template>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
          <el-col :span="12" v-if="'durationTime' in  searchForms">
           <el-form-item :label="searchForms.text||'下单时间'" label-width="70px"  prop="durationTime">
@@ -100,7 +115,7 @@
 </template>
 
 <script>
-import { OutExecStatusEnum, OutOrderStatusEnum,outboundOrderStatus, BusiBillTypeEnum} from '@/utils/enum';  
+import { OutExecStatusEnum, OutOrderStatusEnum,outboundOrderStatus, BusiBillTypeEnum, SortStatus} from '@/utils/enum';  
 const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
 export default  {
   name: 'SearchWarehousing',
@@ -112,7 +127,8 @@ export default  {
       OutExecStatusEnum,
       OutOrderStatusEnum,
       outboundOrderStatus,
-      BusiBillTypeEnum:BusiBillTypeEnumFilter
+      BusiBillTypeEnum:BusiBillTypeEnumFilter,
+      SortStatus
     }
   },
   props:{

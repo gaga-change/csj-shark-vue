@@ -106,6 +106,15 @@ export function modifyPrintState(data) {
   })
 }
 
+//更改出库打印状态
+export function modifyOutPrint(data) {
+  return request({
+    url: '/webApi/plan/out/print',
+    method: 'post',
+    data: data
+  })
+}
+
 //获取出库计划单列表
 export function getInfoPlanOutWarehousing(data) {
   return request({
@@ -387,5 +396,13 @@ export function badproductlist(data) {
     url: `/webApi/receive/order/bad/list`,
     method:'post',
     data:data
+  })
+}
+
+//获取所有计划单号
+export function outcodelist() {
+  return request({
+    url: `/webApi/outWarehouse/job/selectPlanCodeList`,
+    method:'get'
   })
 }

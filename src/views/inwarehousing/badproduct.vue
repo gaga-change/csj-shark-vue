@@ -11,49 +11,6 @@
                 <el-button type="primary"  size="small" @click="resetForm">重置</el-button>
             </el-col>
         </el-card>
-
-        <!-- <div style="margin-bottom:12px">
-           <el-button
-            type="primary"
-            size="small"
-            :disabled="!Array.isArray(nowChildDataSelectData)||nowChildDataSelectData.length<=0"
-            @click="submitOrider" >上架</el-button>
-           <el-button type="danger"
-            size="small"
-            :disabled="!activeOrder.orderCode"
-            @click="deleteOrider"  >
-            <span v-if="activeOrder.orderCode">
-                删除单据 : <span style="font-weight: 600;">{{activeOrder.orderCode}}</span>
-                <i class="el-icon-close" style="pointer:cursor" @click.stop="clearRow"></i>
-            </span>
-            <span v-else>
-                删除
-            </span>
-            </el-button>
-        </div> -->
-
-       <!--  <el-dialog
-          style="z-index:900"
-          title="到货登记"
-          :visible.sync="dialogVisible"
-          width="70%">
-          <div class="alertInfo">
-            <span>入库计划单 : {{activeOrder.planCode}}</span>
-            <span>供应商 : {{activeOrder.providerName}}</span>
-            <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>
-          </div>
-
-          <web-pagination-table
-           :loading="false"
-           :config="arrivalAlertConfig"
-           :allTableData="nowChildDataSelectData"/>
-
-           <div class="alertBottomArr">
-              <el-button type="primary"  size="small" @click="putawayConfirm"  >上架确认</el-button>
-              <el-button type="primary"  size="small"  @click="cancelArrivalAlert" >取消</el-button>
-           </div>
-        </el-dialog> -->
-
          <div class="arrivalAlertChider" v-if="arrivalAlertDisplay">
             <div class="arrivalAlertChiderBody">
                 <el-form :model="addSearchForm"   label-width="70px" label-position="left">

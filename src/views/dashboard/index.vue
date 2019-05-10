@@ -45,12 +45,12 @@
 	    			</router-link>
 	    		</el-col>
 	    		<el-col :span="6">
-	    			<div class="singlecol" v-if="this.totalmenu.indexOf('assignment')>-1">
-	    				<!-- <router-link to="/inwarehousing/planIn">
-	    				</router-link> -->
-	    				<img :src="assignmentpath" alt="" class="singleimg" >
-	    				<p>波次分配</p>
-	    			</div>
+                    <router-link to="/outwarehousing/assignmentPlan">
+                        <div class="singlecol" v-if="this.totalmenu.indexOf('assignmentPlan')>-1">
+                            <img :src="assignmentpath" alt="" class="singleimg" >
+                            <p>波次分配</p>
+                        </div>
+                    </router-link>
 	    		</el-col>
 	    		<el-col :span="6">
 	    			<router-link to="/outwarehousing/pickingtask" v-if="this.totalmenu.indexOf('pickingtask')>-1">
@@ -61,12 +61,12 @@
 	    			</router-link>
 	    		</el-col>
 	    		<el-col :span="6">
-	    			<div class="singlecol" v-if="this.totalmenu.indexOf('confirm')>-1">
-	    				<!-- <router-link to="/inwarehousing/planIn">
-	    				</router-link> -->
-	    				<img :src="confirmpath" alt="" class="singleimg">
-	    				<p>复核</p>
-	    			</div>
+                    <router-link to="/outwarehousing/temporaryStorage">
+                        <div class="singlecol" v-if="this.totalmenu.indexOf('temporaryStorage')>-1">
+                            <img :src="confirmpath" alt="" class="singleimg">
+                            <p>复核</p>
+                        </div>
+                    </router-link>
 	    		</el-col>
 	    	</el-row>
     	</div>
