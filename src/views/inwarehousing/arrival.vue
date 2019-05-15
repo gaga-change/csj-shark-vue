@@ -40,7 +40,7 @@
           <div class="alertInfo">
             <span>入库计划单 : {{activeOrder.planCode}}</span>
             <span>供应商 : {{activeOrder.providerName}}</span>
-            <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>
+            <span>收货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>
           </div>
 
           <web-pagination-table
@@ -309,7 +309,7 @@
               },0)
 
               if(putQtyAll+this.addSearchForm['putQty']>this.skuRow.receiveQty){
-                 this.$message({type:'error',message:'上架数量不能大于到货量'});
+                 this.$message({type:'error',message:'上架数量不能大于收货量'});
                  return
               }
               let json={id:moment().valueOf(),...this.addSearchForm};
@@ -376,7 +376,11 @@
 
              deleteOrider(){
                 let json=this.activeOrder;
-                this.$confirm(`  确定要删除到货单号为 ${json.orderCode} 计划单号为 ${json.planCode} 的单据吗？`, '提示', {
+                if(json.execStatus!==0){
+                  this.$message({type:'error',message:'已有上架记录不能删除！'});
+                  return
+                }
+                this.$confirm(`  确定要删除收货单号为 ${json.orderCode} 计划单号为 ${json.planCode} 的单据吗？`, '提示', {
                    confirmButtonText: '确定',
                    cancelButtonText: '取消'
                 }).then(()=>{

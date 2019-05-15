@@ -169,7 +169,7 @@ export default {
         submitForm(type){//提交
           let isSubmit=this.childData.some(v=>v.planInQty-v.hasReceiveQty<v.receiveQty||v.receiveQty<=0);
           if(isSubmit){
-            this.$message({type:'error',message:'本次到货量应小于总数量-已到货量,且要大于0'});
+            this.$message({type:'error',message:'本次收货量应小于总数量-已收货量,且要大于0'});
             return 
           }
           let data=[...this.childData].map(v=>{

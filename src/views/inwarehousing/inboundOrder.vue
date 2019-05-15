@@ -31,7 +31,7 @@
     <div class="alertInfo">
         <span>入库计划单 : {{activeOrder.planCode}}</span>    
         <span>供应商 : {{activeOrder.providerName}}</span>    
-        <span>到货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>    
+        <span>收货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>    
     </div>
      <web-pagination-table 
        :loading="alertLoding"

@@ -215,12 +215,25 @@ export default {
         },
 
         submitForm(type){//提交
-          let isSubmit=this.childData.some(v=>v.planInQty-(v.hasReceiveQty+v.badReceiveQty)<v.receiveQty||v.receiveQty<0);
-          console.log(isSubmit)
+          let isSubmit=this.childData.some(v=>v.planInQty-v.hasReceiveQty<v.receiveQty||v.receiveQty<=0);
           if(isSubmit){
-            this.$message({type:'error',message:'正品与残次品之和应小于总数量-已收货量,且要大于0'});
+            this.$message({type:'error',message:'正品应小于总数量-已收货量,且要大于0'});
             return 
           }
+          let isConfirm=true
+          this.childData.map(item=>{
+            if(item.badReceiveQty){
+              if(Number(item.badReceiveQty)<=0){
+                this.$message({type:'error',message:'残次品数量要大于等于0'})
+                isConfirm=false
+                return
+              }
+            }
+          })
+          if(!isConfirm){
+            return
+          }
+          // this.childData.map(v=>v.planInQty-v.hasReceiveQty<v.receiveQty||v.receiveQty<=0);
           let data=[...this.childData].map(v=>{
               let json={};
               ['busiIndex','skuCode','receiveQty', 'badReceiveQty'].forEach(item=>{

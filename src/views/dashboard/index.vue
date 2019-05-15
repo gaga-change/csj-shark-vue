@@ -16,7 +16,7 @@
 	    			<router-link to="/inwarehousing/inrecord">
 	    				<div class="singlecol" v-if="this.totalmenu.indexOf('inrecord')>-1">
 		    				<img :src="recordpath" alt="" class="singleimg">
-		    				<p>到货登记</p>
+		    				<p>收货登记</p>
 		    			</div>
 	    			</router-link>
 	    		</el-col>

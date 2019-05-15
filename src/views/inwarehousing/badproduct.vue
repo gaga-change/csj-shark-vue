@@ -218,7 +218,7 @@
               },0)
 
               if(putQtyAll+this.addSearchForm['putQty']>this.skuRow.badReceiveQty){
-                 this.$message({type:'error',message:'上架数量不能大于到货量'});
+                 this.$message({type:'error',message:'上架数量不能大于收货量'});
                  return
               }
               let json={id:moment().valueOf(),...this.addSearchForm};
@@ -286,7 +286,7 @@
 
              deleteOrider(){
                 let json=this.activeOrder;
-                this.$confirm(`  确定要删除到货单号为 ${json.orderCode} 计划单号为 ${json.planCode} 的单据吗？`, '提示', {
+                this.$confirm(`  确定要删除收货单号为 ${json.orderCode} 计划单号为 ${json.planCode} 的单据吗？`, '提示', {
                    confirmButtonText: '确定',
                    cancelButtonText: '取消'
                 }).then(()=>{

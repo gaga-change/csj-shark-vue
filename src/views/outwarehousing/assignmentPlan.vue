@@ -83,7 +83,7 @@
                     durationTime:[],//时间，
                     planCode:'',
                     providerName:'',
-                    execStatus:0,
+                    execStatus:'',
                     ownerName:'',
                     busiBillType:21,
                     sortStatus:9,
@@ -186,7 +186,7 @@
                     if(Array.isArray(this.ruleForm[i])){
                       this.ruleForm[i]=[] 
                     } else if(i==='execStatus'){
-                      this.ruleForm[i]=0 
+                      this.ruleForm[i]='' 
                     } else{
                       this.ruleForm[i]=''  
                     }

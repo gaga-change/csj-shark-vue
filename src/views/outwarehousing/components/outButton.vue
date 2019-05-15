@@ -27,11 +27,28 @@
                 :visible.sync="dialogVisibleLabel"
                 width="841px">
                 <div id="print">
-                  <el-row :gutter="20" style="margin-bottom:14px;">
-                    <el-col :span="6">客户编码: {{childData.length>0?childData[0].customerCode:''}}</el-col>
-                    <el-col :span="6">客户名称: {{childData.length>0?childData[0].customerName:''}}</el-col>
-                    <el-col :span="12">地址: {{childData.length>0?childData[0].arrivalAddress:''}}</el-col>
-                  </el-row>
+                  <el-form :model="planform" ref="ruleForm" label-width="120px" class="printform">
+                    <el-row  gutter="20" style="margin-bottom:14px;">
+                      <el-col :span="8">
+                        <div style="position:relative;padding-left:75px;">
+                          <i style="font-style:normal;position:absolute;top:0;left:0;width:75px;">客户编码:</i>
+                          <span>{{childData.length>0?childData[0].customerCode:''}}</span>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div style="position:relative;padding-left:75px;">
+                          <i style="font-style:normal;position:absolute;top:0;left:0;width:75px;">客户名称:</i>
+                          <span>{{childData.length>0?childData[0].customerName:''}}</span>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div style="position:relative;padding-left:45px;">
+                          <i style="font-style:normal;position:absolute;top:0;left:0;width:45px;">地址:</i>
+                          <span>{{childData.length>0?childData[0].arrivalAddress:''}}</span>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-form>
                     <edit-table 
                       :config="outChildTableLabelConfig" 
                       :default-canedit="defaultCanedit" 
@@ -77,6 +94,7 @@ export default {
             defaultCanedit:true,
             PickingOrderData:[],
             pickOperatorName:'',
+            planform:{}
         }
     },
     props:{

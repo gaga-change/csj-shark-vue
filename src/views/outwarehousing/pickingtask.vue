@@ -96,7 +96,9 @@
                   outOrderCode:'',
                   orderCode:'',
                   pageSize:10,
-                  pageNum:1
+                  pageNum:1,
+                  orderState:'',
+                  orderStatus:9
                 },
                 loading:false,
                 total:0,
@@ -181,6 +183,7 @@
 
             submit(value){
               this.searchForm=value;
+              this.searchForm.orderStatus=this.searchForm.orderState
               this.getCurrentTableData()
             },
 
@@ -189,6 +192,7 @@
              },
 
              resetForm(){
+               this.searchForm.orderStatus=''
                this.$refs['arrivalDom'].resetForm() 
              },
 

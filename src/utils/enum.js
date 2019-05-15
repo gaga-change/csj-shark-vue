@@ -249,15 +249,15 @@ export const orderStatus = [
 
 export const receiveStatusEnum=[
   {
-    name: '未到货',
+    name: '未收货',
     value: 0
   },
   {
-    name: '部分到货',
+    name: '部分收货',
     value: 1
   },
   {
-    name:'全部到货',
+    name:'全部收货',
     value: 2
   },
 ]
@@ -389,5 +389,24 @@ export const badStatuslist=[
   {
     name: '全部入库',
     value: 2
+  }
+]
+
+export const sortStatuslist=[
+  {
+    name: '未执行',
+    value: 0
+  },
+  {
+    name: '执行中',
+    value: 1
+  },
+  {
+    name: '执行完成',
+    value: 2
+  },
+  {
+    name: '终止',
+    value: 3
   }
 ]

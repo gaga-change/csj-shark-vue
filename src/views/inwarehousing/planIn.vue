@@ -113,7 +113,7 @@
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
-                let data={...this.ruleForm,busiBillType:this.currentTab}
+                let data={...this.ruleForm}
                 getInfoWarehousing(data).then(res => {
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
@@ -128,7 +128,7 @@
                             this.currentRadioChange(info)
                         }
                         this.tableData.map(item=>{
-                            item.printplanReal=item.inPlanQty+'/'+item.inQty
+                            item.printplanReal=(item.inPlanQty?item.inPlanQty:0)+'/'+(item.inQty?item.inQty:0)
                         })
                     }else{
                         this.tableData = []

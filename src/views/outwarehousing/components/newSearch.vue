@@ -49,7 +49,21 @@
                 </el-radio-group>
             </el-form-item>
           </el-col>
-
+          <el-col :span="6"  v-if="'orderStatus' in  searchForm">
+            <el-form-item label-width="70px" label="拣货状态" class="postInfo-container-item">
+              <el-select v-model="searchForm.orderState" 
+               filterable clearable placeholder="请选择拣货状态" 
+              size="small" prefix-icon="el-icon-search">
+              <template v-for="item in sortStatuslist">
+                <el-option
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value">
+                </el-option>
+              </template>
+              </el-select>
+            </el-form-item>
+          </el-col>
           
       </el-row>  
     </el-form>
@@ -57,7 +71,7 @@
 </template>
 
 <script>
-
+import { sortStatuslist } from '@/utils/enum'; 
 export default {
 
   props:{
@@ -67,7 +81,11 @@ export default {
      },
   },
   
-
+  data(){
+    return{
+      sortStatuslist
+    }
+  },
   methods:{
 
     submit(type){
