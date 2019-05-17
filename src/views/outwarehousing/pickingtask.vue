@@ -120,7 +120,7 @@
                 slot="reference"
                 size="mini"
                 @click="handleSelectSon(scope.$index, scope.row)"
-                :disabled="!!scope.row.realSortQty"
+                :disabled="scope.row.jobStatus > 3"
               >选择</el-button>
             </el-popover>
           </template>
@@ -191,6 +191,7 @@ import moment from 'moment';
 import { mapGetters } from 'vuex'
 import newSearch from './components/newSearch'
 import BaseTable from '@/components/Table/index'
+import {jobStatusList} from '@/utils/enum'
 import { pickingtaskConfig, pickingtaskdetailConfig, printinConfig } from './components/config'
 import { pickOrderList, pickOrderDetail, orderPickConfirm, orderDelete, orderPickStop } from '@/api/warehousing'
 import { querySkuStockByOutJobId } from '@/api/inventory'
@@ -399,6 +400,7 @@ export default {
           res.data.forEach(item => {
             item.sum = item.warehouseSpaceCode + ':' + item.jobQty
             item.realSortQty = item.realSortQty || 0
+            item.status = jobStatusList.find(v => v.value === item.jobStatus).name
           })
           this.pickingtaskdetailTableData = res.data || [];
         }

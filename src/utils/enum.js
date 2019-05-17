@@ -410,3 +410,39 @@ export const sortStatuslist=[
     value: 3
   }
 ]
+
+export const jobStatusList=[
+  {
+    name: '未执行',
+    value: 0
+  },
+  {
+    name: '未执行',
+    value: 1
+  },
+  {
+    name: '未执行',
+    value: 2
+  },
+  {
+    name: '未执行',
+    value: 3
+  },
+  {
+    name: '已完成',
+    value: 4
+  },
+  {
+    name: '已作废',
+    value: 5
+  },
+  {
+    name: '异常作业',
+    value: 6
+  },
+  {
+    name: '暂停作业',
+    value: 8
+  }
+]
+
