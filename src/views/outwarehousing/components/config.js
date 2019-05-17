@@ -75,6 +75,18 @@ export const planChildTableEditConfig=[// 计划单操作列表
   { label:'待出库数量',prop:'tempOutQty', minWidth:100, },
   { label:'通知拣货数量',prop:'sortQty', width:120,editable:true,fixed:'right' },
 ]
+
+export const planChildTableEditAllocationConfig = [ // 计划单操作列表 之 波次分配
+  { label:'计划单号',prop:'planCode', minWidth:150 },
+  { label:'商品编码',prop:'skuCode', width:150 },
+  { label:'商品名称',prop:'skuName', width:150 },
+  { label:'规格型号',prop:'skuFormat', minWidth:120 },
+  { label:'单位',prop:'skuUnitName', minWidth:100 },
+  { label:'商品数量',prop:'planOutQty', minWidth:120 },
+  { label:'通知拣货数量',prop:'sortQty', width:120,},
+  { label:'本次拣货数量',prop:'sum', width:120,},
+]
+
 export const planChildTableLabelConfig=[// 计划单打印列表
   { label:'计划单号',prop:'planCode', minWidth:150 },
   { label:'商品编码',prop:'skuCode'},

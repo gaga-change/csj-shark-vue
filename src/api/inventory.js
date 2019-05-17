@@ -8,6 +8,12 @@ export function getInfoInventory(data) {
     method: 'get',
   })
 }
+export function getInfoOnPageInventory(data) {
+  return request({
+    url: `/webApi/sku/stock/querySkuStockList?${stringify(data)}`,
+    method: 'get',
+  })
+}
 
 export function querySkuStockRecord(data) {
   return request({
