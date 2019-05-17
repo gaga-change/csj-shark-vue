@@ -14,7 +14,7 @@
                     <el-col :span="8">下单时间: {{formateTime(parentDataObj.gmtCreate)}}</el-col>
                 </el-row>
                 <edit-table 
-                  :config="planChildTableEditConfig" 
+                  :config="businessChildTableEditConfig" 
                   :table-data="childData" 
                   :default-edit="false"></edit-table>
                 <span slot="footer" class="dialog-footer">
@@ -73,7 +73,7 @@ import editTable from '@/components/Table/editTable'
 import { orderAdd, getBatchNo,receiveAndInStock } from '@/api/warehousing'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
-import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
+import { businessChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
 
 export default {
@@ -90,7 +90,7 @@ export default {
             loading:false,
             parentData:{},
             childData:[],
-            planChildTableEditConfig,
+            businessChildTableEditConfig,
             planChildTableLabelConfig,
             planChildTablePrintConfig,
             printPlan:[],//打印计划单

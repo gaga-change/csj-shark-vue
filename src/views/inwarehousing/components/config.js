@@ -37,7 +37,7 @@ export const planChildTableConfig=[// 计划单子列表
   { label:'收货数量',prop:'hasReceiveQty', minWidth:120 },
 ]
 
-export const planChildTableEditConfig=[// 计划单操作列表
+export const businessChildTableEditConfig=[// 计划单操作列表
   { label:'业务行号',prop:'busiIndex', minWidth:80 },
   { label:'商品编码',prop:'skuCode', width:150 },
   { label:'商品名称',prop:'skuName', width:150 },
