@@ -125,13 +125,13 @@ export const pickingtaskConfig=[
 ]
 
 export const pickingtaskdetailConfig=[
-  { columnType:'selection',width:50},
   { label:'计划单号',prop:'planCode'},
   { label:'商品编码',prop:'skuCode'},
   { label:'商品名称',prop:'skuName'},
   { label:'规格型号',prop:'skuFormat'},
-  { label:'商品数量',prop:'jobQty'},
-  { label:'货位',prop:'warehouseSpaceCode'},
+  { label:'通知拣货数',prop:'jobQty'},
+  // { label:'货位',prop:'warehouseSpaceCode'},
+  { label:'货位',prop:'sum'},
 ]
 
 export const printinConfig=[

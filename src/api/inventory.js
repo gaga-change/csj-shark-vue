@@ -21,6 +21,12 @@ export function querySkuStockRecord(data) {
     method: 'get',
   })
 }
+export function querySkuStockByOutJobId(data) {
+  return request({
+    url: `/webApi/sku/stock/querySkuStockByOutJobId?${stringify(data)}`,
+    method: 'get',
+  })
+}
 
 //导出库位库存
 export function exportLedger(data) {
