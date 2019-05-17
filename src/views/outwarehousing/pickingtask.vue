@@ -62,6 +62,7 @@
         <el-table-column
           type="selection"
           width="50"
+          :selectable="selectable"
         >
         </el-table-column>
         <el-table-column
@@ -119,7 +120,7 @@
                 slot="reference"
                 size="mini"
                 @click="handleSelectSon(scope.$index, scope.row)"
-                :disabled="(scope.row.planOutQty - scope.row.sortQty) <= 0"
+                :disabled="!!scope.row.realSortQty"
               >选择</el-button>
             </el-popover>
           </template>
@@ -277,6 +278,9 @@ export default {
   methods: {
     moment,
     MakePrint,
+    selectable(row, index) {
+      return !row.realSortQty
+    },
     /** dialog 隐藏 */
     dialogClose() {
       this.cache = {}
@@ -394,6 +398,7 @@ export default {
         if (res.success) {
           res.data.forEach(item => {
             item.sum = item.warehouseSpaceCode + ':' + item.jobQty
+            item.realSortQty = item.realSortQty || 0
           })
           this.pickingtaskdetailTableData = res.data || [];
         }
@@ -401,7 +406,6 @@ export default {
         this.detailLoding = false;
       })
     },
-
 
     pickingDetail(row, tips, Api) {
       if (!tips) {
@@ -452,12 +456,19 @@ export default {
       json.planCode = this.SelectionData[0].planCode;
       json.pickOrderId = this.activeRow.id;
       let skuStock = JSON.parse(JSON.stringify(this.skuStock))
+      let message = ''
       this.SelectionData.forEach(v => {
         v.realSortStocks && Object.keys(v.realSortStocks).forEach(id => {
           skuStock[id].num = skuStock[id].num || 0
           skuStock[id].num += v.realSortStocks[id]
         })
+        if (v.total > v.jobQty) {
+          message = `计划单 ${v.planCode} 的本次拣货数量应该在 0-${v.jobQty} 之间`
+        }
       })
+      if (message) {
+        return this.$message({ type: 'error', message })
+      }
       for (let key in skuStock) {
         let item = skuStock[key]
         if (item.num !== undefined && item.num > item.qty) {

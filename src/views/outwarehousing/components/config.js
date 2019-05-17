@@ -130,6 +130,7 @@ export const pickingtaskdetailConfig=[
   { label:'商品名称',prop:'skuName'},
   { label:'规格型号',prop:'skuFormat'},
   { label:'通知拣货数',prop:'jobQty'},
+  { label:'已拣货数',prop:'realSortQty'},
   // { label:'货位',prop:'warehouseSpaceCode'},
   { label:'货位',prop:'sum'},
 ]
