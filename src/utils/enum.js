@@ -234,11 +234,11 @@ export const orderStatus = [
     value: 0
   },
   {
-    name: '执行中',
+    name: '部分执行',
     value: 1
   },
   {
-    name: '执行完成',
+    name: '全部执行',
     value: 2
   },
   {
@@ -389,25 +389,6 @@ export const badStatuslist=[
   {
     name: '全部入库',
     value: 2
-  }
-]
-
-export const sortStatuslist=[
-  {
-    name: '未执行',
-    value: 0
-  },
-  {
-    name: '执行中',
-    value: 1
-  },
-  {
-    name: '执行完成',
-    value: 2
-  },
-  {
-    name: '终止',
-    value: 3
   }
 ]
 

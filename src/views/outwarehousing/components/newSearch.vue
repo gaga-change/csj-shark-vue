@@ -54,7 +54,7 @@
               <el-select v-model="searchForm.orderState" 
                filterable clearable placeholder="请选择拣货状态" 
               size="small" prefix-icon="el-icon-search">
-              <template v-for="item in sortStatuslist">
+              <template v-for="item in orderStatus">
                 <el-option
                   :key="item.value"
                   :label="item.name"
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { sortStatuslist } from '@/utils/enum'; 
+import { orderStatus } from '@/utils/enum'; 
 export default {
 
   props:{
@@ -83,7 +83,7 @@ export default {
   
   data(){
     return{
-      sortStatuslist
+      orderStatus
     }
   },
   methods:{
