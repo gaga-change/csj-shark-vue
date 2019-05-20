@@ -121,7 +121,7 @@
                 size="mini"
                 @click="handleSelectSon(scope.$index, scope.row)"
                 :disabled="scope.row.jobStatus > 3"
-              >选择</el-button>
+              >变更库位</el-button>
             </el-popover>
           </template>
         </el-table-column>
@@ -191,7 +191,7 @@ import moment from 'moment';
 import { mapGetters } from 'vuex'
 import newSearch from './components/newSearch'
 import BaseTable from '@/components/Table/index'
-import {jobStatusList} from '@/utils/enum'
+import { jobStatusList } from '@/utils/enum'
 import { pickingtaskConfig, pickingtaskdetailConfig, printinConfig } from './components/config'
 import { pickOrderList, pickOrderDetail, orderPickConfirm, orderDelete, orderPickStop } from '@/api/warehousing'
 import { querySkuStockByOutJobId } from '@/api/inventory'
@@ -280,7 +280,8 @@ export default {
     moment,
     MakePrint,
     selectable(row, index) {
-      return !row.realSortQty
+      
+      return !(row.jobStatus > 3)
     },
     /** dialog 隐藏 */
     dialogClose() {
@@ -477,6 +478,12 @@ export default {
           return this.$message({ type: 'error', message: `库位【${item.code}】的可用库存为${item.qty}，当前已使用${item.num}` })
         }
       }
+      this.SelectionData.forEach(v => {
+        if (!v.realSortStocks || !Object.keys(v.realSortStocks).length) {
+          v.realSortStocks = {}
+          v.realSortStocks[v.stockId] = v.jobQty
+        }
+      })
       orderPickConfirm(json).then(res => {
         if (res.success) {
           this.$message({ type: 'success', message: '操作成功，可以去出库暂存页面查看' });
