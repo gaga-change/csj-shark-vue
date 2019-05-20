@@ -280,7 +280,6 @@ export default {
     moment,
     MakePrint,
     selectable(row, index) {
-      
       return !(row.jobStatus > 3)
     },
     /** dialog 隐藏 */

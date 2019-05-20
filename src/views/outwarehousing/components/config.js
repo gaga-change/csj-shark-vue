@@ -116,8 +116,8 @@ export const planChildTablePrintConfig=[// 计划单打印列表
 
 export const pickingtaskConfig=[
   { label:'拣货单号',prop:'orderCode'},
-  { label:'拣货总数',prop:'realPickQty'},
   { label:'应拣货总量',prop:'pickQty'},
+  { label:'已拣货总数',prop:'realPickQty'},
   { label:'状态',prop:'orderStatus',type:'orderStatus',useLocalEnum:true},
   { label:'创建时间',prop:'gmtCreate',type:'time'},
   { label:'操作',useDom:true,width:300},
