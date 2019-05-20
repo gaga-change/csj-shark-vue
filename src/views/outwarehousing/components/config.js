@@ -153,7 +153,8 @@ export const temporaryStorageConfig=[
   { label:'商品名称',prop:'skuName'},
   { label:'规格型号',prop:'skuFormat'},
   { label:'商品数量',prop:'sortQty'},
-  { label:'是否已生成出库单',prop:'isCreateOrder',type:'Boolean'},
+  {label: '拣货数量', prop: 'realSortQty'},
+  { label:'是否已生成出库单',prop:'isCreateOrder',type:'Boolean',width:120},
   { label:'库位',prop:'warehouseSpaceCode'},
   { label:'创建时间', width:150, prop:'gmtCreate', type:'time' },
 ]
