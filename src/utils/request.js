@@ -16,6 +16,7 @@ service.interceptors.response.use(
     if (res.code !== '200' && !res.success && res.code!=='success') {
       if (res.code === 'shark-512') {
         Message({type:'error',message:'登录失效，请重新登录',onClose:()=>{
+          sessionStorage.setItem('warehouse', '')
           location.href = `/csj_login`
         },duration:1500})
        
@@ -24,6 +25,7 @@ service.interceptors.response.use(
       } else {
         let message=res.message||res.errorMsg||'';
         if(message=='用户未登录'){
+          sessionStorage.setItem('warehouse', '')
           location.href = `/csj_login`
         }
         Notification({
@@ -41,6 +43,7 @@ service.interceptors.response.use(
   error => {    
     let message=error.message||err.errorMsg||''
     if(message=='用户未登录'){
+      sessionStorage.setItem('warehouse', '')
       location.href = `/csj_login`
     }
     Notification({
