@@ -38,9 +38,7 @@ service.interceptors.response.use(
       return res;
     }
   },
-  error => {
-    console.log(error.code,'abcddddd');
-    
+  error => {    
     let message=error.message||err.errorMsg||''
     if(message=='用户未登录'){
       location.href = `/csj_login`

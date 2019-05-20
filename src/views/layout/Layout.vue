@@ -4,10 +4,10 @@
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
       <el-row :gutter="16"  class="main-container-nav">
-         <el-col :span="7" >
+         <el-col :span="8" >
             <navbar></navbar>
          </el-col >
-          <el-col :span="17" >
+          <el-col :span="16" >
              <tags-view></tags-view>
          </el-col >
       </el-row>
