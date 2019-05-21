@@ -67,6 +67,7 @@ pack:
     - curl  -u "$CI_RANCHER_TOKEN" -X PUT -H 'Accept:application/json' -H 'Content-Type:application/json' -d '{"containers":['${CONTAINER}']}' $API
   only:
     - tags
+  when: manual
 
 正式环境更新:
   image: gempesaw/curl-jq
@@ -81,3 +82,4 @@ pack:
     - curl  -u "$CI_RANCHER_TOKEN" -X PUT -H 'Accept:application/json' -H 'Content-Type:application/json' -d '{"containers":['${CONTAINER}']}' $API
   only:
     - tags
+  when: manual
