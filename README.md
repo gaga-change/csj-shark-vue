@@ -1,20 +1,59 @@
-### 一、知识参考
+## 发布流程
 
-1. [vue.js](https://cn.vuejs.org/)
+### 测试
 
-2. [ECMAScript 6 入门](http://es6.ruanyifeng.com/)
+添加 tag 后自动发布
 
-3. [vue-element-admin](https://panjiachen.github.io/vue-element-admin-site/zh/guide/#%E5%8A%9F%E8%83%BD)
+### 预发&正式
 
-4. [element-ui](http://element-cn.eleme.io/#/zh-CN)
+在 CI/CD -> 流水线（或作业）中手动触发更新
 
-### 二、启动方式
+
+## 相关域名以及账号
+
+### #测试
+
+#### 域名&账号
+
+shark测试：http://testshark.csjmro.com  账号：serviceadmin@csjscm.com   密码：Aa12345678
+
+#### 域名代理地址
+
+192.168.1.37  -  nginx
+
+rancher : static-web:csj-shark-vue-test
+
+### #预发
+
+#### 域名&账号
+
+shark预发：http://stabletiger.csjmro.com  账号：serviceadmin@csjscm.com   密码：Aa12345678
+
+#### 域名代理地址
+
+192.168.1.33  -  nginx
+
+rancher : static-web:csj-shark-vue-rel
+
+### #正式
+
+#### 域名&账号
+
+shark正式：http://shark.csjmro.com   账号：serviceadmin@csjscm.com   密码：Aa12345678
+
+
+#### 域名代理地址
+
+总控 nginx
+
+rancher : static-web:csj-shark-vue-prod
+
+
+## 二、启动方式
 
 ```
+npm install
 npm run start
 
 ```
 
-### 三、目录结构
-
-> 参考vue-element-admin
