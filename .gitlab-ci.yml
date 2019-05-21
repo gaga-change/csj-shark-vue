@@ -17,12 +17,12 @@ build:
     - docker build --pull -t "${CI_REGISTRY_IMAGE}_build:latest" . -f Dockerfile.build
     - docker push "${CI_REGISTRY_IMAGE}_build:latest"
     - docker create --name extract "${CI_REGISTRY_IMAGE}_build:latest"
-    - docker cp extract:/usr/src/app/dist ./build
+    - docker cp extract:/usr/src/app/dist ./dist
     - docker rm -f extract
   artifacts:
     expire_in: 3 mins
     paths:
-      - build/
+      - dist/
       - Dockerfile
       - nginx.conf
   only:
