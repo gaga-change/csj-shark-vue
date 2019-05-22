@@ -46,16 +46,12 @@
       width="60%"
       :before-close="handleClose"
     >
-      <!-- <web-pagination-table
-        :loading="detailLoding"
-        @SelectionChange="SelectionChange"
-        :config="pickingtaskdetailConfig"
-        :allTableData="pickingtaskdetailTableData"
-      /> -->
       <el-table
+        class="select-table"
         v-loading="detailLoding"
         :data="pickingtaskdetailTableData"
         border
+        ref="multipleTable"
         @selection-change="SelectionChange"
         size="mini"
       >
@@ -446,6 +442,12 @@ export default {
 
     SelectionChange(val) {
       this.SelectionData = val
+      if (val.length > 1) {
+        val.forEach((v, index) => {
+          if (index === (val.length - 1)) return
+          this.$refs.multipleTable.toggleRowSelection(v)
+        })
+      }
     },
 
     suerPicking() {
@@ -534,6 +536,13 @@ export default {
       cursor: pointer;
       &:last-child {
         margin-right: 0;
+      }
+    }
+  }
+  .select-table {
+    .el-table__header {
+      .el-checkbox {
+        visibility: hidden;
       }
     }
   }
