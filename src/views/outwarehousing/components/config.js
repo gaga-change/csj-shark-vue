@@ -38,8 +38,6 @@ export const planOrderChildTableConfig=[// 出库计划单子列表
   { label:'出库数量',prop:'realOutQty', minWidth:120 },
   { label:'已通知拣货数量',prop:'sortQty', minWidth:120 },
   { label:'已拣货数量',prop:'realSortQty', minWidth:120 },
-  { label:'暂存区数量',prop:'realSortQty', minWidth:120 },
-
 ]
 export const orderTableConfig=[// 出库单列表
   { label:'出库时间', prop:'gmtCreate', type:'time' },
