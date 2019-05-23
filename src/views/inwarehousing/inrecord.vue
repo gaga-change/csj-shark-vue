@@ -135,7 +135,7 @@
                     query:{data:JSON.stringify(this.ruleForm)}
                 })
                 this.loading=true;
-                let data={...this.ruleForm,busiBillType:this.currentTab}
+                let data={...this.ruleForm}
                 getInfoWarehousing(data).then(res => {
                     if(res.success && res.data &&res.data.list){
                         var tempList = [...res.data.list]
