@@ -4,7 +4,7 @@
       <img :src="logoPath" />
     </div>
     <div class="plant-text">
-      供应链协同操作管理平台
+      供应链云仓库管理系统WMS
     </div>
      <el-dropdown class="avatar-container warehouse" @command="handleCommand">
       <div class="avatar-wrapper">

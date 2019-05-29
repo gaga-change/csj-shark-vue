@@ -28,21 +28,24 @@
         :visible.sync="dialogVisible"
         width="90%"
       >
-        <span>拣货人姓名:</span>
-        <el-input
-          type="text"
-          size="small"
-          style="width:200px;margin-bottom:12px;"
-          placeholder="请输入拣货人姓名"
-          v-model="pickOperatorName"
-        >
-        </el-input>
-        <!-- <edit-table
-          :config="planChildTableEditAllocationConfig"
-          :table-data="PickingOrderData"
-          :default-edit="false"
-        >
-        </edit-table> -->
+        <div style="position:relative;">
+          <span>拣货人姓名:</span>
+          <el-input
+            type="text"
+            size="small"
+            style="width:200px;margin-bottom:12px;"
+            placeholder="请输入拣货人姓名"
+            v-model="pickOperatorName"
+          >
+          </el-input>
+          <!-- <edit-table
+            :config="planChildTableEditAllocationConfig"
+            :table-data="PickingOrderData"
+            :default-edit="false"
+          >
+          </edit-table> -->
+          <el-button size="mini" type="primary" @click="getorder" style="position:absolute;right:0;" :disabled="getbtn">先进先出</el-button>
+        </div>
         <el-table
           :data="PickingOrderData"
           border
@@ -120,58 +123,6 @@
           >确认</el-button>
         </span>
       </el-dialog>
-
-      <el-dialog
-        title="打印装箱单"
-        :visible.sync="dialogVisibleLabel"
-        width="841px"
-      >
-        <div id="print">
-          <edit-table
-            :config="planChildTableLabelConfig"
-            :default-canedit="defaultCanedit"
-            :table-data="childData"
-            v-loading="loading"
-            :default-edit="false"
-          >
-          </edit-table>
-        </div>
-        <span
-          slot="footer"
-          class="dialog-footer"
-          v-loading="loading"
-        >
-          <el-button @click="dialogVisibleLabel = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="printLabel"
-          >确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog
-        title="打印计划单"
-        :visible.sync="dialogVisibleReserve"
-        width="841px"
-      >
-        <edit-table
-          :config="planChildTablePrintConfig"
-          :table-data="printPlan"
-          id="printPlanContainer"
-          :default-edit="false"
-        >
-        </edit-table>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
-          <el-button @click="dialogVisibleReserve = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="printPlanOrder"
-          >打印</el-button>
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -210,6 +161,10 @@ export default {
       cache: {}, // 缓存
       cacheApi: {}, // 缓存api
       skuStock: {}, // 库存统计
+      newcacheApi: {},
+      newgridData: [],
+      newcountnum:{},
+      getbtn:false
     }
   },
   props: {
@@ -255,7 +210,11 @@ export default {
       this.cacheApi = {}
       this.gridData = []
       this.skuStock = {}
+      this.newcacheApi={}
+      this.newcountnum={}
+      this.newgridData=[]
       this.PickingOrderData.forEach(v => v.sum = '')
+      this.getbtn=false
     },
     /** popover 隐藏事件 */
     handlePopoverHide(indexHide, itemHide) {
@@ -286,8 +245,170 @@ export default {
         this.gridData = []
       }
     },
+    getorder(){
+      this.newcacheApi={}
+      let ownlength=this.PickingOrderData.length
+      let i=0
+      let that=this
+      this.getbtn=true
+      function getdata(){
+        if(ownlength>0){
+          let Numkey=that.PickingOrderData[i].planCode+that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
+          let ownkey=that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
+          that.newcountnum[Numkey]={}
+          let basicnum=that.PickingOrderData[i].planOutQty-that.PickingOrderData[i].sortQty
+          const _ = (data) => {
+            that.newgridData = data.map((item, index) => {
+              item.index = index + 1
+              item.qty = item.skuQty - item.blockQty
+              if(basicnum>0){
+                if(basicnum-item.qty>0){
+                  item.num = item.qty
+                  basicnum = basicnum-item.qty
+                  item.qty = 0
+                }else if(basicnum-item.qty==0){
+                  item.num = item.qty
+                  basicnum = 0
+                  item.qty = 0
+                }else if(basicnum-item.qty<0){
+                  item.num = basicnum
+                  item.qty = item.qty-basicnum
+                  basicnum = 0
+                }
+              }else{
+                basicnum = 0
+              }
+              return item
+            })
+            that.newgridData.item = that.PickingOrderData[i]
+            if (that.newgridData.length) {
+              let item = that.newgridData.item
+              let sum = ''
+              let map = {}
+              let total = 0
+              that.newgridData.forEach(v => {
+                if (!v.num) return
+                if (sum.length) {
+                  sum += ','
+                }
+                map[v.id] = v.num
+                sum += (v.warehouseSpaceCode + ':' + v.num)
+                total += v.num
+                let ownid=v.id
+                that.newcountnum[Numkey][ownid]=v.num
+              })
+              that.PickingOrderData[i].sortList = map
+              that.PickingOrderData[i].sum = sum
+              that.PickingOrderData[i].total = total
+              that.PickingOrderData = [...that.PickingOrderData]
+              that.newgridData = []
+            }
+          }
+          if (that.newcacheApi[ownkey]) {
+            _(that.newcacheApi[ownkey])
+            i++
+            ownlength--
+            if(ownlength>0){
+              getdata()
+            }
+          }else{
+            getInfoOnPageInventory({
+              ownerCode: that.PickingOrderData[i].ownerCode,
+              skuCode: that.PickingOrderData[i].skuCode
+            }).then(res => {
+              if (res.success && res.data) {
+                // console.log(res.data)
+                that.newcacheApi[ownkey] = JSON.parse(JSON.stringify(res.data))
+                res.data.forEach(v => {
+                  that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
+                })
+                _(res.data)
+                i++
+                ownlength--
+                if(ownlength>0){
+                  getdata()
+                }
+              }
+            }).catch(err => {
+              this.getbtn=false
+            })
+          }
+        }
+      }
+      getdata()
+      // this.PickingOrderData.map(item=>{
+      //   let Numkey=item.planCode+item.ownerCode + item.skuCode
+      //   this.newcountnum[Numkey]={}
+      //   let basicnum=item.planOutQty-item.sortQty
+      //   const _ = (data) => {
+      //     this.newgridData = data.map((item, index) => {
+      //       item.index = index + 1
+      //       item.qty = item.skuQty - item.blockQty
+      //       if(basicnum-item.qty>0){
+      //         item.num = item.qty
+      //         basicnum = basicnum-item.qty
+      //         item.qty = 0
+      //       }else if(basicnum-item.qty==0){
+      //         item.num = item.qty
+      //         basicnum = 0
+      //         item.qty = 0
+      //       }else if(basicnum-item.qty<0){
+      //         item.num = basicnum
+      //         item.qty = item.qty-basicnum
+      //         basicnum = 0
+      //       }
+      //       return item
+      //     })
+      //     this.newgridData.item = item
+      //     if (this.newgridData.length) {
+      //       let item = this.newgridData.item
+      //       let sum = ''
+      //       let map = {}
+      //       let total = 0
+      //       this.newgridData.forEach(v => {
+      //         if (!v.num) return
+      //         if (sum.length) {
+      //           sum += ','
+      //         }
+      //         map[v.id] = v.num
+      //         sum += (v.warehouseSpaceCode + ':' + v.num)
+      //         total += v.num
+      //         let ownid=v.id
+      //         this.newcountnum[Numkey][ownid]=v.num
+      //         console.log(this.newcountnum[Numkey])
+      //       })
+      //       item.sortList = map
+      //       item.sum = sum
+      //       item.total = total
+      //       this.PickingOrderData = [...this.PickingOrderData]
+      //       this.newgridData = []
+      //     }
+      //   }
+      //   let key = item.ownerCode + item.skuCode
+      //   if (this.newcacheApi[Numkey]) {
+      //     _(this.newcacheApi[Numkey])
+      //   }else{
+      //     getInfoOnPageInventory({
+      //       ownerCode: item.ownerCode,
+      //       skuCode: item.skuCode
+      //     }).then(res => {
+      //       if (res.success && res.data) {
+      //         this.newcacheApi[Numkey] = JSON.parse(JSON.stringify(res.data))
+      //         res.data.forEach(v => {
+      //           this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
+      //         })
+      //         _(res.data)
+      //       }
+            
+      //     }).catch(err => {
+
+      //     })
+      //   }
+      // })
+    },
     /** 选择 通知拣货数量 */
     handleSelectSon(index, item, type) {
+      let numKey=item.planCode+item.ownerCode + item.skuCode
       if (this.gridData.length) {
         this.handlePopoverHide()
       }
@@ -300,33 +421,75 @@ export default {
         })
         this.gridData.item = item
       }
-      if (this.cache[item.skuCode + item.planCode]) {
-        this.gridData = this.cache[item.skuCode + item.planCode]
+      const countNum = (data) => {
+        this.gridData = data.map((item, index) => {
+          item.index = index + 1
+          item.qty = item.skuQty - item.blockQty
+          item.num = this.newcountnum[numKey][item.id]?this.newcountnum[numKey][item.id]:0;
+          return item
+        })
         this.gridData.item = item
+      }
+      if (this.cache[item.skuCode + item.planCode]) {
+          this.gridData = this.cache[item.skuCode + item.planCode]
+          this.gridData.item = item
       } else {
-        let key = item.ownerCode + item.skuCode
-        if (this.cacheApi[key]) {
-          _(this.cacheApi[key])
-        } else {
-          this.sonTableLoading = true
-          getInfoOnPageInventory({
-            ownerCode: item.ownerCode,
-            skuCode: item.skuCode
-          }).then(res => {
-            if (res.success && res.data) {
-              this.cacheApi[key] = JSON.parse(JSON.stringify(res.data))
-              res.data.forEach(v => {
-                this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
-              })
-              _(res.data)
-            }
-            this.sonTableLoading = false;
-          }).catch(err => {
-            this.sonTableLoading = false;
-          })
+        if(this.newcacheApi[item.ownerCode + item.skuCode]){
+          countNum(this.newcacheApi[item.ownerCode + item.skuCode])
+        }else{
+          let key = item.ownerCode + item.skuCode
+          if (this.cacheApi[key]) {
+            _(this.cacheApi[key])
+          } else {
+            this.sonTableLoading = true
+            getInfoOnPageInventory({
+              ownerCode: item.ownerCode,
+              skuCode: item.skuCode
+            }).then(res => {
+              if (res.success && res.data) {
+                this.cacheApi[key] = JSON.parse(JSON.stringify(res.data))
+                res.data.forEach(v => {
+                  this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
+                })
+                _(res.data)
+              }
+              this.sonTableLoading = false;
+            }).catch(err => {
+              this.sonTableLoading = false;
+            })
+          }
         }
       }
-
+      // if(this.newcacheApi[item.ownerCode + item.skuCode]){
+      //   countNum(this.newcacheApi[item.ownerCode + item.skuCode])
+      // }else{
+      //   if (this.cache[item.skuCode + item.planCode]) {
+      //     this.gridData = this.cache[item.skuCode + item.planCode]
+      //     this.gridData.item = item
+      //   } else {
+      //     let key = item.ownerCode + item.skuCode
+      //     if (this.cacheApi[key]) {
+      //       _(this.cacheApi[key])
+      //     } else {
+      //       this.sonTableLoading = true
+      //       getInfoOnPageInventory({
+      //         ownerCode: item.ownerCode,
+      //         skuCode: item.skuCode
+      //       }).then(res => {
+      //         if (res.success && res.data) {
+      //           this.cacheApi[key] = JSON.parse(JSON.stringify(res.data))
+      //           res.data.forEach(v => {
+      //             this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
+      //           })
+      //           _(res.data)
+      //         }
+      //         this.sonTableLoading = false;
+      //       }).catch(err => {
+      //         this.sonTableLoading = false;
+      //       })
+      //     }
+      //   }
+      // }
     },
     surePicking() {
       if (this.gridData.length) {
@@ -345,9 +508,11 @@ export default {
           skuStock[id].num = skuStock[id].num || 0
           skuStock[id].num += v.sortList[id]
         })
-        if (total > v.planOutQty - v.sortQty) {
-          this.$message({ type: 'error', message: `计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty - v.sortQty} 之间` })
-          return true
+        if(v.planOutQty - v.sortQty>0){
+          if (total > v.planOutQty - v.sortQty) {
+            this.$message({ type: 'error', message: `计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty - v.sortQty} 之间` })
+            return true
+          }
         }
       })) {
         return
