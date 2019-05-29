@@ -164,7 +164,8 @@ export default {
       newcacheApi: {},
       newgridData: [],
       newcountnum:{},
-      getbtn:false
+      getbtn:false,
+      errarrry:[]
     }
   },
   props: {
@@ -213,6 +214,7 @@ export default {
       this.newcacheApi={}
       this.newcountnum={}
       this.newgridData=[]
+      this.errarrry=[]
       this.PickingOrderData.forEach(v => v.sum = '')
       this.getbtn=false
     },
@@ -251,6 +253,7 @@ export default {
       let i=0
       let that=this
       this.getbtn=true
+      this.errarrry=[]
       function getdata(){
         if(ownlength>0){
           let Numkey=that.PickingOrderData[i].planCode+that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
@@ -306,9 +309,12 @@ export default {
           }
           if (that.newcacheApi[ownkey]) {
             _(that.newcacheApi[ownkey])
+            if(that.newcacheApi[ownkey].length<=0){
+              that.errarrry.push('error')
+            }
             i++
             ownlength--
-            if(ownlength>0){
+            if(ownlength>=0){
               getdata()
             }
           }else{
@@ -323,16 +329,24 @@ export default {
                   that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
                 })
                 _(res.data)
+                if(res.data.length<=0){
+                  that.errarrry.push('error')
+                }
                 i++
                 ownlength--
-                if(ownlength>0){
+                if(ownlength>=0){
                   getdata()
                 }
               }
             }).catch(err => {
-              this.getbtn=false
+              that.getbtn=false
             })
           }
+        }else{
+          if(that.errarrry.length>0){
+            that.$message({ type: 'error', message: '部分商品库存不足或为0，系统无法给出匹配的库位!' })
+          }
+          return
         }
       }
       getdata()
