@@ -256,6 +256,7 @@ export default {
       }
     },
     getorder(){
+      this.cache = {}
       this.newcacheApi={}
       let ownlength=this.PickingOrderData.length
       let i=0
