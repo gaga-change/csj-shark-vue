@@ -59,6 +59,14 @@
             :width="item.width"
           >
           </el-table-column>
+          <el-table-column
+            label="本次拣货数量"
+            width="120"
+          >
+            <template slot-scope="scope">
+              <span :class="(scope.row.planOutQty-scope.row.sortQty)>scope.row.total?'pointout':''">{{ scope.row.sum }}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-popover
@@ -307,118 +315,52 @@ export default {
               that.newgridData = []
             }
           }
+          // if(basicnum>0){
+            
+          // }
           if (that.newcacheApi[ownkey]) {
-            _(that.newcacheApi[ownkey])
-            if(that.newcacheApi[ownkey].length<=0){
-              that.errarrry.push('error')
-            }
-            i++
-            ownlength--
-            if(ownlength>=0){
-              getdata()
-            }
-          }else{
-            getInfoOnPageInventory({
-              ownerCode: that.PickingOrderData[i].ownerCode,
-              skuCode: that.PickingOrderData[i].skuCode
-            }).then(res => {
-              if (res.success && res.data) {
-                // console.log(res.data)
-                that.newcacheApi[ownkey] = JSON.parse(JSON.stringify(res.data))
-                res.data.forEach(v => {
-                  that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
-                })
-                _(res.data)
-                if(res.data.length<=0){
-                  that.errarrry.push('error')
-                }
-                i++
-                ownlength--
-                if(ownlength>=0){
-                  getdata()
-                }
+              _(that.newcacheApi[ownkey])
+              if(that.newcacheApi[ownkey].length<=0){
+                that.errarrry.push('error')
               }
-            }).catch(err => {
-              that.getbtn=false
-            })
-          }
+              i++
+              ownlength--
+              if(ownlength>=0){
+                getdata()
+              }
+            }else{
+              getInfoOnPageInventory({
+                ownerCode: that.PickingOrderData[i].ownerCode,
+                skuCode: that.PickingOrderData[i].skuCode
+              }).then(res => {
+                if (res.success && res.data) {
+                  // console.log(res.data)
+                  that.newcacheApi[ownkey] = JSON.parse(JSON.stringify(res.data))
+                  res.data.forEach(v => {
+                    that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
+                  })
+                  _(res.data)
+                  if(res.data.length<=0){
+                    that.errarrry.push('error')
+                  }
+                  i++
+                  ownlength--
+                  if(ownlength>=0){
+                    getdata()
+                  }
+                }
+              }).catch(err => {
+                that.getbtn=false
+              })
+            }
         }else{
           if(that.errarrry.length>0){
-            that.$message({ type: 'error', message: '部分商品库存不足或为0，系统无法给出匹配的库位!' })
+            that.$message({ type: 'error', message: '部分商品库存为0，系统无法给出匹配的库位!' })
           }
           return
         }
       }
       getdata()
-      // this.PickingOrderData.map(item=>{
-      //   let Numkey=item.planCode+item.ownerCode + item.skuCode
-      //   this.newcountnum[Numkey]={}
-      //   let basicnum=item.planOutQty-item.sortQty
-      //   const _ = (data) => {
-      //     this.newgridData = data.map((item, index) => {
-      //       item.index = index + 1
-      //       item.qty = item.skuQty - item.blockQty
-      //       if(basicnum-item.qty>0){
-      //         item.num = item.qty
-      //         basicnum = basicnum-item.qty
-      //         item.qty = 0
-      //       }else if(basicnum-item.qty==0){
-      //         item.num = item.qty
-      //         basicnum = 0
-      //         item.qty = 0
-      //       }else if(basicnum-item.qty<0){
-      //         item.num = basicnum
-      //         item.qty = item.qty-basicnum
-      //         basicnum = 0
-      //       }
-      //       return item
-      //     })
-      //     this.newgridData.item = item
-      //     if (this.newgridData.length) {
-      //       let item = this.newgridData.item
-      //       let sum = ''
-      //       let map = {}
-      //       let total = 0
-      //       this.newgridData.forEach(v => {
-      //         if (!v.num) return
-      //         if (sum.length) {
-      //           sum += ','
-      //         }
-      //         map[v.id] = v.num
-      //         sum += (v.warehouseSpaceCode + ':' + v.num)
-      //         total += v.num
-      //         let ownid=v.id
-      //         this.newcountnum[Numkey][ownid]=v.num
-      //         console.log(this.newcountnum[Numkey])
-      //       })
-      //       item.sortList = map
-      //       item.sum = sum
-      //       item.total = total
-      //       this.PickingOrderData = [...this.PickingOrderData]
-      //       this.newgridData = []
-      //     }
-      //   }
-      //   let key = item.ownerCode + item.skuCode
-      //   if (this.newcacheApi[Numkey]) {
-      //     _(this.newcacheApi[Numkey])
-      //   }else{
-      //     getInfoOnPageInventory({
-      //       ownerCode: item.ownerCode,
-      //       skuCode: item.skuCode
-      //     }).then(res => {
-      //       if (res.success && res.data) {
-      //         this.newcacheApi[Numkey] = JSON.parse(JSON.stringify(res.data))
-      //         res.data.forEach(v => {
-      //           this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
-      //         })
-      //         _(res.data)
-      //       }
-            
-      //     }).catch(err => {
-
-      //     })
-      //   }
-      // })
     },
     /** 选择 通知拣货数量 */
     handleSelectSon(index, item, type) {
@@ -474,36 +416,6 @@ export default {
           }
         }
       }
-      // if(this.newcacheApi[item.ownerCode + item.skuCode]){
-      //   countNum(this.newcacheApi[item.ownerCode + item.skuCode])
-      // }else{
-      //   if (this.cache[item.skuCode + item.planCode]) {
-      //     this.gridData = this.cache[item.skuCode + item.planCode]
-      //     this.gridData.item = item
-      //   } else {
-      //     let key = item.ownerCode + item.skuCode
-      //     if (this.cacheApi[key]) {
-      //       _(this.cacheApi[key])
-      //     } else {
-      //       this.sonTableLoading = true
-      //       getInfoOnPageInventory({
-      //         ownerCode: item.ownerCode,
-      //         skuCode: item.skuCode
-      //       }).then(res => {
-      //         if (res.success && res.data) {
-      //           this.cacheApi[key] = JSON.parse(JSON.stringify(res.data))
-      //           res.data.forEach(v => {
-      //             this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
-      //           })
-      //           _(res.data)
-      //         }
-      //         this.sonTableLoading = false;
-      //       }).catch(err => {
-      //         this.sonTableLoading = false;
-      //       })
-      //     }
-      //   }
-      // }
     },
     surePicking() {
       if (this.gridData.length) {
@@ -511,7 +423,13 @@ export default {
       }
       let json = {}
       let skuStock = JSON.parse(JSON.stringify(this.skuStock))
-      json.pickOrderDetailAddReqList = JSON.parse(JSON.stringify(this.PickingOrderData))
+      json.pickOrderDetailAddReqList=[]
+      this.PickingOrderData.map(item=>{
+        if(item.sum){
+          json.pickOrderDetailAddReqList.push(item)
+        }
+      })
+      // json.pickOrderDetailAddReqList = JSON.parse(JSON.stringify(this.PickingOrderData))
       let sortListSum = 0
       if (json.pickOrderDetailAddReqList.some(v => {
         let total = v.total || 0
@@ -548,13 +466,14 @@ export default {
         this.$message({ type: 'error', message: '拣货人姓名必填' });
         return
       }
-      pickOrderAdd(json).then(res => {
-        if (res.success) {
-          this.$message({ type: 'success', message: '操作成功!' });
-          this.dialogVisible = false;
-        }
-      }).catch(err => {
-      })
+      console.log(json)
+      // pickOrderAdd(json).then(res => {
+      //   if (res.success) {
+      //     this.$message({ type: 'success', message: '操作成功!' });
+      //     this.dialogVisible = false;
+      //   }
+      // }).catch(err => {
+      // })
     },
 
     //打印装箱单
@@ -633,5 +552,6 @@ export default {
     margin-right: 10px;
   }
 }
+.pointout{color:red;}
 </style>
 
