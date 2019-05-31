@@ -467,14 +467,13 @@ export default {
         this.$message({ type: 'error', message: '拣货人姓名必填' });
         return
       }
-      console.log(json)
-      // pickOrderAdd(json).then(res => {
-      //   if (res.success) {
-      //     this.$message({ type: 'success', message: '操作成功!' });
-      //     this.dialogVisible = false;
-      //   }
-      // }).catch(err => {
-      // })
+      pickOrderAdd(json).then(res => {
+        if (res.success) {
+          this.$message({ type: 'success', message: '操作成功!' });
+          this.dialogVisible = false;
+        }
+      }).catch(err => {
+      })
     },
 
     //打印装箱单
