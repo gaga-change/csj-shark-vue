@@ -419,6 +419,10 @@ export default {
       }
     },
     surePicking() {
+      if (this.pickOperatorName === '') {
+        this.$message({ type: 'error', message: '拣货人姓名必填' });
+        return
+      }
       if (this.gridData.length) {
         this.handlePopoverHide()
       }
@@ -463,10 +467,10 @@ export default {
       json.pickOperatorId = '666'
       json.pickType = 0;
       json.pickOperatorName = this.pickOperatorName;
-      if (json.pickOperatorName === '') {
-        this.$message({ type: 'error', message: '拣货人姓名必填' });
-        return
-      }
+      // if (json.pickOperatorName === '') {
+      //   this.$message({ type: 'error', message: '拣货人姓名必填' });
+      //   return
+      // }
       pickOrderAdd(json).then(res => {
         if (res.success) {
           this.$message({ type: 'success', message: '操作成功!' });
