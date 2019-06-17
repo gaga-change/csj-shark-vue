@@ -124,15 +124,15 @@ let count = 0
     		assignmentpath,
     		pickpath,
     		confirmpath,
-    		receive:null,
-    		put:null,
-    		sort:null,
-    		review:null
+    		receive:0,
+    		put:0,
+    		sort:0,
+    		review:0
     	}
     },
     computed: {
 	    ...mapGetters([
-	      'totalmenu'
+	      'totalmenu',
 	    ])
 	},
     created(){
@@ -140,20 +140,11 @@ let count = 0
     },
     methods: {
     	totallist(){
-    		todolist().then(res=>{
-    			if(res.success){
-    				if(res.data){
-    					this.receive=res.data.receive?res.data.receive:0
-	    				this.put=res.data.put?res.data.put:0
-	    				this.sort=res.data.sort?res.data.sort:0
-	    				this.review=res.data.review?res.data.review:0
-    				}
-    			}else{
-    				this.$message({type:'error',message:'获取代办失败'})
-    			}
-    		}).catch(err =>{
-    			this.$message({type:'error',message:'获取代办失败'})
-    		})
+        	let totallist=sessionStorage.getItem('todolist')?JSON.parse(sessionStorage.getItem('todolist')):null
+            this.receive=totallist?totallist.receive:0
+            this.put=totallist?totallist.put:0
+            this.sort=totallist?totallist.sort:0
+            this.review=totallist?totallist.review:0
     	}
     }
  }

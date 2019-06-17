@@ -26,7 +26,7 @@
 
 <script>
 import { Navbar, Sidebar, AppMain, TagsView,Topbar } from './components'
-import { setWarehouseCode } from '@/api/login.js'
+import { setWarehouseCode, todolist } from '@/api/login.js'
 export default {
   name: 'layout',
   components: {
@@ -49,6 +49,20 @@ export default {
     }
   },
   methods:{
+    totallist(){
+      todolist().then(res=>{
+        if(res.success){
+          if(res.data){
+            this.$store.dispatch('setTodolist',JSON.stringify(res.data))
+            window.location.reload()
+          }
+        }else{
+          this.$message({type:'error',message:'获取代办失败'})
+        }
+      }).catch(err =>{
+        this.$message({type:'error',message:'获取代办失败'})
+      })
+    },
     choosewarehouse(value){ 
       setWarehouseCode({
          operaterId:this.$store.getters.userInfo.id,
@@ -56,6 +70,7 @@ export default {
       }).then(res => {
         if(res.success){
           this.showWarehouse=false;
+          this.totallist()
           this.$store.dispatch('SetWarehouse',value.warehouseNo)
         }
       }).catch(err=>{

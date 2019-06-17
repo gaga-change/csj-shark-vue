@@ -9,6 +9,7 @@ const user = {
     chooseWarehouse: null,
     roles:[],
     warehouseMap: [],
+    todolist:null
   },
   
   mutations: {
@@ -31,7 +32,11 @@ const user = {
     SET_WAREHOUSEENUM:(state,info) => {
       state.roles = info.roles
       state.warehouseMap = info.warehouses
-    }
+    },
+    SET_TODOLIST: (state,todolist) => {
+      sessionStorage.setItem('todolist',todolist)
+      state.todolist = todolist
+    },
   },
 
   actions: {
@@ -57,6 +62,9 @@ const user = {
     },
     SetWarehouse({commit},warehouse){
       commit('SET_WAREHOUSE',warehouse)
+    },
+    setTodolist({commit},todolist){
+      commit('SET_TODOLIST',todolist)
     }
   }
 }

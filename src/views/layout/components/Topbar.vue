@@ -70,7 +70,7 @@
 <script>
 import logoPath from '@/assets/images/logo.png'
 import { mapGetters } from 'vuex'
-import { updatepassword, setWarehouseCode } from '@/api/login'
+import { updatepassword, setWarehouseCode, todolist } from '@/api/login'
 import { LoginPath, TiggerUrl } from '@/utils'
 export default {
   data() {
@@ -155,6 +155,20 @@ export default {
       this.warehouse = command
       this.setWarehouse()
     },
+    totallist(){
+      todolist().then(res=>{
+        if(res.success){
+          if(res.data){
+            this.$store.dispatch('setTodolist',JSON.stringify(res.data))
+            window.location.reload()
+          }
+        }else{
+          this.$message({type:'error',message:'获取代办失败'})
+        }
+      }).catch(err =>{
+        this.$message({type:'error',message:'获取代办失败'})
+      })
+    },
     setWarehouse(){
       var warehouse = this.warehouse;
       if(!warehouse){
@@ -166,9 +180,9 @@ export default {
       }
        setWarehouseCode({operaterId:this.userInfo.id,warehouseCode:warehouse}).then(res => {
         if(res.success){
+          this.totallist()
           this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
             this.$message({type:'success',message:'切换仓库成功'})
-            window.location.reload()
           })
         }else{
           this.$message({type:'error',message:'切换仓库失败'})
@@ -209,7 +223,8 @@ export default {
         cancelButtonText: '取消'
       }).then(action => {
         if (action === 'confirm') {
-           this.$store.dispatch('SetWarehouse','')
+          this.$store.dispatch('SetWarehouse','')
+          this.$store.dispatch('setTodolist','')
           location.href = `/csj_logout`
         }
       })
