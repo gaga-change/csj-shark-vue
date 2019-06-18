@@ -282,6 +282,10 @@ export const isPushStateEnum=[
     name: '已推送',
     value: 1
   },
+  {
+    name: '推送失败',
+    value: 2
+  }
 ]
 
 export const openStatusEnum=[
