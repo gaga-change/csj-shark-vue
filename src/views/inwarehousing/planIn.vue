@@ -34,7 +34,8 @@
 <script>
     import DoubleTable from '@/components/Table/printTable'
     import { printplanTableConfig, planChildTableConfig } from './components/config'
-    import { getInfoWarehousing,getInfoDetailWarehousing } from '@/api/warehousing'
+    import { getInfoDetailWarehousing } from '@/api/warehousing'
+    import { getInfoWarehousing } from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchWarehousing  from './components/printsearch'
     import operationButton from './components/operationButton'

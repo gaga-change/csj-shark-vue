@@ -1,0 +1,59 @@
+import axios from 'axios'
+import {
+  Notification,
+  Message
+} from 'element-ui'
+
+
+let newAxios = axios.create({
+  timeout: 15000 // 请求超时时间
+})
+
+// 响应拦截器
+newAxios.interceptors.response.use(function (response) {
+  let data = response.data
+
+  // 系统异常提示（返回的数据为 null）
+  if (data.code !== '200' && !data.success && data.code !== 'success') {
+    if (res.code === 'shark-512') {
+      Message({
+        type: 'error',
+        message: '登录失效，请重新登录',
+        onClose: () => {
+          sessionStorage.setItem('warehouse', '')
+          location.href = `/csj_login`
+        },
+        duration: 1500
+      })
+    } else {
+      Notification({
+        title: '错误信息',
+        message: message || '系统异常',
+        type: 'error',
+        duration: 3000
+      })
+    }
+    return null
+  }
+  return data
+}, function (error) {
+  return Promise.reject(error)
+})
+
+
+const http = {
+  get(...params) {
+    return newAxios.get(...params).then(res => res).catch(err => null)
+  },
+  post(...params) {
+    return newAxios.post(...params).then(res => res).catch(err => null)
+  },
+  delete(...params) {
+    return newAxios.delete(...params).then(res => res).catch(err => null)
+  },
+  put(...params) {
+    return newAxios.put(...params).then(res => res).catch(err => null)
+  }
+}
+
+export default http

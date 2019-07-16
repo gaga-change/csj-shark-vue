@@ -40,7 +40,8 @@
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
     import { planTableConfig, planChildTableConfig } from './components/config'
-    import { getInfoWarehousing,getInfoDetailWarehousing } from '@/api/warehousing'
+    import { getInfoDetailWarehousing } from '@/api/warehousing'
+    import { getInfoWarehousing } from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchWarehousing  from './components/search'
     import operationButton from './components/recordOperation'
