@@ -244,7 +244,6 @@
                                 }
                             }).catch(err=>{
                                 this.$message({type:'error',message:'操作失败'})
-                                console.log(err)
                             })
                         }else{
                             addLogistics({
@@ -259,7 +258,6 @@
                                 }
                             }).catch(err=>{
                                 this.$message({type:'error',message:'操作失败'})
-                                console.log(err)
                             })
                         }
                     } else {
@@ -294,7 +292,6 @@
                         }
                     }).catch(err=>{
                         this.$message({type:'error',message:'操作失败'})
-                        console.log(err)
                     })
                 }).catch(() => {
                     this.$message({

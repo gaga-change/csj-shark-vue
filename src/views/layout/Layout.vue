@@ -74,7 +74,6 @@ export default {
           this.$store.dispatch('SetWarehouse',value.warehouseNo)
         }
       }).catch(err=>{
-         console.log(err)
       })
     },
   },

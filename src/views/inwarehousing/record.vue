@@ -83,11 +83,9 @@ export default {
       return !row.isCreateOrder
     },
     dataChange(index, type, changeData) {
-      console.log({ ...changeData })
     },
 
     editDataSelect(val) {
-      console.log([...val.arr])
       this.inOriderSelectData = val.arr
     },
 
@@ -122,11 +120,9 @@ export default {
             })
             .catch(err => {
               this.$message({ type: 'error', message: '操作失败！' })
-              console.log(err)
             })
         })
         .catch(err => {
-          console.log(err)
         })
     },
 
@@ -166,7 +162,6 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err)
         })
     }
   }

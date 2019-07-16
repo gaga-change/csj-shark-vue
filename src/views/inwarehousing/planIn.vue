@@ -108,7 +108,6 @@
               })
             },
             getTableData(){
-                console.log(1);
                 this.$router.replace({
                     path:'/inwarehousing/planIn',
                     query:{data:JSON.stringify(this.ruleForm)}
@@ -137,7 +136,6 @@
                     this.loading = false;
 
                 }).catch(err=>{
-                    console.log(err);
                     this.tableData = []
                     this.loading = false;                    
                 })

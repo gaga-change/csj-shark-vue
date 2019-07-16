@@ -174,7 +174,6 @@
                     }
                     this.loading = false;
                 }).catch(err=>{
-                    console.log(err);
                     this.loading = false;                    
                 })
             },
@@ -195,9 +194,7 @@
                               item.printNum=0
                               item.planCode=owndata.planCode
                             }) 
-                            // console.log(queryOutWarehouseOrderDetailVOSList)
                             var tempList = [...this.tableData]
-                            console.log(tempList)
                             this.tableData = tempList.map(list => {
                                
                                 if(list.orderCode == data.orderCode){
@@ -242,7 +239,6 @@
                        this.$message({type: 'error',message: '操作失败'});     
                    }
                 }).catch(err=>{
-                    console.log(err)
                     this.$message({type: 'error',message: '操作失败'});    
                 })
              },
@@ -263,9 +259,7 @@
                  this.selectChiledByPlanCode={}
                  this.multipleSelection=[]
                  this.childDataArr=[]
-               }
-              // console.log(selectedData)
-              
+               }              
             },
 
             handleSizeChange(val) {

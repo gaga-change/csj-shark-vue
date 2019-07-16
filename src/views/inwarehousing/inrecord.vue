@@ -130,7 +130,6 @@
             },
 
             getTableData(){
-                console.log(1);
                 this.$router.replace({
                     path:'/inwarehousing/inrecord',
                     query:{data:JSON.stringify(this.ruleForm)}
@@ -156,7 +155,6 @@
                     this.loading = false;
 
                 }).catch(err=>{
-                    console.log(err);
                     this.tableData = []
                     this.loading = false;                    
                 })
@@ -234,23 +232,7 @@
                 this.ruleForm={ ...ruleForm }
                 this.getTableData()
             },
-            // tabSwitch(tab,event){
-            //     if(tab.name==this.currentTab){
-            //         console.log('当前标签')
-            //     }else{
-            //         this.currentTab = tab.name
-            //         this.$refs.searchWarhouse.resetForm()
-            //        this.planPrintData = []
-            //        this.tableData = []
-            //        this.parentDataObj = {}
-            //        this.childDataArr = []
-            //     }
-            // },
-            // closePlanTags(tag){
-            //     var planPrintData = [...this.planPrintData]
-            //     var b = [...planPrintData.filter(item => {return item.planCode!=tag.planCode})]
-            //     this.planPrintData = [...b]
-            // }
+
         },
         created(){
             this.getTableData()

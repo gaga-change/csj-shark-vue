@@ -63,7 +63,6 @@ export default {
           this.oldcode=[]
         }
       }).catch(err=>{
-        console.log(err)
       })
     },
     currentRadioChange(currentRow){

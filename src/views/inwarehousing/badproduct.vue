@@ -135,7 +135,6 @@
                       this.warehouseSpaceCodeConfig=res.data||[];
                     }
                 }).catch(err=>{
-                    console.log(err)
                 })
               }
          },
@@ -169,7 +168,6 @@
                   }
               }).catch(err=>{
                   this.$message({type:'error',message:'操作失败！'})
-                  console.log(err)
               })
             },
 
@@ -180,7 +178,6 @@
             },
 
             sureWarehouse(){
-              // console.log(this.warehouseSpaceCodeListTable)
               let nowChildDataSelectData= _.cloneDeep(this.nowChildDataSelectData);
               let index=nowChildDataSelectData.findIndex(v=>v.id===this.skuRow.id);
               if(index<0){
@@ -188,7 +185,6 @@
               }
               nowChildDataSelectData[index]['warehousingArr']=this.warehouseSpaceCodeListTable;
               this.nowChildDataSelectData=nowChildDataSelectData;
-              // console.log(this.nowChildDataSelectData)
               this.arrivalAlertDisplay=false;
               this.warehouseSpaceCodeListTable=[];
               this.addSearchForm={};
@@ -212,7 +208,6 @@
                  this.$message({type:'error',message:'数量不能为0'});
                  return
               }
-              console.log(this.warehouseSpaceCodeListTable)
               let putQtyAll=this.warehouseSpaceCodeListTable.reduce((a,b)=>{
                   return a+b.putQty
               },0)
@@ -299,11 +294,9 @@
                           this.$message({type:'error',message:'操作失败'})
                       }
                     }).catch(err=>{
-                      console.log(err)
                       this.$message({type:'error',message:'操作失败'})
                     })
                }).catch(err=>{
-                  console.log(err)
                })
              },
 
@@ -319,7 +312,6 @@
                     this.$message({type:'error',message:'操作失败'})
                   }
                }).catch(err=>{
-                   console.log(err)
                    this.$message({type:'error',message:'操作失败'})
                })
              },
@@ -349,7 +341,6 @@
                       this.tableData=tableData;
                    }
                }).catch(err=>{
-                   console.log(err)
                })
              },
 
@@ -375,7 +366,6 @@
                     }
                 }).catch(err=>{
                     this.loading=false;
-                    console.log(err)
                 })
              }
         },

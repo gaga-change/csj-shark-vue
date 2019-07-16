@@ -73,7 +73,6 @@
                       this.SumSkuQty=res.data;
                     }
                 }).catch(err=>{
-                    console.log(err); 
                 })
                 getInfoInventory(data).then(res => {
                     if(res.success && res.data &&res.data.list){
@@ -83,7 +82,6 @@
                     }
                     this.loading = false;
                 }).catch(err=>{
-                    console.log(err);
                     this.loading = false;                    
                 })
             },
@@ -111,7 +109,6 @@
                         var name = value ? value : '库存台账'
                         exportExcelBlob(name,res)
                     }).catch(err=>{
-                        console.log(err,11111)
                     })
                 }).catch(err=>{
                      this.$message({

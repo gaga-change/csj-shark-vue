@@ -126,41 +126,12 @@ export default {
 
 
     methods:{
-        // surePicking(){
-        //   let json={};
-        //   json.pickOrderDetailAddReqList=this.PickingOrderData;
-        //   if(json.pickOrderDetailAddReqList.some(v=>{
-        //     if(v.sortQty<0||v.sortQty>v.planOutQty-v.save_sortQty){
-        //         this.$message({type:'error',message:`计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty-v.save_sortQty} 之间`})
-        //         return true
-        //     }
-        //   })){
-        //     return 
-        //   }
-        //   json.pickOperatorId='666';
-        //   json.pickType=0;
-        //   json.pickOperatorName=this.pickOperatorName;
-        //   if(json.pickOperatorName===''){
-        //     this.$message({type: 'error',message: '拣货人姓名必填'});   
-        //     return    
-        //   }
-        //   pickOrderAdd(json).then(res=>{
-        //     if(res.success){
-        //        this.$message({type: 'success',message: '操作成功!'});
-        //        this.dialogVisible=false;
-        //     }
-        //   }).catch(err=>{
-        //       console.log(err)
-        //   })
-        // },
-
         //打印装箱单
         priviewBoxLabel(){
           let arr=[]
           for(let i in this.selectChiledByPlanCode){
             arr=[...arr,...this.selectChiledByPlanCode[i]]
           }
-          // console.log(this.selectChiledByPlanCode)
           this.childData=arr.map(v=>{
               v.printNum=v.realOutQty
               return v
@@ -176,11 +147,6 @@ export default {
       
         printLabel(){
             var childData = [...this.childData]
-            // this.childData=childData.map(v=>{
-            //      v.editable=false;
-            //      return v
-            // })
-
             setTimeout(()=>{
                let label = document.getElementById('print').innerHTML
                //样式暂时不可配，需优化
@@ -188,27 +154,6 @@ export default {
                MakePrint(label,style)
             },500)
         },
-
-      //  PickingOrder(){
-      //     let arr=[]
-      //     for(let i in this.selectChiledByPlanCode){
-      //       arr=[...arr,...this.selectChiledByPlanCode[i]]
-      //     }
-      //     this.PickingOrderData=arr.map(v=>{
-      //         v.editable=true;
-      //         v.tempOutQty=v.sortQty-v.realSortQty;
-      //         v.save_sortQty=v.sortQty;
-      //         v.sortQty=v.planOutQty-v.sortQty;
-      //         return v
-      //     })
-
-      //   if(!this.PickingOrderData.length){
-      //       this.$message({type: 'error',message: '未选择子表里商品'});   
-      //       return 
-      //   }
-      //   this.dialogVisible=true;
-
-      // },
 
         priviewReserve(){
             this.printPlan = [...printPlanDataFn([...this.planPrintData])]
@@ -219,10 +164,6 @@ export default {
              this.dialogVisibleReserve = true
         },
 
-        // printPlanOrder(){
-        //     var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
-        //     MakePrint(printPlanContainer)
-        // },
     }
 }
 </script>

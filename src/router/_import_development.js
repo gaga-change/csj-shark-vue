@@ -2,6 +2,6 @@ module.exports = file => {
   try{
     return  require('@/views/' + file + '.vue').default
   }catch(err){
-    console.log(err);//当组件不存在时，不抛出异常阻塞网站
+    console.err(err);//当组件不存在时，不抛出异常阻塞网站
   }
 } // vue-loader at least v13.0.0+

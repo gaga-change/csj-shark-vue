@@ -99,7 +99,6 @@ export default {
           this.inPushOrderDetailTable=res.data;  
         }
       }).catch(err=>{
-          console.log(err)
       })
     },
 
@@ -139,7 +138,6 @@ export default {
         json['orderStartDate']=moment(json.orderTime[0]).valueOf()
         json['orderEndDate']=moment(json.orderTime[1]).valueOf()
       }
-      console.log({...json,pageSize:this.pageSize,pageNum:this.pageNum})
       inOrderList({
           ...json,
           pageSize:this.pageSize,
@@ -152,7 +150,6 @@ export default {
          }
       }).catch(err=>{
           this.loading=false;
-          console.log(err)
       })
 
     }

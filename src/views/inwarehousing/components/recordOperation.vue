@@ -192,7 +192,6 @@ export default {
               return item
             })
             this.childData=[...b]
-            console.log(this.childData)
             this.parentData = {...a}
             var objectUsabel = Object.keys(a).length>0
             var arrUsabel = b.length>0
@@ -264,7 +263,6 @@ export default {
                this.$message({type:'error',message:'操作失败'})
             }
           }).catch(err=>{
-              console.log(err)
               this.$message({type:'error',message:'操作失败'})
           })
 

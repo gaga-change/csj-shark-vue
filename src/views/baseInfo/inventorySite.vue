@@ -257,8 +257,6 @@ export default {
     //主表多选
     dataSelect(selectData) {
       this.multipleParentSelection = [...selectData]
-      console.log(selectData, 'pa');
-
     },
     printSite() {
       if (this.multipleParentSelection.length > 0) {

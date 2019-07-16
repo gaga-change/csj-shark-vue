@@ -160,7 +160,6 @@ export default {
            modifyPrintState({ids:data}).then(res=>{
 
            }).catch(err=>{
-            console.log(err)
            })
            var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
            MakePrint(printPlanContainer)
@@ -196,7 +195,6 @@ export default {
                this.$message({type:'error',message:'操作失败'})
             }
           }).catch(err=>{
-              console.log(err)
               this.$message({type:'error',message:'操作失败'})
           })
 

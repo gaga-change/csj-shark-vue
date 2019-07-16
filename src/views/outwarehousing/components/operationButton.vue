@@ -335,7 +335,6 @@ export default {
                 skuCode: that.PickingOrderData[i].skuCode
               }).then(res => {
                 if (res.success && res.data) {
-                  // console.log(res.data)
                   that.newcacheApi[ownkey] = JSON.parse(JSON.stringify(res.data))
                   res.data.forEach(v => {
                     that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }

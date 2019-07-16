@@ -112,11 +112,9 @@ export default {
             this.$message({ type: 'info', message: '操作失败' });
           }
         }).catch(err => {
-          console.log(err)
           this.$message({ type: 'info', message: '操作失败' });
         })
       }).catch(err => {
-        console.log(err)
         this.$message({ type: 'info', message: '操作失败' });
       })
     },
@@ -145,7 +143,6 @@ export default {
           }
         }
       }).catch(err => {
-        console.log(err)
         this.loding = false;
       })
     }

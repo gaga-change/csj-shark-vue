@@ -102,7 +102,6 @@ export default {
       let data = _.cloneDeep(this.searchForm);
       let json={};
       for(let i in data){
-        console.log(i)
         if(i==='pageSize'){
            json[i]=10;
         } else if(i==='pageNum'){

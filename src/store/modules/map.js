@@ -15,7 +15,7 @@ const map = {
         config().then(res=>{
           commit('SET_MAP',res );
         }).catch(err=>{
-          console.log(err)
+          console.err(err)
         })
     }
 
