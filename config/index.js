@@ -8,16 +8,16 @@ const path = require('path')
 // const ip= "http://172.16.80.138:8787"//亚磊
 
 // const ip='http://172.16.80.138:8787'; 
-const ip='http://192.168.2.167:8787';//修浩
-// const ip='http://172.16.81.26:8787';//苗
+// const ip='http://192.168.2.167:8787';//修浩
+// const ip = 'http://192.168.2.126:8787';//修浩
+// const ip = 'http://172.16.81.26:8787';//苗
+const ip = 'http://192.168.1.37:8787'; // 测试环境
 
-// const ip='http://192.168.1.195:8787';//测试服务
-const proxyTableArr=['/csj_login','/csj_logout','/webApi','/api'];
+const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api'];
+let proxyTable = {};
 
-let proxyTable={};
-
-proxyTableArr.forEach(item=>{
-  proxyTable[item]={
+proxyTableArr.forEach(item => {
+  proxyTable[item] = {
     target: ip,
     changeOrigin: true
   }
@@ -31,7 +31,7 @@ module.exports = {
     proxyTable: proxyTable,
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: 'testshark.csjmro.com', // can be overwritten by process.env.HOST
     port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
