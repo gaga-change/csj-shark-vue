@@ -41,61 +41,6 @@ export function exportLedger(data) {
   })
 }
 
- /**
-  *
-  * 库位列表
-  * @export
-  * @param {*} data
-  *  "warehouseCode": "string //仓库编码",
-  "warehouseAreaCode": "string //库区编码",
-  "warehouseSpaceCode": "string //库位编码",
-  "warehouseSpaces": "string[]"
-  * @returns
-  */
- export function getInventorySite(data) {
-  return request({
-    url: `/webApi/basic/warehouseSpace/select`,
-    method: 'post',
-    data:data
-  })
-}
-
-/**
- *新增库位
- * "warehouseAreaCode": "string //库区编码",
-  "platoonStart": "int //库位排号 开始位置",
-  "platoonEnd": "int //库位排号 结束位置",
-  "columnStart": "int //库位列号 开始位置",
-  "columnEnd": "int //库位列号 结束位置",
-  "floorStart": "int //库位层号 开始位置",
-  "floorEnd": "int //库位层号 结束位置"
- * @export
- * @param {*} data
- * @returns
- */
-export function addInventorySite(data) {
-  return request({
-    url: `/webApi/basic/warehouseSpace/addByBatch`,
-    method: 'post',
-    data:data
-  })
-}
-
-/**
- *修改库位状态
- *
- * @export
- * @param {*} data
- * id	int	false	
-    flag	int	false	操作标识:0:启用 1：禁用
- * @returns
- */
-export function updateInventorySite(data) {
-  return request({
-    url: `/webApi/basic/warehouseSpace/updateLockStatus/${data.id}?${stringify(data)}`,
-    method: 'get',
-  })
-}
 
 /**
  *删除库位
