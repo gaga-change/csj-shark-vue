@@ -12,7 +12,6 @@ let newAxios = axios.create({
 // 响应拦截器
 newAxios.interceptors.response.use(function (response) {
   let data = response.data
-
   // 系统异常提示（返回的数据为 null）
   if (data.code !== '200' && !data.success && data.code !== 'success') {
     if (res.code === 'shark-512') {
@@ -26,10 +25,10 @@ newAxios.interceptors.response.use(function (response) {
         duration: 1500
       })
     } else {
-      Notification({
-        title: '错误信息',
-        message: message || '系统异常',
+      let message = res.message || res.errorMsg || '';
+      Message({
         type: 'error',
+        message: message || '系统异常',
         duration: 3000
       })
     }
@@ -37,6 +36,13 @@ newAxios.interceptors.response.use(function (response) {
   }
   return data
 }, function (error) {
+  let message = error.message || err.errorMsg || ''
+  Notification({
+    title: '错误信息',
+    message: message,
+    type: 'error',
+    duration: 5000,
+  })
   return Promise.reject(error)
 })
 
