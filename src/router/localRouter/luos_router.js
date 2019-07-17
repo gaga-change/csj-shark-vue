@@ -7,7 +7,7 @@ export default [
     path: '/inwarehousing',
     component: Layout,
     redirect: 'inwarehousing/arrival',
-    meta: { title: '入库管理', noCache: true,icon: 'in' },
+    meta: { title: '入库管理', noCache: true, icon: 'in' },
     hidden: false,
     children: [
       {
@@ -58,7 +58,7 @@ export default [
     path: '/outwarehousing',
     component: Layout,
     redirect: 'outwarehousing/outboundPlan',
-    meta: { title: '出库管理',noCache: true,icon: 'out' },
+    meta: { title: '出库管理', noCache: true, icon: 'out' },
     hidden: false,
     children: [
       {
@@ -99,10 +99,49 @@ export default [
     ]
   },
   {
+    path: '/qualityTesting',
+    component: Layout,
+    redirect: 'qualityTesting/record',
+    meta: { title: '质检管理', noCache: true, icon: 'deliver' },
+    hidden: false,
+    children: [
+      {
+        name: 'qualityTestitngRecord',
+        path: 'record',
+        meta: { title: '质检记录', noCache: true },
+        component: _import('qualityTesting/qualityTestitngRecord'),
+        hidden: false,
+      }
+    ]
+  },
+  {
+    path: '/takeStock',
+    component: Layout,
+    redirect: 'takeStock/billing',
+    meta: { title: '盘点管理', noCache: true, icon: 'deliver' },
+    hidden: false,
+    children: [
+      {
+        name: 'takeStockBilling',
+        path: 'billing',
+        meta: { title: '盘点开单', noCache: true },
+        component: _import('takeStock/takeStockBilling'),
+        hidden: false,
+      },
+      {
+        name: 'takeStockList',
+        path: 'list',
+        meta: { title: '盘点单管理', noCache: true },
+        component: _import('takeStock/takeStockList'),
+        hidden: false,
+      }
+    ]
+  },
+  {
     path: '/inventoryLedger',
     component: Layout,
     redirect: 'inventoryLedger/inventory',
-    meta: { title: '库存台账', noCache: true,icon: 'download' },
+    meta: { title: '库存台账', noCache: true, icon: 'download' },
     hidden: false,
     children: [
       {
@@ -120,14 +159,14 @@ export default [
         component: _import('inventoryLedger/stream'),
         hidden: false,
       },
-      
+
     ]
   },
   {
     path: '/baseInfo',
     component: Layout,
     redirect: 'baseInfo/logistics',
-    meta: { title: '基础资料',noCache: true,icon: 'info' },
+    meta: { title: '基础资料', noCache: true, icon: 'info' },
     hidden: false,
     children: [
       {
@@ -157,7 +196,7 @@ export default [
     path: '/deliverInfo',
     component: Layout,
     redirect: 'deliverInfo/deliver',
-    meta: { title: '配送管理',noCache: true,icon: 'deliver' },
+    meta: { title: '配送管理', noCache: true, icon: 'deliver' },
     hidden: false,
     children: [
       {
@@ -168,5 +207,5 @@ export default [
         hidden: false,
       },
     ]
-  },
+  }
 ]
