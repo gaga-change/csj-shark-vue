@@ -13,26 +13,25 @@ let newAxios = axios.create({
 newAxios.interceptors.response.use(function (response) {
   let data = response.data
   // 系统异常提示（返回的数据为 null）
-  if (data.code !== '200' && !data.success && data.code !== 'success') {
-    if (res.code === 'shark-512') {
-      Message({
-        type: 'error',
-        message: '登录失效，请重新登录',
-        onClose: () => {
-          sessionStorage.setItem('warehouse', '')
-          location.href = `/csj_login`
-        },
-        duration: 1500
-      })
-    } else {
-      let message = res.message || res.errorMsg || '';
-      Message({
-        type: 'error',
-        message: message || '系统异常',
-        duration: 3000
-      })
-    }
-    return null
+  if (data.code === 'user-not-login') {
+    Message({
+      type: 'error',
+      message: '登录失效，请重新登录',
+      onClose: () => {
+        sessionStorage.setItem('warehouse', '')
+        location.href = `/csj_login`
+      },
+      duration: 1500
+    })
+    data = null
+  } else if (data.code !== '200') {
+    let message = data.message || data.errorMsg || ''
+    Message({
+      type: 'error',
+      message: message || '系统异常',
+      duration: 3000
+    })
+    data = null
   }
   return data
 }, function (error) {
