@@ -198,19 +198,92 @@
       @currentChange="handleCurrentChange"
       @dataChange="dataChange"
     >
+      <template
+        slot="edit"
+        slot-scope="scope"
+      >
+        <el-button
+          size="mini"
+          style="margin-top: 10px"
+          @click="printBatchTag(scope.row)"
+        >打印批次标签</el-button>
+      </template>
     </double-table>
+    <el-dialog
+      title="打印批次标签"
+      :visible.sync="dialogVisibleLabel"
+      width="70%"
+    >
+      <edit-table
+        :config="planChildTableLabelConfig"
+        :table-data="childData"
+        v-loading="loading"
+        :default-edit="false"
+      ></edit-table>
+      <template v-if="!previewIt">
+        <div style="margin:10px;">
+          <span style="font-weight:bold">预览</span>
+          <span style="color: #888;">（最多100条，若需更多，请打印时增加份数！）</span>
+        </div>
+        <div
+          id="print"
+          style="width:80mm;height:40mm;overflow:auto;margin:10px;"
+        >
+          <div
+            v-for="item in childData"
+            :key="item.skuCode"
+          >
+            <div
+              v-for="i in Math.min(Number(item.printNum), 100)"
+              :key="i"
+              class="labelContainer"
+            >
+              <div class="labelItem"><span class="labelItemLeft">商品编码</span><span>{{item.skuCode}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">商品名称</span><span>{{item.skuName}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">规格型号</span><span>{{item.skuFormat}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">供应商</span><span>{{item.providerName}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">批次</span><span>{{item.skuUnitConvert}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">收货单号</span><span>{{item.aa}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">批次号</span><span>{{item.aa}}</span></div>
+              <div>
+                <bar-code :code="item.batchNo"></bar-code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisibleLabel = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="getCode"
+        >预览</el-button>
+        <el-button
+          type="primary"
+          v-if="!previewIt"
+          @click="printLabel"
+        >打印</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import DoubleTable from '@/components/Table/doubleTable'
 import newSearch from './components/newSearch'
 import editTable from '@/components/Table/editTable'
 import webPaginationTable from '@/components/Table/webPaginationTable'
 import _ from 'lodash';
 import moment from 'moment';
-import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig } from './components/config'
-import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, jobAddIn } from '@/api'
+import { MakePrint } from '@/utils'
+import { PositiveIntegerReg } from '@/utils/validator'
+import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig, planChildTableLabelConfig } from './components/config'
+import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, jobAddIn, getBatchNo } from '@/api'
 export default {
   components: { DoubleTable, newSearch, webPaginationTable, editTable },
   data() {
@@ -244,8 +317,11 @@ export default {
       warehouseSpaceCodeConfig: [],
       dialogVisible: false,
       arrivalAlertDisplay: false,
-      skuRow: {}
-
+      dialogVisibleLabel: false,
+      childData: [],
+      skuRow: {},
+      previewIt: true,
+      planChildTableLabelConfig
     }
   },
 
@@ -271,7 +347,75 @@ export default {
 
   methods: {
     moment,
-
+    getBatchNoArr(batchNoArr) {
+      var arr = [], brr = []
+      for (var i = 0; i < batchNoArr.length; i++) {
+        let req = getBatchNo(batchNoArr[i])
+        arr.push(req)
+        brr.push(i)
+      }
+      return axios.all(arr).then(axios.spread((...brr) => {
+        return brr
+      }))
+    },
+    /** 预览 */
+    async  getCode() {
+      let id = this.expandsParent[0]
+      let parent = this.tableData.find(item => item.id === id)
+      var childData = [...this.childData]
+      var batchNoArr = []
+      var canPriview = true
+      childData.map(item => {
+        if (!PositiveIntegerReg.test(item.printNum)) {
+          canPriview = false
+        }
+        batchNoArr.push({ skuCode: item.skuCode, ownerCode: parent.ownerCode, providerCode: parent.providerCode })
+      })
+      if (!canPriview) {
+        this.$message({ type: 'error', message: '打印张数为正整数' })
+        return false
+      }
+      var abb = await this.getBatchNoArr(batchNoArr)
+      abb.map(item => {
+        if (item.success && item.data && item.data.batchNo) {
+          childData = childData.map(child => {
+            if (item.data.skuCode == child.skuCode) {
+              child.batchNo = item.data.batchNo
+            }
+            return child
+          })
+        } else {
+          canPriview = false
+        }
+      })
+      if (!canPriview) {
+        this.$message({ type: 'error', message: '批次号查询出错，请重试' })
+        return false
+      }
+      this.childData = [...childData]
+      this.previewIt = false
+    },
+    /** 打印批次标签 按钮点击，展示弹窗 */
+    printBatchTag(row) {
+      this.dialogVisibleLabel = true
+      let obj = { ...row }
+      let id = this.expandsParent[0]
+      let parent = this.tableData.find(item => item.id === id)
+      this.childData = [obj].map((item, index) => {
+        item.editable = true
+        item.printNum = item.realInQty
+        item.ownerName = parent.ownerName;
+        item.providerName = parent.providerName;
+        return item
+      })
+    },
+    /** 打印 */
+    printLabel() {
+      let label = document.getElementById('print').innerHTML
+      //样式暂时不可配，需优化
+      let style = "<style type='text/css'>.labelContainer{width:80mm;overflow:hidden;border-bottom: 1px dashed #eee;}.labelItem{ height:5mm;line-height: 5mm; font-weight: 600;font-size: 13px;}.labelContainer .labelItemLeft{display:inline-block;width:70px;margin-right:20px;} img{width:40mm;height:15mm}</style>"
+      MakePrint(label, style)
+    },
     putawayConfirm() {
       let json = {};
       json['orderCode'] = this.activeOrder.orderCode;
@@ -282,7 +426,7 @@ export default {
           let vJson = {};
           vJson['warehouseAreaCode'] = this.warehouseSpaceCodeConfig.find(item => item.warehouseSpaceCode === v.warehouseSpaceCode).warehouseAreaCode
           vJson['warehouseSpaceCode'] = v.warehouseSpaceCode;
-          vJson['putQty'] = v.putQty;
+          vJsosn['putQty'] = v.putQty;
           vJson['orderDetailId'] = item.id;
           json['putSpaceInfoList'].push(vJson)
         })
@@ -544,6 +688,27 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
+.labelContainer {
+  width: 80mm;
+  overflow: hidden;
+  border-bottom: 1px dashed #eee;
+  .labelItem {
+    height: 5mm;
+    line-height: 5mm;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .labelItemLeft {
+    display: inline-block;
+    width: 60px;
+    margin: 0 10px;
+  }
+  img {
+    width: 40mm !important;
+    height: 15mm;
+    margin: 0 auto;
+  }
+}
 .el-popper[x-placement^="bottom"] {
   z-index: 3001 !important;
 }

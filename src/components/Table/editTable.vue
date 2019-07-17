@@ -16,7 +16,12 @@
       size="small"
       :style="tableStyle"
     >
-      <el-table-column type="selection" :selectable="checkSelectable" width="55" v-if="childCanSelect"></el-table-column>
+      <el-table-column
+        type="selection"
+        :selectable="checkSelectable"
+        width="55"
+        v-if="childCanSelect"
+      ></el-table-column>
       <el-table-column
         v-for="item in tableConfig"
         :fixed="item.fixed"
@@ -27,7 +32,16 @@
       >
         <template slot-scope="scope">
           <template v-if="scope.row.editable&&item.editable&&defaultCanedit">
-            <template v-if="item.editType">
+            <template v-if="item.editType ==='inputNumber'">
+              <el-input-number
+                v-model="scope.row[item.prop]"
+                controls-position="right"
+                :min="item.min || 1"
+                :max="item.max || 1000"
+                size="mini"
+              ></el-input-number>
+            </template>
+            <template v-else-if="item.editType">
               <el-input
                 size="mini"
                 style="width:70px"
@@ -37,7 +51,11 @@
               ></el-input>
             </template>
             <template v-else>
-              <el-input size="mini" style="width:70px" v-model="scope.row[item.prop]"></el-input>
+              <el-input
+                size="mini"
+                style="width:70px"
+                v-model="scope.row[item.prop]"
+              ></el-input>
             </template>
           </template>
           <span v-else-if="item.linkTo">
@@ -53,7 +71,10 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="(file,i) in scope.row[item.prop]" :key="file.path">
+                <el-dropdown-item
+                  v-for="(file,i) in scope.row[item.prop]"
+                  :key="file.path"
+                >
                   <a
                     class="el-dropdown-link"
                     target="blank"
@@ -67,16 +88,20 @@
             <bar-code :code="scope.row[item.prop]"></bar-code>
           </template>
 
-          <span
-            v-else-if="typeof item.formatter == 'function'"
-          >{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
+          <span v-else-if="typeof item.formatter == 'function'">{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
 
           <span v-else>{{scope.row[item.prop]}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="160" fixed="right" v-if="defaultEdit" label="操作">
+      <el-table-column
+        width="160"
+        fixed="right"
+        v-if="defaultEdit"
+        label="操作"
+      >
         <template slot-scope="scope">
           <div style="width:160px">
+            <slot></slot>
             <span v-if="useEdit">
               <el-button
                 v-if="scope.row.editable"
@@ -96,6 +121,10 @@
               v-if="deleteNeed"
               @click="handleDelete(scope.$index, scope.row)"
             >删除</el-button>
+            <slot
+              name="edit"
+              v-bind:row="scope.row"
+            ></slot>
           </div>
         </template>
       </el-table-column>
@@ -146,7 +175,7 @@ export default {
     },
     summaryMethod: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     checkSelectable: {
       type: Function,
@@ -239,7 +268,7 @@ export default {
       tableDataEditable: []
     };
   },
-  created() {},
+  created() { },
   mounted() {
     this.initSelected();
   },
@@ -253,8 +282,8 @@ export default {
       this.initSelected();
     }
   },
-  activated() {},
-  beforeDestroy() {},
+  activated() { },
+  beforeDestroy() { },
   beforeMount() {
     let tableDataEditable = [...this.tableData];
     this.tableDataEditable = tableDataEditable.map((item, index) => {
@@ -287,8 +316,8 @@ export default {
               tableConfig[i].formatter = (row, column, cellValue, index) =>
                 cellValue
                   ? moment(cellValue).format(
-                      tableConfig[i].format || "YYYY-MM-DD HH:mm:ss"
-                    )
+                    tableConfig[i].format || "YYYY-MM-DD HH:mm:ss"
+                  )
                   : "";
               break;
             case "Boolean":
@@ -319,17 +348,17 @@ export default {
     ...mapGetters(["mapConfig"]),
 
     tablePageSize: {
-      get: function() {
+      get: function () {
         return this.pageSize;
       },
-      set: function() {}
+      set: function () { }
     },
 
     tableCurrentPage: {
-      get: function() {
+      get: function () {
         return this.currentPage;
       },
-      set: function() {}
+      set: function () { }
     }
   },
 
