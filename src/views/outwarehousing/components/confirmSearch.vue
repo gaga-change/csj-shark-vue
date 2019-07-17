@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { outcodelist } from '@/api/warehousing'
+import { outcodelist } from '@/api'
 import outTable from '@/components/Table/outTable'
 import { outTableConfig } from './config'
 export default {

@@ -26,7 +26,7 @@
 
 <script>
 import { Navbar, Sidebar, AppMain, TagsView,Topbar } from './components'
-import { setWarehouseCode, todolist } from '@/api/login.js'
+import { setWarehouseCode, todolist } from '@/api'
 export default {
   name: 'layout',
   components: {

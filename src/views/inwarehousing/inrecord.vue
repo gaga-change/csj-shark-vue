@@ -40,12 +40,10 @@
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
     import { planTableConfig, planChildTableConfig } from './components/config'
-    import { getInfoDetailWarehousing } from '@/api/warehousing'
-    import { getInfoWarehousing } from '@/api'
+    import { getInfoWarehousing, getInfoDetailWarehousing } from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchWarehousing  from './components/search'
     import operationButton from './components/recordOperation'
-
     import { BusiBillTypeEnum } from "@/utils/enum"
     const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in'))
     const ruleForm = {

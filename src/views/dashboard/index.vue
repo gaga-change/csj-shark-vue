@@ -108,7 +108,7 @@ import outpath from '@/assets/images/outwarehousing.png'
 import assignmentpath from '@/assets/images/assignment.png'
 import pickpath from '@/assets/images/pickingtask.png'
 import confirmpath from '@/assets/images/confirm.png'
-import { todolist } from '@/api/login'
+import { todolist } from '@/api'
 
 let count = 0
  export default {

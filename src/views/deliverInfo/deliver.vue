@@ -180,7 +180,7 @@
     import DoubleTable from '@/components/Table/doubleTable'
     import moment from 'moment'
     import { tableConfig,baseInfoConfig } from './components/config'
-    import { addLogisticsRegister, getLogisticsRegisterInfo,getLogisticsRegisterList,getLogisticsSelectList } from '@/api/logistics'
+    import { addLogisticsRegister, getLogisticsRegisterInfo,getLogisticsRegisterList,getLogisticsSelectList } from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchDeliver  from './components/search'
     import  DeliverDetail  from './components/deliverDetailinfo'

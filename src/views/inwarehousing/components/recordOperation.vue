@@ -70,7 +70,7 @@
 import moment from 'moment'
 import axios from 'axios'
 import editTable from '@/components/Table/editTable'
-import { orderAdd, getBatchNo,receiveAndInStock } from '@/api/warehousing'
+import { orderAdd, getBatchNo,receiveAndInStock } from '@/api'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { businessChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'

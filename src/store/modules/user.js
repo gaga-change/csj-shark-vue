@@ -1,4 +1,4 @@
-import { getInfo} from '@/api/login'
+import { getInfo} from '@/api'
 
 const user = {
   state: {

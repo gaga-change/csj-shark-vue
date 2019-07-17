@@ -29,7 +29,7 @@
 <script>
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
-import { outboundOrderSubmit,pickOrderAdd, modifyOutPrint } from '@/api/warehousing'
+import { outboundOrderSubmit,pickOrderAdd, modifyOutPrint } from '@/api'
 import { PositiveIntegerReg,MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditConfig,planChildTableLabelConfig,planChildTablePrintConfig } from './config'

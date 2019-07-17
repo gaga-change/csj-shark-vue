@@ -46,7 +46,7 @@ import SearchInvoice from './components/newSearch'
 import webPaginationTable from '@/components/Table/webPaginationTable'
 import { inPushOrderConfig ,inPushOrderDetailConfig} from './components/config';
 import BaseTable from '@/components/Table'
-import { inOrderList ,inOrderSelectDetailList} from '@/api/warehousing'
+import { inOrderList ,inOrderSelectDetailList} from '@/api'
 import _  from 'lodash';
 import moment from 'moment'; 
 export default {

@@ -35,7 +35,7 @@
 <script>
     import BaseTable from '@/components/Table'
     import { inventoryTableConfig } from './components/config'
-    import { getInfoInventory,exportLedger,selectSumSkuQty} from '@/api/inventory'
+    import { getInfoInventory,exportLedger,selectSumSkuQty} from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import { exportExcelBlob } from '@/utils/exportexcel'
     import  SearchInventory  from './components/search'

@@ -52,7 +52,7 @@ import webPaginationTable from '@/components/Table/webPaginationTable'
 import _ from 'lodash'
 import moment from 'moment'
 import { recordListConfig } from './components/config'
-import { jobList, inOrderAdd } from '@/api/warehousing'
+import { jobList, inOrderAdd } from '@/api'
 export default {
   components: { newSearch, webPaginationTable, editTable },
   data() {

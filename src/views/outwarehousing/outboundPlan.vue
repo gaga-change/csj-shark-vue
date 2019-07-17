@@ -77,7 +77,7 @@
 <script>
 import DoubleTable from '@/components/Table/printTable'
 import { planTableConfig, planOrderChildTableConfig } from './components/config'
-import { getInfoPlanOutWarehousing, getInfoPlanDetailOutWarehousing } from '@/api/warehousing'
+import { getInfoPlanOutWarehousing, getInfoPlanDetailOutWarehousing } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import SearchWarehousing from './components/printsearch'
 import operationButton from './components/printOperation'

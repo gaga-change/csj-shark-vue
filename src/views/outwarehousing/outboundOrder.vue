@@ -79,7 +79,7 @@
 <script>
     import DoubleTable from '@/components/Table/doubleTable'
     import { orderTableConfig, orderChildTableConfig } from './components/config'
-    import { getInfoOutWarehousing, getInfoDetailOutWarehousing,confirmOutOfTheLibrary,cancelOutOfTheLibrary} from '@/api/warehousing'
+    import { getInfoOutWarehousing, getInfoDetailOutWarehousing,confirmOutOfTheLibrary,cancelOutOfTheLibrary} from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchWarehousing  from './components/search'
     import operationButton from './components/outButton'

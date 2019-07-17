@@ -70,7 +70,7 @@
 <script>
 import logoPath from '@/assets/images/logo.png'
 import { mapGetters } from 'vuex'
-import { updatepassword, setWarehouseCode, todolist } from '@/api/login'
+import { updatepassword, setWarehouseCode, todolist } from '@/api'
 import { LoginPath, TiggerUrl } from '@/utils'
 export default {
   data() {

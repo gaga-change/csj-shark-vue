@@ -137,8 +137,7 @@
 <script>
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
-import { outboundOrderSubmit, pickOrderAdd } from '@/api/warehousing'
-import { getInfoOnPageInventory } from '@/api/inventory'
+import { outboundOrderSubmit, pickOrderAdd , getInfoOnPageInventory} from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditAllocationConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'

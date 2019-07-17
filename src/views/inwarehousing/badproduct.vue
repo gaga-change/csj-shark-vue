@@ -78,7 +78,7 @@
     import _  from 'lodash';
     import moment from 'moment';
     import { arrivalTableConfig, arrivalChildTableConfig,arrivalAlertConfig,putQtyConfig } from './components/config'
-    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete,warehouseSpaceSelect ,jobAdd, badproductlist} from '@/api/warehousing'
+    import { orderList,orderDetailList,orderUpdateReceiveQty,receiveOrderDelete,warehouseSpaceSelect ,jobAdd, badproductlist} from '@/api'
     export default {
         components: { BaseTable,newSearch,webPaginationTable,editTable },
         data(){

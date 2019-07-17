@@ -107,7 +107,7 @@
     import _ from 'lodash'
     import DoubleTable from '@/components/Table/doubleTable'
     import { tableConfig } from './components/config'
-    import { getLogisticsList,addLogistics,updateLogistics,deleteLogistics,getLogisticsSearch } from '@/api/logistics'
+    import { getLogisticsList,addLogistics,updateLogistics,deleteLogistics,getLogisticsSearch } from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchLogistics  from './components/search'
 

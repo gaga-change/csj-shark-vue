@@ -210,7 +210,7 @@ import webPaginationTable from '@/components/Table/webPaginationTable'
 import _ from 'lodash';
 import moment from 'moment';
 import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig } from './components/config'
-import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, jobAddIn } from '@/api/warehousing'
+import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, jobAddIn } from '@/api'
 export default {
   components: { DoubleTable, newSearch, webPaginationTable, editTable },
   data() {

@@ -37,7 +37,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import newSearch from './components/confirmSearch'
 import { temporaryStorageConfig } from './components/config'
-import { selectOutWarehouseJobDetail, createOutWareHouseOrder, deleteByIds } from '@/api/warehousing'
+import { selectOutWarehouseJobDetail, createOutWareHouseOrder, deleteByIds } from '@/api'
 import editTable from '@/components/Table/outTable'
 export default {
   components: { newSearch, editTable },

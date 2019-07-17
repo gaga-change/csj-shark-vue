@@ -25,7 +25,7 @@
 <script>
     import BaseTable from '@/components/Table'
     import { streamTableConfig } from './components/config'
-    import { querySkuStockRecord } from '@/api/inventory'
+    import { querySkuStockRecord } from '@/api'
     import { uniqueArray } from '@/utils/arrayHandler'
     import  SearchInventory  from './components/search'
 
