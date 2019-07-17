@@ -243,9 +243,8 @@
               <div class="labelItem"><span class="labelItemLeft">规格型号</span><span>{{item.skuFormat}}</span></div>
               <div class="labelItem"><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
               <div class="labelItem"><span class="labelItemLeft">供应商</span><span>{{item.providerName}}</span></div>
-              <div class="labelItem"><span class="labelItemLeft">批次</span><span>{{item.skuUnitConvert}}</span></div>
-              <div class="labelItem"><span class="labelItemLeft">收货单号</span><span>{{item.aa}}</span></div>
-              <div class="labelItem"><span class="labelItemLeft">批次号</span><span>{{item.aa}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">批次</span><span>{{item.batchNo}}</span></div>
+              <div class="labelItem"><span class="labelItemLeft">收货单号</span><span>{{item.orderCode}}</span></div>
               <div>
                 <bar-code :code="item.batchNo"></bar-code>
               </div>
@@ -406,6 +405,7 @@ export default {
         item.printNum = item.realInQty
         item.ownerName = parent.ownerName;
         item.providerName = parent.providerName;
+        item.orderCode = parent.orderCode;
         return item
       })
     },
