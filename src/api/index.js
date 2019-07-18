@@ -131,8 +131,6 @@ export const outboundOrderSubmitQuick = params => http.post(`/webApi/outWarehous
 export const orderList = params => http.post(`/webApi/receive/order/list`, params)
 /** 新增上架任务 */
 export const jobAdd = params => http.post(`/webApi/in/job/add`, params)
-/** 上架并入库 */
-export const jobAddIn = params => http.post(`/webApi/in/job/addAndOrder`, params)
 /** 查询收货单列表 */
 export const jobList = params => http.post(`/webApi/in/job/list`, params)
 /** 添加入库单以及明细 */

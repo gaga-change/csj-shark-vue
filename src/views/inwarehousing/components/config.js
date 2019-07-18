@@ -123,6 +123,7 @@ export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
   { label: '规格型号', prop: 'skuFormat', },
   { label: '单位', prop: 'skuUnitName', },
   { label: '商品数量', prop: 'planQty', },
+  { label: '批次', prop: 'batchNo', },
   { label: '收货数量', prop: 'receiveQty', editable: true },
   { label: '已入库数量', prop: 'realInQty', },
 ]
@@ -133,16 +134,18 @@ export const arrivalAlertConfig = [
   { label: '商品编号', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '商品规格', prop: 'skuFormat' },
+  { label: '批次', prop: 'batchNo' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '总数量', prop: 'planQty' },
   { label: '已入库', prop: 'realInQty' },
   { label: '收货量', prop: 'receiveQty' },
-  { label: '上架量/货位', dom: formatWareHousing() },
+  { label: '上架量/货位', width: 100, dom: formatWareHousing() },
   { label: '操作', useLink: true, fixed: 'right', width: 180 },
 ]
 
 export const putQtyConfig = [
   { label: '序号', type: 'index', width: 50 },
+  { label: '批次', prop: 'batchNo', width: 100 },
   { label: '库位(编码)', prop: 'warehouseSpaceCode' },
   { label: '上架数量', prop: 'putQty' },
 ]

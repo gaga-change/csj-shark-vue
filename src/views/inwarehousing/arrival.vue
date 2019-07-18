@@ -1,5 +1,5 @@
 <template>
-  <div class="arrival">
+  <div class="arrival Arrival">
     <el-card
       class="simpleCard"
       shadow="never"
@@ -63,8 +63,9 @@
     >
       <div class="alertInfo">
         <span>入库计划单 : {{activeOrder.planCode}}</span>
+        <span>收货单号 : {{activeOrder.orderCode}}</span>
         <span>供应商 : {{activeOrder.providerName}}</span>
-        <span>收货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>
+        <span>收货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD HH:mm:ss') }}</span>
       </div>
 
       <web-pagination-table
@@ -77,13 +78,8 @@
         <el-button
           type="primary"
           size="small"
-          @click="addConfirm"
-        >上架并生成入库单</el-button>
-        <el-button
-          type="primary"
-          size="small"
           @click="putawayConfirm"
-        >仅上架</el-button>
+        >上架</el-button>
         <el-button
           type="primary"
           size="small"
@@ -97,6 +93,9 @@
       v-if="arrivalAlertDisplay"
     >
       <div class="arrivalAlertChiderBody">
+        <div style="font-size:12px;margin:15px 0">
+          <span style="font-size:12px; font-weight: bold;">批次：</span> <span>{{addSearchForm.batchNo}}</span>
+        </div>
         <el-form
           :model="addSearchForm"
           label-width="70px"
@@ -282,7 +281,7 @@ import moment from 'moment';
 import { MakePrint } from '@/utils'
 import { PositiveIntegerReg } from '@/utils/validator'
 import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig, planChildTableLabelConfig } from './components/config'
-import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, jobAddIn, getBatchNo } from '@/api'
+import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, getBatchNo } from '@/api'
 export default {
   components: { DoubleTable, newSearch, webPaginationTable, editTable },
   data() {
@@ -305,7 +304,8 @@ export default {
       },
       addSearchForm: {
         warehouseSpaceCode: '',
-        putQty: 1
+        putQty: 1,
+        batchNo: ''
       },
       putQtyConfig,
       activeOrder: {},
@@ -426,37 +426,6 @@ export default {
           let vJson = {};
           vJson['warehouseAreaCode'] = this.warehouseSpaceCodeConfig.find(item => item.warehouseSpaceCode === v.warehouseSpaceCode).warehouseAreaCode
           vJson['warehouseSpaceCode'] = v.warehouseSpaceCode;
-          vJsosn['putQty'] = v.putQty;
-          vJson['orderDetailId'] = item.id;
-          json['putSpaceInfoList'].push(vJson)
-        })
-      });
-      if (json['putSpaceInfoList'].length <= 0) {
-        this.$message({ type: 'error', message: '请先输入上架量！' })
-        return
-      }
-      jobAdd(json).then(res => {
-        if (res.success) {
-          this.dialogVisible = false;
-          this.$message({ type: 'success', message: '操作成功！' })
-          this.warehouseSpaceCodeListTable = [];
-        } else {
-          this.$message({ type: 'error', message: '操作失败！' })
-        }
-      }).catch(err => {
-        this.$message({ type: 'error', message: '操作失败！' })
-      })
-    },
-    addConfirm() {
-      let json = {};
-      json['orderCode'] = this.activeOrder.orderCode;
-      json['putSpaceInfoList'] = [];
-      _.cloneDeep(this.nowChildDataSelectData).forEach(item => {
-        let arr = item.warehousingArr || [];
-        arr.forEach(v => {
-          let vJson = {};
-          vJson['warehouseAreaCode'] = this.warehouseSpaceCodeConfig.find(item => item.warehouseSpaceCode === v.warehouseSpaceCode).warehouseAreaCode
-          vJson['warehouseSpaceCode'] = v.warehouseSpaceCode;
           vJson['putQty'] = v.putQty;
           vJson['orderDetailId'] = item.id;
           json['putSpaceInfoList'].push(vJson)
@@ -466,16 +435,11 @@ export default {
         this.$message({ type: 'error', message: '请先输入上架量！' })
         return
       }
-      jobAddIn(json).then(res => {
-        if (res.success) {
-          this.dialogVisible = false;
-          this.$message({ type: 'success', message: '操作成功！' })
-          this.warehouseSpaceCodeListTable = [];
-        } else {
-          this.$message({ type: 'error', message: '操作失败！' })
-        }
-      }).catch(err => {
-        this.$message({ type: 'error', message: '操作失败！' })
+      jobAdd(json).then(res => {
+        if (!res) return
+        this.dialogVisible = false;
+        this.$message({ type: 'success', message: '操作成功！' })
+        this.warehouseSpaceCodeListTable = [];
       })
     },
     deleteByindex(index, row) {
@@ -524,22 +488,20 @@ export default {
         return
       }
       let json = { id: moment().valueOf(), ...this.addSearchForm };
+      console.log(json)
       let index = this.warehouseSpaceCodeListTable.findIndex(v => v.warehouseSpaceCode === this.addSearchForm.warehouseSpaceCode)
       if (index === -1) {
         this.warehouseSpaceCodeListTable.push(json);
       } else {
         this.warehouseSpaceCodeListTable[index]['putQty'] += this.addSearchForm['putQty']
       }
-
-
-
     },
 
     upperShelf(row) {
       this.arrivalAlertDisplay = true;
       this.skuRow = row;
       this.warehouseSpaceCodeListTable = row.warehousingArr;
-
+      this.addSearchForm.batchNo = row.batchNo
     },
 
     cancelArrivalAlert() {
@@ -688,6 +650,15 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
+.Arrival {
+  .alertInfo {
+    span {
+      display: inline-block;
+      white-space: nowrap;
+      margin: 0 15px 5px;
+    }
+  }
+}
 .labelContainer {
   width: 80mm;
   overflow: hidden;
