@@ -161,10 +161,7 @@ export default {
     currentRadioChange(data) {
       var templatePlanTag = [...this.planPrintData, data]
       this.planPrintData = uniqueArray([...templatePlanTag], 'planCode')
-      var chooseList = data
-      if (data.childData && data.childData.length > 0) {
-
-      } else {
+      if (!data.childData || data.childData.length <= 0) {
         this.activePlanCode = data.planCode;
         this.getInfoDetailWarehousingApi({
           planCode: data.planCode
@@ -187,7 +184,6 @@ export default {
                 v.printNum = 0
                 return v
               });
-              chooseList = list
             }
             return list
           })

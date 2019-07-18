@@ -487,7 +487,6 @@ export default {
         return
       }
       let json = { id: moment().valueOf(), ...this.addSearchForm };
-      console.log(json)
       let index = this.warehouseSpaceCodeListTable.findIndex(v => v.warehouseSpaceCode === this.addSearchForm.warehouseSpaceCode)
       if (index === -1) {
         this.warehouseSpaceCodeListTable.push(json);

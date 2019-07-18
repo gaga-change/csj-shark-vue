@@ -34,6 +34,7 @@
           !Array.isArray(inOriderSelectData) || inOriderSelectData.length <= 0
         "
         @click="orderAdd"
+        :loading="inOrderAddLoading"
         type="primary"
         size="small"
       >
@@ -74,6 +75,7 @@ export default {
   components: { newSearch, webPaginationTable, editTable },
   data() {
     return {
+      inOrderAddLoading: false,
       searchForm: {
         receiveOrderCode: '',
         planCode: '',
@@ -123,13 +125,15 @@ export default {
           cancelButtonText: '取消'
         }
       ).then(() => {
+        this.inOrderAddLoading = true
         inOrderAdd({
           inWarehouseJobList
         }).then(res => {
-          if (res) {
-            this.getCurrentTableData()
-            this.$message({ type: 'success', message: '操作成功！' })
-          }
+          this.inOrderAddLoading = false
+          if (!res) return
+          this.getCurrentTableData()
+          this.inOriderSelectData = []
+          this.$message({ type: 'success', message: '操作成功！' })
         })
       })
     },

@@ -195,7 +195,7 @@ export default {
       }
       var abb = await this.getBatchNoArr(batchNoArr)
       abb.map(item => {
-        if (item.success && item.data && item.data.batchNo) {
+        if (item && item.data && item.data.batchNo) {
           childData = childData.map(child => {
             if (item.data.skuCode == child.skuCode) {
               child.batchNo = item.data.batchNo
