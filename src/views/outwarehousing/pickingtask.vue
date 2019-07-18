@@ -422,7 +422,7 @@ export default {
               this.getCurrentTableData();
             }
           })
-        })
+        }).catch(() => { })
       }
     },
 

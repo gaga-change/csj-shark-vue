@@ -283,7 +283,7 @@ export default {
             }
           })
         })
-      })
+      }).catch(() => { })
     },
     getTableData() {
 
@@ -405,7 +405,7 @@ export default {
             }
           })
         })
-      })
+      }).catch(() => { })
     },
   },
   computed: {

@@ -339,7 +339,7 @@ export default {
             this.getCurrentTableData()
           }
         })
-      })
+      }).catch(() => { })
     },
 
     dataChange(index, type, changeData) {

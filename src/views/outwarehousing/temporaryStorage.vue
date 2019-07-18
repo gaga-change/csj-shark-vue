@@ -121,7 +121,7 @@ export default {
             this.$message({ type: 'success', message: '操作成功' });
           }
         })
-      })
+      }).catch(() => { })
     },
 
     getCurrentTableData() {

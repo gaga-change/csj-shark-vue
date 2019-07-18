@@ -212,7 +212,7 @@ export default {
           this.$store.dispatch('setTodolist', '')
           location.href = `/csj_logout`
         }
-      })
+      }).catch(() => { })
     }
   }
 }

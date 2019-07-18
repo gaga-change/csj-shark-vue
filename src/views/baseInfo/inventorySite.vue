@@ -342,7 +342,7 @@ export default {
             }
           })
         })
-      })
+      }).catch(() => { })
     },
     getTableData() {
       this.$router.replace({
@@ -460,7 +460,7 @@ export default {
             }
           })
         })
-      })
+      }).catch(() => { })
     },
   },
   created() {
