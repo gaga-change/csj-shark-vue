@@ -127,7 +127,7 @@ export default {
       let data = { ...this.ruleForm }
 
       getInfoPlanOutWarehousing(data).then(res => {
-        if (res.success && res.data && res.data.list) {
+        if (res && res.data && res.data.list) {
           var tempList = [...res.data.list].map(v => {
             v.outWarehousePlanDetailRespList = v.outWarehousePlanDetailRespList.map(item => {
               item.planCode = v.planCode;
@@ -139,10 +139,9 @@ export default {
           this.tableData = uniqueArray([...tempList], 'planCode')
           this.total = res.data.total
           var a = this.$refs.tableChild.expands//之前打开过 
+        } else {
+          this.tableData = []
         }
-        this.loading = false;
-      }).catch(err => {
-        this.tableData = []
         this.loading = false;
       })
     },

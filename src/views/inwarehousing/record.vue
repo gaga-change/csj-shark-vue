@@ -1,13 +1,30 @@
 <template>
   <div class="record">
-    <el-card class="simpleCard" shadow="never" body-style="padding:12px">
-      <new-search @submit="submit" :searchForm="searchForm" ref="arrivalDom">
+    <el-card
+      class="simpleCard"
+      shadow="never"
+      body-style="padding:12px"
+    >
+      <new-search
+        @submit="submit"
+        :searchForm="searchForm"
+        ref="arrivalDom"
+      >
       </new-search>
-      <el-col :span="24" style="margin-bottom:12px;">
-        <el-button type="primary" size="small" @click="select">查询</el-button>
-        <el-button type="primary" size="small" @click="resetForm"
-          >重置</el-button
-        >
+      <el-col
+        :span="24"
+        style="margin-bottom:12px;"
+      >
+        <el-button
+          type="primary"
+          size="small"
+          @click="select"
+        >查询</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="resetForm"
+        >重置</el-button>
       </el-col>
     </el-card>
 
@@ -105,25 +122,16 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }
-      )
-        .then(() => {
-          inOrderAdd({
-            inWarehouseJobList
-          })
-            .then(res => {
-              if (res.success) {
-                this.getCurrentTableData()
-                this.$message({ type: 'success', message: '操作成功！' })
-              } else {
-                this.$message({ type: 'error', message: '操作失败！' })
-              }
-            })
-            .catch(err => {
-              this.$message({ type: 'error', message: '操作失败！' })
-            })
+      ).then(() => {
+        inOrderAdd({
+          inWarehouseJobList
+        }).then(res => {
+          if (res) {
+            this.getCurrentTableData()
+            this.$message({ type: 'success', message: '操作成功！' })
+          }
         })
-        .catch(err => {
-        })
+      })
     },
 
     submit(value) {
@@ -155,13 +163,11 @@ export default {
       }
       jobList({ pageNum: this.pageIndex, pageSize: this.pageSize, ...json })
         .then(res => {
-          if (res.success) {
+          if (res) {
             this.recordListTableData = (res.data && res.data.list) || []
             this.total = res.data.total
             this.currentPage = res.data.pageNum
           }
-        })
-        .catch(err => {
         })
     }
   }

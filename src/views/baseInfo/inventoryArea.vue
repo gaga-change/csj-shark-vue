@@ -6,7 +6,12 @@
       :search-forms="ruleForm"
     ></search-logistics>
 
-    <el-button type="primary" size="small" @click="formHandle('add')" style="margin-bottom:15px">添加</el-button>
+    <el-button
+      type="primary"
+      size="small"
+      @click="formHandle('add')"
+      style="margin-bottom:15px"
+    >添加</el-button>
 
     <double-table
       :loading="loading"
@@ -22,7 +27,11 @@
       :currentPage="ruleForm.pageNum"
     ></double-table>
 
-    <el-dialog :title="dialogTitle+'库区'" :visible.sync="dialogVisible" width="420px">
+    <el-dialog
+      :title="dialogTitle+'库区'"
+      :visible.sync="dialogVisible"
+      width="420px"
+    >
       <el-form
         :model="formParams"
         class="formInput"
@@ -30,12 +39,28 @@
         label-width="70px"
         label-position="left"
       >
-        <el-form-item label="仓库编码" prop="warehouseCode">
-          <el-input type="text" size="small" v-model="chooseWarehouse" disabled></el-input>
+        <el-form-item
+          label="仓库编码"
+          prop="warehouseCode"
+        >
+          <el-input
+            type="text"
+            size="small"
+            v-model="chooseWarehouse"
+            disabled
+          ></el-input>
         </el-form-item>
 
-        <el-form-item label="仓库名称" prop="warehouseName">
-          <el-input type="text" size="small" v-model="warehouseName" disabled></el-input>
+        <el-form-item
+          label="仓库名称"
+          prop="warehouseName"
+        >
+          <el-input
+            type="text"
+            size="small"
+            v-model="warehouseName"
+            disabled
+          ></el-input>
         </el-form-item>
 
         <el-form-item
@@ -60,7 +85,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="是否虚拟区" label-width="90px" :rules="[{ required: true, message: '请选择'}]">
+        <el-form-item
+          label="是否虚拟区"
+          label-width="90px"
+          :rules="[{ required: true, message: '请选择'}]"
+        >
           <el-select
             v-model="formParams.isVirtual"
             :disabled="formType!='add'"
@@ -77,7 +106,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="库区状态" label-width="90px" :rules="[{ required: true, message: '请选择'}]">
+        <el-form-item
+          label="库区状态"
+          label-width="90px"
+          :rules="[{ required: true, message: '请选择'}]"
+        >
           <el-select
             v-model="formParams.warehouseAreaStatus"
             :disabled="formType!='add'"
@@ -115,7 +148,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="库区功能" prop="warehouseAreaDesc">
+        <el-form-item
+          label="库区功能"
+          prop="warehouseAreaDesc"
+        >
           <el-input
             type="textarea"
             :maxlength="100"
@@ -125,9 +161,15 @@
           ></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitIt">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitIt"
+        >确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -142,7 +184,7 @@ import { SimpleMsg } from '@/utils/luoFun'
 import { areaTableConfig } from './components/config'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, deleteInventoryArea, getSelectInventoryAreaList } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
-import { WarehouseAreaNatureEnum, YesOrNoEnum, WarehouseAreaStatusEnum, AtoZ, isVirtualenum} from '@/utils/enum'
+import { WarehouseAreaNatureEnum, YesOrNoEnum, WarehouseAreaStatusEnum, AtoZ, isVirtualenum } from '@/utils/enum'
 import SearchLogistics from './components/search'
 
 export default {
@@ -185,21 +227,28 @@ export default {
       total: 0,
       //主表操作
       handleButtonMap: [
-        {          title: '修改', handle: (index, data) => {
+        {
+          title: '修改',
+          handle: (index, data) => {
             this.formHandle('edit')
             this.formParams = { ...data }
-
-          }        },
-        {          title: '状态更改', handle: (index, data) => {
+          }
+        },
+        {
+          title: '状态更改',
+          handle: (index, data) => {
             this.changeStatus()
             this.formParams = { ...data }
-
           }, formatter: function (data) {
             return data.warehouseAreaStatus ? '启用' : '禁用'
-          }        },
-        {          title: '删除', handle: (index, data) => {
+          }
+        },
+        {
+          title: '删除',
+          handle: (index, data) => {
             this.formDelete(data)
-          }        }
+          }
+        }
 
       ],
       childCanSelect: false,//子表可选择,false不可选，
@@ -225,13 +274,14 @@ export default {
         type: 'warning'
       }).then(() => {
         updateInventoryArea({ ...this.formParams, warehouseAreaStatus: this.formParams.warehouseAreaStatus ? 0 : 1 }).then(res => {
-          SimpleMsg({            result: res.success, msgType: 'user', msg: this.formParams.warehouseAreaStatus ? '启用' : '禁用', cb: () => {            this.dialogVisible = false;
-              this.getTableData()            }          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+          if (!res) return
+          SimpleMsg({
+            result: res.success, msgType: 'user', msg: this.formParams.warehouseAreaStatus ? '启用' : '禁用',
+            cb: () => {
+              this.dialogVisible = false;
+              this.getTableData()
+            }
+          })
         })
       })
     },
@@ -245,37 +295,25 @@ export default {
 
       let data = { ...this.ruleForm, warehouseCode: this.chooseWarehouse }
       getInventoryArea(data).then(res => {
-
-        if (res.success && res.data && res.data.list) {
-          this.tableData = [...res.data.list]
-          this.total = res.data.total
-        } else {
-          this.tableData = []
-          this.total = 0
-        }
-        // this.loading = false;
-
-      }).catch(err => {
-        // this.loading = false;                    
-      }).finally(() => {
-        this.loading = false;
+        this.loading = false
+        if (!res) return
+        this.tableData = [...res.data.list]
+        this.total = res.data.total
       })
       getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
-        if (res.success) {
-          if (res.data && res.data.length > 0) {
-            let tempList = [...this.AtoZ]
-            let temp = res.data.map(item => item.warehouseAreaCode)
-            tempList.map(item => {
-              if (temp.includes(item.value)) {
-                item.isUsed = true
-              } else {
-                item.isUsed = false
-              }
-              return item
-            })
-            this.AtoZ = [...tempList]
+        if (res && res.data && res.data.length > 0) {
+          let tempList = [...this.AtoZ]
+          let temp = res.data.map(item => item.warehouseAreaCode)
+          tempList.map(item => {
+            if (temp.includes(item.value)) {
+              item.isUsed = true
+            } else {
+              item.isUsed = false
+            }
+            return item
+          })
+          this.AtoZ = [...tempList]
 
-          }
         }
       })
     },
@@ -305,13 +343,29 @@ export default {
           this.formParams.warehouseAreaName = this.formParams.warehouseAreaCode
           if (this.formParams.id) {
             updateInventoryArea({ ...this.formParams }).then(res => {
-              SimpleMsg({ result: res.success, msgType: 'edit', msg: '库区', cb: () => { this.dialogVisible = false;
-                  this.getTableData()                }              })
+              if (!res) return
+              SimpleMsg({
+                result: res.success,
+                msgType: 'edit',
+                msg: '库区',
+                cb: () => {
+                  this.dialogVisible = false;
+                  this.getTableData()
+                }
+              })
             })
           } else {
             addInventoryArea({ ...this.formParams }).then(res => {
-              SimpleMsg({                result: res.success, msgType: 'add', msg: '库区', cb: () => {                this.dialogVisible = false;
-                  this.getTableData()   }              })
+              if (!res) return
+              SimpleMsg({
+                result: res.success,
+                msgType: 'add',
+                msg: '库区',
+                cb: () => {
+                  this.dialogVisible = false;
+                  this.getTableData()
+                }
+              })
             })
           }
         } else {
@@ -340,13 +394,16 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteInventoryArea(data).then(res => {
-          SimpleMsg({            result: res.success, msgType: 'delete', msg: '库区', cb: () => {            this.dialogVisible = false;
-              this.getTableData()            }          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+          if (!res) return
+          SimpleMsg({
+            result: res.success,
+            msgType: 'delete',
+            msg: '库区',
+            cb: () => {
+              this.dialogVisible = false;
+              this.getTableData()
+            }
+          })
         })
       })
     },
@@ -380,7 +437,7 @@ export default {
     this.warehouseMap.map(item => {
       if (item.warehouseNo == this.chooseWarehouse) {
         this.warehouseName = item.warehouseName
-        
+
       }
     })
     // this.demo()

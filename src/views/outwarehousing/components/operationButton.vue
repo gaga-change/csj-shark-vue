@@ -44,7 +44,13 @@
             :default-edit="false"
           >
           </edit-table> -->
-          <el-button size="mini" type="primary" @click="getorder" style="position:absolute;right:0;" :disabled="getbtn">先进先出</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            @click="getorder"
+            style="position:absolute;right:0;"
+            :disabled="getbtn"
+          >先进先出</el-button>
         </div>
         <el-table
           :data="PickingOrderData"
@@ -137,7 +143,7 @@
 <script>
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
-import { outboundOrderSubmit, pickOrderAdd , getInfoOnPageInventory} from '@/api'
+import { outboundOrderSubmit, pickOrderAdd, getInfoOnPageInventory } from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { planChildTableEditAllocationConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
@@ -170,9 +176,9 @@ export default {
       skuStock: {}, // 库存统计
       newcacheApi: {},
       newgridData: [],
-      newcountnum:{},
-      getbtn:false,
-      errarrry:[]
+      newcountnum: {},
+      getbtn: false,
+      errarrry: []
     }
   },
   props: {
@@ -218,12 +224,12 @@ export default {
       this.cacheApi = {}
       this.gridData = []
       this.skuStock = {}
-      this.newcacheApi={}
-      this.newcountnum={}
-      this.newgridData=[]
-      this.errarrry=[]
+      this.newcacheApi = {}
+      this.newcountnum = {}
+      this.newgridData = []
+      this.errarrry = []
       this.PickingOrderData.forEach(v => v.sum = '')
-      this.getbtn=false
+      this.getbtn = false
     },
     /** popover 隐藏事件 */
     handlePopoverHide(indexHide, itemHide) {
@@ -254,39 +260,39 @@ export default {
         this.gridData = []
       }
     },
-    getorder(){
+    getorder() {
       this.cache = {}
-      this.newcacheApi={}
-      let ownlength=this.PickingOrderData.length
-      let i=0
-      let that=this
-      this.getbtn=true
-      this.errarrry=[]
-      function getdata(){
-        if(ownlength>0){
-          let Numkey=that.PickingOrderData[i].planCode+that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
-          let ownkey=that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
-          that.newcountnum[Numkey]={}
-          let basicnum=that.PickingOrderData[i].planOutQty-that.PickingOrderData[i].sortQty
+      this.newcacheApi = {}
+      let ownlength = this.PickingOrderData.length
+      let i = 0
+      let that = this
+      this.getbtn = true
+      this.errarrry = []
+      function getdata() {
+        if (ownlength > 0) {
+          let Numkey = that.PickingOrderData[i].planCode + that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
+          let ownkey = that.PickingOrderData[i].ownerCode + that.PickingOrderData[i].skuCode
+          that.newcountnum[Numkey] = {}
+          let basicnum = that.PickingOrderData[i].planOutQty - that.PickingOrderData[i].sortQty
           const _ = (data) => {
             that.newgridData = data.map((item, index) => {
               item.index = index + 1
               item.qty = item.skuQty - item.blockQty
-              if(basicnum>0){
-                if(basicnum-item.qty>0){
+              if (basicnum > 0) {
+                if (basicnum - item.qty > 0) {
                   item.num = item.qty
-                  basicnum = basicnum-item.qty
+                  basicnum = basicnum - item.qty
                   item.qty = 0
-                }else if(basicnum-item.qty==0){
+                } else if (basicnum - item.qty == 0) {
                   item.num = item.qty
                   basicnum = 0
                   item.qty = 0
-                }else if(basicnum-item.qty<0){
+                } else if (basicnum - item.qty < 0) {
                   item.num = basicnum
-                  item.qty = item.qty-basicnum
+                  item.qty = item.qty - basicnum
                   basicnum = 0
                 }
-              }else{
+              } else {
                 basicnum = 0
               }
               return item
@@ -305,8 +311,8 @@ export default {
                 map[v.id] = v.num
                 sum += (v.warehouseSpaceCode + ':' + v.num)
                 total += v.num
-                let ownid=v.id
-                that.newcountnum[Numkey][ownid]=v.num
+                let ownid = v.id
+                that.newcountnum[Numkey][ownid] = v.num
               })
               that.PickingOrderData[i].sortList = map
               that.PickingOrderData[i].sum = sum
@@ -316,44 +322,44 @@ export default {
             }
           }
           // if(basicnum>0){
-            
+
           // }
           if (that.newcacheApi[ownkey]) {
-              _(that.newcacheApi[ownkey])
-              if(that.newcacheApi[ownkey].length<=0){
-                that.errarrry.push('error')
-              }
-              i++
-              ownlength--
-              if(ownlength>=0){
-                getdata()
-              }
-            }else{
-              getInfoOnPageInventory({
-                ownerCode: that.PickingOrderData[i].ownerCode,
-                skuCode: that.PickingOrderData[i].skuCode
-              }).then(res => {
-                if (res.success && res.data) {
-                  that.newcacheApi[ownkey] = JSON.parse(JSON.stringify(res.data))
-                  res.data.forEach(v => {
-                    that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
-                  })
-                  _(res.data)
-                  if(res.data.length<=0){
-                    that.errarrry.push('error')
-                  }
-                  i++
-                  ownlength--
-                  if(ownlength>=0){
-                    getdata()
-                  }
-                }
-              }).catch(err => {
-                that.getbtn=false
-              })
+            _(that.newcacheApi[ownkey])
+            if (that.newcacheApi[ownkey].length <= 0) {
+              that.errarrry.push('error')
             }
-        }else{
-          if(that.errarrry.length>0){
+            i++
+            ownlength--
+            if (ownlength >= 0) {
+              getdata()
+            }
+          } else {
+            getInfoOnPageInventory({
+              ownerCode: that.PickingOrderData[i].ownerCode,
+              skuCode: that.PickingOrderData[i].skuCode
+            }).then(res => {
+              if (res) {
+                that.newcacheApi[ownkey] = res.data
+                res.data.forEach(v => {
+                  that.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
+                })
+                _(res.data)
+                if (res.data.length <= 0) {
+                  that.errarrry.push('error')
+                }
+                i++
+                ownlength--
+                if (ownlength >= 0) {
+                  getdata()
+                }
+              } else {
+                that.getbtn = false
+              }
+            })
+          }
+        } else {
+          if (that.errarrry.length > 0) {
             that.$message({ type: 'error', message: '部分商品库存为0，系统无法给出匹配的库位!' })
           }
           return
@@ -363,7 +369,7 @@ export default {
     },
     /** 选择 通知拣货数量 */
     handleSelectSon(index, item, type) {
-      let numKey=item.planCode+item.ownerCode + item.skuCode
+      let numKey = item.planCode + item.ownerCode + item.skuCode
       if (this.gridData.length) {
         this.handlePopoverHide()
       }
@@ -380,18 +386,18 @@ export default {
         this.gridData = data.map((item, index) => {
           item.index = index + 1
           item.qty = item.skuQty - item.blockQty
-          item.num = this.newcountnum[numKey][item.id]?this.newcountnum[numKey][item.id]:0;
+          item.num = this.newcountnum[numKey][item.id] ? this.newcountnum[numKey][item.id] : 0;
           return item
         })
         this.gridData.item = item
       }
       if (this.cache[item.skuCode + item.planCode]) {
-          this.gridData = this.cache[item.skuCode + item.planCode]
-          this.gridData.item = item
+        this.gridData = this.cache[item.skuCode + item.planCode]
+        this.gridData.item = item
       } else {
-        if(this.newcacheApi[item.ownerCode + item.skuCode]){
+        if (this.newcacheApi[item.ownerCode + item.skuCode]) {
           countNum(this.newcacheApi[item.ownerCode + item.skuCode])
-        }else{
+        } else {
           let key = item.ownerCode + item.skuCode
           if (this.cacheApi[key]) {
             _(this.cacheApi[key])
@@ -401,15 +407,13 @@ export default {
               ownerCode: item.ownerCode,
               skuCode: item.skuCode
             }).then(res => {
-              if (res.success && res.data) {
+              if (res) {
                 this.cacheApi[key] = JSON.parse(JSON.stringify(res.data))
                 res.data.forEach(v => {
                   this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
                 })
                 _(res.data)
               }
-              this.sonTableLoading = false;
-            }).catch(err => {
               this.sonTableLoading = false;
             })
           }
@@ -426,9 +430,9 @@ export default {
       }
       let json = {}
       let skuStock = JSON.parse(JSON.stringify(this.skuStock))
-      json.pickOrderDetailAddReqList=[]
-      this.PickingOrderData.map(item=>{
-        if(item.sum){
+      json.pickOrderDetailAddReqList = []
+      this.PickingOrderData.map(item => {
+        if (item.sum) {
           json.pickOrderDetailAddReqList.push(item)
         }
       })
@@ -443,7 +447,7 @@ export default {
           skuStock[id].num = skuStock[id].num || 0
           skuStock[id].num += v.sortList[id]
         })
-        if(v.planOutQty - v.sortQty>0){
+        if (v.planOutQty - v.sortQty > 0) {
           if (total > v.planOutQty - v.sortQty) {
             this.$message({ type: 'error', message: `计划单 ${v.planCode} 的本次出库数量应该在 0-${v.planOutQty - v.sortQty} 之间` })
             return true
@@ -461,20 +465,14 @@ export default {
           return this.$message({ type: 'error', message: `库位【${item.code}】的可用库存为${item.qty}，当前已使用${item.num}` })
         }
       }
-      // this.skuStock
       json.pickOperatorId = '666'
       json.pickType = 0;
       json.pickOperatorName = this.pickOperatorName;
-      // if (json.pickOperatorName === '') {
-      //   this.$message({ type: 'error', message: '拣货人姓名必填' });
-      //   return
-      // }
       pickOrderAdd(json).then(res => {
-        if (res.success) {
+        if (res) {
           this.$message({ type: 'success', message: '操作成功!' });
           this.dialogVisible = false;
         }
-      }).catch(err => {
       })
     },
 
@@ -554,6 +552,8 @@ export default {
     margin-right: 10px;
   }
 }
-.pointout{color:red;}
+.pointout {
+  color: red;
+}
 </style>
 

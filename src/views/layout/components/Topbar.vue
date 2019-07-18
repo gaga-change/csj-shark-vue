@@ -106,8 +106,8 @@ export default {
         newpassword: '',
         renewpassword: ''
       },
-      warehouse:'',
-      preWarehouse:'',
+      warehouse: '',
+      preWarehouse: '',
       formrule: {
         oldpassword: [
           { required: true, message: '请输入旧密码', trigger: 'blur' }
@@ -130,85 +130,71 @@ export default {
       'warehouseMap',
       'chooseWarehouse',
     ]),
-    warehouseName(){
+    warehouseName() {
       var warehouseName = ''
-      this.warehouseMap.map(item=>{
-        if(this.warehouse==item.warehouseNo){
+      this.warehouseMap.map(item => {
+        if (this.warehouse == item.warehouseNo) {
           warehouseName = item.warehouseName
         }
       })
       return warehouseName
     }
   },
-  watch:{
-    chooseWarehouse(){
+  watch: {
+    chooseWarehouse() {
       this.preWarehouse = this.chooseWarehouse
       this.warehouse = this.chooseWarehouse
     }
   },
-  created(){
+  created() {
     this.preWarehouse = this.chooseWarehouse
-    this.warehouse = this.chooseWarehouse||sessionStorage.getItem('warehouse')
+    this.warehouse = this.chooseWarehouse || sessionStorage.getItem('warehouse')
   },
   methods: {
-    handleCommand(command){
+    handleCommand(command) {
       this.warehouse = command
       this.setWarehouse()
     },
-    totallist(){
-      todolist().then(res=>{
-        if(res.success){
-          if(res.data){
-            this.$store.dispatch('setTodolist',JSON.stringify(res.data))
-            window.location.reload()
-          }
-        }else{
-          this.$message({type:'error',message:'获取代办失败'})
+    totallist() {
+      todolist().then(res => {
+        if (res && res.data) {
+          this.$store.dispatch('setTodolist', JSON.stringify(res.data))
+          window.location.reload()
         }
-      }).catch(err =>{
-        this.$message({type:'error',message:'获取代办失败'})
       })
     },
-    setWarehouse(){
+    setWarehouse() {
       var warehouse = this.warehouse;
-      if(!warehouse){
+      if (!warehouse) {
         this.$message({
-          type:'info',
-          message:'请选择仓库'
+          type: 'info',
+          message: '请选择仓库'
         })
         return false
       }
-       setWarehouseCode({operaterId:this.userInfo.id,warehouseCode:warehouse}).then(res => {
-        if(res.success){
+      setWarehouseCode({ operaterId: this.userInfo.id, warehouseCode: warehouse }).then(res => {
+        if (res) {
           this.totallist()
-          this.$store.dispatch('SetWarehouse',warehouse).then(res=>{
-            this.$message({type:'success',message:'切换仓库成功'})
+          this.$store.dispatch('SetWarehouse', warehouse).then(res => {
+            this.$message({ type: 'success', message: '切换仓库成功' })
           })
-        }else{
-          this.$message({type:'error',message:'切换仓库失败'})
+        } else {
           this.warehouse = this.preWarehouse
         }
-      }).catch(err => {
-        this.$message({type:'error',message:'切换仓库失败'})
-        this.warehouse = this.preWarehouse
       })
     },
-     modifyPassword() {
+    modifyPassword() {
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
           updatepassword({
             userId: this.userInfo.id,
             oldPw: this.form.oldpassword,
             newPw: this.form.newpassword
-          }).then(
-            res => {
-              if(JSON.parse(res.data).code=='success'){
-                 this.$message.success('修改密码成功')
-                 this.modifyPasswordShow = false
-              }  
+          }).then(res => {
+            if (res) {
+              this.$message.success('修改密码成功')
+              this.modifyPasswordShow = false
             }
-          ).catch(err => {
-       
           })
         } else {
           return false
@@ -222,8 +208,8 @@ export default {
         cancelButtonText: '取消'
       }).then(action => {
         if (action === 'confirm') {
-          this.$store.dispatch('SetWarehouse','')
-          this.$store.dispatch('setTodolist','')
+          this.$store.dispatch('SetWarehouse', '')
+          this.$store.dispatch('setTodolist', '')
           location.href = `/csj_logout`
         }
       })
@@ -240,7 +226,7 @@ export default {
   width: 100%;
   z-index: 1001;
   top: 0;
-  .logo{
+  .logo {
     margin: 0 24px;
     float: left;
   }
@@ -259,8 +245,8 @@ export default {
   right: 35px;
   top: 0;
   color: #f2f2f2;
-  &.warehouse{
-    right:160px;
+  &.warehouse {
+    right: 160px;
   }
   .welcome {
     line-height: 60px;
@@ -309,12 +295,12 @@ export default {
       color: #b5c6d9;
       font-size: 16px;
       display: block;
-      transition: all .3s;
+      transition: all 0.3s;
     }
     a:hover {
       background: #263445;
       padding: 0 25px;
-      transition: all .3s;
+      transition: all 0.3s;
     }
   }
 }

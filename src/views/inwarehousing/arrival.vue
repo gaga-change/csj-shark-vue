@@ -336,10 +336,9 @@ export default {
 
     if (sessionStorage.getItem('warehouse')) {
       warehouseSpaceSelect().then(res => {
-        if (res.success) {
+        if (res) {
           this.warehouseSpaceCodeConfig = res.data || [];
         }
-      }).catch(err => {
       })
     }
   },
@@ -558,17 +557,12 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         receiveOrderDelete(json.id).then(res => {
-          if (res.success) {
+          if (res) {
             this.$message({ type: 'success', message: '操作成功！' });
             this.activeOrder = {};
             this.getCurrentTableData()
-          } else {
-            this.$message({ type: 'error', message: '操作失败' })
           }
-        }).catch(err => {
-          this.$message({ type: 'error', message: '操作失败' })
         })
-      }).catch(err => {
       })
     },
 
@@ -577,14 +571,10 @@ export default {
         receiveDetailId: changeData.id,
         receiveQty: changeData.receiveQty
       }).then(res => {
-        if (res.success) {
+        if (res) {
           this.$message({ type: 'success', message: '操作成功！' });
           this.expandChange(this.activeOrder, {}, false)
-        } else {
-          this.$message({ type: 'error', message: '操作失败' })
         }
-      }).catch(err => {
-        this.$message({ type: 'error', message: '操作失败' })
       })
     },
 
@@ -604,7 +594,7 @@ export default {
       }
 
       orderDetailList(json.id).then(res => {
-        if (res.success) {
+        if (res) {
           tableData[index]['childData'] = res.data.map(item => {
             let itemJson = item;
             itemJson.rowId = json.id;
@@ -612,7 +602,6 @@ export default {
           });
           this.tableData = tableData;
         }
-      }).catch(err => {
       })
     },
 
@@ -632,12 +621,10 @@ export default {
         pageSize: this.pageSize
       }).then(res => {
         this.loading = false;
-        if (res.success) {
+        if (res) {
           this.tableData = res.data && res.data.list || [];
           this.total = res.data && res.data.total;
         }
-      }).catch(err => {
-        this.loading = false;
       })
     }
   },

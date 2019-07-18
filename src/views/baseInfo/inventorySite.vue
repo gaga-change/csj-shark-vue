@@ -1,10 +1,21 @@
 <template>
   <div>
-    <search-logistics @searchTrigger="submitForm" :search-forms="ruleForm"></search-logistics>
+    <search-logistics
+      @searchTrigger="submitForm"
+      :search-forms="ruleForm"
+    ></search-logistics>
 
     <div style="margin-bottom:12px;">
-      <el-button type="primary" size="small" @click="formHandle('add')">添加</el-button>
-      <el-button type="primary" size="small" @click="printSite">打印库位码</el-button>
+      <el-button
+        type="primary"
+        size="small"
+        @click="formHandle('add')"
+      >添加</el-button>
+      <el-button
+        type="primary"
+        size="small"
+        @click="printSite"
+      >打印库位码</el-button>
     </div>
     <double-table
       :loading="loading"
@@ -22,8 +33,17 @@
       :currentPage="ruleForm.pageNum"
     ></double-table>
 
-    <el-dialog :title="dialogTitle+'库位'" :visible.sync="dialogVisible" width="600px">
-      <el-form :model="formParams" ref="subForm" label-width="70px" label-position="left">
+    <el-dialog
+      :title="dialogTitle+'库位'"
+      :visible.sync="dialogVisible"
+      width="600px"
+    >
+      <el-form
+        :model="formParams"
+        ref="subForm"
+        label-width="70px"
+        label-position="left"
+      >
         <el-form-item
           label="库区编码"
           prop="warehouseAreaCode"
@@ -129,14 +149,27 @@
         </el-form-item>
       </el-form>
       <div>提示：第一行是货架，第二行是货架层高，第三行是具体库位号</div>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitIt">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitIt"
+        >确 定</el-button>
       </span>
     </el-dialog>
 
-    <el-dialog title="打印库位码" :visible.sync="dialogVisibleSite" width="70%">
-      <div id="print" class="printSiteCss">
+    <el-dialog
+      title="打印库位码"
+      :visible.sync="dialogVisibleSite"
+      width="70%"
+    >
+      <div
+        id="print"
+        class="printSiteCss"
+      >
         <div
           v-for="item in multipleParentSelection"
           class="printItemCss"
@@ -145,9 +178,16 @@
           <bar-code :code="item.warehouseSpaceCode"></bar-code>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer" v-loading="loading">
+      <span
+        slot="footer"
+        class="dialog-footer"
+        v-loading="loading"
+      >
         <el-button @click="dialogVisibleSite = false">取 消</el-button>
-        <el-button type="primary" @click="printIt">打印</el-button>
+        <el-button
+          type="primary"
+          @click="printIt"
+        >打印</el-button>
       </span>
     </el-dialog>
   </div>
@@ -291,6 +331,7 @@ export default {
           id: this.formParams.id,
           flag: this.formParams.openStatus ? 0 : 1
         }).then(res => {
+          if (!res) return
           SimpleMsg({
             result: res.success,
             msgType: 'user',
@@ -301,15 +342,9 @@ export default {
             }
           })
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
     },
     getTableData() {
-
       this.$router.replace({
         path: '/baseInfo/inventorySite',
         query: { data: JSON.stringify(this.ruleForm) }
@@ -320,25 +355,17 @@ export default {
         warehouseCode: this.chooseWarehouse
       }
       getInventorySite(data).then(res => {
-        if (res.success && res.data && res.data.list) {
-          this.tableData = [...res.data.list]
-          this.total = res.data.total
-        } else {
-          this.tableData = []
-          this.total = 0
-        }
-        this.loading = false;
-
-      }).catch(err => {
-        this.loading = false;
+        this.loading = false
+        if (!res) return
+        this.tableData = [...res.data.list]
+        this.total = res.data.total
       })
       getSelectInventoryAreaList({
         warehouseCode: this.chooseWarehouse
       }).then(res => {
-        if (res.success) {
-          if (res.data && res.data.length > 0) {
-            this.warehouseAreaCodeEnum = [...res.data]
-          }
+        if (!res) return
+        if (res.data && res.data.length > 0) {
+          this.warehouseAreaCodeEnum = [...res.data]
         }
       })
     },
@@ -386,6 +413,7 @@ export default {
           addInventorySite({
             ...this.formParams
           }).then(res => {
+            if (!res) return
             SimpleMsg({
               result: res.success,
               msgType: 'add',
@@ -421,6 +449,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteInventorySite(data).then(res => {
+          if (!res) return
           SimpleMsg({
             result: res.success,
             msgType: 'delete',
@@ -430,11 +459,6 @@ export default {
               this.getTableData()
             }
           })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
         })
       })
     },

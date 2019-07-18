@@ -1,23 +1,34 @@
 <template>
   <div class="pickingtask">
-    <el-card shadow="never" body-style="padding:12px" class="confirmstyle">
-      <new-search @submit="submit" :searchForm="searchForm" ref="arrivalDom"></new-search>
+    <el-card
+      shadow="never"
+      body-style="padding:12px"
+      class="confirmstyle"
+    >
+      <new-search
+        @submit="submit"
+        :searchForm="searchForm"
+        ref="arrivalDom"
+      ></new-search>
     </el-card>
     <div style="margin-left:280px;">
-      <el-col :span="24" style="margin-bottom:12px;">
-      <el-button
-        type="primary"
-        :disabled="!SelectionData.length>0"
-        size="small"
-        @click="outOrder"
-      >复核(生成出库单)</el-button>
-      <el-button
-        type="danger"
-        :disabled="!SelectionData.length>0"
-        size="small"
-        @click="outOrder('delete')"
-      >删除</el-button>
-    </el-col>
+      <el-col
+        :span="24"
+        style="margin-bottom:12px;"
+      >
+        <el-button
+          type="primary"
+          :disabled="!SelectionData.length>0"
+          size="small"
+          @click="outOrder"
+        >复核(生成出库单)</el-button>
+        <el-button
+          type="danger"
+          :disabled="!SelectionData.length>0"
+          size="small"
+          @click="outOrder('delete')"
+        >删除</el-button>
+      </el-col>
       <edit-table
         :loading="loding"
         :config="temporaryStorageConfig"
@@ -55,7 +66,7 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
-      isShow:false
+      isShow: false
     }
   },
   mounted() {
@@ -106,16 +117,10 @@ export default {
         cancelButtonText: '取消',
       }).then(() => {
         Api(data).then(res => {
-          if (res.success) {
+          if (res) {
             this.$message({ type: 'success', message: '操作成功' });
-          } else {
-            this.$message({ type: 'info', message: '操作失败' });
           }
-        }).catch(err => {
-          this.$message({ type: 'info', message: '操作失败' });
         })
-      }).catch(err => {
-        this.$message({ type: 'info', message: '操作失败' });
       })
     },
 
@@ -128,22 +133,20 @@ export default {
           json[i] = this.searchForm[i];
         }
       }
-      if(!json.planCode){
-        this.TableData=[]
+      if (!json.planCode) {
+        this.TableData = []
         this.loding = false
         return
       }
       selectOutWarehouseJobDetail({ ...json }).then(res => {
         this.loding = false;
-        if (res.success) {
-          if(res.data && res.data.length>0){
+        if (res) {
+          if (res.data && res.data.length > 0) {
             this.TableData = res.data
-          }else{
+          } else {
             this.TableData = []
           }
         }
-      }).catch(err => {
-        this.loding = false;
       })
     }
   },
@@ -164,10 +167,10 @@ export default {
     }
   }
 }
-.confirmstyle{
-  float:left;
-  width:260px;
-  min-height:400px;
+.confirmstyle {
+  float: left;
+  width: 260px;
+  min-height: 400px;
 }
 
 .el-dialog__body {

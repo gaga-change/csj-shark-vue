@@ -291,15 +291,11 @@ export default {
         planCode: this.parentDataObj.planCode,
         receiveOrderDetailReqList: data
       }).then(res => {
-        if (res.success) {
+        if (res) {
           this.dialogVisible = false;
           this.$message({ type: 'success', message: '操作成功！' })
           this.$emit('lodash')
-        } else {
-          this.$message({ type: 'error', message: '操作失败' })
         }
-      }).catch(err => {
-        this.$message({ type: 'error', message: '操作失败' })
       })
 
     }

@@ -13,23 +13,19 @@ router.beforeEach((to, from, next) => {
   if (whiteList.includes(to.path)) {
     next()
   } else if (store.getters.userInfo == null) {
-      store.dispatch('GetInfo').then(res => {
-        if(res.success){
-          store.dispatch('gitMap');
-          router.addRoutes(store.getters.menu)
-          next({ ...to, replace: true })
-        } else{
-          store.dispatch('SetWarehouse','')
-          location.href = `/csj_logout`
-        }
-      }).catch((err) => {
-        store.dispatch('SetWarehouse','')
+    store.dispatch('GetInfo').then(res => {
+      if (res) {
+        store.dispatch('gitMap');
+        router.addRoutes(store.getters.menu)
+        next({ ...to, replace: true })
+      } else {
+        store.dispatch('SetWarehouse', '')
         location.href = `/csj_logout`
-      })
-
-    } else {
-      next()
-    }
+      }
+    })
+  } else {
+    next()
+  }
 
 })
 

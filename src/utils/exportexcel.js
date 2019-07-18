@@ -29,17 +29,12 @@ export function exportExcel(exportdata) {
         autoWidth: true
       })
     })
-  }).catch(() => {
-    this.$message({
-      type: 'info',
-      message: '取消导出'
-    })
   })
 }
-export function exportExcelBlob(name,blobData){
+export function exportExcelBlob(name, blobData) {
   const blob = new Blob([blobData]);
   const elink = document.createElement('a');
-  elink.download = name ? name+'.xlsx' :'库存台账.xlsx';
+  elink.download = name ? name + '.xlsx' : '库存台账.xlsx';
   elink.style.display = 'none';
   elink.href = URL.createObjectURL(blob);
   document.body.appendChild(elink);

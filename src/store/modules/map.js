@@ -12,37 +12,32 @@ const map = {
   actions: {
     // 获取枚举信息
     gitMap({ commit, state }) {
-        config().then(res=>{
-          commit('SET_MAP',res );
-        }).catch(err=>{
-          console.err(err)
-        })
+      config().then(res => {
+        commit('SET_MAP', res);
+      })
     }
-
   }
 }
 
 async function config() {
-  let config={};
-  for(let i in apiMap){
-    await  apiMap[i]().then(res=>{
-      if(res.success){
-        if(Array.isArray(res.data)){
-          config[i]=res.data
-        } else{
-          let arr=[];
-          for(let prop in res.data){
-              arr.push({
-                key:prop,
-                value:res.data[prop]
-              }) 
+  let config = {};
+  for (let i in apiMap) {
+    await apiMap[i]().then(res => {
+      if (res.success) {
+        if (Array.isArray(res.data)) {
+          config[i] = res.data
+        } else {
+          let arr = [];
+          for (let prop in res.data) {
+            arr.push({
+              key: prop,
+              value: res.data[prop]
+            })
           }
-          config[i]=arr
+          config[i] = arr
         }
-      } 
-     }).catch(err=>{
-       
-     })
+      }
+    })
   }
   return config
 }

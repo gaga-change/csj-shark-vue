@@ -1,31 +1,44 @@
 <template>
-  <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
+  <div
+    class="app-wrapper"
+    :class="{hideSidebar:!sidebar.opened}"
+  >
     <topbar></topbar>
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
-      <el-row :gutter="16"  class="main-container-nav">
-         <el-col :span="8" >
-            <navbar></navbar>
-         </el-col >
-          <el-col :span="16" >
-             <tags-view></tags-view>
-         </el-col >
+      <el-row
+        :gutter="16"
+        class="main-container-nav"
+      >
+        <el-col :span="8">
+          <navbar></navbar>
+        </el-col>
+        <el-col :span="16">
+          <tags-view></tags-view>
+        </el-col>
       </el-row>
       <app-main></app-main>
-      <div class="warehouseBox" v-if="showWarehouse">
-          <div class="warehouseBox_alert">
-              <div class="warehouseBox_alert_title">仓库选择</div>
-              <ul>
-                <li  v-for="item in $store.getters.warehouseMap" :key="item.warehouseNo"  @click="choosewarehouse(item)" >{{item.warehouseName}}</li>
-              </ul>
-          </div>
+      <div
+        class="warehouseBox"
+        v-if="showWarehouse"
+      >
+        <div class="warehouseBox_alert">
+          <div class="warehouseBox_alert_title">仓库选择</div>
+          <ul>
+            <li
+              v-for="item in $store.getters.warehouseMap"
+              :key="item.warehouseNo"
+              @click="choosewarehouse(item)"
+            >{{item.warehouseName}}</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, TagsView,Topbar } from './components'
+import { Navbar, Sidebar, AppMain, TagsView, Topbar } from './components'
 import { setWarehouseCode, todolist } from '@/api'
 export default {
   name: 'layout',
@@ -37,9 +50,9 @@ export default {
     Topbar
   },
 
-  data(){
+  data() {
     return {
-      showWarehouse:!sessionStorage.getItem('warehouse')
+      showWarehouse: !sessionStorage.getItem('warehouse')
     }
   },
 
@@ -48,32 +61,25 @@ export default {
       return this.$store.state.app.sidebar
     }
   },
-  methods:{
-    totallist(){
-      todolist().then(res=>{
-        if(res.success){
-          if(res.data){
-            this.$store.dispatch('setTodolist',JSON.stringify(res.data))
-            window.location.reload()
-          }
-        }else{
-          this.$message({type:'error',message:'获取代办失败'})
+  methods: {
+    totallist() {
+      todolist().then(res => {
+        if (res) {
+          this.$store.dispatch('setTodolist', JSON.stringify(res.data))
+          window.location.reload()
         }
-      }).catch(err =>{
-        this.$message({type:'error',message:'获取代办失败'})
       })
     },
-    choosewarehouse(value){ 
+    choosewarehouse(value) {
       setWarehouseCode({
-         operaterId:this.$store.getters.userInfo.id,
-         warehouseCode:value.warehouseNo
+        operaterId: this.$store.getters.userInfo.id,
+        warehouseCode: value.warehouseNo
       }).then(res => {
-        if(res.success){
-          this.showWarehouse=false;
+        if (res) {
+          this.showWarehouse = false;
           this.totallist()
-          this.$store.dispatch('SetWarehouse',value.warehouseNo)
+          this.$store.dispatch('SetWarehouse', value.warehouseNo)
         }
-      }).catch(err=>{
       })
     },
   },
@@ -81,68 +87,66 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "src/styles/mixin.scss";
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    padding-top: 65px;
-  }
+@import "src/styles/mixin.scss";
+.app-wrapper {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding-top: 65px;
+}
 
-  #app .sidebar-container{
-    top:65px;
-  }
+#app .sidebar-container {
+  top: 65px;
+}
 
-  .main-container-nav{
-    border-bottom: 1px solid #d8dce5;
-  }
-  .el-message-box--center .el-message-box__btns{
-    text-align: right !important;
-  }
+.main-container-nav {
+  border-bottom: 1px solid #d8dce5;
+}
+.el-message-box--center .el-message-box__btns {
+  text-align: right !important;
+}
 
-  .warehouseBox{
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height:100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index:9999;
-    .warehouseBox_alert{
-      background: #fff;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%,-50%);
-      .warehouseBox_alert_title{
-        font-size: 24px;
-        text-align: center;
-        line-height: 32px;
-        padding-top: 16px;
-        font-weight: 600;
-      }
-      ul{
-         width: 464px;
-         padding:0;
-         margin: 0;
-         >li{
-          list-style: none;
-          padding: 0;
-          margin: 16px;
-          width: 200px; 
-          height: 50px;
-          line-height: 50px;
-          border: 1px solid #000;
-          text-align: center;
-          cursor: pointer;
-          float: left;
-        }
-      }
-    
+.warehouseBox {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  .warehouseBox_alert {
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    .warehouseBox_alert_title {
+      font-size: 24px;
+      text-align: center;
+      line-height: 32px;
+      padding-top: 16px;
+      font-weight: 600;
     }
-
+    ul {
+      width: 464px;
+      padding: 0;
+      margin: 0;
+      > li {
+        list-style: none;
+        padding: 0;
+        margin: 16px;
+        width: 200px;
+        height: 50px;
+        line-height: 50px;
+        border: 1px solid #000;
+        text-align: center;
+        cursor: pointer;
+        float: left;
+      }
+    }
   }
+}
 </style>
 
 

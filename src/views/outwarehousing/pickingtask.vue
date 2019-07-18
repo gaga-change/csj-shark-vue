@@ -189,7 +189,7 @@ import newSearch from './components/newSearch'
 import BaseTable from '@/components/Table/index'
 import { jobStatusList } from '@/utils/enum'
 import { pickingtaskConfig, pickingtaskdetailConfig, printinConfig } from './components/config'
-import { pickOrderList, pickOrderDetail, orderPickConfirm, orderDelete, orderPickStop , querySkuStockByOutJobId} from '@/api'
+import { pickOrderList, pickOrderDetail, orderPickConfirm, orderDelete, orderPickStop, querySkuStockByOutJobId } from '@/api'
 import webPaginationTable from '@/components/Table/webPaginationTable'
 import { MakePrint } from '@/utils'
 export default {
@@ -342,15 +342,13 @@ export default {
           querySkuStockByOutJobId({
             outJobId: item.outJobId,
           }).then(res => {
-            if (res.success && res.data) {
+            if (res) {
               this.cacheApi[key] = JSON.parse(JSON.stringify(res.data))
               res.data.forEach(v => {
                 this.skuStock[v.id] = { code: v.warehouseSpaceCode, qty: v.skuQty - v.blockQty }
               })
               _(res.data)
             }
-            this.sonTableLoading = false;
-          }).catch(err => {
             this.sonTableLoading = false;
           })
         }
@@ -391,7 +389,7 @@ export default {
       this.detailLoding = true;
       pickOrderDetail(id).then(res => {
         this.detailLoding = false;
-        if (res.success) {
+        if (res) {
           res.data.forEach(item => {
             item.sum = item.warehouseSpaceCode + ':' + item.jobQty
             item.realSortQty = item.realSortQty || 0
@@ -399,8 +397,6 @@ export default {
           })
           this.pickingtaskdetailTableData = res.data || [];
         }
-      }).catch(err => {
-        this.detailLoding = false;
       })
     },
 
@@ -421,22 +417,13 @@ export default {
           type: 'warning'
         }).then(() => {
           Api(row.id).then(res => {
-            if (res.success) {
+            if (res) {
               this.$message({ type: 'success', message: '操作成功!' });
               this.getCurrentTableData();
-            } else {
-              this.$message({ type: 'info', message: '操作失败' });
             }
-          }).catch(err => {
-            console.error(err)
-            this.$message({ type: 'info', message: '操作失败' });
           })
-
-        }).catch(() => {
-          this.$message({ type: 'info', message: '操作失败' });
-        });
+        })
       }
-
     },
 
     SelectionChange(val) {
@@ -485,15 +472,10 @@ export default {
         }
       })
       orderPickConfirm(json).then(res => {
-        if (res.success) {
+        if (res) {
           this.$message({ type: 'success', message: '操作成功，可以去出库暂存页面查看' });
           this.dialogVisible = false;
-        } else {
-          this.$message({ type: 'err', message: '操作失败' });
         }
-      }).catch(err => {
-        console.error(err)
-        this.$message({ type: 'err', message: '操作失败' });
       })
 
     },
@@ -513,12 +495,10 @@ export default {
       }
 
       pickOrderList(json).then(res => {
-        if (res.success) {
+        if (res) {
           this.total = res.data && res.data.total;
           this.tableData = res.data && res.data.list || []
         }
-      }).catch(err => {
-        console.error(err)
       })
     }
   },
