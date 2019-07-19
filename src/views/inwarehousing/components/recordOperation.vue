@@ -1,5 +1,8 @@
 <template>
-  <div style="margin-bottom:10px">
+  <div
+    style="margin-bottom:10px"
+    class="RecordOperation"
+  >
     <el-button
       type="primary"
       size="small"
@@ -10,7 +13,6 @@
       size="small"
       @click="priviewProductLabel"
     >打印商品标签</el-button>
-
     <div>
       <el-dialog
         title="收货登记"
@@ -27,9 +29,22 @@
         </el-row>
         <edit-table
           :config="businessChildTableEditConfig"
-          :table-data="childData"
-          :default-edit="false"
-        ></edit-table>
+          :defaultEdit="true"
+          :useEdit="false"
+          controlName="批次"
+          :tableData="childData"
+        >
+          <template
+            slot="edit"
+            slot-scope="scope"
+          >
+            <span style="margin: 5px 10px;">{{scope.row.receiveListText}}</span>
+            <span
+              class="link_dom"
+              @click="upperShelf(scope.row)"
+            >添加</span>
+          </template>
+        </edit-table>
         <span
           slot="footer"
           class="dialog-footer"
@@ -44,6 +59,79 @@
             @click="submitForm('inwarehousing')"
           >收货并入库</el-button>
         </span>
+        <el-dialog
+          custom-class="RecordOperation"
+          width="70%"
+          title="添加批次"
+          :visible.sync="innerVisible"
+          append-to-body
+        >
+          <el-form
+            :model="addSearchForm"
+            :inline="true"
+            label-width="70px"
+            label-position="left"
+          >
+            <el-form-item
+              label-width="40px"
+              label="批次"
+            >
+              <el-input
+                style="width:200px"
+                :maxlength="50"
+                v-model="addSearchForm.batchNo"
+                size="mini"
+              />
+            </el-form-item>
+
+            <el-form-item
+              label-width="40px"
+              label="数量"
+            >
+              <el-input-number
+                type="text"
+                size="mini"
+                style="width:200px"
+                :min="0"
+                :max="99999999"
+                v-model="addSearchForm.receiveQty"
+                placeholder="请输入上架数量"
+              >
+              </el-input-number>
+            </el-form-item>
+
+            <el-form-item class="addButton">
+              <el-button
+                type="primary"
+                size="small"
+                @click="addBatch"
+              >添加</el-button>
+            </el-form-item>
+          </el-form>
+
+          <edit-table
+            :loading="false"
+            @dataChange="deleteByindex"
+            emptyText="请并输入批次、数量添加数据"
+            :config="batchNoConfig"
+            :deleteNeed="true"
+            :useEdit="false"
+            :tableData="batchNoListTable"
+          />
+
+          <div class="alertBottomArr">
+            <el-button
+              type="primary"
+              size="small"
+              @click="sureWarehouse"
+            >确认</el-button>
+            <el-button
+              type="primary"
+              size="small"
+              @click="cancelWarehouse"
+            >取消</el-button>
+          </div>
+        </el-dialog>
       </el-dialog>
 
       <el-dialog
@@ -110,16 +198,17 @@ import editTable from '@/components/Table/editTable'
 import { orderAdd, getBatchNo, receiveAndInStock } from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
-import { businessChildTableEditConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
+import { batchNoConfig, businessChildTableEditConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
 
 export default {
-  name: 'operationButton',
+  name: 'RecordOperation',
   components: {
     editTable,
   },
   data() {
     return {
+      innerVisible: false,
       dialogVisible: false,
       dialogVisibleLabel: false,
       dialogVisibleReserve: false,
@@ -127,10 +216,17 @@ export default {
       loading: false,
       parentData: {},
       childData: [],
+      batchNoConfig,
       businessChildTableEditConfig,
       planChildTableLabelConfig,
       planChildTablePrintConfig,
+      batchNoListTable: [],
+      selectRow: null,
       printPlan: [],//打印计划单
+      addSearchForm: {
+        batchNo: '',
+        receiveQty: 0,
+      }
     }
   },
   props: {
@@ -148,6 +244,51 @@ export default {
     }
   },
   methods: {
+    /** 确认 */
+    sureWarehouse() {
+      this.selectRow.receiveList = [...this.batchNoListTable]
+      this.$set(this.selectRow, 'receiveListText', this.batchNoListTable.map(v => v.batchNo).join(','))
+      this.cancelWarehouse()
+    },
+    /** 取消 */
+    cancelWarehouse() {
+      this.innerVisible = false
+      this.batchNoListTable = []
+      this.addSearchForm = {
+        batchNo: '',
+        receiveQty: 0,
+      }
+    },
+    /** 批次删除 */
+    deleteByindex(index) {
+      let temp = [...this.batchNoListTable]
+      temp.splice(index, 1)
+      this.batchNoListTable = temp
+    },
+    /** 添加批次 */
+    addBatch() {
+      for (let key in this.addSearchForm) {
+        if (this.addSearchForm[key] === '') {
+          this.$message({ type: 'error', message: '库位和数量都是必填参数' });
+          return
+        }
+      }
+      if (this.addSearchForm.receiveQty === 0) {
+        this.$message({ type: 'error', message: '数量不能为0' });
+        return
+      }
+      let json = { id: moment().valueOf(), ...this.addSearchForm };
+      this.batchNoListTable.push(json)
+      this.addSearchForm = {
+        batchNo: '',
+        receiveQty: 0,
+      }
+    },
+    upperShelf(row) {
+      this.selectRow = row
+      this.innerVisible = true
+      this.batchNoListTable = row.receiveList || [];
+    },
     formateTime(val) {
       return moment(val).format('YYYY-MM-DD HH:MM:SS')
     },
@@ -184,7 +325,8 @@ export default {
       var childData = [...this.childData]
       var batchNoArr = []
       var canPriview = true
-      childData.map(item => {        if (!PositiveIntegerReg.test(item.printNum)) {
+      childData.map(item => {
+        if (!PositiveIntegerReg.test(item.printNum)) {
           canPriview = false
         }
         batchNoArr.push({ skuCode: item.skuCode, ownerCode: this.parentData.ownerCode, providerCode: this.parentData.providerCode })
@@ -243,7 +385,6 @@ export default {
       } else {
         this.$message({ type: 'info', message: '请选择单据' })
       }
-
     },
     printPlanOrder() {
       var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
@@ -271,7 +412,7 @@ export default {
       }
       let data = [...this.childData].map(v => {
         let json = {};
-        ['busiIndex', 'skuCode', 'receiveQty', 'badReceiveQty'].forEach(item => {
+        ['busiIndex', 'skuCode', 'receiveQty', 'badReceiveQty', 'receiveList'].forEach(item => {
           if (item === 'receiveQty') {
             json[item] = Number(v[item]) || 0
           } else if (item === 'badReceiveQty') {
@@ -324,6 +465,13 @@ export default {
     width: 40mm;
     height: 15mm;
     margin: 0 auto;
+  }
+}
+.RecordOperation {
+  .alertBottomArr {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
   }
 }
 </style>

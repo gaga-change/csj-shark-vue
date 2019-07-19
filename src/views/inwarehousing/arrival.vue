@@ -677,10 +677,6 @@ export default {
       padding-right: 20px;
     }
   }
-  .link_dom {
-    color: rgb(51, 153, 234);
-    cursor: pointer;
-  }
   .alertBottomArr {
     display: flex;
     justify-content: flex-end;

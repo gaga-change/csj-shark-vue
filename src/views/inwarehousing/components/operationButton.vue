@@ -35,7 +35,7 @@
 import moment from 'moment'
 import axios from 'axios'
 import editTable from '@/components/Table/editTable'
-import { orderAdd, getBatchNo, receiveAndInStock, modifyPrintState } from '@/api'
+import { getBatchNo, modifyPrintState } from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { businessChildTableEditConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
@@ -178,36 +178,6 @@ export default {
       })
       var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
       MakePrint(printPlanContainer)
-    },
-
-    submitForm(type) {//提交
-      let isSubmit = this.childData.some(v => v.planInQty - v.hasReceiveQty < v.receiveQty || v.receiveQty <= 0);
-      if (isSubmit) {
-        this.$message({ type: 'error', message: '本次收货量应小于总数量-已收货量,且要大于0' });
-        return
-      }
-      let data = [...this.childData].map(v => {
-        let json = {};
-        ['busiIndex', 'skuCode', 'receiveQty'].forEach(item => {
-          json[item] = item === 'receiveQty' ? Number(v[item]) || 0 : v[item]
-        })
-        return json
-      })
-
-      let Api = orderAdd;
-      if (type === 'inwarehousing') {
-        Api = receiveAndInStock
-      }
-      Api({
-        planCode: this.parentDataObj.planCode,
-        receiveOrderDetailReqList: data
-      }).then(res => {
-        if (res) {
-          this.dialogVisible = false;
-          this.$message({ type: 'success', message: '操作成功！' })
-          this.$emit('lodash')
-        }
-      })
     }
   }
 }

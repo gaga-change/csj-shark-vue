@@ -97,10 +97,10 @@
         width="160"
         fixed="right"
         v-if="defaultEdit"
-        label="操作"
+        :label="controlName"
       >
         <template slot-scope="scope">
-          <div style="width:160px">
+          <div>
             <slot></slot>
             <span v-if="useEdit">
               <el-button
@@ -153,6 +153,10 @@ import * as Enum from "@/utils/enum.js";
 
 export default {
   props: {
+    controlName: {
+      type: String,
+      defalut: '操作',
+    },
     loading: {
       type: Boolean,
       default: false
