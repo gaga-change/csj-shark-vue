@@ -442,3 +442,8 @@ export const busiBillTypeEnum = [
   { name: '移库入库', value: 51 },
 ]
 
+export const checkResultEnum = [
+  { name: '待检', value: 0 },
+  { name: '残次品', value: 1 },
+  { name: '合格', value: 2 },
+]

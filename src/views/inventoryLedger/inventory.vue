@@ -6,7 +6,6 @@
       :search-forms="ruleForm"
     >
     </search-inventory>
-
     <div
       class="export_box"
       v-if="SumSkuQty"
@@ -56,8 +55,8 @@ export default {
         skuCode: '',
         skuName: '',
         ownerName: '',
+        checkResult: '',
         warehouseSpaceCode: '',
-
       },
       tableData: [],
       inventoryTableConfig,

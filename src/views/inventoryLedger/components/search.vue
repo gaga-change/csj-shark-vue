@@ -44,7 +44,6 @@
             ></el-input>
           </el-form-item>
         </el-col>
-
         <el-col
           :span="6"
           v-if="searchForms.skuName!==undefined"
@@ -139,6 +138,32 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col
+          :span="6"
+          v-if="searchForms.checkResult!==undefined"
+        >
+          <el-form-item
+            label="商品状态"
+            prop="checkResult"
+          >
+            <el-select
+              v-model="searchForms.checkResult"
+              filterable
+              clearable
+              placeholder="请选择商品状态"
+              size="small"
+              prefix-icon="el-icon-search"
+            >
+              <el-option
+                v-for="item in checkResultEnum"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
@@ -161,14 +186,15 @@
 </template>
 
 <script>
-import { busiBillTypeEnum } from '@/utils/enum'
+import { busiBillTypeEnum, checkResultEnum } from '@/utils/enum'
 export default {
   name: 'SearchInventory',
 
   data() {
     return {
       searchRules: {},
-      busiBillTypeEnum
+      busiBillTypeEnum,
+      checkResultEnum
     }
   },
   props: {
