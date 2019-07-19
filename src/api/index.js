@@ -110,9 +110,7 @@ export const updateInventoryArea = params => http.post(`/webApi/basic/warehouseA
 /** 获取到货单列表 */
 export const getArrivalList = params => http.post(`/webApi/receive/order/list`, params)
 /** 新增收货单 */
-export const addArrival = params => http.post(`/webApi/receive/order/add`, params)
-/** 新增上架单 */
-export const addPutJob = params => http.post(`/webApi/receive/order/add'`, params)
+export const orderAdd = params => http.post(`/webApi/receive/order/add`, params)
 /** 获取入库列表 */
 export const getInfoInWarehousing = params => http.post(`/webApi/in/list`, params)
 /** 更改打印状态 */
@@ -121,8 +119,6 @@ export const modifyPrintState = params => http.post(`/webApi/plan/in/print`, par
 export const modifyOutPrint = params => http.post(`/webApi/plan/out/print`, params)
 /** 获取出库计划单列表 */
 export const getInfoPlanOutWarehousing = params => http.post(`/webApi/plan/out/list`, params)
-/** 新增收货单 */
-export const orderAdd = params => http.post(`/webApi/receive/order/add`, params)
 /** 提交出库单 */
 export const outboundOrderSubmit = params => http.post(`/webApi/outWarehouse/order/addOutWarehouseOrder`, params)
 /** 一键提交出库单 */

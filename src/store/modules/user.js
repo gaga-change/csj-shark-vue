@@ -43,12 +43,14 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return getInfo().then(res => {
-        const data = res.data
-        commit('SET_USERINFO', data)
-        commit('SET_PERMISSIONCODES', data.permissionCodes || [])
-        commit('SET_COMPANY', data.companyname || '')
-        commit('SET_COMPANYID', data.companyid || '')
-        commit('SET_WAREHOUSEENUM', data)
+        if (res) {
+          const data = res.data
+          commit('SET_USERINFO', data)
+          commit('SET_PERMISSIONCODES', data.permissionCodes || [])
+          commit('SET_COMPANY', data.companyname || '')
+          commit('SET_COMPANYID', data.companyid || '')
+          commit('SET_WAREHOUSEENUM', data)
+        }
         return res
       })
     },
