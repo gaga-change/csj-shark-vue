@@ -12,7 +12,10 @@
       @select="handleParentSelection"
       @select-all="handleParentSelection"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column
+        type="selection"
+        width="55"
+      ></el-table-column>
       <el-table-column
         v-for="item in tableConfig"
         :fixed="item.fixed"
@@ -34,7 +37,10 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="(file,i) in scope.row[item.prop]" :key="file.path">
+                <el-dropdown-item
+                  v-for="(file,i) in scope.row[item.prop]"
+                  :key="file.path"
+                >
                   <a
                     class="el-dropdown-link"
                     target="blank"
@@ -44,14 +50,17 @@
               </el-dropdown-menu>
             </el-dropdown>
           </span>
-          <span
-            v-else-if="typeof item.formatter == 'function'"
-          >{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
+          <span v-else-if="typeof item.formatter == 'function'">{{item.formatter(scope.row,{},scope.row[item.prop],scope.$index)}}</span>
 
           <span v-else>{{scope.row[item.prop]}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="160" v-if="handleButtonMap.length>0" fixed="right" label="操作">
+      <el-table-column
+        width="160"
+        v-if="handleButtonMap.length>0"
+        fixed="right"
+        label="操作"
+      >
         <template slot-scope="scope">
           <template v-for="thisButton in handleButtonMap">
             <el-button
@@ -115,7 +124,7 @@ export default {
 
     summaryMethod: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     handleButtonMap: {
       type: Array,
@@ -222,7 +231,7 @@ export default {
       tableSonSelection: {}
     };
   },
-  created() {},
+  created() { },
   watch: {
     tableData() {
       this.tableDataEditable = [...this.tableData];
@@ -260,8 +269,8 @@ export default {
               tableConfig[i].formatter = (row, column, cellValue, index) =>
                 cellValue
                   ? moment(Number(cellValue)).format(
-                      tableConfig[i].format || "YYYY-MM-DD HH:mm:ss"
-                    )
+                    tableConfig[i].format || "YYYY-MM-DD HH:mm:ss"
+                  )
                   : "";
               break;
             case "Boolean":
@@ -329,8 +338,8 @@ export default {
               ) =>
                 cellValue
                   ? moment(cellValue).format(
-                      tableConfig[i].format || "YYYY-MM-DD"
-                    )
+                    tableConfig[i].format || "YYYY-MM-DD"
+                  )
                   : "";
               break;
             case "Boolean":
@@ -349,7 +358,7 @@ export default {
                 index
               ) => this.pageSize * (this.currentPage - 1) + index + 1;
               break;
-          
+
             case "toFixed":
               childTableConfigFilter[i].formatter = (
                 row,
@@ -375,17 +384,17 @@ export default {
     ...mapGetters(["mapConfig"]),
 
     tablePageSize: {
-      get: function() {
+      get: function () {
         return this.pageSize;
       },
-      set: function() {}
+      set: function () { }
     },
 
     tableCurrentPage: {
-      get: function() {
+      get: function () {
         return this.currentPage;
       },
-      set: function() {}
+      set: function () { }
     }
   },
   methods: {
