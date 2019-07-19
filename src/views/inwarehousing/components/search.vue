@@ -1,176 +1,257 @@
 <template>
-    <el-card class="simpleCard" shadow="never" body-style="padding:12px">
-      <el-form :model="searchForm" :rules="searchRules" ref="searchForm" label-width="70px" label-position="left">
+  <el-card
+    class="simpleCard"
+    shadow="never"
+    body-style="padding:12px"
+  >
+    <el-form
+      :model="searchForm"
+      :rules="searchRules"
+      ref="searchForm"
+      label-width="70px"
+      label-position="left"
+    >
       <el-row>
         <el-col :span="6">
-          <el-form-item label="计划单号" >
-            <el-input type="text" size="small" v-model="searchForm.planCode" placeholder="请输入计划单号"></el-input>
+          <el-form-item label="计划单号">
+            <el-input
+              type="text"
+              size="small"
+              v-model="searchForm.planCode"
+              placeholder="请输入计划单号"
+            ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6" v-if="inbound">
-          <el-form-item label="入库单号" >
-            <el-input type="text" size="small" v-model="searchForm.orderCode" placeholder="请输入入库单号"></el-input>
+        <el-col
+          :span="6"
+          v-if="inbound"
+        >
+          <el-form-item label="入库单号">
+            <el-input
+              type="text"
+              size="small"
+              v-model="searchForm.orderCode"
+              placeholder="请输入入库单号"
+            ></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="6">
-          <el-form-item label="供应商" >
-            <el-input type="text" size="small" v-model="searchForm.providerName" placeholder="请输入供应商" ></el-input>
+          <el-form-item label="供应商">
+            <el-input
+              type="text"
+              size="small"
+              v-model="searchForm.providerName"
+              placeholder="请输入供应商"
+            ></el-input>
           </el-form-item>
         </el-col>
-        
-        <el-col :span="6" v-if="!inbound">
-            <el-form-item label-width="70px" label="入库状态" class="postInfo-container-item" >
-              <el-select v-model="searchForm.execStatus" 
-               filterable clearable placeholder="请选择入库状态" 
-              size="small" prefix-icon="el-icon-search">
-                <el-option
-                  v-for="item in ExecStatusEnum"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-        </el-col>  
+
+        <el-col
+          :span="6"
+          v-if="!inbound"
+        >
+          <el-form-item
+            label-width="70px"
+            label="入库状态"
+            class="postInfo-container-item"
+          >
+            <el-select
+              v-model="searchForm.execStatus"
+              filterable
+              clearable
+              placeholder="请选择入库状态"
+              size="small"
+              prefix-icon="el-icon-search"
+            >
+              <el-option
+                v-for="item in ExecStatusEnum"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
         <el-col :span="6">
-          <el-form-item label="货主" label-width="40px" >
-            <el-input type="text" size="small" v-model="searchForm.ownerName" placeholder="请输入货主" ></el-input>
+          <el-form-item
+            label="货主"
+            label-width="40px"
+          >
+            <el-input
+              type="text"
+              size="small"
+              v-model="searchForm.ownerName"
+              placeholder="请输入货主"
+            ></el-input>
           </el-form-item>
         </el-col>
-      
-        <el-col :span="6" v-if="inbound">
-          <el-form-item label="单据状态" >
-            <el-select v-model="searchForm.orderStatus" 
-               filterable clearable placeholder="请选择单据状态" 
-              size="small" prefix-icon="el-icon-search">
-                <el-option
-                  v-for="item in OrderStatusEnum"
-                  v-if="item.show"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
+
+        <el-col
+          :span="6"
+          v-if="inbound"
+        >
+          <el-form-item label="单据状态">
+            <el-select
+              v-model="searchForm.orderStatus"
+              filterable
+              clearable
+              placeholder="请选择单据状态"
+              size="small"
+              prefix-icon="el-icon-search"
+            >
+              <el-option
+                v-for="item in orderStatusEnum"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="单据类型" >
-            <el-select v-model="searchForm.busiBillType" 
-               filterable clearable placeholder="请选择" 
-              size="small" prefix-icon="el-icon-search">
-                <el-option
-                  v-for="item in BusiBillTypeEnum"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
+          <el-form-item label="单据类型">
+            <el-select
+              v-model="searchForm.busiBillType"
+              filterable
+              clearable
+              placeholder="请选择"
+              size="small"
+              prefix-icon="el-icon-search"
+            >
+              <el-option
+                v-for="item in BusiBillTypeEnum"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="收货状态" >
-            <el-select v-model="searchForm.receiveStates" 
-               filterable clearable placeholder="请选择" 
-              size="small" prefix-icon="el-icon-search">
-                <el-option
-                  v-for="item in receiveState"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
+          <el-form-item label="收货状态">
+            <el-select
+              v-model="searchForm.receiveStates"
+              filterable
+              clearable
+              placeholder="请选择"
+              size="small"
+              prefix-icon="el-icon-search"
+            >
+              <el-option
+                v-for="item in receiveState"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="inbound?'入库时间':'下单时间'" label-width="70px"  prop="durationTime">
+          <el-form-item
+            :label="inbound?'入库时间':'下单时间'"
+            label-width="70px"
+            prop="durationTime"
+          >
             <el-date-picker
               v-model="searchForm.durationTime"
               type="daterange"
               size="small"
               range-separator="至"
               start-placeholder="开始日期"
-              end-placeholder="结束日期">
+              end-placeholder="结束日期"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
-        
+
       </el-row>
       <el-row :gutter="10">
         <el-col :span="6">
-            <el-form-item label-width="0">
-              <el-button type="primary"  size="small"  @click="submitIt">查询</el-button>
-              <el-button type="primary"  size="small" @click="resetForm">重置</el-button>
-            </el-form-item>
-          </el-col>
-      </el-row>  
-      
+          <el-form-item label-width="0">
+            <el-button
+              type="primary"
+              size="small"
+              @click="submitIt"
+            >查询</el-button>
+            <el-button
+              type="primary"
+              size="small"
+              @click="resetForm"
+            >重置</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
     </el-form>
   </el-card>
 </template>
 
 <script>
-// import {  InvoiceType  as invoicetype  } from '@/utils'
-import { ExecStatusEnum, OrderStatusEnum, receiveState, BusiBillTypeEnum } from '@/utils/enum'; 
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in')) 
-export default  {
+import { ExecStatusEnum, OrderStatusEnum, receiveState, BusiBillTypeEnum } from '@/utils/enum';
+const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in'))
+export default {
   name: 'SearchWarehousing',
 
   data() {
     return {
-      searchRules: { 
+      searchRules: {
       },
-      searchForm:{},
+      searchForm: {},
       ExecStatusEnum,
       OrderStatusEnum,
       receiveState,
-      BusiBillTypeEnum:BusiBillTypeEnumFilter
+      BusiBillTypeEnum: BusiBillTypeEnumFilter
     }
   },
-  props:{
-    searchForms:{
-      type:Object,
-      default:() => {}
+  props: {
+    searchForms: {
+      type: Object,
+      default: () => { }
     },
-    
-    inbound:{
-      type:Boolean,
-      default:false
+
+    inbound: {
+      type: Boolean,
+      default: false
     },
-    
-  },
-  
-  created(){
-    this.searchForm = {...this.searchForms}
+
   },
 
-  
-  methods:{
+  computed: {
+    orderStatusEnum() {
+      return this.OrderStatusEnum.filter(v => v.show)
+    }
+  },
 
-    
-    submitIt(){//查询
-      this.$emit('searchTrigger',this.searchForm)
+  created() {
+    this.searchForm = { ...this.searchForms }
+  },
+  methods: {
+    submitIt() {//查询
+      this.$emit('searchTrigger', this.searchForm)
     },
-
-    resetForm(){//重置
+    resetForm() {//重置
       this.searchForm = {}
-      this.$emit('resetSearch',this.searchForm)
+      this.$emit('resetSearch', this.searchForm)
     }
   }
-
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .codeNoStyle{
-    float: left; 
-    color: #8492a6; 
-    font-size: 12px;
-    width:150px;
-    &:last-child{
-      float: right;
-    } 
+.codeNoStyle {
+  float: left;
+  color: #8492a6;
+  font-size: 12px;
+  width: 150px;
+  &:last-child {
+    float: right;
   }
+}
 </style>
   

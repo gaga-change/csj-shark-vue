@@ -21,33 +21,33 @@ export const BusiBillTypeEnum = [
   {
     name: '采购入库',
     value: 11,
-    type:'in'
+    type: 'in'
   },
 
   {
     name: '销售退货入库',
     value: 12,
-    type:'in'
+    type: 'in'
   },
   {
     name: '仓储入库',
     value: 13,
-    type:'in'
+    type: 'in'
   },
   {
     name: '拒收入库',
     value: 15,
-    type:'in'
+    type: 'in'
   },
   {
     name: '销售出库',
     value: 21,
-    type:'out'
+    type: 'out'
   },
   {
     name: '退货出库',
     value: 22,
-    type:'out'
+    type: 'out'
   },
 
 ];
@@ -93,23 +93,23 @@ export const OrderStatusEnum = [
   {
     name: '草稿',
     value: 0,
-    show:false,
+    show: false,
   },
 
   {
     name: '暂存',
     value: 1,
-    show:true,
+    show: true,
   },
   {
     name: '已确认上架',
     value: 2,
-    show:true,
+    show: true,
   },
   {
     name: '驳回',
     value: 3,
-    show:false,
+    show: false,
   },
 ];
 //
@@ -118,27 +118,27 @@ export const OutOrderStatusEnum = [
   {
     name: '草稿',
     value: 0,
-    show:false,
+    show: false,
   },
 
   {
     name: '暂存',
     value: 1,
-    show:true,
+    show: true,
   },
   {
     name: '已确认出库',
     value: 2,
-    show:true,
+    show: true,
   },
   {
     name: '驳回',
     value: 3,
-    show:false,
+    show: false,
   },
 ];
 
-export const outboundOrderStatus=[
+export const outboundOrderStatus = [
   {
     name: '暂存',
     value: 0
@@ -247,7 +247,7 @@ export const orderStatus = [
   },
 ]
 
-export const receiveStatusEnum=[
+export const receiveStatusEnum = [
   {
     name: '未收货',
     value: 0
@@ -257,7 +257,7 @@ export const receiveStatusEnum=[
     value: 1
   },
   {
-    name:'全部收货',
+    name: '全部收货',
     value: 2
   },
 ]
@@ -273,7 +273,7 @@ export const warehouseSpaceStatusEnum = [
   },
 ]
 
-export const isPushStateEnum=[
+export const isPushStateEnum = [
   {
     name: '未推送',
     value: 0
@@ -288,7 +288,7 @@ export const isPushStateEnum=[
   }
 ]
 
-export const openStatusEnum=[
+export const openStatusEnum = [
   {
     name: '启用',
     value: 0
@@ -299,7 +299,7 @@ export const openStatusEnum=[
   },
 ]
 
-export const isVirtualenum=[
+export const isVirtualenum = [
   {
     name: '否',
     value: 0
@@ -312,35 +312,35 @@ export const isVirtualenum=[
 
 //库区编码
 export const AtoZ = [
-  {value:'A',name:'A',isUsed:false,},
-  {value:'B',name:'B',isUsed:false,},
-  {value:'C',name:'C',isUsed:false,},
-  {value:'D',name:'D',isUsed:false,},
-  {value:'E',name:'E',isUsed:false,},
-  {value:'F',name:'F',isUsed:false,},
-  {value:'G',name:'G',isUsed:false,},
-  {value:'H',name:'H',isUsed:false,},
-  {value:'I',name:'I',isUsed:false,},
-  {value:'J',name:'J',isUsed:false,},
-  {value:'K',name:'K',isUsed:false,},
-  {value:'L',name:'L',isUsed:false,},
-  {value:'M',name:'M',isUsed:false,},
-  {value:'N',name:'N',isUsed:false,},
-  {value:'O',name:'O',isUsed:false,},
-  {value:'P',name:'P',isUsed:false,},
-  {value:'Q',name:'Q',isUsed:false,},
-  {value:'R',name:'R',isUsed:false,},
-  {value:'S',name:'S',isUsed:false,},
-  {value:'T',name:'T',isUsed:false,},
-  {value:'U',name:'U',isUsed:false,},
-  {value:'V',name:'V',isUsed:false,},
-  {value:'W',name:'W',isUsed:false,},
-  {value:'X',name:'X',isUsed:false,},
-  {value:'Y',name:'Y',isUsed:false,},
-  {value:'Z',name:'Z',isUsed:false,},
+  { value: 'A', name: 'A', isUsed: false, },
+  { value: 'B', name: 'B', isUsed: false, },
+  { value: 'C', name: 'C', isUsed: false, },
+  { value: 'D', name: 'D', isUsed: false, },
+  { value: 'E', name: 'E', isUsed: false, },
+  { value: 'F', name: 'F', isUsed: false, },
+  { value: 'G', name: 'G', isUsed: false, },
+  { value: 'H', name: 'H', isUsed: false, },
+  { value: 'I', name: 'I', isUsed: false, },
+  { value: 'J', name: 'J', isUsed: false, },
+  { value: 'K', name: 'K', isUsed: false, },
+  { value: 'L', name: 'L', isUsed: false, },
+  { value: 'M', name: 'M', isUsed: false, },
+  { value: 'N', name: 'N', isUsed: false, },
+  { value: 'O', name: 'O', isUsed: false, },
+  { value: 'P', name: 'P', isUsed: false, },
+  { value: 'Q', name: 'Q', isUsed: false, },
+  { value: 'R', name: 'R', isUsed: false, },
+  { value: 'S', name: 'S', isUsed: false, },
+  { value: 'T', name: 'T', isUsed: false, },
+  { value: 'U', name: 'U', isUsed: false, },
+  { value: 'V', name: 'V', isUsed: false, },
+  { value: 'W', name: 'W', isUsed: false, },
+  { value: 'X', name: 'X', isUsed: false, },
+  { value: 'Y', name: 'Y', isUsed: false, },
+  { value: 'Z', name: 'Z', isUsed: false, },
 ]
 
-export const printState=[
+export const printState = [
   {
     name: '未打印',
     value: 0
@@ -351,7 +351,7 @@ export const printState=[
   },
 ]
 
-export const receiveState=[
+export const receiveState = [
   {
     name: '未收货',
     value: 0
@@ -366,7 +366,7 @@ export const receiveState=[
   }
 ]
 
-export const execStatuslist=[
+export const execStatuslist = [
   {
     name: '未上架',
     value: 0
@@ -381,7 +381,7 @@ export const execStatuslist=[
   }
 ]
 
-export const badStatuslist=[
+export const badStatuslist = [
   {
     name: '未入库',
     value: 0
@@ -396,7 +396,7 @@ export const badStatuslist=[
   }
 ]
 
-export const jobStatusList=[
+export const jobStatusList = [
   {
     name: '未执行',
     value: 0
@@ -429,5 +429,16 @@ export const jobStatusList=[
     name: '暂停作业',
     value: 8
   }
+]
+
+export const busiBillTypeEnum = [
+  { name: '采购入库', value: 11 },
+  { name: '销售退入库', value: 12 },
+  { name: '仓储入库', value: 13 },
+  { name: '拒收入库', value: 15 },
+  { name: '销售出库', value: 21 },
+  { name: '采购退货出库', value: 22 },
+  { name: '移库出库', value: 41 },
+  { name: '移库入库', value: 51 },
 ]
 

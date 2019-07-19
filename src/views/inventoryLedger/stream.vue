@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <search-inventory
       @searchTrigger="submitForm"
       ref="searchWarhouse"
@@ -8,7 +7,6 @@
       :pageName="'stream'"
     >
     </search-inventory>
-
     <base-table
       @sizeChange="handleSizeChange"
       @currentChange="handleCurrentChange"
@@ -20,7 +18,6 @@
       :currentPage="ruleForm.pageNum"
       :tableData="tableData"
     />
-
   </div>
 </template>
 
@@ -43,6 +40,7 @@ export default {
         skuName: '',
         ownerName: '',
         warehouseSpaceCode: '',
+        busiBillType: '',
         durationTime: [],
       },
       tableData: [],
