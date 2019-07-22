@@ -155,3 +155,5 @@ export const receiveAndInStock = params => http.post(`/webApi/receive/order/rece
 export const badproductlist = params => http.post(`/webApi/receive/order/bad/list`, params)
 /** 库存移库 */
 export const skuStockMove = params => http.post(`/webApi/sku/stock/stockMove`, params)
+/** 状态转移 */
+export const skuStockWriteCheckResult = params => http.post(`/webApi/sku/stock/writeCheckResult`, params)

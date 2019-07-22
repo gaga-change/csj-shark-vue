@@ -10,13 +10,23 @@
       class="export_box"
       v-if="SumSkuQty"
     >
-      <el-button
-        @click="getExport"
-        type="primary"
-        size="small"
-      >
-        导出
-      </el-button>
+      <div>
+        <el-button
+          @click="getExport"
+          type="primary"
+          size="small"
+        >
+          导出
+        </el-button>
+        <el-button
+          @click="showStateTransition"
+          type="primary"
+          size="small"
+          :disabled="!selectRows.length"
+        >
+          状态转移
+        </el-button>
+      </div>
       <div class="Total">
         <span>库存合计 ：</span> <span>{{SumSkuQty}}</span>
       </div>
@@ -25,6 +35,8 @@
     <base-table
       @sizeChange="handleSizeChange"
       @currentChange="handleCurrentChange"
+      @selectionChange="handleSelectionChange"
+      :select="true"
       :showControl="true"
       :controlWidth="100"
       :loading="loading"
@@ -95,7 +107,6 @@
         </div>
       </div>
       <div>
-
       </div>
       <span
         slot="footer"
@@ -109,13 +120,40 @@
         >确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="状态转移"
+      :visible.sync="stateTransitionVisible"
+      width="80%"
+      :before-close="handleClose"
+    >
+
+      <base-table
+        :config="stateTransitionTableConfig"
+        :total="selectRows.length"
+        :maxTotal="100"
+        :showIndex="true"
+        :tableData="selectRows"
+      />
+
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="stateTransitionVisible = false;">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="stateTransition()"
+          :loading="skuStockWriteCheckResultLoading"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import BaseTable from '@/components/Table'
-import { inventoryTableConfig } from './components/config'
-import { getInfoInventory, exportLedger, selectSumSkuQty, warehouseSpaceSelect, skuStockMove } from '@/api'
+import { inventoryTableConfig, stateTransitionTableConfig } from './components/config'
+import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQty, warehouseSpaceSelect, skuStockMove } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import { exportExcelBlob } from '@/utils/exportexcel'
 import SearchInventory from './components/search'
@@ -144,6 +182,10 @@ export default {
       warehouseSpaceCodeConfig: [],
       warehouseSpaceSelectLoading: false,
       skuStockMoveLoading: false,
+      selectRows: [],
+      stateTransitionVisible: false,
+      skuStockWriteCheckResultLoading: false,
+      stateTransitionTableConfig,
     }
   },
   computed: {
@@ -167,6 +209,47 @@ export default {
     })
   },
   methods: {
+    /** 唤起状态转移 */
+    showStateTransition() {
+      this.selectRows = this.selectRows.map(v => {
+        return {
+          ...v,
+          goodQty: '',
+          badQty: '',
+        }
+      })
+      this.stateTransitionVisible = true
+    },
+    /** 状态转移 */
+    stateTransition() {
+      let msg = ''
+      let temp = this.selectRows.map(v => {
+        let skuQty = Number(v.skuQty)
+        let goodQty = parseInt(Number(v.goodQty)) || 0
+        let badQty = parseInt(Number(v.badQty)) || 0
+        if (goodQty + badQty > skuQty && !msg) {
+          msg = `商品【${v.skuName}】的正品数量与残次品数量之和不能超过商品总数！`
+        }
+        return {
+          stockId: v.id,
+          goodQty,
+          badQty
+        }
+      })
+      if (msg) {
+        return this.$message(msg)
+      }
+      this.skuStockWriteCheckResultLoading = true
+      skuStockWriteCheckResult(temp).then(res => {
+        this.skuStockWriteCheckResultLoading = false
+        if (!res) return
+        this.stateTransitionVisible = false
+      })
+    },
+    /** 列表多选 */
+    handleSelectionChange(val) {
+      this.selectRows = val
+    },
     handleClose(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
@@ -177,7 +260,6 @@ export default {
     },
     /** 显示移库操作 */
     showMoveLibrary(row) {
-      console.log(row)
       this.selectRow = row
       this.moveLibraryDialogVisible = true
     },

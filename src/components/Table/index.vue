@@ -15,6 +15,18 @@
       :style="tableStyle"
     >
       <el-table-column
+        v-if="select"
+        type="selection"
+        width="55"
+      >
+      </el-table-column>
+      <el-table-column
+        v-if="showIndex"
+        type="index"
+        label="序号"
+        :index="1"
+      ></el-table-column>
+      <el-table-column
         v-for="item in tableConfig"
         :formatter="item.formatter"
         :fixed="item.fixed"
@@ -24,6 +36,22 @@
         :prop="item.prop"
         :label="item.label"
       >
+        <template slot-scope="scope">
+          <template v-if="item.edit">
+            <el-input-number
+              size="mini"
+              v-if="item.inputType==='number'"
+              v-model="scope.row[item.prop]"
+              controls-position="right"
+              :min="item.min || 0"
+              :max="item.max || 99999999"
+            ></el-input-number>
+          </template>
+          <template v-else>
+            {{scope.row[item.prop]}}
+          </template>
+        </template>
+
       </el-table-column>
       <el-table-column
         :width="controlWidth"
@@ -67,6 +95,14 @@ import * as Enum from "@/utils/enum.js";
 
 export default {
   props: {
+    showIndex: {
+      type: Boolean,
+      default: false
+    },
+    select: {
+      type: Boolean,
+      default: false,
+    },
     controlName: {
       type: String,
       default: '操作'
@@ -269,9 +305,6 @@ export default {
     handleSelectionChange(val) {
       this.$emit('selectionChange', val);
     },
-
-
-
   }
 }
 </script>
