@@ -153,5 +153,5 @@ export const cancelOutOfTheLibrary = params => http.post(`/webApi/outWarehouse/o
 export const receiveAndInStock = params => http.post(`/webApi/receive/order/receiveAndInStock`, params)
 /** 获取残次品列表 */
 export const badproductlist = params => http.post(`/webApi/receive/order/bad/list`, params)
-/**  */
-export const temp2 = params => http.post(`temp`, params)
+/** 库存移库 */
+export const skuStockMove = params => http.post(`/webApi/sku/stock/stockMove`, params)
