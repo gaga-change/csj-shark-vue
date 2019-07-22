@@ -37,7 +37,7 @@
         :defaultEdit="false"
         :childCanSelect="true"
         @currentChange="currentChange"
-        @editDataSelect="SelectionChange"
+        @editDataSelect="selectionChange"
       />
     </div>
   </div>
@@ -96,7 +96,7 @@ export default {
       this.$refs['arrivalDom'].resetForm()
     },
 
-    SelectionChange(val) {
+    selectionChange(val) {
       this.SelectionData = val.arr;
     },
     outOrder(type) {

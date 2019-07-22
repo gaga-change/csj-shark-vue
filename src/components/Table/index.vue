@@ -267,7 +267,7 @@ export default {
     },
 
     handleSelectionChange(val) {
-      this.$emit('SelectionChange', val);
+      this.$emit('selectionChange', val);
     },
 
 

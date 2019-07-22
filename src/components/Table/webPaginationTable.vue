@@ -5,7 +5,7 @@
       v-loading="loading"
       :element-loading-text="elementLoadingText"
       :element-loading-background="elementLoadingBackground"
-      :data="this._events.SelectionChange?allTableData:tableData"
+      :data="this._events.selectionChange?allTableData:tableData"
       size="small"
       :empty-text="emptyText"
       :border="border"
@@ -27,7 +27,7 @@
     </el-table>
 
     <el-pagination
-      v-if="total>maxTotal&&!this._events.SelectionChange"
+      v-if="total>maxTotal&&!this._events.selectionChange"
       :style="paginationStyle"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -184,7 +184,7 @@ export default {
     },
 
     handleSelectionChange(val) {
-      this.$emit('SelectionChange', val);
+      this.$emit('selectionChange', val);
     },
   }
 }

@@ -52,7 +52,7 @@
         :data="pickingtaskdetailTableData"
         border
         ref="multipleTable"
-        @selection-change="SelectionChange"
+        @selection-change="selectionChange"
         size="mini"
       >
         <el-table-column
@@ -426,7 +426,7 @@ export default {
       }
     },
 
-    SelectionChange(val) {
+    selectionChange(val) {
       this.SelectionData = val
       if (val.length > 1) {
         val.forEach((v, index) => {
