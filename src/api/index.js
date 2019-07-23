@@ -12,8 +12,6 @@ export const exportLedger = parmas => axios({
   }
 })
 
-/** 修改库位状态 */
-export const updateInventorySite = params => http.get(`/webApi/basic/warehouseSpace/updateLockStatus/${params.id}`, { params })
 /** 物流公司列表 */
 export const getLogisticsList = params => http.get(`/webApi/logistics/basic/list`, { params })
 /** 物流公司下拉列表 */
@@ -74,8 +72,8 @@ export const selectOutWarehouseJobDetail = params => http.get(`/webApi/outWareho
 export const pickOrderDetail = id => http.get(`/webApi/pick/order/detail/${id}`)
 /** 获取所有计划单号 */
 export const outcodelist = params => http.get(`/webApi/outWarehouse/job/selectPlanCodeList`, { params })
-/**  */
-export const temp = params => http.get(`temp`, { params })
+/** 修改库位状态接口 */
+export const updateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseSpace/updateLockStatus/${id}`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)

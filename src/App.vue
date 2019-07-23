@@ -36,6 +36,27 @@ export default {
   }
 }
 
+// 按钮连接
+.btn-link {
+  color: rgb(51, 153, 234);
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.3s;
+  padding: 0;
+  border: none;
+  margin: 0;
+
+  &[disabled="disabled"] {
+    color: #c0c4cc !important;
+    cursor: not-allowed !important;
+  }
+  &:hover {
+    color: rgb(3, 138, 248);
+  }
+}
+
 // 非当前项目专属的公共样式。即使拷贝到其他项目也能使用。
 // 公共样式  字体大小  字重  padding
 

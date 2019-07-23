@@ -288,13 +288,24 @@ export const isPushStateEnum = [
   }
 ]
 
-export const openStatusEnum = [
+export const inLockEnum = [
   {
-    name: '启用',
+    name: '正常',
     value: 0
   },
   {
-    name: '禁用',
+    name: '锁定',
+    value: 1
+  },
+]
+
+export const outLockEnum = [
+  {
+    name: '正常',
+    value: 0
+  },
+  {
+    name: '锁定',
     value: 1
   },
 ]

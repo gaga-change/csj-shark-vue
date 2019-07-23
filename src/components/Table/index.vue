@@ -26,18 +26,18 @@
         label="序号"
         :index="1"
       ></el-table-column>
-      <el-table-column
-        v-for="item in tableConfig"
-        :formatter="item.formatter"
-        :fixed="item.fixed"
-        :type="item.columnType"
-        :width="item.width"
-        :key="item.lable"
-        :prop="item.prop"
-        :label="item.label"
-      >
-        <template slot-scope="scope">
-          <template v-if="item.edit">
+      <template v-for="item in tableConfig">
+        <el-table-column
+          v-if="item.edit"
+          :formatter="item.formatter"
+          :fixed="item.fixed"
+          :type="item.columnType"
+          :width="item.width"
+          :key="item.lable"
+          :prop="item.prop"
+          :label="item.label"
+        >
+          <template slot-scope="scope">
             <el-input-number
               size="mini"
               v-if="item.inputType==='number'"
@@ -47,16 +47,23 @@
               :max="item.max || 99999999"
             ></el-input-number>
           </template>
-          <template v-else>
-            {{scope.row[item.prop]}}
-          </template>
-        </template>
-
-      </el-table-column>
+        </el-table-column>
+        <el-table-column
+          v-else
+          :formatter="item.formatter"
+          :fixed="item.fixed"
+          :type="item.columnType"
+          :width="item.width"
+          :key="item.lable"
+          :prop="item.prop"
+          :label="item.label"
+        >
+        </el-table-column>
+      </template>
       <el-table-column
+        v-if="showControl"
         :width="controlWidth"
         fixed="right"
-        v-if="showControl"
         :label="controlName"
       >
         <template slot-scope="scope">
@@ -65,6 +72,7 @@
             <slot
               name="edit"
               v-bind:row="scope.row"
+              v-bind:index="scope.$index"
             ></slot>
           </div>
         </template>
@@ -203,7 +211,23 @@ export default {
         if (tableConfig[i].useApi) {
           tableConfig[i].formatter = (row, column, cellValue, index) => this.mapConfig[tableConfig[i].type] && this.mapConfig[tableConfig[i].type].find(v => v.key == cellValue) && this.mapConfig[tableConfig[i].type].find(v => v.key == cellValue).value || cellValue
         } else if (tableConfig[i].useLocalEnum) {
-          tableConfig[i].formatter = (row, column, cellValue, index) => Enum[tableConfig[i].type] && Enum[tableConfig[i].type].find(v => v.value == cellValue) && Enum[tableConfig[i].type].find(v => v.value == cellValue).name || cellValue
+          let item = { ...tableConfig[i] }
+          tableConfig[i].formatter = (row, column, cellValue, index) => {
+            let res = cellValue
+            if (!item.type) {
+              console.error('需要 【type】字段')
+            } else if (!Enum[item.type]) {
+              console.error(`枚举列表中为找到【${item.type}】`)
+            } else {
+              let temp = Enum[item.type].find(v => v.value == cellValue)
+              if (temp) {
+                res = temp.name
+              } else {
+                console.error(`枚举异常, 在【${item.type}】下未找到相应枚举值【${cellValue}】`)
+              }
+            }
+            return res
+          }
         } else {
           switch (tableConfig[i].type) {
             case 'time': tableConfig[i].formatter = (row, column, cellValue, index) => cellValue ? moment(cellValue).format(tableConfig[i].format || 'YYYY-MM-DD HH:mm:ss') : ''; break;

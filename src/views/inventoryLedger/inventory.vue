@@ -51,11 +51,14 @@
         slot="edit"
         slot-scope="scope"
       >
-        <span
-          class="link_dom"
-          :class="{disabled: scope.row.checkResult !== 1}"
+        <button
+          class="btn-link"
+          type="button"
+          :disabled="scope.row.checkResult !== 1"
           @click="showMoveLibrary(scope.row)"
-        >移库</span>
+        >
+          移库
+        </button>
       </template>
     </base-table>
     <el-dialog

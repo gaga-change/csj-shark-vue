@@ -4,7 +4,6 @@
       @searchTrigger="submitForm"
       :search-forms="ruleForm"
     ></search-logistics>
-
     <div style="margin-bottom:12px;">
       <el-button
         type="primary"
@@ -17,22 +16,58 @@
         @click="printSite"
       >打印库位码</el-button>
     </div>
-    <double-table
+
+    <base-table
       :loading="loading"
-      :table-data="tableData"
-      :can-select="canSelect"
-      @dataSelect="dataSelect"
-      :handle-button-map="handleButtonMap"
-      :config="tableConfig"
-      @sizeChange="handleSizeChange"
+      :tableData="tableData"
+      :select="canSelect"
       @currentChange="handleCurrentChange"
+      @sizeChange="handleSizeChange"
+      @selectionChange="dataSelect"
+      :showControl="true"
+      :controlWidth="220"
+      :config="tableConfig"
       :total="total"
       :maxTotal="10"
-      :expand-key="expandKey"
       :pageSize="ruleForm.pageSize"
       :currentPage="ruleForm.pageNum"
-    ></double-table>
-
+    >
+      <template
+        slot="edit"
+        slot-scope="scope"
+      >
+        <button
+          class="btn-link ml5 mr5"
+          type="button"
+          :disabled="scope.row.checkResult !== 1"
+          @click="handleSetStorage(scope.row)"
+        >
+          库位设置
+        </button>
+        <!-- <button
+          class="btn-link"
+          type="button"
+          :disabled="scope.row.checkResult !== 1"
+          @click="formDelect(scope.row)"
+        >
+          删除
+        </button> -->
+        <el-button
+          class="btn-link ml5 mr5"
+          :disabled="scope.row.updateLockStatusInLoading"
+          @click="handleLock(scope.row, scope.index, 'in')"
+        >
+          {{scope.row.inLock ? '解锁入库' : '入库锁定'}}
+        </el-button>
+        <el-button
+          class="btn-link ml5 mr5"
+          :disabled="scope.row.updateLockStatusOutLoading"
+          @click="handleLock(scope.row, scope.index, 'out')"
+        >
+          {{scope.row.outLock ? '解锁出库' : '出库锁定'}}
+        </el-button>
+      </template>
+    </base-table>
     <el-dialog
       :title="dialogTitle+'库位'"
       :visible.sync="dialogVisible"
@@ -197,18 +232,17 @@
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 
-
+import BaseTable from '@/components/Table'
 import DoubleTable from '@/components/Table/doubleTable'
 import { SimpleMsg } from '@/utils/luoFun'
 import { siteTableConfig } from './components/config'
-import { addInventorySite, getInventorySite, updateInventorySite, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
-
+import { addInventorySite, getInventorySite, updateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import { MakePrint } from '@/utils/luoFun'
 import SearchLogistics from './components/search'
 
 export default {
-  components: { DoubleTable, SearchLogistics },
+  components: { DoubleTable, SearchLogistics, BaseTable },
   data() {
     return {
       imgs: '',
@@ -234,28 +268,6 @@ export default {
       //表格配置
       tableConfig: siteTableConfig,
       total: 0,
-      //主表操作
-      handleButtonMap: [
-        {
-          title: '状态更改',
-          handle: (index, data) => {
-            this.changeStatus()
-            this.formParams = { ...data }
-          },
-          formatter: (data) => {
-            return data.openStatus ? '启用' : '禁用'
-          }
-        },
-        {
-          title: '删除',
-          handle: (index, data) => {
-            this.formDelect(data)
-          },
-          isHide: (data) => {
-            return data.openStatus
-          }
-        }
-      ],
       canSelect: true,
       multipleParentSelection: [],//选中的主表
       childCanSelect: false,//子表可选择,false不可选，
@@ -290,7 +302,42 @@ export default {
     }
   },
   methods: {
+    /** 出入库 解锁或锁定 */
+    handleLock(row, index, type) {
+      let flag = null
+      let isIn = type === 'in'
+      let id = row.id
+      if (isIn && row.inLock) {
+        flag = 2 // 入库解锁
+      } else if (isIn && !row.inLock) {
+        flag = 1 // 入库锁定
+      } else if (!isIn && row.outLock) {
+        flag = 4 // 出库解锁
+      } else {
+        flag = 3 // 出库锁定
+      }
+      isIn ? row.updateLockStatusInLoading = true : row.updateLockStatusOutLoading = true
+      updateLockStatus(id, {
+        flag
+      }).then(res => {
+        isIn ? row.updateLockStatusInLoading = false : row.updateLockStatusOutLoading = false
+        if (!res) return
+        let item = this.tableData.find(v => v.id === id)
+        if (isIn && row.inLock) {
+          item.inLock = 0
+        } else if (isIn && !row.inLock) {
+          item.inLock = 1
+        } else if (!isIn && row.outLock) {
+          item.outLock = 0
+        } else {
+          item.outLock = 1
+        }
+      })
+    },
+    /** 库位设置 */
+    handleSetStorage(row) {
 
+    },
     handleSelect(item) {
       this.formParams.companyCode = item.companyCode
     },
@@ -321,29 +368,6 @@ export default {
                                </style>`
       MakePrint(document.getElementById('print').innerHTML, useStyle)
     },
-    changeStatus() {
-      this.$confirm('是否确定更改?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        updateInventorySite({
-          id: this.formParams.id,
-          flag: this.formParams.openStatus ? 0 : 1
-        }).then(res => {
-          if (!res) return
-          SimpleMsg({
-            result: res.success,
-            msgType: 'user',
-            msg: this.formParams.openStatus ? '启用' : '禁用',
-            cb: () => {
-              this.dialogVisible = false;
-              this.getTableData()
-            }
-          })
-        })
-      }).catch(() => { })
-    },
     getTableData() {
       this.$router.replace({
         path: '/baseInfo/inventorySite',
@@ -357,7 +381,12 @@ export default {
       getInventorySite(data).then(res => {
         this.loading = false
         if (!res) return
-        this.tableData = [...res.data.list]
+        this.tableData = [...res.data.list].map(v => {
+          v.updateLockStatusOutLoading = false
+          v.updateLockStatusInLoading = false
+          return v
+        })
+
         this.total = res.data.total
       })
       getSelectInventoryAreaList({
