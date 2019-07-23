@@ -8,7 +8,7 @@ export const planTableConfig = [// 计划单列表
   { label: '入库状态', prop: 'execStatus', useLocalEnum: true, type: 'ExecStatusEnum', minWidth: 120 },
   { label: '收货状态', prop: 'receiveStatus', useLocalEnum: true, type: 'receiveState', minWidth: 120 },
   { label: '制单人', prop: 'createrName', minWidth: 90 },
-  { label: '已入库数量', prop: 'inQty', minWidth: 90 },
+  { label: '已入库数量', prop: 'inQty', width: 85 },
 ]
 
 export const printplanTableConfig = [// 计划单列表
@@ -125,7 +125,7 @@ export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
   { label: '商品数量', prop: 'planQty', },
   { label: '批次', prop: 'batchNo', },
   { label: '收货数量', prop: 'receiveQty', editable: true },
-  { label: '已入库数量', prop: 'realInQty', },
+  { label: '已入库数量', prop: 'realInQty', width: 85 },
 ]
 
 
