@@ -25,7 +25,7 @@
       @sizeChange="handleSizeChange"
       @selectionChange="dataSelect"
       :showControl="true"
-      :controlWidth="220"
+      :controlWidth="240"
       :config="tableConfig"
       :total="total"
       :maxTotal="10"
@@ -36,10 +36,30 @@
         slot="edit"
         slot-scope="scope"
       >
+        <el-button
+          class=" ml5 mr5"
+          size="mini"
+          :type="scope.row.inLock ? 'primary': 'warning'"
+          plain
+          :loading="scope.row.updateLockStatusInLoading"
+          @click="handleLock(scope.row, scope.index, 'in')"
+        >
+          {{scope.row.inLock ? '解锁入库' : '入库锁定'}}
+        </el-button>
+        <el-button
+          class=" ml5 mr5"
+          size="mini"
+          :type="scope.row.outLock ? 'primary': 'warning'"
+          plain
+          :loading="scope.row.updateLockStatusOutLoading"
+          @click="handleLock(scope.row, scope.index, 'out')"
+        >
+          {{scope.row.outLock ? '解锁出库' : '出库锁定'}}
+        </el-button>
         <button
-          class="btn-link ml5 mr5"
+          class="btn-link ml5 mr5 mt10"
           type="button"
-          :disabled="scope.row.checkResult !== 1"
+          :disabled="scope.row.inLock === 1 || scope.row.outLock === 1"
           @click="handleSetStorage(scope.row)"
         >
           库位设置
@@ -52,20 +72,6 @@
         >
           删除
         </button> -->
-        <el-button
-          class="btn-link ml5 mr5"
-          :disabled="scope.row.updateLockStatusInLoading"
-          @click="handleLock(scope.row, scope.index, 'in')"
-        >
-          {{scope.row.inLock ? '解锁入库' : '入库锁定'}}
-        </el-button>
-        <el-button
-          class="btn-link ml5 mr5"
-          :disabled="scope.row.updateLockStatusOutLoading"
-          @click="handleLock(scope.row, scope.index, 'out')"
-        >
-          {{scope.row.outLock ? '解锁出库' : '出库锁定'}}
-        </el-button>
       </template>
     </base-table>
     <el-dialog
@@ -225,13 +231,17 @@
         >打印</el-button>
       </span>
     </el-dialog>
+    <set-storage
+      :visible.sync="setStorageVisible"
+      :row="selectedRow"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-
 import BaseTable from '@/components/Table'
 import DoubleTable from '@/components/Table/doubleTable'
 import { SimpleMsg } from '@/utils/luoFun'
@@ -240,11 +250,13 @@ import { addInventorySite, getInventorySite, updateLockStatus, deleteInventorySi
 import { uniqueArray } from '@/utils/arrayHandler'
 import { MakePrint } from '@/utils/luoFun'
 import SearchLogistics from './components/search'
+import setStorage from './components/setStorage'
 
 export default {
-  components: { DoubleTable, SearchLogistics, BaseTable },
+  components: { SearchLogistics, BaseTable, setStorage },
   data() {
     return {
+      setStorageVisible: false,
       imgs: '',
       loading: false,
       dialogVisible: false,
@@ -278,6 +290,7 @@ export default {
       formType: '',
       warehouseAreaCodeEnum: [],
       dialogVisibleSite: false,
+      selectedRow: null,
     }
   },
   computed: {
@@ -334,9 +347,10 @@ export default {
         }
       })
     },
-    /** 库位设置 */
+    /** 显示库位设置 */
     handleSetStorage(row) {
-
+      this.setStorageVisible = true
+      this.selectedRow = row
     },
     handleSelect(item) {
       this.formParams.companyCode = item.companyCode

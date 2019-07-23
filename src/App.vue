@@ -67,6 +67,9 @@ export default {
 .c-666 {
   color: #666;
 }
+.c-ccc {
+  color: #ccc;
+}
 
 //  字体大小。 如： f12、f26
 $fontSizeList: 12 14 16 18 20 22 24 26 28;

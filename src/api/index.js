@@ -155,3 +155,5 @@ export const badproductlist = params => http.post(`/webApi/receive/order/bad/lis
 export const skuStockMove = params => http.post(`/webApi/sku/stock/stockMove`, params)
 /** 状态转移 */
 export const skuStockWriteCheckResult = params => http.post(`/webApi/sku/stock/writeCheckResult`, params)
+/** 修改库位 */
+export const basicWarehouseSpaceUpdate = params => http.post(`/webApi/basic/warehouseSpace/update`, params)
