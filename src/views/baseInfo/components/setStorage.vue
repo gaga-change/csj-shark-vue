@@ -48,6 +48,7 @@
                       size="mini"
                       placeholder="承载重量"
                       v-model="formData.loadBorn"
+                      :precision="3"
                       :min="0"
                       :max="99999999"
                       controls-position="right"
@@ -66,6 +67,7 @@
                   size="mini"
                   placeholder="承载数量"
                   v-model="formData.loadQty"
+                  :precision="0"
                   :min="0"
                   :max="99999999"
                   controls-position="right"
@@ -82,6 +84,7 @@
                       size="mini"
                       placeholder="承载体积"
                       v-model="formData.loadVolume"
+                      :precision="3"
                       :min="0"
                       :max="99999999"
                       controls-position="right"
@@ -99,6 +102,7 @@
                       size="mini"
                       placeholder="长"
                       v-model="formData.length"
+                      :precision="3"
                       :min="0"
                       :max="99999999"
                       controls-position="right"
@@ -109,6 +113,7 @@
                       size="mini"
                       placeholder="宽"
                       v-model="formData.width"
+                      :precision="3"
                       :min="0"
                       :max="99999999"
                       controls-position="right"
@@ -119,6 +124,7 @@
                       size="mini"
                       placeholder="高"
                       v-model="formData.height"
+                      :precision="3"
                       :min="0"
                       :max="99999999"
                       controls-position="right"
@@ -147,6 +153,7 @@
                   size="mini"
                   v-model="formData.lotNum"
                   placeholder="商品混放数"
+                  :precision="0"
                   :min="0"
                   :max="99999999"
                   controls-position="right"
@@ -157,7 +164,7 @@
                   v-model="formData.isLot"
                   size="mini"
                   :active-value='1'
-                  :ainactive-value='0'
+                  :inactive-value='0'
                 >
                 </el-switch>
               </el-form-item>
@@ -200,6 +207,7 @@ export default {
   },
   watch: {
     rowData(val) {
+      this.$refs['form'] && this.$refs['form'].resetFields()
       Object.keys(this.formData).forEach(key => {
         this.$set(this.formData, key, val[key] === null ? undefined : val[key])
       })
@@ -255,7 +263,6 @@ export default {
     },
     /** 关闭弹窗 */
     close() {
-      this.$refs['form'].resetFields()
       this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {

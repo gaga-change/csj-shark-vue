@@ -1,6 +1,7 @@
 <template>
   <div class="ctabel TableIndexCom">
     <el-table
+      ref="table"
       v-loading="loading"
       :element-loading-text="elementLoadingText"
       :element-loading-background="elementLoadingBackground"
@@ -18,6 +19,7 @@
         v-if="select"
         type="selection"
         width="55"
+        :selectable="selectable"
       >
       </el-table-column>
       <el-table-column
@@ -58,6 +60,7 @@
           :key="item.lable"
           :prop="item.prop"
           :label="item.label"
+          show-overflow-tooltip
         >
         </el-table-column>
       </template>
@@ -104,6 +107,14 @@ import * as Enum from "@/utils/enum.js";
 
 export default {
   props: {
+    selectRows: {
+      type: Array,
+      default: () => []
+    },
+    selectable: {
+      type: Function,
+      default: () => true
+    },
     showIndex: {
       type: Boolean,
       default: false
@@ -202,6 +213,38 @@ export default {
       tableConfig: [],
     }
   },
+  watch: {
+    selectRows(val) {
+      // 重置选中
+      if (val.length === 0) {
+        this.$refs.table.clearSelection()
+      }
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'mapConfig',
+    ]),
+
+    tablePageSize: {
+      get: function () {
+        return this.pageSize
+      },
+      set: function () {
+
+      }
+    },
+
+    tableCurrentPage: {
+      get: function () {
+        return this.currentPage
+      },
+      set: function () {
+
+      }
+    },
+
+  },
   created() {
 
   },
@@ -287,32 +330,6 @@ export default {
     this.tableConfig = tableConfig;
   },
 
-  computed: {
-
-    ...mapGetters([
-      'mapConfig',
-    ]),
-
-    tablePageSize: {
-      get: function () {
-        return this.pageSize
-      },
-      set: function () {
-
-      }
-    },
-
-    tableCurrentPage: {
-      get: function () {
-        return this.currentPage
-      },
-      set: function () {
-
-      }
-    },
-
-  },
-
   methods: {
 
     handleSizeChange(val) {
@@ -328,6 +345,7 @@ export default {
     },
 
     handleSelectionChange(val) {
+      this.$emit('update:selectRows', val)
       this.$emit('selectionChange', val);
     },
   }

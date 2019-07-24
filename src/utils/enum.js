@@ -444,7 +444,7 @@ export const busiBillTypeEnum = [
 ]
 
 export const checkResultEnum = [
-  { name: '待检', value: 0 },
+  { name: '待检品', value: 0 },
   { name: '残次品', value: 1 },
-  { name: '合格', value: 2 },
+  { name: '正品', value: 2 },
 ]

@@ -35,7 +35,8 @@
     <base-table
       @sizeChange="handleSizeChange"
       @currentChange="handleCurrentChange"
-      @selectionChange="handleSelectionChange"
+      :selectRows.sync="selectRows"
+      :selectable="selectable"
       :select="true"
       :showControl="true"
       :controlWidth="100"
@@ -196,6 +197,8 @@ export default {
       return this.warehouseSpaceCodeConfig.map(v => {
         if (v.warehouseSpaceCode === this.selectRow.warehouseSpaceCode) {
           v.disabled = true
+        } else {
+          v.disabled = false
         }
         return v
       })
@@ -212,6 +215,10 @@ export default {
     })
   },
   methods: {
+    /** 判断是否可选 */
+    selectable(row) {
+      return row.checkResult === 0
+    },
     /** 唤起状态转移 */
     showStateTransition() {
       this.selectRows = this.selectRows.map(v => {
@@ -243,15 +250,14 @@ export default {
         return this.$message(msg)
       }
       this.skuStockWriteCheckResultLoading = true
-      skuStockWriteCheckResult(temp).then(res => {
+      skuStockWriteCheckResult({
+        stockCheckResultList: temp
+      }).then(res => {
         this.skuStockWriteCheckResultLoading = false
         if (!res) return
         this.stateTransitionVisible = false
+        this.selectRows = []
       })
-    },
-    /** 列表多选 */
-    handleSelectionChange(val) {
-      this.selectRows = val
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
@@ -283,6 +289,7 @@ export default {
         if (!res) return
         this.moveLibraryDialogVisible = false
         this.newWarehouseSpaceCode = null
+        this.getTableData()
       })
     },
     getTableData() {
