@@ -43,11 +43,10 @@ export const businessChildTableEditConfig = [// 计划单操作列表
   { label: '商品名称', prop: 'skuName', width: 150 },
   { label: '规格型号', prop: 'skuFormat', minWidth: 120 },
   { label: '单位', prop: 'skuUnitName', minWidth: 120 },
-  { label: '总数量', prop: 'planInQty', minWidth: 120 },
-  { label: '已入库', prop: 'realInQty', minWidth: 120 },
-  { label: '已收货量', prop: 'hasReceiveQty', width: 120, editable: true },
-  { label: '正品', prop: 'receiveQty', width: 120, editable: true },
-  // { label: '残次品', prop: 'badReceiveQty', width: 120, editable: true, fixed: 'right' },
+  { label: '入库数量', prop: 'realInQty' },
+  { label: '商品数量', prop: 'planInQty' },
+  { label: '收货数量', prop: 'hasReceiveQty' },
+  { label: '正品数量(自动计算)', prop: 'receiveQty', width: 180 }
 ]
 
 export const planChildTableLabelConfig = [// 计划单商品条码打印列表
@@ -153,7 +152,7 @@ export const putQtyConfig = [
 export const batchNoConfig = [
   { label: '序号', type: 'index', width: 50 },
   { label: '批次', prop: 'batchNo' },
-  { label: '数量', prop: 'receiveQty', width: 200 },
+  { label: '正品数量', prop: 'receiveQty', width: 200 },
 ]
 
 function formatWareHousing() {

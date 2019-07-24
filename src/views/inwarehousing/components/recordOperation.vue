@@ -27,12 +27,14 @@
           <el-col :span="8">供应商: {{parentDataObj.providerName}}</el-col>
           <el-col :span="8">下单时间: {{formateTime(parentDataObj.gmtCreate)}}</el-col>
         </el-row>
-        <edit-table
+        <base-table
           :config="businessChildTableEditConfig"
-          :defaultEdit="true"
-          :useEdit="false"
-          controlName="批次"
           :tableData="childData"
+          controlName="批次"
+          :showControl="true"
+          :controlWidth="240"
+          :total="childData.length"
+          :maxTotal="9999"
         >
           <template
             slot="edit"
@@ -44,7 +46,16 @@
               @click="upperShelf(scope.row)"
             >添加</span>
           </template>
-        </edit-table>
+        </base-table>
+        <el-alert
+          class="mt15"
+          title="注："
+          type="info"
+        >
+
+          <p>1. 同一商品，不同批次正品数量相加≤总数量-已收数量</p>
+          <p>2. 正品 = 不同批次正品数量相加</p>
+        </el-alert>
         <span
           slot="footer"
           class="dialog-footer"
@@ -53,11 +64,8 @@
           <el-button
             type="primary"
             @click="submitForm()"
+            :loading="orderAddLoading"
           >收货确认</el-button>
-          <el-button
-            type="primary"
-            @click="submitForm('inwarehousing')"
-          >收货并入库</el-button>
         </span>
         <el-dialog
           custom-class="RecordOperation"
@@ -85,8 +93,8 @@
             </el-form-item>
 
             <el-form-item
-              label-width="40px"
-              label="数量"
+              label-width="60px"
+              label="正品数量"
             >
               <el-input-number
                 type="text"
@@ -94,8 +102,9 @@
                 style="width:200px"
                 :min="0"
                 :max="99999999"
+                :precision="0"
                 v-model="addSearchForm.receiveQty"
-                placeholder="请输入上架数量"
+                placeholder="请输入正品数量"
               >
               </el-input-number>
             </el-form-item>
@@ -194,8 +203,9 @@
 <script>
 import moment from 'moment'
 import axios from 'axios'
+import BaseTable from '@/components/Table'
 import editTable from '@/components/Table/editTable'
-import { orderAdd, getBatchNo, receiveAndInStock } from '@/api'
+import { orderAdd, getBatchNo } from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
 import { batchNoConfig, businessChildTableEditConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
@@ -204,10 +214,12 @@ import { printPlanDataFn } from './dataHandler'
 export default {
   name: 'RecordOperation',
   components: {
-    editTable,
+    BaseTable,
+    editTable
   },
   data() {
     return {
+      orderAddLoading: false,
       innerVisible: false,
       dialogVisible: false,
       dialogVisibleLabel: false,
@@ -248,6 +260,7 @@ export default {
     sureWarehouse() {
       this.selectRow.receiveList = [...this.batchNoListTable]
       this.$set(this.selectRow, 'receiveListText', this.batchNoListTable.map(v => v.batchNo).join(','))
+      this.$set(this.selectRow, 'receiveQty', this.batchNoListTable.reduce((num, v) => v.receiveQty + num, 0))
       this.cancelWarehouse()
     },
     /** 取消 */
@@ -392,10 +405,11 @@ export default {
     },
 
     submitForm(type) {//提交
-      let isSubmit = this.childData.some(v => v.planInQty - v.hasReceiveQty < v.receiveQty || v.receiveQty <= 0);
-      if (isSubmit) {
-        this.$message({ type: 'error', message: '正品应小于总数量-已收货量,且要大于0' });
-        return
+      if (this.childData.some(v => v.planInQty - v.hasReceiveQty < v.receiveQty)) {
+        return this.$message({ type: 'error', message: '同一商品，不同批次正品数量相加≤总数量-已收数量' });
+      }
+      if (this.childData.some(v => v.receiveQty === 0)) {
+        return this.$message({ type: 'error', message: '请添加批次！' });
       }
       let isConfirm = true
       this.childData.map(item => {
@@ -411,34 +425,21 @@ export default {
         return
       }
       let data = [...this.childData].map(v => {
-        let json = {};
-        ['busiIndex', 'skuCode', 'receiveQty', 'badReceiveQty', 'receiveList'].forEach(item => {
-          if (item === 'receiveQty') {
-            json[item] = Number(v[item]) || 0
-          } else if (item === 'badReceiveQty') {
-            json[item] = Number(v[item]) || 0
-          } else {
-            json[item] = v[item]
-          }
-        })
-        return json
+        return v
       })
-
       let Api = orderAdd;
-      if (type === 'inwarehousing') {
-        Api = receiveAndInStock
-      }
+      this.orderAddLoading = true
       Api({
         planCode: this.parentDataObj.planCode,
         receiveOrderDetailReqList: data
       }).then(res => {
+        this.orderAddLoading = false
         if (res) {
           this.dialogVisible = false;
           this.$message({ type: 'success', message: '操作成功！' })
           this.$emit('lodash')
         }
       })
-
     }
   }
 }

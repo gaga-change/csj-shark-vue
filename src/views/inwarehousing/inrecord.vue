@@ -180,6 +180,7 @@ export default {
               list.childData = res.data.inWarehousePlanDetailRespList.map(v => {
                 v.hasReceiveQty = v.receiveQty || 0;
                 v.receiveQty = v.planInQty - v.receiveQty || 0
+                v.receiveQty = 0
                 v.editable = true
                 v.printNum = 0
                 return v

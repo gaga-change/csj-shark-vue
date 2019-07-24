@@ -149,8 +149,6 @@ export const deleteByIds = params => http.delete(`/webApi/outWarehouse/job/delet
 export const confirmOutOfTheLibrary = params => http.post(`/webApi/outWarehouse/order/confirmOutOfTheLibrary`, params)
 /** 取消出库 */
 export const cancelOutOfTheLibrary = params => http.post(`/webApi/outWarehouse/order/cancelOutOfTheLibrary`, params)
-/** 到货并入库 */
-export const receiveAndInStock = params => http.post(`/webApi/receive/order/receiveAndInStock`, params)
 /** 获取残次品列表 */
 export const badproductlist = params => http.post(`/webApi/receive/order/bad/list`, params)
 /** 库存移库 */

@@ -39,10 +39,11 @@
         >
           <template slot-scope="scope">
             <el-input-number
-              size="mini"
               v-if="item.inputType==='number'"
+              size="mini"
               v-model="scope.row[item.prop]"
               controls-position="right"
+              :precision="item.precision || 0"
               :min="item.min || 0"
               :max="item.max || 99999999"
             ></el-input-number>
