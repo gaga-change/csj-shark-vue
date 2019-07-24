@@ -12,21 +12,57 @@
       @click="formHandle('add')"
       style="margin-bottom:15px"
     >添加</el-button>
-
-    <double-table
+    <base-table
       :loading="loading"
-      :table-data="tableData"
-      :handle-button-map="handleButtonMap"
+      :tableData="tableData"
       :config="tableConfig"
       @sizeChange="handleSizeChange"
       @currentChange="handleCurrentChange"
       :total="total"
       :maxTotal="10"
-      :expand-key="expandKey"
       :pageSize="ruleForm.pageSize"
       :currentPage="ruleForm.pageNum"
-    ></double-table>
-
+      :showControl="true"
+      :controlWidth="240"
+    >
+      <template
+        slot="edit"
+        slot-scope="scope"
+      >
+        <el-button
+          class=" ml5 mr5"
+          size="mini"
+          :type="scope.row.inLock ? 'primary': 'warning'"
+          plain
+          :loading="scope.row.updateLockStatusInLoading"
+          @click="handleLock(scope.row, scope.index, 'in')"
+        >
+          {{scope.row.inLock ? '解锁入库' : '入库锁定'}}
+        </el-button>
+        <el-button
+          class=" ml5 mr5"
+          size="mini"
+          :type="scope.row.outLock ? 'primary': 'warning'"
+          plain
+          :loading="scope.row.updateLockStatusOutLoading"
+          @click="handleLock(scope.row, scope.index, 'out')"
+        >
+          {{scope.row.outLock ? '解锁出库' : '出库锁定'}}
+        </el-button>
+        <el-button
+          class="btn-link ml5 mr5 mt10"
+          @click="formParams={...scope.row};formHandle('edit')"
+        >
+          修改
+        </el-button>
+        <el-button
+          class="btn-link ml5 mr5 mt10"
+          @click="formDelete(scope.row)"
+        >
+          删除
+        </el-button>
+      </template>
+    </base-table>
     <el-dialog
       :title="dialogTitle+'库区'"
       :visible.sync="dialogVisible"
@@ -107,27 +143,6 @@
         </el-form-item>
 
         <el-form-item
-          label="库区状态"
-          label-width="90px"
-          :rules="[{ required: true, message: '请选择'}]"
-        >
-          <el-select
-            v-model="formParams.warehouseAreaStatus"
-            :disabled="formType!='add'"
-            clearable
-            placeholder="请选择"
-            size="small"
-          >
-            <el-option
-              v-for="item in WarehouseAreaStatusEnum"
-              :key="item.name"
-              :label="item.name"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item
           label="库区性质"
           prop="warehouseAreaNature"
           :rules="[{ required: true, message: '请选择库区性质'}]"
@@ -178,17 +193,17 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-
 import DoubleTable from '@/components/Table/doubleTable'
+import BaseTable from '@/components/Table'
 import { SimpleMsg } from '@/utils/luoFun'
 import { areaTableConfig } from './components/config'
-import { getInventoryArea, addInventoryArea, updateInventoryArea, deleteInventoryArea, getSelectInventoryAreaList } from '@/api'
+import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea, getSelectInventoryAreaList } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
-import { WarehouseAreaNatureEnum, YesOrNoEnum, WarehouseAreaStatusEnum, AtoZ, isVirtualenum } from '@/utils/enum'
+import { WarehouseAreaNatureEnum, YesOrNoEnum, AtoZ, isVirtualenum } from '@/utils/enum'
 import SearchLogistics from './components/search'
 
 export default {
-  components: { DoubleTable, SearchLogistics },
+  components: { DoubleTable, SearchLogistics, BaseTable },
   data() {
     return {
       imgs: '',
@@ -206,7 +221,6 @@ export default {
       YesOrNoEnum,
       WarehouseAreaNatureEnum,
       isVirtualenum,
-      WarehouseAreaStatusEnum,
       AtoZ,
       formRules: {},
       selectData: {//x选中的单据
@@ -225,32 +239,6 @@ export default {
       // currentPage:1,
       // pageSize:10,
       total: 0,
-      //主表操作
-      handleButtonMap: [
-        {
-          title: '修改',
-          handle: (index, data) => {
-            this.formHandle('edit')
-            this.formParams = { ...data }
-          }
-        },
-        {
-          title: '状态更改',
-          handle: (index, data) => {
-            this.changeStatus()
-            this.formParams = { ...data }
-          }, formatter: function (data) {
-            return data.warehouseAreaStatus ? '启用' : '禁用'
-          }
-        },
-        {
-          title: '删除',
-          handle: (index, data) => {
-            this.formDelete(data)
-          }
-        }
-
-      ],
       childCanSelect: false,//子表可选择,false不可选，
       // accordionExpand:true,//手风琴展开
       multipleSelection: [],//选中的子表数据
@@ -262,8 +250,80 @@ export default {
       searchName: 'inventory'
     }
   },
-  methods: {
+  computed: {
+    ...mapGetters([
+      'warehouseMap',
+      'chooseWarehouse',
+    ]),
+  },
+  watch: {
+    chooseWarehouse: {
+      handler: function (val, oldVal) {
+        if (val != oldVal) {
+          //仓库更改数据重新请求
+          this.getTableData()
+          this.warehouseMap.map(item => {
+            if (item.warehouseNo == this.chooseWarehouse) {
+              this.warehouseName = item.warehouseName
 
+            }
+          })
+        }
+      },
+      // 深度观察监听
+      // deep: true
+    }
+  },
+  created() {
+    this.getTableData()
+    this.warehouseMap.map(item => {
+      if (item.warehouseNo == this.chooseWarehouse) {
+        this.warehouseName = item.warehouseName
+
+      }
+    })
+  },
+  activated() {
+    this.warehouseMap.map(item => {
+      if (item.warehouseNo == this.chooseWarehouse) {
+        this.warehouseName = item.warehouseName
+      }
+    })
+    this.getTableData()
+  },
+  methods: {
+    /** 出入库 解锁或锁定 */
+    handleLock(row, index, type) {
+      let flag = null
+      let isIn = type === 'in'
+      let id = row.id
+      if (isIn && row.inLock) {
+        flag = 2 // 入库解锁
+      } else if (isIn && !row.inLock) {
+        flag = 1 // 入库锁定
+      } else if (!isIn && row.outLock) {
+        flag = 4 // 出库解锁
+      } else {
+        flag = 3 // 出库锁定
+      }
+      isIn ? row.updateLockStatusInLoading = true : row.updateLockStatusOutLoading = true
+      warehouseAreaUpdateLockStatus(id, {
+        flag
+      }).then(res => {
+        isIn ? row.updateLockStatusInLoading = false : row.updateLockStatusOutLoading = false
+        if (!res) return
+        let item = this.tableData.find(v => v.id === id)
+        if (isIn && row.inLock) {
+          item.inLock = 0
+        } else if (isIn && !row.inLock) {
+          item.inLock = 1
+        } else if (!isIn && row.outLock) {
+          item.outLock = 0
+        } else {
+          item.outLock = 1
+        }
+      })
+    },
     handleSelect(item) {
       this.formParams.companyCode = item.companyCode
     },
@@ -286,7 +346,6 @@ export default {
       }).catch(() => { })
     },
     getTableData() {
-
       this.$router.replace({
         path: '/baseInfo/inventoryArea',
         query: { data: JSON.stringify(this.ruleForm) }
@@ -297,7 +356,11 @@ export default {
       getInventoryArea(data).then(res => {
         this.loading = false
         if (!res) return
-        this.tableData = [...res.data.list]
+        this.tableData = [...res.data.list].map(v => {
+          v.updateLockStatusOutLoading = false
+          v.updateLockStatusInLoading = false
+          return v
+        })
         this.total = res.data.total
       })
       getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
@@ -407,50 +470,6 @@ export default {
         })
       }).catch(() => { })
     },
-  },
-  computed: {
-    ...mapGetters([
-      'warehouseMap',
-      'chooseWarehouse',
-    ]),
-  },
-  watch: {
-    chooseWarehouse: {
-      handler: function (val, oldVal) {
-        if (val != oldVal) {
-          //仓库更改数据重新请求
-          this.getTableData()
-          this.warehouseMap.map(item => {
-            if (item.warehouseNo == this.chooseWarehouse) {
-              this.warehouseName = item.warehouseName
-
-            }
-          })
-        }
-      },
-      // 深度观察监听
-      // deep: true
-    }
-  },
-  beforeMount() {
-    this.getTableData()
-    this.warehouseMap.map(item => {
-      if (item.warehouseNo == this.chooseWarehouse) {
-        this.warehouseName = item.warehouseName
-
-      }
-    })
-    // this.demo()
-    // this.currentRedioChange()
-  },
-  activated() {
-    this.warehouseMap.map(item => {
-      if (item.warehouseNo == this.chooseWarehouse) {
-        this.warehouseName = item.warehouseName
-
-      }
-    })
-    this.getTableData()
   }
 }
 </script>

@@ -1,5 +1,9 @@
 <template>
-  <el-card class="simpleCard" shadow="never" body-style="padding:12px">
+  <el-card
+    class="simpleCard"
+    shadow="never"
+    body-style="padding:12px"
+  >
     <el-form
       :model="searchForms"
       :rules="searchRules"
@@ -7,7 +11,10 @@
       label-width="80px"
     >
       <el-row>
-        <el-col :span="8" v-if="'companyName' in searchForms">
+        <el-col
+          :span="8"
+          v-if="'companyName' in searchForms"
+        >
           <el-form-item
             label="物流公司名称"
             prop="companyName"
@@ -22,8 +29,14 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="8" v-if="'warehouseAreaCode' in searchForms">
-          <el-form-item label="库区编码" prop="warehouseAreaCode">
+        <el-col
+          :span="8"
+          v-if="'warehouseAreaCode' in searchForms"
+        >
+          <el-form-item
+            label="库区编码"
+            prop="warehouseAreaCode"
+          >
             <el-select
               v-model="searchForms.warehouseAreaCode"
               clearable
@@ -41,7 +54,10 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="8" v-if="'isVirtual' in searchForms">
+        <el-col
+          :span="8"
+          v-if="'isVirtual' in searchForms"
+        >
           <el-form-item label="是否虚拟区">
             <el-select
               v-model="searchForms.isVirtual"
@@ -60,8 +76,14 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="8" v-if="'warehouseAreaNature' in searchForms">
-          <el-form-item label="库区性质" prop="warehouseAreaNature">
+        <el-col
+          :span="8"
+          v-if="'warehouseAreaNature' in searchForms"
+        >
+          <el-form-item
+            label="库区性质"
+            prop="warehouseAreaNature"
+          >
             <el-select
               v-model="searchForms.warehouseAreaNature"
               clearable
@@ -79,8 +101,14 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="8" v-if="'warehouseSpaceCode' in searchForms">
-          <el-form-item label="库位编码" prop="warehouseSpaceCode">
+        <el-col
+          :span="8"
+          v-if="'warehouseSpaceCode' in searchForms"
+        >
+          <el-form-item
+            label="库位编码"
+            prop="warehouseSpaceCode"
+          >
             <el-input
               type="text"
               size="small"
@@ -94,12 +122,16 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label-width="0">
-            <el-button type="primary" size="small" @click="submitIt"
-              >查询</el-button
-            >
-            <el-button type="primary" size="small" @click="resetForm"
-              >重置</el-button
-            >
+            <el-button
+              type="primary"
+              size="small"
+              @click="submitIt"
+            >查询</el-button>
+            <el-button
+              type="primary"
+              size="small"
+              @click="resetForm"
+            >重置</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -111,7 +143,6 @@
 import {
   WarehouseAreaNatureEnum,
   YesOrNoEnum,
-  WarehouseAreaStatusEnum,
   AtoZ
 } from '@/utils/enum'
 export default {
@@ -122,14 +153,13 @@ export default {
       searchRules: {},
       WarehouseAreaNatureEnum,
       YesOrNoEnum,
-      WarehouseAreaStatusEnum,
       AtoZ
     }
   },
   props: {
     searchForms: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     searchName: {
       type: String,

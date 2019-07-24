@@ -73,7 +73,9 @@ export const pickOrderDetail = id => http.get(`/webApi/pick/order/detail/${id}`)
 /** 获取所有计划单号 */
 export const outcodelist = params => http.get(`/webApi/outWarehouse/job/selectPlanCodeList`, { params })
 /** 修改库位状态接口 */
-export const updateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseSpace/updateLockStatus/${id}`, { params })
+export const warehouseSpaceUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseSpace/updateLockStatus/${id}`, { params })
+/** 修改库区状态接口 */
+export const warehouseAreaUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseArea/updateLockStatus/${id}`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)

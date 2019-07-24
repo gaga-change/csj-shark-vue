@@ -194,17 +194,7 @@ export const WarehouseAreaNatureEnum = [
     value: 3
   },
 ]
-//库区状态
-export const WarehouseAreaStatusEnum = [
-  {
-    name: '启用',
-    value: 0
-  },
-  {
-    name: '禁用',
-    value: 1
-  },
-]
+
 //是否
 export const YesOrNoEnum = [
   {

@@ -246,7 +246,7 @@ import BaseTable from '@/components/Table'
 import DoubleTable from '@/components/Table/doubleTable'
 import { SimpleMsg } from '@/utils/luoFun'
 import { siteTableConfig } from './components/config'
-import { addInventorySite, getInventorySite, updateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
+import { addInventorySite, getInventorySite, warehouseSpaceUpdateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import { MakePrint } from '@/utils/luoFun'
 import SearchLogistics from './components/search'
@@ -330,7 +330,7 @@ export default {
         flag = 3 // 出库锁定
       }
       isIn ? row.updateLockStatusInLoading = true : row.updateLockStatusOutLoading = true
-      updateLockStatus(id, {
+      warehouseSpaceUpdateLockStatus(id, {
         flag
       }).then(res => {
         isIn ? row.updateLockStatusInLoading = false : row.updateLockStatusOutLoading = false
