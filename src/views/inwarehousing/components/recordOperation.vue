@@ -53,8 +53,8 @@
           type="info"
         >
 
-          <p>1. 同一商品，不同批次正品数量相加≤总数量-已收数量</p>
-          <p>2. 正品 = 不同批次正品数量相加</p>
+          <p>1. 同一商品，正品数量 ≤ 商品数量 - 收货数量</p>
+          <p>2. 正品数量 = 不同批次正品数量相加</p>
         </el-alert>
         <span
           slot="footer"
@@ -409,7 +409,7 @@ export default {
 
     submitForm(type) {//提交
       if (this.childData.some(v => v.planInQty - v.hasReceiveQty < v.receiveQty)) {
-        return this.$message({ type: 'error', message: '同一商品，不同批次正品数量相加≤总数量-已收数量' });
+        return this.$message({ type: 'error', message: '同一商品，正品数量 ≤ 商品数量 - 收货数量' });
       }
       if (this.childData.some(v => v.receiveQty === 0)) {
         return this.$message({ type: 'error', message: '请添加批次！' });
