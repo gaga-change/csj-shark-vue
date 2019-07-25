@@ -76,6 +76,8 @@ export const outcodelist = params => http.get(`/webApi/outWarehouse/job/selectPl
 export const warehouseSpaceUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseSpace/updateLockStatus/${id}`, { params })
 /** 修改库区状态接口 */
 export const warehouseAreaUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseArea/updateLockStatus/${id}`, { params })
+/** 开单获取商品 */
+export const planInventoryQuerysSkuStockList = params => http.get(`/webApi/plan/inventory/querysSkuStockList`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)

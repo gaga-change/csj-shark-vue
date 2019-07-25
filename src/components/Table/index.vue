@@ -2,7 +2,7 @@
   <div class="ctabel TableIndexCom">
     <el-table
       ref="table"
-      v-loading="loading"
+      v-loading="api ? selfLoading: loading"
       :element-loading-text="elementLoadingText"
       :element-loading-background="elementLoadingBackground"
       :data="tableData"
@@ -10,6 +10,8 @@
       @current-change="handleCurrentRedioChange"
       :summary-method="summaryMethod"
       @selection-change="handleSelectionChange"
+      @select="handleSelect"
+      @select-all="handleSelectAll"
       :border="border"
       :show-summary="showSummary"
       size="small"
@@ -82,19 +84,32 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :style="paginationStyle"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="tableCurrentPage"
-      :page-sizes="pageSizes"
-      size="small"
-      :page-size="tablePageSize"
-      :layout="layout"
-      v-if="total>maxTotal"
-      :total="total"
-    >
-    </el-pagination>
+    <template>
+      <el-pagination
+        :style="paginationStyle"
+        @size-change="handleSelfSizeChange"
+        @current-change="handleSelfCurrentChange"
+        :current-page.sync="selfCurrentPage"
+        :page-sizes="pageSizes"
+        size="small"
+        :page-size="selfPageSize"
+        :layout="layout"
+        v-if="api"
+        :total="selfTotal"
+      ></el-pagination>
+      <el-pagination
+        :style="paginationStyle"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="tableCurrentPage"
+        :page-sizes="pageSizes"
+        size="small"
+        :page-size="tablePageSize"
+        :layout="layout"
+        v-else-if="total>maxTotal"
+        :total="total"
+      ></el-pagination>
+    </template>
   </div>
 </template>
 
@@ -107,9 +122,43 @@ import * as Enum from "@/utils/enum.js";
 
 export default {
   props: {
+    /** 表格api接口 */
+    api: {
+      type: Function,
+      default: null,
+    },
+    /** 表格api接口 -  解析接口返回的数据。 */
+    parseData: {
+      type: Function,
+      default: null,
+    },
+    /** 表格api接口 - 搜索条件 */
+    searchParam: {
+      type: Object,
+      default: () => { }
+    },
+    select: {
+      type: Boolean,
+      default: false,
+    },
     selectRows: {
       type: Array,
       default: () => []
+    },
+    /** 跨分页多选 */
+    selectTotal: {
+      type: Boolean,
+      default: false
+    },
+    /** 跨分页多选 - 唯一键 */
+    selectTotalKey: {
+      type: String,
+      default: 'id'
+    },
+    /** 跨分页多选 - 最大数量限制。 */
+    selectTotalMax: {
+      type: Number,
+      default: 50
     },
     selectable: {
       type: Function,
@@ -119,21 +168,20 @@ export default {
       type: Boolean,
       default: false
     },
-    select: {
+    /** 显示 【操作】 */
+    showControl: {
       type: Boolean,
-      default: false,
+      default: false
     },
+    /** 显示 【操作】 - 更改名称 */
     controlName: {
       type: String,
       default: '操作'
     },
+    /** 显示 【操作】 - 宽度 */
     controlWidth: {
       type: Number,
       default: 160
-    },
-    showControl: {
-      type: Boolean,
-      default: false
     },
     loading: {
       type: Boolean,
@@ -169,7 +217,7 @@ export default {
     },
     pageSizes: {
       type: Array,
-      default: () => [10, 50, 100, 500]
+      default: () => [10, 20, 30, 50]
     },
     pageSize: {
       type: Number,
@@ -211,6 +259,10 @@ export default {
   data() {
     return {
       tableConfig: [],
+      selfTotal: 0,
+      selfPageSize: 10,
+      selfCurrentPage: 1,
+      selfLoading: true,
     }
   },
   watch: {
@@ -225,7 +277,6 @@ export default {
     ...mapGetters([
       'mapConfig',
     ]),
-
     tablePageSize: {
       get: function () {
         return this.pageSize
@@ -234,7 +285,6 @@ export default {
 
       }
     },
-
     tableCurrentPage: {
       get: function () {
         return this.currentPage
@@ -243,10 +293,11 @@ export default {
 
       }
     },
-
   },
-  created() {
-
+  mounted() {
+    if (this.api) {
+      this.fetchData()
+    }
   },
   beforeMount() {
     let tableConfig = _.cloneDeep(this.config);
@@ -329,24 +380,116 @@ export default {
     }
     this.tableConfig = tableConfig;
   },
-
   methods: {
-
+    fetchData() {
+      this.selfLoading = true
+      this.api({
+        pageNum: this.selfCurrentPage,
+        pageSize: this.selfPageSize,
+        ...this.searchParam
+      }).then(res => {
+        this.selfLoading = false
+        if (!res) return
+        let data = null
+        let total = null
+        if (this.parseData) {
+          let obj = this.parseData(res)
+          data = obj.data
+          total = obj.total
+        } else {
+          data = res.data.list || []
+          total = res.data.total
+        }
+        let recoverSelectRows = []
+        if (this.selectTotal) {
+          // 需要恢复选中状态
+          let keys = this.selectRows.map(v => v[this.selectTotalKey]).join(',') + ','
+          data.forEach(v => {
+            if (~keys.indexOf(v[this.selectTotalKey])) {
+              recoverSelectRows.push(v)
+            }
+          })
+        }
+        this.$emit('update:tableData', data)
+        this.selectTotal && this.$nextTick(() => {
+          recoverSelectRows.forEach(v => {
+            this.$refs['table'].toggleRowSelection(v, true)
+          })
+        })
+        this.selfTotal = total
+      })
+    },
     handleSizeChange(val) {
-      this.$emit('sizeChange', val);
+      this.$emit('sizeChange', val)
     },
-
+    handleSelfSizeChange(val) {
+      this.selfPageSize = val
+      this.fetchData()
+    },
     handleCurrentChange(val) {
-      this.$emit('currentChange', val);
+      this.$emit('currentChange', val)
     },
-
+    handleSelfCurrentChange(val) {
+      this.selfCurrentPage = val
+      this.fetchData()
+    },
     handleCurrentRedioChange(currentRow, oldCurrentRow) {
-      this.$emit('currentRedioChange', currentRow, oldCurrentRow);
+      this.$emit('currentRedioChange', currentRow, oldCurrentRow)
     },
-
+    handleSelect(selection, row) {
+      // 如果 selectTotal= false, 走 handleSelectionChange
+      if (!this.selectTotal) return
+      let temp = [...this.selectRows]
+      let selected = selection[selection.length - 1] === row
+      row = JSON.parse(JSON.stringify(row))
+      if (selected) {
+        temp.push(row)
+      } else {
+        temp.splice(temp.findIndex(v => v[this.selectTotalKey] === row[this.selectTotalKey]), 1)
+      }
+      if (temp.length > this.selectTotalMax) {
+        this.$message(`最多选取${this.selectTotalMax}条,当前已超出，将自动删除第一条选中内容！`)
+        let delRow = temp.shift()
+        let row = this.tableData.find(v => v[this.selectTotalKey] === delRow[this.selectTotalKey])
+        row && this.$refs['table'].toggleRowSelection(row, false)
+      }
+      this.$emit('update:selectRows', temp)
+    },
+    handleSelectAll(selection) {
+      // 如果 selectTotal= false, 走 handleSelectionChange
+      if (!this.selectTotal) return
+      let temp = [...this.selectRows]
+      if (selection.length) { // 全选
+        this.tableData.forEach(row => {
+          // 在已选的总库中，添加当前列表中的项
+          if (!temp.find(v => v[this.selectTotalKey] === row[this.selectTotalKey])) {
+            temp.push(row)
+          }
+        })
+      } else { // 全不选
+        this.tableData.forEach(row => {
+          // 在已选的总库中，剔除当前列表中的项
+          let index = temp.findIndex(v => v[this.selectTotalKey] === row[this.selectTotalKey])
+          if (~index) {
+            temp.splice(index, 1)
+          }
+        })
+      }
+      if (temp.length > this.selectTotalMax) {
+        this.$message(`最多选取${this.selectTotalMax},当前已超出，将自动删除前${temp.length - this.selectTotalMax}条选中内容！`)
+        let delRows = temp.splice(0, temp.length - this.selectTotalMax)
+        delRows.forEach(delRow => {
+          let row = this.tableData.find(v => v[this.selectTotalKey] === delRow[this.selectTotalKey])
+          row && this.$refs['table'].toggleRowSelection(row, false)
+        })
+      }
+      this.$emit('update:selectRows', temp)
+    },
     handleSelectionChange(val) {
+      // 如果 selectTotal= true, 走handleSelect
+      if (this.selectTotal) return
       this.$emit('update:selectRows', val)
-      this.$emit('selectionChange', val);
+      this.$emit('selectionChange', val)
     },
   }
 }
