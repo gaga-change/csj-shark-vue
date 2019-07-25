@@ -290,7 +290,10 @@ export default {
         this.$message({ type: 'error', message: '数量不能为0' });
         return
       }
-      let json = { id: moment().valueOf(), ...this.addSearchForm };
+      let json = { id: moment().valueOf(), ...this.addSearchForm }
+      if (this.batchNoListTable.find(v => v.batchNo === json.batchNo)) {
+        return this.$message({ type: 'error', message: `批次【${json.batchNo}】已存在！` });
+      }
       this.batchNoListTable.push(json)
       this.addSearchForm = {
         batchNo: '',
