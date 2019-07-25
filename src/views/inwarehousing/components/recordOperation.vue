@@ -282,12 +282,12 @@ export default {
     addBatch() {
       for (let key in this.addSearchForm) {
         if (this.addSearchForm[key] === '') {
-          this.$message({ type: 'error', message: '库位和数量都是必填参数' });
+          this.$message({ type: 'error', message: '批次和正品数量必填！' });
           return
         }
       }
       if (this.addSearchForm.receiveQty === 0) {
-        this.$message({ type: 'error', message: '数量不能为0' });
+        this.$message({ type: 'error', message: '正品数量不能为0！' });
         return
       }
       let json = { id: moment().valueOf(), ...this.addSearchForm }
