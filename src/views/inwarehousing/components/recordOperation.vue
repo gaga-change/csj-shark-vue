@@ -86,7 +86,7 @@
             >
               <el-input
                 style="width:200px"
-                :maxlength="50"
+                :maxlength="30"
                 v-model="addSearchForm.batchNo"
                 size="mini"
               />
