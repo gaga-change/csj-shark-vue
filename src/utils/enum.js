@@ -398,14 +398,14 @@ export const jobStatusList = [
 
 /** 单据类型 */
 export const busiBillTypeEnum = [
-  { name: '采购入库', value: 11 },
-  { name: '销售退入库', value: 12 },
-  { name: '仓储入库', value: 13 },
-  { name: '拒收入库', value: 15 },
-  { name: '销售出库', value: 21 },
-  { name: '采购退货出库', value: 22 },
-  { name: '移库出库', value: 41 },
-  { name: '移库入库', value: 51 },
+  { name: '采购入库', value: 11, type: 'in' },
+  { name: '销售退入库', value: 12, type: 'in' },
+  { name: '仓储入库', value: 13, type: 'in' },
+  { name: '拒收入库', value: 15, type: 'in' },
+  { name: '销售出库', value: 21, type: 'out' },
+  { name: '采购退货出库', value: 22, type: 'out' },
+  { name: '移库出库', value: 41, type: 'out' },
+  { name: '移库入库', value: 51, type: 'in' },
 ]
 
 export const checkResultEnum = [

@@ -39,6 +39,7 @@ export default {
 // 按钮连接
 .btn-link {
   color: rgb(51, 153, 234);
+  background-color: initial !important;
   text-decoration: none;
   background-color: transparent;
   outline: none;
