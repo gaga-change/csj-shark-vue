@@ -161,11 +161,11 @@ export default {
     ]),
   },
   watch: {
-    selectRows(val) {
-
-    },
-    selectData(val) {
-
+    visible(val) {
+      if (val) {
+        // 恢复选中的内容
+        this.selectRows = [...this.selectData]
+      }
     }
   },
   created() {
@@ -199,8 +199,6 @@ export default {
     submitForm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          console.log('submit')
-          console.log()
           this.$refs['baseTable'].fetchData()
         }
       })
@@ -213,6 +211,7 @@ export default {
     /** 确认 */
     confrim() {
       this.$emit('update:selectData', [...this.selectRows])
+      this.selectRows = []
       this.close()
     },
     /** 关闭 */

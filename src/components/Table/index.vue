@@ -270,6 +270,12 @@ export default {
       // 重置选中
       if (val.length === 0) {
         this.$refs.table.clearSelection()
+      } else {
+        this.$refs.table.clearSelection()
+        this.selectTotalKey && val.forEach(checkRow => {
+          let row = this.tableData.find(v => v[this.selectTotalKey] === checkRow[this.selectTotalKey])
+          row && this.$refs['table'].toggleRowSelection(row, true)
+        })
       }
     }
   },
