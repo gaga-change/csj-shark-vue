@@ -7,7 +7,7 @@
             <el-select v-model="searchForms.busiBillType" 
              filterable clearable placeholder="请选择单据类型" 
             size="small" prefix-icon="el-icon-search">
-            <template v-for="item in BusiBillTypeEnum">
+            <template v-for="item in busiBillTypeEnum">
               <el-option
                 :key="item.value"
                 :label="item.name"
@@ -115,8 +115,8 @@
 </template>
 
 <script>
-import { OutExecStatusEnum, OutOrderStatusEnum,outboundOrderStatus, BusiBillTypeEnum, SortStatus} from '@/utils/enum';  
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
+import { OutExecStatusEnum, OutOrderStatusEnum,outboundOrderStatus, busiBillTypeEnum, SortStatus} from '@/utils/enum';  
+const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('out'))
 export default  {
   name: 'SearchWarehousing',
 
@@ -127,7 +127,7 @@ export default  {
       OutExecStatusEnum,
       OutOrderStatusEnum,
       outboundOrderStatus,
-      BusiBillTypeEnum:BusiBillTypeEnumFilter,
+      busiBillTypeEnum:BusiBillTypeEnumFilter,
       SortStatus
     }
   },

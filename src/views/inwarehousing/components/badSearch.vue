@@ -41,11 +41,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { BusiBillTypeEnum, badStatuslist } from '@/utils/enum'
+import { busiBillTypeEnum, badStatuslist } from '@/utils/enum'
 export default {
   data() {
     return {
-       BusiBillTypeEnum,
+       busiBillTypeEnum,
        badStatuslist
     }
   },

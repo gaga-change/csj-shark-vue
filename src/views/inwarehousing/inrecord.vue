@@ -47,8 +47,8 @@ import { getInfoWarehousing, getInfoDetailWarehousing } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import SearchWarehousing from './components/search'
 import operationButton from './components/recordOperation'
-import { BusiBillTypeEnum } from "@/utils/enum"
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in'))
+import { busiBillTypeEnum } from "@/utils/enum"
+const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('in'))
 const ruleForm = {
   pageNum: 1,
   pageSize: 10,
@@ -72,7 +72,7 @@ export default {
       dialogVisible: false,
       dialogData: {},
       highlightCurrentRow: true,
-      BusiBillTypeEnum: BusiBillTypeEnumFilter,
+      busiBillTypeEnum: BusiBillTypeEnumFilter,
       tabDefault: BusiBillTypeEnumFilter[0].value + '',
       currentTab: BusiBillTypeEnumFilter[0].value + '',
       ruleForm,

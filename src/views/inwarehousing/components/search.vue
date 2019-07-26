@@ -123,7 +123,7 @@
               prefix-icon="el-icon-search"
             >
               <el-option
-                v-for="item in BusiBillTypeEnum"
+                v-for="item in busiBillTypeEnum"
                 :key="item.value"
                 :label="item.name"
                 :value="item.value"
@@ -193,8 +193,8 @@
 </template>
 
 <script>
-import { ExecStatusEnum, OrderStatusEnum, receiveState, BusiBillTypeEnum } from '@/utils/enum';
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in'))
+import { ExecStatusEnum, OrderStatusEnum, receiveState, busiBillTypeEnum } from '@/utils/enum';
+const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('in'))
 export default {
   name: 'SearchWarehousing',
 
@@ -206,7 +206,7 @@ export default {
       ExecStatusEnum,
       OrderStatusEnum,
       receiveState,
-      BusiBillTypeEnum: BusiBillTypeEnumFilter
+      busiBillTypeEnum: BusiBillTypeEnumFilter
     }
   },
   props: {

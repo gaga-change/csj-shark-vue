@@ -1,7 +1,7 @@
 export const planTableConfig = [// 计划单列表
   { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time' },
   { label: '计划单号', prop: 'planCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'BusiBillTypeEnum', width: 130 },
+  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'busiBillTypeEnum', width: 130 },
   { label: '货主', prop: 'ownerName', width: 150 },
   { label: '供应商', prop: 'providerName', width: 150 },
   { label: '商品总数', prop: 'inPlanQty', minWidth: 90 },
@@ -14,7 +14,7 @@ export const planTableConfig = [// 计划单列表
 export const printplanTableConfig = [// 计划单列表
   { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time' },
   { label: '计划单号', prop: 'planCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'BusiBillTypeEnum', width: 130 },
+  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'busiBillTypeEnum', width: 130 },
   { label: '货主', prop: 'ownerName', width: 150 },
   { label: '供应商', prop: 'providerName', width: 150 },
   { label: '商品总数', prop: 'inPlanQty', minWidth: 90 },
@@ -63,7 +63,7 @@ export const planChildTableLabelConfig = [// 计划单商品条码打印列表
 
 export const planChildTablePrintConfig = [// 计划单打印列表
   { label: '计划单号', prop: 'planCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'BusiBillTypeEnum', width: 100 },
+  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'busiBillTypeEnum', width: 100 },
   { label: '货主', prop: 'ownerName', width: 150 },
   { label: '供应商', prop: 'providerName', width: 150 },
   { label: '应入/已入', prop: 'planReal', width: 100 },
@@ -73,7 +73,7 @@ export const planChildTablePrintConfig = [// 计划单打印列表
 export const inTableConfig = [// 入库列表
   { label: '计划单号', prop: 'planCode', width: 150 },
   { label: '入库单号', prop: 'orderCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'BusiBillTypeEnum', width: 90 },
+  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'busiBillTypeEnum', width: 90 },
   { label: '入库时间', width: 120, prop: 'gmtModify', type: 'time' },
   { label: '货主', prop: 'ownerName', width: 150 },
   { label: '供应商', prop: 'providerName', width: 150 },
@@ -107,7 +107,7 @@ export const arrivalConfig = [// 收货单列表 unconfirmed
   { label: '计划单号', prop: 'planCode' },
   { label: '上架状态', prop: 'execStatus', useLocalEnum: true, type: 'execStatuslist' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time' },
-  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'BusiBillTypeEnum' },
+  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '操作人', prop: 'createrName' },
@@ -193,7 +193,7 @@ export const recordListConfig = [
 export const inPushOrderConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '入库单号', prop: 'orderCode' },
-  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'BusiBillTypeEnum' },
+  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'busiBillTypeEnum' },
   { label: '入库日期', prop: 'gmtCreate', type: 'time' },
   { label: '推送状态', prop: 'isPush', useLocalEnum: true, type: 'isPushStateEnum' },
   { label: '货主', prop: 'ownerName' },

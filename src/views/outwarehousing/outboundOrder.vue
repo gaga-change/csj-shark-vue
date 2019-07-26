@@ -85,8 +85,8 @@ import { getInfoOutWarehousing, getInfoDetailOutWarehousing, confirmOutOfTheLibr
 import { uniqueArray } from '@/utils/arrayHandler'
 import SearchWarehousing from './components/search'
 import operationButton from './components/outButton'
-import { BusiBillTypeEnum } from "@/utils/enum"
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
+import { busiBillTypeEnum } from "@/utils/enum"
+const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('out'))
 export default {
   components: { DoubleTable, SearchWarehousing, operationButton },
   data() {
@@ -95,7 +95,7 @@ export default {
       dialogVisible: false,
       dialogData: {},
       highlightCurrentRow: true,
-      BusiBillTypeEnum: BusiBillTypeEnumFilter,
+      busiBillTypeEnum: BusiBillTypeEnumFilter,
       tabDefault: BusiBillTypeEnumFilter[0].value + '',
       currentTab: BusiBillTypeEnumFilter[0].value + '',
       ruleForm: {

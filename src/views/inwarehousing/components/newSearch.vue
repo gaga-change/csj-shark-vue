@@ -13,7 +13,7 @@
               <el-select v-model="searchForm.orderType" 
               size="small"  filterable clearable placeholder="请选择单据类型" prefix-icon="el-icon-search">
                 <el-option
-                  v-for="item in BusiBillTypeEnum"
+                  v-for="item in busiBillTypeEnum"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value">
@@ -140,11 +140,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { BusiBillTypeEnum, execStatuslist } from '@/utils/enum'
+import { busiBillTypeEnum, execStatuslist } from '@/utils/enum'
 export default {
   data() {
     return {
-       BusiBillTypeEnum,
+       busiBillTypeEnum,
        execStatuslist
     }
   },

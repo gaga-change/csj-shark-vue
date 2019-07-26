@@ -8,7 +8,7 @@
                filterable clearable placeholder="请选择" 
               size="small" prefix-icon="el-icon-search">
                 <el-option
-                  v-for="item in BusiBillTypeEnum"
+                  v-for="item in busiBillTypeEnum"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value">
@@ -52,8 +52,8 @@
 
 <script>
 // import {  InvoiceType  as invoicetype  } from '@/utils'
-import { printState, BusiBillTypeEnum } from '@/utils/enum';  
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('in')) 
+import { printState, busiBillTypeEnum } from '@/utils/enum';  
+const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('in')) 
 export default  {
   name: 'SearchWarehousing',
 
@@ -65,7 +65,7 @@ export default  {
         
       },
       printState,
-      BusiBillTypeEnum: BusiBillTypeEnumFilter
+      busiBillTypeEnum: BusiBillTypeEnumFilter
     }
   },
   props:{

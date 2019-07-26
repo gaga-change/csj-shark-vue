@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  <tab-label 
-          :tab-config="BusiBillTypeEnum" 
+          :tab-config="busiBillTypeEnum" 
           @tabSwitch="tabSwitch" 
           :tab-default="tabDefault">
         </tab-label> -->
@@ -81,8 +81,8 @@ import { getInfoPlanOutWarehousing, getInfoPlanDetailOutWarehousing } from '@/ap
 import { uniqueArray } from '@/utils/arrayHandler'
 import SearchWarehousing from './components/printsearch'
 import operationButton from './components/printOperation'
-import { BusiBillTypeEnum } from "@/utils/enum"
-const BusiBillTypeEnumFilter = BusiBillTypeEnum.filter(item => item.type.includes('out'))
+import { busiBillTypeEnum } from "@/utils/enum"
+const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('out'))
 
 export default {
   components: { DoubleTable, SearchWarehousing, operationButton },
@@ -92,7 +92,7 @@ export default {
       dialogVisible: false,
       dialogData: {},
       highlightCurrentRow: true,
-      BusiBillTypeEnum: BusiBillTypeEnumFilter,
+      busiBillTypeEnum: BusiBillTypeEnumFilter,
       tabDefault: BusiBillTypeEnumFilter[0].value + '',
       currentTab: BusiBillTypeEnumFilter[0].value + '',
       ruleForm: {
