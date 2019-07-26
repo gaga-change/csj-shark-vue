@@ -129,6 +129,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'takeStockBilling',
+        path: 'detail',
+        meta: { title: '盘点单详情', noCache: true },
+        component: _import('takeStock/takeStockDetail'),
+        hidden: false,
+      },
+      {
         name: 'takeStockList',
         path: 'list',
         meta: { title: '盘点单管理', noCache: true },

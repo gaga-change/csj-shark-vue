@@ -23,6 +23,6 @@ export const takeStockListSearchConfig = [
   { label: '盘点单号', prop: 'orderCode', type: 'input' },
   { label: '状态', prop: 'executeStatus', type: 'select', enum: 'executeStatusEnum' },
   { label: '创建时间', prop: 'createTimeArea', type: 'timeArea' },
-  { label: '库区', prop: 'warehouseAreaCode', type: 'warehouseAreaCode' },
-  { label: '库位', prop: 'warehouseSpaceCode', type: 'warehouseSpaceCode' }
+  // { label: '库区', prop: 'warehouseAreaCode', type: 'warehouseAreaCode' },
+  // { label: '库位', prop: 'warehouseSpaceCode', type: 'warehouseSpaceCode' }
 ]

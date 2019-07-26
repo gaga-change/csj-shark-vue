@@ -37,6 +37,10 @@
         :controlWidth="160"
       >
         <template slot-scope="scope">
+          <router-link
+            :to="{path:`/takeStock/detail`,query:{id: scope.row.id}}"
+            :style="{color:'#3399ea'}"
+          >查看</router-link>
           <el-button
             class="btn-link"
             v-if="scope.row.executeStatus === 0"
