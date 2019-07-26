@@ -78,6 +78,8 @@ export const warehouseSpaceUpdateLockStatus = (id, params) => http.get(`/webApi/
 export const warehouseAreaUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseArea/updateLockStatus/${id}`, { params })
 /** 开单获取商品 */
 export const planInventoryQuerysSkuStockList = params => http.get(`/webApi/plan/inventory/querysSkuStockList`, { params })
+/** 分页查询盘点单列表 */
+export const planInventoryList = params => http.get(`/webApi/plan/inventory/list`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)

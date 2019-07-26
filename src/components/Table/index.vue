@@ -133,7 +133,7 @@ export default {
       default: null,
     },
     /** 表格api接口 - 搜索条件 */
-    searchParam: {
+    searchParams: {
       type: Object,
       default: () => { }
     },
@@ -389,10 +389,12 @@ export default {
   methods: {
     fetchData() {
       this.selfLoading = true
-      this.api({
+      console.log('真实传出：', JSON.stringify(this.searchParams))
+
+      return this.api({
         pageNum: this.selfCurrentPage,
         pageSize: this.selfPageSize,
-        ...this.searchParam
+        ...this.searchParams
       }).then(res => {
         this.selfLoading = false
         if (!res) return

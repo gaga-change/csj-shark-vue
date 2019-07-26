@@ -448,3 +448,11 @@ export const checkResultEnum = [
   { name: '残次品', value: 1 },
   { name: '正品', value: 2 },
 ]
+
+export const executeStatusEnum = [
+  { name: '待盘点', value: 0 },
+  { name: '盘点中', value: 1 },
+  { name: '已取消', value: 2 },
+  { name: '已终止', value: 3 },
+  { name: '已完成', value: 4 },
+]
