@@ -44,7 +44,6 @@
         label-width="70px"
         label-position="left"
       >
-
         <el-form-item
           label="物流公司名称"
           label-width="100px"
@@ -61,7 +60,6 @@
           >
           </el-autocomplete>
         </el-form-item>
-
         <el-form-item
           label="物流公司编码"
           prop="companyCode"
@@ -77,7 +75,6 @@
           >
           </el-input>
         </el-form-item>
-
         <el-form-item
           label="联系人"
           prop="linkUser"
@@ -90,7 +87,6 @@
           >
           </el-input>
         </el-form-item>
-
         <el-form-item
           label="联系电话"
           prop="linkTel"
@@ -103,7 +99,6 @@
           >
           </el-input>
         </el-form-item>
-
         <el-form-item
           label="地址"
           prop="linkAddress"
@@ -117,18 +112,19 @@
           </el-input>
         </el-form-item>
       </el-form>
-
       <span
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button
+          @click="dialogVisible = false"
+          size=""
+        >取 消</el-button>
         <el-button
           type="primary"
           @click="submitIt"
         >确 定</el-button>
       </span>
-
     </el-dialog>
   </div>
 </template>

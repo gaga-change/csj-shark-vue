@@ -74,7 +74,10 @@
       >
         <template slot-scope="scope">
           <div>
-            <slot></slot>
+            <slot
+              v-bind:row="scope.row"
+              v-bind:index="scope.$index"
+            ></slot>
             <slot
               name="edit"
               v-bind:row="scope.row"
@@ -266,11 +269,11 @@ export default {
     }
   },
   watch: {
-    selectRows(val) {
+    selectRows(val, oldVal) {
       // 重置选中
       if (val.length === 0) {
         this.$refs.table.clearSelection()
-      } else {
+      } else if (this.selectTotal) {
         this.$refs.table.clearSelection()
         this.selectTotalKey && val.forEach(checkRow => {
           let row = this.tableData.find(v => v[this.selectTotalKey] === checkRow[this.selectTotalKey])
@@ -389,8 +392,6 @@ export default {
   methods: {
     fetchData() {
       this.selfLoading = true
-      console.log('真实传出：', JSON.stringify(this.searchParams))
-
       return this.api({
         pageNum: this.selfCurrentPage,
         pageSize: this.selfPageSize,

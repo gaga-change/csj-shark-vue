@@ -163,3 +163,5 @@ export const skuStockWriteCheckResult = params => http.post(`/webApi/sku/stock/w
 export const basicWarehouseSpaceUpdate = params => http.post(`/webApi/basic/warehouseSpace/update`, params)
 /** 盘点开单 */
 export const insertInventoryOrder = params => http.post(`/webApi/plan/inventory/insertInventoryOrder`, params)
+/** 盘点单取消或终止 */
+export const inventoryRemoveOrStop = params => http.post(`/webApi/plan/inventory/removeOrStop`, params)
