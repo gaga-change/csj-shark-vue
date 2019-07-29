@@ -10,6 +10,12 @@ export default {
 }
 </script>
 <style lang="scss">
+.el-card__header {
+  padding: 9px 10px;
+}
+.el-card__body {
+  padding: 10px;
+}
 .link_dom {
   color: rgb(51, 153, 234);
   cursor: pointer;
