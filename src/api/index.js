@@ -12,6 +12,13 @@ export const exportLedger = parmas => axios({
   }
 })
 
+/** 上传文件 */
+export const uploadReportFile = (formData, options = {}) => http.post('/webApi/plan/checkOrder/uploadReportFile', formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data'
+  },
+  ...options
+})
 /** 物流公司列表 */
 export const getLogisticsList = params => http.get(`/webApi/logistics/basic/list`, { params })
 /** 物流公司下拉列表 */
@@ -84,6 +91,8 @@ export const planInventoryQueryByOrderId = params => http.get(`/webApi/plan/inve
 export const planInventoryList = params => http.get(`/webApi/plan/inventory/list`, { params })
 /** 质检记录 */
 export const checkOrderList = params => http.get(`/webApi/plan/checkOrder/list`, { params })
+/** 通过质检单号查询质检报告记录 */
+export const getCheckReportByOrderCode = params => http.get(`/webApi/plan/checkOrder/getCheckReportByOrderCode`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)

@@ -36,32 +36,41 @@
             class="btn-link"
             @click="handleReloadFile(scope.row)"
           >
-            重新上传
+            质检报告
           </el-button>
         </template>
       </base-table>
     </div>
+    <reload-file
+      :visible.sync="reloadFileVisible"
+      :row="rowNow"
+    />
   </div>
 </template>
 
 <script>
-import { checkOrderList, inventoryRemoveOrStop } from '@/api'
+import { checkOrderList, getCheckReportByOrderCode } from '@/api'
 import { qualityTestitingListConfig, qualityTestitingListSearchConfig } from './components/config'
+import reloadFile from './components/reloadFile'
 export default {
+  components: { reloadFile },
   data() {
     return {
+      reloadFileVisible: false,
       qualityTestitingListConfig,
       qualityTestitingListSearchConfig,
       checkOrderList,
       tableData: [],
       searchParams: {},
-      selectRows: []
+      selectRows: [],
+      rowNow: {},
     }
   },
   methods: {
     /** 重新上传 */
     handleReloadFile(row, operate) {
-
+      this.rowNow = row
+      this.reloadFileVisible = true
     },
     /** 新建质检记录 */
     handleCreate() {
