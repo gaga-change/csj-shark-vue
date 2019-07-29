@@ -5,7 +5,10 @@ import ItemCard from '@/components/ItemCard/index'
 import TabLabel from '@/components/TabLabel/index'
 import BarCode from '@/components/BarCode/index'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
+
 import BaseTable from '@/components/Table'
+import SearchForm from '@/components/SearchForm/index'
+
 import 'normalize.css/normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss'
@@ -20,6 +23,7 @@ import '@/permission'
 import { EXTENDS } from './assets/extends'
 
 Vue.component('BaseTable', BaseTable);
+Vue.component('SearchForm', SearchForm);
 
 Vue.use(ElementUI, { locale })
 Vue.use(EXTENDS)

@@ -82,6 +82,8 @@ export const planInventoryQuerysSkuStockList = params => http.get(`/webApi/plan/
 export const planInventoryQueryByOrderId = params => http.get(`/webApi/plan/inventory/queryByOrderId`, { params })
 /** 分页查询盘点单列表 */
 export const planInventoryList = params => http.get(`/webApi/plan/inventory/list`, { params })
+/** 质检记录 */
+export const checkOrderList = params => http.get(`/webApi/plan/checkOrder/list`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)
