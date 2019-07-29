@@ -43,7 +43,7 @@
     </div>
     <reload-file
       :visible.sync="reloadFileVisible"
-      :row="rowNow"
+      :row.sync="rowNow"
     />
   </div>
 </template>

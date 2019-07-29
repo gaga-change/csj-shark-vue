@@ -180,3 +180,7 @@ export const insertInventoryOrder = params => http.post(`/webApi/plan/inventory/
 export const inventoryRemoveOrStop = params => http.post(`/webApi/plan/inventory/removeOrStop`, params)
 /** 盘点录入 */
 export const inventoryInbentoryRecord = params => http.post(`/webApi/plan/inventory/inbentoryRecord`, params)
+/** 上传质检报告 */
+export const checkOrderAddReport = params => http.post(`/webApi/plan/checkOrder/addReport`, params)
+/** 通过ID删除质检报告记录 */
+export const deleteCheckReportById = params => http.post(`/webApi/plan/checkOrder/deleteCheckReportById`, params)
