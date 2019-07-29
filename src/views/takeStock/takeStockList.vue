@@ -41,6 +41,11 @@
             :to="{path:`/takeStock/detail`,query:{id: scope.row.id}}"
             :style="{color:'#3399ea'}"
           >查看</router-link>
+          <router-link
+            v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
+            :to="{path:`/takeStock/record`,query:{id: scope.row.id}}"
+            :style="{color:'#3399ea'}"
+          >盘点录入</router-link>
           <el-button
             class="btn-link"
             v-if="scope.row.executeStatus === 0"
@@ -75,7 +80,7 @@ export default {
       planInventoryList,
       tableData: [],
       searchParams: {},
-      selectRows: [],
+      selectRows: []
     }
   },
   methods: {

@@ -119,6 +119,10 @@ $dirSizeList: 5 10 15 20 25;
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .clearfix {
   &::after {
     content: "";

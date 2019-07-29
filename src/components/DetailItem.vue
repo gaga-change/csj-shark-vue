@@ -6,12 +6,19 @@
       :key="index"
     >
       <span class="label-text">{{item.label}} ：</span>
-      <span class="value-content">{{detail[item.prop]}}</span>
+      <template v-if="item.type === 'time'">
+        <span class="value-content">{{detail[item.prop] | timeFormat}}</span>
+      </template>
+      <template v-else>
+        <span class="value-content">{{detail[item.prop]}}</span>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+// moment(cellValue).format(tableConfig[i].format || 'YYYY-MM-DD HH:mm:ss')
 export default {
   props: {
     detail: {
@@ -30,6 +37,12 @@ export default {
   data() {
     return {
 
+    }
+  },
+  filters: {
+    timeFormat(val) {
+      if (!val) return ''
+      return moment(val).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }

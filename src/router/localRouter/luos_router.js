@@ -136,6 +136,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'takeStockRecord',
+        path: 'record',
+        meta: { title: '盘点录入', noCache: true },
+        component: _import('takeStock/takeStockRecord'),
+        hidden: false,
+      },
+      {
         name: 'takeStockList',
         path: 'list',
         meta: { title: '盘点单管理', noCache: true },

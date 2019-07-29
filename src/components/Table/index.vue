@@ -47,7 +47,9 @@
               size="mini"
               v-model="scope.row[item.prop]"
               controls-position="right"
+              :disabled="scope.row['inputTypeNumberDisabled']"
               :precision="item.precision || 0"
+              @change="val => handleInputNumberChange(scope.row, scope.$index, item, val)"
               :min="item.min || 0"
               :max="item.max || 99999999"
             ></el-input-number>
@@ -390,6 +392,10 @@ export default {
     this.tableConfig = tableConfig;
   },
   methods: {
+    /** 输入框内容改变 */
+    handleInputNumberChange(row, index, item, value) {
+      this.$emit('inputNumberChange', { row, index, item, value })
+    },
     fetchData() {
       this.selfLoading = true
       return this.api({

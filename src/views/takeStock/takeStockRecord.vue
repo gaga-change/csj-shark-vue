@@ -1,0 +1,137 @@
+<template>
+  <div
+    class="TakeStockRecordCom"
+    v-loading="planInventoryQueryByOrderIdLoading"
+  >
+    <el-alert
+      v-if="!planInventoryQueryByOrderIdLoading && detail.executeStatus !== 0 && detail.executeStatus !== 1"
+      title="盘点单状态已更新，当前无法进行盘点录入操作！"
+      type="error"
+      class="mb20"
+      show-icon
+    >
+    </el-alert>
+    <el-card shadow="never">
+      <div slot="header">
+        基本信息
+      </div>
+      <detail-item
+        :config="takeStockRecordConfig"
+        :detail="detail"
+      />
+    </el-card>
+    <el-card
+      shadow="never"
+      class="mt20"
+    >
+      <div slot="header">
+        商品列表
+      </div>
+      <base-table
+        :config="takeStockRecordProductTableConfig"
+        :tableData="prodList"
+        @inputNumberChange="inputNumberChange"
+      >
+      </base-table>
+    </el-card>
+    <div class="mt15">
+      <el-button
+        type="primary"
+        size="mini"
+        :disabled="detail.executeStatus !== 0 && detail.executeStatus !== 1"
+        @click="submit(0)"
+        :loading="inventoryInbentoryRecordLoading"
+      >保存</el-button>
+      <el-button
+        type="primary"
+        size="mini"
+        @click="submit(1)"
+        :disabled="detail.executeStatus !== 0 && detail.executeStatus !== 1"
+        :loading="inventoryInbentoryRecordLoading"
+      >提交</el-button>
+    </div>
+    <el-alert
+      class="mt15"
+      title="注："
+      type="info"
+    >
+      <p>1. 盈亏数量：实际盘点数量-库存数量</p>
+      <p>2. 保存：状态更新为盘点中</p>
+      <p>2. 提交：状态更新为已完成</p>
+    </el-alert>
+  </div>
+</template>
+
+<script>
+import DetailItem from '@/components/DetailItem'
+import { planInventoryQueryByOrderId, inventoryInbentoryRecord } from '@/api'
+import { takeStockRecordConfig, takeStockRecordProductTableConfig } from './components/config'
+import { mapGetters } from 'vuex'
+export default {
+  components: { DetailItem },
+  data() {
+    return {
+      planInventoryQueryByOrderIdLoading: true,
+      inventoryInbentoryRecordLoading: false,
+      takeStockRecordProductTableConfig,
+      takeStockRecordConfig,
+      detail: {},
+      prodList: []
+    }
+  },
+  computed: {
+    ...mapGetters({
+      visitedViews: 'visitedViews'
+    })
+  },
+  created() {
+    planInventoryQueryByOrderId({
+      orderId: this.$route.query.id
+    }).then(res => {
+      this.planInventoryQueryByOrderIdLoading = false
+      if (!res) return
+      this.detail = res.data.inventoryOrderDO
+      this.prodList = res.data.orderDetailDOS.map(v => {
+        v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+        v.inputTypeNumberDisabled = v.executeStatus !== 0
+        return v
+      })
+    })
+  },
+  methods: {
+    submit(isSubmit) {
+      const view = this.visitedViews.filter(v => v.path === this.$route.path)
+
+      this.inventoryInbentoryRecordLoading = true
+      inventoryInbentoryRecord({
+        inventoryOrderId: this.$route.query.id,
+        inventoryOrderDO: this.detail,
+        orderDetailDOS: this.prodList,
+        isSubmit
+      }).then(res => {
+        this.inventoryInbentoryRecordLoading = false
+        if (!res) return
+        this.$message.success('盘点录入成功，即将跳转到盘点单列表！')
+        setTimeout(() => {
+          this.$store.dispatch('delVisitedViews', view[0]).then(() => {
+            this.$router.push({
+              path: `/takeStock/list`,
+              query: { t: Date.now() }
+            })
+          }).catch(err => {
+          })
+        }, 3000);
+      })
+    },
+    /** 输入框内容改变 */
+    inputNumberChange({ row, index, value }) {
+      this.prodList[index].profitLossQty = value - (Number(row.skuQty) || 0)
+    }
+  },
+}
+</script>
+
+<style lang="scss">
+// .TakeStockRecordCom {
+// }
+</style>

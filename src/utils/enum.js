@@ -421,3 +421,8 @@ export const executeStatusEnum = [
   { name: '已终止', value: 3 },
   { name: '已完成', value: 4 },
 ]
+export const executeStatus2Enum = [
+  { name: '未执行', value: 0 },
+  { name: '已执行', value: 1 },
+  { name: '已终止', value: 2 },
+]

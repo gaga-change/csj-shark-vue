@@ -167,3 +167,5 @@ export const basicWarehouseSpaceUpdate = params => http.post(`/webApi/basic/ware
 export const insertInventoryOrder = params => http.post(`/webApi/plan/inventory/insertInventoryOrder`, params)
 /** 盘点单取消或终止 */
 export const inventoryRemoveOrStop = params => http.post(`/webApi/plan/inventory/removeOrStop`, params)
+/** 盘点录入 */
+export const inventoryInbentoryRecord = params => http.post(`/webApi/plan/inventory/inbentoryRecord`, params)
