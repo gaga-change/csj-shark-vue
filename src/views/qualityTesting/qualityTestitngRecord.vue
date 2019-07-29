@@ -2,7 +2,7 @@
   <div class="TakeStockListCom">
     <div>
       <search-form
-        :config="qualityTestitingListSearchConfig"
+        :config="qualityTestingListSearchConfig"
         @search="handleSearch"
       >
       </search-form>
@@ -20,7 +20,7 @@
       <base-table
         ref='baseTable'
         :api="checkOrderList"
-        :config="qualityTestitingListConfig"
+        :config="qualityTestingListConfig"
         :tableData.sync="tableData"
         :searchParams="searchParams"
         :showControl="true"
@@ -28,7 +28,7 @@
       >
         <template slot-scope="scope">
           <router-link
-            :to="{path:`/takeStock/detail`,query:{id: scope.row.id}}"
+            :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
             :style="{color:'#3399ea'}"
           >查看</router-link>
           <el-divider direction="vertical"></el-divider>
@@ -50,15 +50,15 @@
 
 <script>
 import { checkOrderList, getCheckReportByOrderCode } from '@/api'
-import { qualityTestitingListConfig, qualityTestitingListSearchConfig } from './components/config'
+import { qualityTestingListConfig, qualityTestingListSearchConfig } from './components/config'
 import reloadFile from './components/reloadFile'
 export default {
   components: { reloadFile },
   data() {
     return {
       reloadFileVisible: false,
-      qualityTestitingListConfig,
-      qualityTestitingListSearchConfig,
+      qualityTestingListConfig,
+      qualityTestingListSearchConfig,
       checkOrderList,
       tableData: [],
       searchParams: {},

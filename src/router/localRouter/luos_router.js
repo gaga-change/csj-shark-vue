@@ -111,6 +111,13 @@ export default [
         meta: { title: '质检记录', noCache: true },
         component: _import('qualityTesting/qualityTestitngRecord'),
         hidden: false,
+      },
+      {
+        name: 'qualityTestingDetail',
+        path: 'detail',
+        meta: { title: '质检记录详情', noCache: true },
+        component: _import('qualityTesting/qualityTestingDetail'),
+        hidden: false,
       }
     ]
   },

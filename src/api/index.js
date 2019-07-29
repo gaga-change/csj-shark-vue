@@ -93,6 +93,8 @@ export const planInventoryList = params => http.get(`/webApi/plan/inventory/list
 export const checkOrderList = params => http.get(`/webApi/plan/checkOrder/list`, { params })
 /** 通过质检单号查询质检报告记录 */
 export const getCheckReportByOrderCode = params => http.get(`/webApi/plan/checkOrder/getCheckReportByOrderCode`, { params })
+/** 通过id获取质检单详情 */
+export const getCheckOrderDetail = params => http.get(`/webApi/plan/checkOrder/getCheckOrderDetail`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)
