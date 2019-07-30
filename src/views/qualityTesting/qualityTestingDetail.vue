@@ -52,7 +52,6 @@
 import DetailItem from '@/components/DetailItem'
 import { getCheckOrderDetail } from '@/api'
 import { quailtyTestingDetailConfig, arrivalConfig } from './components/config'
-// window.navigate("dollare.php")
 export default {
   components: { DetailItem },
   data() {

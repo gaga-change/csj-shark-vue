@@ -1,107 +1,33 @@
 <template>
   <div class="SelectProductCom">
     <el-dialog
-      title="选择盘点商品"
+      title="选择收货单"
       :visible="visible"
       width="70%"
       :before-close="handleClose"
       @close="close"
     >
       <div class="mb10">
-        <el-card shadow="never">
-          <el-form
-            ref="form"
-            :inline="true"
-            :model="formData"
-            class="demo-form-inline"
-          >
-            <el-form-item
-              label="库区"
-              prop="warehouseAreaCode"
-            >
-              <el-select
-                size="mini"
-                v-model="formData.warehouseAreaCode"
-                placeholder="请选择库区"
-                @change="warehouseAreaCodeChange"
-                :loading="getSelectInventoryAreaListLoading"
-              >
-                <el-option
-                  v-for="(item, index) in warehouseArea"
-                  :key="index"
-                  :label="item.warehouseAreaName"
-                  :value="item.warehouseAreaCode"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              label="库位"
-              v-if="formData.warehouseAreaCode"
-              prop="warehouseSpaceCode"
-            >
-              <el-select
-                size="mini"
-                v-model="formData.warehouseSpaceCode"
-                placeholder="请选择库位"
-                :loading="getInventorySiteLoading"
-              >
-                <el-option
-                  v-for="(item, index) in warehouseSpace"
-                  :key="index"
-                  :label="item.warehouseSpaceCode"
-                  :value="item.warehouseSpaceCode"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              label="商品编码"
-              prop="skuCode"
-            >
-              <el-input
-                size="mini"
-                v-model="formData.skuCode"
-                placeholder="请输入商品编码"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="商品名称"
-              prop="skuName"
-            >
-              <el-input
-                size="mini"
-                v-model="formData.skuName"
-                placeholder="请输入商品名称"
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                size="mini"
-                type="primary"
-                @click="submitForm"
-              >查询</el-button>
-              <el-button
-                size="mini"
-                @click="resetForm"
-              >重置</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
+        <search-form
+          :config="selectGoodsSearchConfig"
+          @search="handleSearch"
+        >
+        </search-form>
       </div>
       <div>
         <base-table
           ref='baseTable'
-          :config="takeStockSelectProductTableConfig"
-          :api="planInventoryQuerysSkuStockList"
-          :select="true"
-          :selectTotal="true"
-          :selectRows.sync="selectRows"
-          :searchParam="formData"
+          :config="arrivalConfig"
+          :api="queryReceiverOrder"
           :tableData.sync="tableData"
+          :searchParams="searchParams"
+          :highlightCurrentRow="true"
+          @currentRedioChange="currentRedioChange"
         />
       </div>
       <el-alert
         class="mt15"
-        title="注：最多选取50条，如需盘点更多商品，请分批处理！"
+        title="注：点击表格中的行即可选中！"
         type="info"
         :closable="false"
       >
@@ -123,8 +49,8 @@
 <script>
 import BaseTable from '@/components/Table'
 import { mapGetters } from 'vuex'
-import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, getInventorySite } from '@/api'
-import { takeStockSelectProductTableConfig } from './config'
+import { queryReceiverOrder, getSelectInventoryAreaList, getInventorySite } from '@/api'
+import { selectGoodsSearchConfig, arrivalConfig } from './config'
 export default {
   components: { BaseTable },
   props: {
@@ -139,20 +65,15 @@ export default {
   },
   data() {
     return {
-      formData: {
-        warehouseAreaCode: '',
-        warehouseSpaceCode: '',
-        skuName: '',
-        skuCode: ''
-      },
-      takeStockSelectProductTableConfig,
+      arrivalConfig,
+      selectGoodsSearchConfig,
+      searchParams: {},
+      selectGoodsSearchConfig,
       selectRows: [],
       tableData: [],
       warehouseArea: [],
       warehouseSpace: [],
-      getInventorySiteLoading: false,
-      getSelectInventoryAreaListLoading: false,
-      planInventoryQuerysSkuStockList,
+      queryReceiverOrder,
     }
   },
   computed: {
@@ -162,56 +83,34 @@ export default {
   },
   watch: {
     visible(val) {
-      if (val) {
-        // 恢复选中的内容
-        this.selectRows = [...this.selectData]
+      if (val && !this.selectData.length) {
+        // this.$refs['baseTable'] && this.$refs['baseTable'].setCurrentRow()
       }
     }
   },
   created() {
-    this.initData()
   },
   methods: {
-    initData() {
-      this.getSelectInventoryAreaListLoading = true
-      getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
-        if (!res) return
-        this.getSelectInventoryAreaListLoading = false
-        this.warehouseArea = res.data
-      })
+    currentRedioChange(row, oldrow) {
+      this.selectRows = [row]
     },
-    /** 库区修改 */
-    warehouseAreaCodeChange(val) {
-      this.formData.warehouseSpaceCode = ''
-      this.getInventorySiteLoading = true
-      getInventorySite({
-        pageNum: 1,
-        pageSize: 9999,
-        warehouseAreaCode: val,
-        warehouseCode: this.chooseWarehouse
-      }).then(res => {
-        this.getInventorySiteLoading = false
-        if (!res) return
-        this.warehouseSpace = res.data.list || []
+    /** 搜索 */
+    handleSearch(params, callback) {
+      let obj = { ...params }
+      if (params.createTimeArea) {
+        delete obj.createTimeArea
+        obj.startDate = new Date(params.createTimeArea[0]).getTime()
+        obj.endtDate = new Date(params.createTimeArea[0]).getTime()
+      }
+      this.searchParams = obj
+      this.$nextTick(() => {
+        this.$refs['baseTable'].fetchData().then(callback)
       })
-    },
-    /** 查询 */
-    submitForm() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.$refs['baseTable'].fetchData()
-        }
-      })
-    },
-    /** 重置 */
-    resetForm() {
-      this.$refs['form'].resetFields()
-      this.$refs['baseTable'].fetchData()
     },
     /** 确认 */
     confrim() {
       this.$emit('update:selectData', [...this.selectRows])
-      this.selectRows = []
+      // this.selectRows = []
       this.close()
     },
     /** 关闭 */
@@ -230,9 +129,6 @@ export default {
 </script>
 <style lang="scss">
 .SelectProductCom {
-  .el-card__body {
-    padding: 10px 10px 0 10px;
-  }
   .el-dialog__body {
     padding: 10px 20px;
   }

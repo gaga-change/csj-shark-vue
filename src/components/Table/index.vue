@@ -506,6 +506,9 @@ export default {
       this.$emit('update:selectRows', val)
       this.$emit('selectionChange', val)
     },
+    setCurrentRow(row) {
+      // this.$refs['table'].setCurrentRow()
+    }
   }
 }
 </script>

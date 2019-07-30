@@ -11,14 +11,9 @@ export const qualityTestingListSearchConfig = [
   { label: '创建时间', prop: 'createTimeArea', type: 'timeArea' },
 ]
 
-export const takeStockSelectProductTableConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '批次', prop: 'batchNo' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '单位', prop: 'skuUnitName' },
-  { label: '库存数量', prop: 'skuQty' },
-  { label: '仓库名称', prop: 'warehouseName' },
+export const selectGoodsSearchConfig = [
+  { label: '收货单号', prop: 'orderCode', type: 'input' },
+  { label: '收货时间', prop: 'createTimeArea', type: 'timeArea' },
 ]
 
 export const quailtyTestingDetailConfig = [
@@ -28,7 +23,7 @@ export const quailtyTestingDetailConfig = [
 ]
 
 export const arrivalConfig = [
-  { label: '收货单号', prop: 'receiveOrderCode' },
+  { label: '收货单号', prop: 'orderCode' },
   { label: '计划单号', prop: 'planCode' },
   { label: '上架状态', prop: 'execStatus', useLocalEnum: true, type: 'execStatuslist' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time' },

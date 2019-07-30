@@ -74,6 +74,7 @@ export default {
     },
     /** 新建质检记录 */
     handleCreate() {
+      this.$router.push({ path: '/qualityTesting/create' })
     },
     /** 搜索 */
     handleSearch(params, callback) {

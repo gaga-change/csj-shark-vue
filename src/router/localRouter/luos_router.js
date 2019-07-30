@@ -118,6 +118,13 @@ export default [
         meta: { title: '质检记录详情', noCache: true },
         component: _import('qualityTesting/qualityTestingDetail'),
         hidden: false,
+      },
+      {
+        name: 'qualityTestingCreate',
+        path: 'create',
+        meta: { title: '新建质检记录', noCache: true },
+        component: _import('qualityTesting/qualityTestingCreate'),
+        hidden: false,
       }
     ]
   },

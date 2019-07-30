@@ -95,6 +95,8 @@ export const checkOrderList = params => http.get(`/webApi/plan/checkOrder/list`,
 export const getCheckReportByOrderCode = params => http.get(`/webApi/plan/checkOrder/getCheckReportByOrderCode`, { params })
 /** 通过id获取质检单详情 */
 export const getCheckOrderDetail = params => http.get(`/webApi/plan/checkOrder/getCheckOrderDetail`, { params })
+/** 引入收货单查询收货单记录 */
+export const queryReceiverOrder = params => http.get(`/webApi/plan/checkOrder/queryReceiverOrder`, { params })
 
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)
@@ -186,3 +188,5 @@ export const inventoryInbentoryRecord = params => http.post(`/webApi/plan/invent
 export const checkOrderAddReport = params => http.post(`/webApi/plan/checkOrder/addReport`, params)
 /** 通过ID删除质检报告记录 */
 export const deleteCheckReportById = params => http.post(`/webApi/plan/checkOrder/deleteCheckReportById`, params)
+/** 新增质检单 */
+export const checkOrderAddCheckOrder = params => http.post(`/webApi/plan/checkOrder/addCheckOrder`, params)

@@ -77,6 +77,9 @@ export default {
 .c-ccc {
   color: #ccc;
 }
+.c-red {
+  color: red;
+}
 
 //  字体大小。 如： f12、f26
 $fontSizeList: 12 14 16 18 20 22 24 26 28;
