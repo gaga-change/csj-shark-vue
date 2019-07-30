@@ -36,6 +36,12 @@
         @click="submitOrider"
       >上架</el-button>
       <el-button
+        type="primary"
+        size="small"
+        :disabled="!selectMainTableRows.length"
+        @click="submitOrider"
+      >打印单据</el-button>
+      <el-button
         type="danger"
         size="small"
         :disabled="!activeOrder.orderCode"
@@ -175,6 +181,8 @@
 
     <double-table
       ref="tableChild"
+      :canSelect="true"
+      @dataSelect="handleDataSelect"
       :loading="loading"
       :config="arrivalConfig"
       :table-data="tableData"
@@ -320,6 +328,7 @@ export default {
       childData: [],
       skuRow: {},
       previewIt: true,
+      selectMainTableRows: [],
       planChildTableLabelConfig
     }
   },
@@ -345,6 +354,10 @@ export default {
 
   methods: {
     moment,
+    handleDataSelect(val) {
+      console.log(val)
+      this.selectMainTableRows = val
+    },
     getBatchNoArr(batchNoArr) {
       var arr = [], brr = []
       for (var i = 0; i < batchNoArr.length; i++) {
