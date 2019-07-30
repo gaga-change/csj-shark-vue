@@ -40,8 +40,6 @@ export const getSelectInventoryAreaList = params => http.get(`/webApi/basic/ware
 export const selectSumSkuQty = params => http.get(`/webApi/sku/stock/selectSumSkuQty`, { params })
 /** 获取入库计划详情 */
 export const getInfoDetailWarehousing = params => http.get(`/webApi/plan/in/detail`, { params })
-/** 获取到货单详情 */
-export const getArrivalDetail = params => http.get(`/webApi/receive/order/detailList`, { params })
 /** 获取入库详情 */
 export const getInfoDetailInWarehousing = params => http.get(`/webApi/in/selectBarcodePrinting`, { params })
 /** 获取出库计划单详情 */

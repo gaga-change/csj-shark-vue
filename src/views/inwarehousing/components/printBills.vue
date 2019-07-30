@@ -1,12 +1,58 @@
 <template>
   <div>
     <el-dialog
-      title="提示"
+      title="打印预览"
       :visible.sync="visible"
-      width="30%"
+      width="80%"
       :before-close="handleClose"
     >
-      <span>这是一段信息</span>
+      <div v-loading="orderDetailListLoading">
+        <div ref="print">
+          <div
+            v-for="(item ,index) in showRowsData"
+            :key="index"
+          >
+            <div :class="{'hide': index}">
+              <div>
+                <h3>基本信息</h3>
+              </div>
+              <div class="mb15">
+                <span class="f14 mr15 mt10 nowrap"><span>收货单号:</span><span>{{item.orderCode}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>入库计划单:</span><span>{{item.planCode}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>收货时间:</span><span>{{item.gmtCreate | timeFormat}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>供应商 :</span><span>{{item.providerName}}</span></span>
+              </div>
+              <div>
+                <table class="print-table">
+                  <tr>
+                    <th>序号</th>
+                    <th>商品编码</th>
+                    <th>商品名称</th>
+                    <th>规格型号</th>
+                    <th>单位</th>
+                    <th>总数量</th>
+                    <th>已入库</th>
+                    <th>收货数量</th>
+                  </tr>
+                  <tr
+                    v-for="(son, i) in item.children"
+                    :key="i"
+                  >
+                    <td>{{i + 1}}</td>
+                    <td>{{son.skuCode}}</td>
+                    <td>{{son.skuName}}</td>
+                    <td>{{son.skuFormat}}</td>
+                    <td>{{son.skuUnitCode}}</td>
+                    <td>{{son.planQty}}</td>
+                    <td>{{son.realInQty}}</td>
+                    <td>{{son.receiveQty}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <span
         slot="footer"
         class="dialog-footer"
@@ -15,12 +61,15 @@
         <el-button
           type="primary"
           @click="confirm"
-        >打 印</el-button>
+        >确认打印</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
+import { orderDetailList } from '@/api'
+import { MakePrint } from '@/utils'
+import moment from 'moment'
 export default {
   props: {
     visible: {
@@ -40,17 +89,37 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      orderDetailListLoading: false,
+      showRowsData: [],
+    }
+  },
+  filters: {
+    timeFormat(val) {
+      if (!val) return ''
+      return moment(val).format('YYYY-MM-DD HH:mm:ss')
+    }
   },
   methods: {
     initData() {
-      console.log(this.rows)
+      let rows = JSON.parse(JSON.stringify(this.rows))
+      let temp = []
+      rows.forEach(row => {
+        temp.push(() => orderDetailList(row.id).then(res => {
+          row.children = res.data
+        }))
+      })
+      this.orderDetailListLoading = true
+      Promise.all(temp.map(fun => fun())).then(res => {
+        this.orderDetailListLoading = false
+        this.showRowsData = rows
+      })
     },
     close() {
       this.visible && this.$emit('update:visible', false)
     },
     confirm() {
-
+      MakePrint(this.$refs['print'].innerHTML)
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
@@ -62,3 +131,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.hide {
+  display: none;
+}
+</style>

@@ -132,5 +132,34 @@ $dirSizeList: 5 10 15 20 25;
     clear: both;
   }
 }
+
+.nowrap {
+  white-space: nowrap;
+}
+
+table.print-table {
+  font-family: verdana, arial, sans-serif;
+  font-size: 11px;
+  color: #333333;
+  width: 100%;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+  th {
+    border-width: 1px;
+    padding: 8px;
+    text-align: left;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+  }
+  td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+  }
+}
 </style>
 
