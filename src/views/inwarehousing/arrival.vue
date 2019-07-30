@@ -595,7 +595,6 @@ export default {
     },
 
     expandChange(json, expandedRows, reserver = true) {
-
       this.activeOrder = json;
       if (reserver && this.expandsParent.includes(json['id'])) {
         this.expandsParent = []
@@ -603,20 +602,18 @@ export default {
         this.expandsParent = [json['id']]
       }
 
-      let tableData = _.cloneDeep(this.tableData);
+      let tableData = this.tableData
       let index = tableData.findIndex(v => v.id === json.id);
-      if (reserver && tableData[index]['childData'] && Array.isArray(tableData[index]['childData'])) {
+      if (reserver && tableData[index]['childData'].length) {
         return
       }
-
       orderDetailList(json.id).then(res => {
         if (res) {
-          tableData[index]['childData'] = res.data.map(item => {
-            let itemJson = item;
-            itemJson.rowId = json.id;
-            return itemJson;
-          });
-          this.tableData = tableData;
+          this.tableData[index].childData = res.data.map(item => {
+            let itemJson = item
+            itemJson.rowId = json.id
+            return itemJson
+          })
         }
       })
     },
@@ -638,7 +635,12 @@ export default {
       }).then(res => {
         this.loading = false;
         if (res) {
-          this.tableData = res.data && res.data.list || [];
+          this.tableData = res.data.list.map(v => {
+            return {
+              ...v,
+              childData: [],
+            }
+          })
           this.total = res.data && res.data.total;
         }
       })
