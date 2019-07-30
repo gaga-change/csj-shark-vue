@@ -65,7 +65,7 @@
     <el-dialog
       title="移库"
       :visible.sync="moveLibraryDialogVisible"
-      width="40%"
+      width="60%"
       :before-close="handleClose"
     >
       <div
@@ -73,10 +73,14 @@
         v-if="selectRow"
       >
         <div>
-          <span><span class="fw700">商品名称</span>： <span>{{selectRow.skuName}}</span>
+          <span class="nowrap mr25">
+            <span class="fw700 ">商品名称</span>：<span>{{selectRow.skuName}}</span>
           </span>
-          <span class="ml25">
-            <span class="fw700">商品批次</span>： <span>{{selectRow.batchNo}}</span>
+          <span class="mr25 nowrap">
+            <span class="fw700">商品批次</span>：<span>{{selectRow.batchNo}}</span>
+          </span>
+          <span class="mr25 nowrap">
+            <span class="fw700">残次品数量</span>：<span>{{selectRow.badReceiveQty || 0}}</span>
           </span>
         </div>
         <div class="mt25">
