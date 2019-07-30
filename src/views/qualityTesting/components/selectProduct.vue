@@ -100,7 +100,7 @@ export default {
       if (params.createTimeArea) {
         delete obj.createTimeArea
         obj.startDate = new Date(params.createTimeArea[0]).getTime()
-        obj.endtDate = new Date(params.createTimeArea[0]).getTime()
+        obj.endtDate = new Date(params.createTimeArea[1]).getTime()
       }
       this.searchParams = obj
       this.$nextTick(() => {

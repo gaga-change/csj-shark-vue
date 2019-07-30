@@ -133,6 +133,8 @@ export default {
               let index = this.addFile.findIndex(v => v.uid = file.uid)
               if (~index) {
                 this.addFile.splice(index, 1)
+                resulve()
+                done()
               } else {
                 // 在这删除已发布的文件
                 instance.confirmButtonLoading = true
@@ -144,6 +146,7 @@ export default {
                   }
                   resulve()
                   this.$message.success('删除成功！')
+                  done()
                 })
               }
             } else {
