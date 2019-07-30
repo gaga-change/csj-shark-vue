@@ -63,18 +63,24 @@
         </template>
       </base-table>
     </div>
+    <print-bills
+      :visible.sync="printBillsVisible"
+      :rows="selectRows"
+    />
   </div>
 </template>
 
 <script>
 import BaseTable from '@/components/Table/index'
+import printBills from './components/printBills'
 import SearchForm from '@/components/SearchForm/index'
 import { planInventoryList, inventoryRemoveOrStop, inventoryRecordExport } from '@/api'
 import { takeStockListConfig, takeStockListSearchConfig } from './components/config'
 export default {
-  components: { BaseTable, SearchForm },
+  components: { BaseTable, SearchForm, printBills },
   data() {
     return {
+      printBillsVisible: false,
       takeStockListConfig,
       takeStockListSearchConfig,
       planInventoryList,
@@ -116,7 +122,7 @@ export default {
     },
     /** 打印 */
     handlePrint() {
-      this.$message.info('正在开发中...')
+      this.printBillsVisible = true
     },
     /** 搜索 */
     handleSearch(params, callback) {

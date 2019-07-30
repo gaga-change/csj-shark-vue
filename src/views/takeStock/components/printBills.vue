@@ -17,35 +17,35 @@
                 <h3>基本信息</h3>
               </div>
               <div class="mb15">
-                <span class="f14 mr15 mt10 nowrap"><span>收货单号:</span><span>{{item.orderCode}}</span></span>
-                <span class="f14 mr15 mt10 nowrap"><span>入库计划单:</span><span>{{item.planCode}}</span></span>
-                <span class="f14 mr15 mt10 nowrap"><span>收货时间:</span><span>{{item.gmtCreate | timeFormat}}</span></span>
-                <span class="f14 mr15 mt10 nowrap"><span>供应商 :</span><span>{{item.providerName}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>盘点单号:</span><span>{{item.orderCode}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>创建人:</span><span>{{item.createrName}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>创建时间:</span><span>{{item.gmtCreate | timeFormat}}</span></span>
+                <span class="f14 mr15 mt10 nowrap"><span>仓库名称 :</span><span>{{item.warehouseName}}</span></span>
               </div>
               <div>
                 <table class="print-table">
                   <tr>
-                    <th>序号</th>
                     <th>商品编码</th>
                     <th>商品名称</th>
+                    <th>批次</th>
                     <th>规格型号</th>
                     <th>单位</th>
-                    <th>总数量</th>
-                    <th>已入库</th>
-                    <th>收货数量</th>
+                    <th>库区库位</th>
+                    <th>库存数量</th>
+                    <th>实际盘点数量</th>
                   </tr>
                   <tr
                     v-for="(son, i) in item.children"
                     :key="i"
                   >
-                    <td>{{i + 1}}</td>
                     <td>{{son.skuCode}}</td>
                     <td>{{son.skuName}}</td>
+                    <td>{{son.batchNo}}</td>
                     <td>{{son.skuFormat}}</td>
                     <td>{{son.skuUnitCode}}</td>
-                    <td>{{son.planQty}}</td>
-                    <td>{{son.realInQty}}</td>
-                    <td>{{son.receiveQty}}</td>
+                    <td>{{son.areaSpceCode}}</td>
+                    <td>{{son.skuQty}}</td>
+                    <td>{{son.inventoryQty}}</td>
                   </tr>
                 </table>
               </div>
@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import { orderDetailList } from '@/api'
+import { planInventoryQueryByOrderId } from '@/api'
 import { MakePrint } from '@/utils'
 import moment from 'moment'
 export default {
@@ -109,8 +109,11 @@ export default {
       let rows = JSON.parse(JSON.stringify(this.rows))
       let temp = []
       rows.forEach(row => {
-        temp.push(() => orderDetailList(row.id).then(res => {
-          row.children = res.data
+        temp.push(() => planInventoryQueryByOrderId({ orderId: row.id }).then(res => {
+          row.children = res.data.orderDetailDOS.map(v => {
+            v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+            return v
+          })
         }))
       })
       this.orderDetailListLoading = true
