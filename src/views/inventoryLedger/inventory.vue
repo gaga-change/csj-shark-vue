@@ -159,7 +159,6 @@ import BaseTable from '@/components/Table'
 import { inventoryTableConfig, stateTransitionTableConfig } from './components/config'
 import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQty, warehouseSpaceSelect, skuStockMove } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
-import { exportExcelBlob } from '@/utils/exportexcel'
 import SearchInventory from './components/search'
 
 export default {
@@ -326,15 +325,7 @@ export default {
       this.getTableData();
     },
     getExport() {
-      this.$prompt('请输入文件名称', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
-      }).then(({ value }) => {
-        exportLedger({ ...this.ruleForm }).then(res => {
-          var name = value ? value : '库存台账'
-          exportExcelBlob(name, res)
-        })
-      })
+      exportLedger(this.ruleForm, '库存台账.xls')
     }
   }
 }
