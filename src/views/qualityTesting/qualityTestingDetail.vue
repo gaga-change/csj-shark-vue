@@ -73,10 +73,7 @@ export default {
       if (!res) return
       this.detail = res.data.checkOrderDO
       this.attachments = res.data.attachments
-      this.prodList = res.data.detailDOS.map(v => {
-        v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
-        return v
-      })
+      this.prodList = [res.data.receiveOrderDO]
     })
   },
 }
