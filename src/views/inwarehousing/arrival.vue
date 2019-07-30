@@ -27,7 +27,6 @@
         >重置</el-button>
       </el-col>
     </el-card>
-
     <div style="margin-bottom:12px">
       <el-button
         type="primary"
@@ -39,7 +38,7 @@
         type="primary"
         size="small"
         :disabled="!selectMainTableRows.length"
-        @click="submitOrider"
+        @click="printBillsVisible=true"
       >打印单据</el-button>
       <el-button
         type="danger"
@@ -275,6 +274,10 @@
         >打印</el-button>
       </span>
     </el-dialog>
+    <print-bills
+      :visible.sync="printBillsVisible"
+      :rows="selectMainTableRows"
+    />
   </div>
 </template>
 
@@ -282,6 +285,7 @@
 import axios from 'axios'
 import DoubleTable from '@/components/Table/doubleTable'
 import newSearch from './components/newSearch'
+import printBills from './components/printBills'
 import editTable from '@/components/Table/editTable'
 import webPaginationTable from '@/components/Table/webPaginationTable'
 import _ from 'lodash';
@@ -291,9 +295,10 @@ import { PositiveIntegerReg } from '@/utils/validator'
 import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig, planChildTableLabelConfig } from './components/config'
 import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, getBatchNo } from '@/api'
 export default {
-  components: { DoubleTable, newSearch, webPaginationTable, editTable },
+  components: { DoubleTable, newSearch, webPaginationTable, editTable, printBills },
   data() {
     return {
+      printBillsVisible: false,
       loading: false,
       arrivalConfig,
       tableData: [],
@@ -355,7 +360,6 @@ export default {
   methods: {
     moment,
     handleDataSelect(val) {
-      console.log(val)
       this.selectMainTableRows = val
     },
     getBatchNoArr(batchNoArr) {
