@@ -401,9 +401,13 @@ export const busiBillTypeEnum = [
   { name: '采购入库', value: 11, type: 'in' },
   { name: '销售退入库', value: 12, type: 'in' },
   { name: '仓储入库', value: 13, type: 'in' },
+  { name: '调拨入库', value: 14, type: 'in' },
   { name: '拒收入库', value: 15, type: 'in' },
   { name: '销售出库', value: 21, type: 'out' },
   { name: '采购退货出库', value: 22, type: 'out' },
+  { name: '调拨出库', value: 23, type: 'out' },
+  { name: '领用出库（VMI）', value: 24, type: 'out' },
+  { name: '召回出库 ', value: 25, type: 'out' },
   { name: '移库出库', value: 41, type: 'out' },
   { name: '移库入库', value: 51, type: 'in' },
 ]

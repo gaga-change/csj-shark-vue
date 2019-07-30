@@ -95,7 +95,7 @@
           :select="true"
           :selectTotal="true"
           :selectRows.sync="selectRows"
-          :searchParam="formData"
+          :searchParams="formData"
           :tableData.sync="tableData"
         />
       </div>
