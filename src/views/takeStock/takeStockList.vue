@@ -69,7 +69,7 @@
 <script>
 import BaseTable from '@/components/Table/index'
 import SearchForm from '@/components/SearchForm/index'
-import { planInventoryList, inventoryRemoveOrStop } from '@/api'
+import { planInventoryList, inventoryRemoveOrStop, inventoryRecordExport } from '@/api'
 import { takeStockListConfig, takeStockListSearchConfig } from './components/config'
 export default {
   components: { BaseTable, SearchForm },
@@ -112,7 +112,7 @@ export default {
     },
     /** 导出 */
     handleOutput() {
-      this.$message.info('正在开发中...')
+      inventoryRecordExport(this.SearchForm, '盘点明细.xls')
     },
     /** 打印 */
     handlePrint() {

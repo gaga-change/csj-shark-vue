@@ -1,7 +1,8 @@
 import http from './http'
 import axios from 'axios'
+import download from './download'
 
-//导出库位库存
+/** 导出库位库存 */
 export const exportLedger = parmas => axios({
   method: 'get',
   url: `/webApi/sku/stock/exportLedger`,
@@ -11,7 +12,8 @@ export const exportLedger = parmas => axios({
     'Content-Type': 'application/json'
   }
 })
-
+/** 盘点管理导出 */
+export const inventoryRecordExport = (params, fileName) => axios(`/webApi/plan/inventory/recordExport`, params, fileName)
 /** 上传文件 */
 export const uploadReportFile = (formData, options = {}) => http.post('/webApi/plan/checkOrder/uploadReportFile', formData, {
   headers: {
