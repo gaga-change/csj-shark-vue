@@ -231,32 +231,34 @@ export default {
     },
     /** 状态转移 */
     stateTransition() {
-      let msg = ''
-      let temp = this.selectRows.map(v => {
-        let skuQty = Number(v.skuQty)
-        let goodQty = parseInt(Number(v.goodQty)) || 0
-        let badQty = parseInt(Number(v.badQty)) || 0
-        if (goodQty + badQty > skuQty && !msg) {
-          msg = `商品【${v.skuName}】的正品数量与残次品数量之和不能超过商品总数！`
+      this.$confirm('请再次确认是否提交本次操作').then(() => {
+        let msg = ''
+        let temp = this.selectRows.map(v => {
+          let skuQty = Number(v.skuQty)
+          let goodQty = parseInt(Number(v.goodQty)) || 0
+          let badQty = parseInt(Number(v.badQty)) || 0
+          if (goodQty + badQty > skuQty && !msg) {
+            msg = `商品【${v.skuName}】的正品数量与残次品数量之和不能超过商品总数！`
+          }
+          return {
+            stockId: v.id,
+            goodQty,
+            badQty
+          }
+        })
+        if (msg) {
+          return this.$message(msg)
         }
-        return {
-          stockId: v.id,
-          goodQty,
-          badQty
-        }
-      })
-      if (msg) {
-        return this.$message(msg)
-      }
-      this.skuStockWriteCheckResultLoading = true
-      skuStockWriteCheckResult({
-        stockCheckResultList: temp
-      }).then(res => {
-        this.skuStockWriteCheckResultLoading = false
-        if (!res) return
-        this.stateTransitionVisible = false
-        this.selectRows = []
-      })
+        this.skuStockWriteCheckResultLoading = true
+        skuStockWriteCheckResult({
+          stockCheckResultList: temp
+        }).then(res => {
+          this.skuStockWriteCheckResultLoading = false
+          if (!res) return
+          this.stateTransitionVisible = false
+          this.selectRows = []
+        })
+      }).catch(() => { })
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
