@@ -203,9 +203,27 @@ export default {
   computed: {
     rowData() {
       return this.row || {}
+    },
+    autoLoadVolume() {
+      let { width, height, length } = this.formData
+      if (width === undefined && height === undefined && length === undefined) return undefined
+      return (this.formData.width || 0) * (this.formData.height || 0) * (this.formData.length || 0)
+    },
+    loadVolume() {
+      return this.formData.loadVolume
     }
   },
   watch: {
+    autoLoadVolume(val) {
+      if (val !== undefined) this.formData.loadVolume = val
+    },
+    loadVolume(val) {
+      if (this.autoLoadVolume !== val) {
+        this.formData.width = undefined
+        this.formData.height = undefined
+        this.formData.length = undefined
+      }
+    },
     rowData(val) {
       this.$refs['form'] && this.$refs['form'].resetFields()
       Object.keys(this.formData).forEach(key => {
@@ -232,16 +250,40 @@ export default {
       },
       rules: {
         loadBorn: [
-          { required: true, message: '请输入承载重量', trigger: 'blur' }
+          { required: true, message: '请输入承载重量', trigger: 'blur' },
+          {
+            validator(rule, value, callback) {
+              value > 0 ? callback() : callback('承载重量必须大于0')
+            },
+            trigger: 'blur'
+          }
         ],
         loadQty: [
-          { required: true, message: '请输入承载数量', trigger: 'blur' }
+          { required: true, message: '请输入承载数量', trigger: 'blur' },
+          {
+            validator(rule, value, callback) {
+              value > 0 ? callback() : callback('承载数量必须大于0')
+            },
+            trigger: 'blur'
+          }
         ],
         loadVolume: [
-          { required: true, message: '请输入承载体积', trigger: 'blur' }
+          { required: true, message: '请输入承载体积', trigger: 'blur' },
+          {
+            validator(rule, value, callback) {
+              value > 0 ? callback() : callback('体积必须大于0')
+            },
+            trigger: 'blur'
+          }
         ],
         lotNum: [
-          { required: true, message: '请输入商品混放数', trigger: 'blur' }
+          { required: true, message: '请输入商品混放数', trigger: 'blur' },
+          {
+            validator(rule, value, callback) {
+              value > 0 ? callback() : callback('体积必须大于0')
+            },
+            trigger: 'blur'
+          }
         ],
       }
     }
@@ -252,7 +294,13 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.basicWarehouseSpaceUpdateLoading = true
-          basicWarehouseSpaceUpdate(this.formData).then(res => {
+          let params = { ...this.formData }
+          for (let key in params) {
+            if (params[key] === undefined) {
+              params[key] = ''
+            }
+          }
+          basicWarehouseSpaceUpdate(params).then(res => {
             this.basicWarehouseSpaceUpdateLoading = false
             if (!res) return
             this.$emit('submited')
