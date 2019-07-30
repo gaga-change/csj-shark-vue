@@ -272,6 +272,7 @@ export default {
   },
   watch: {
     selectRows(val, oldVal) {
+      console.log('selectRows', val)
       // 重置选中
       if (val.length === 0) {
         this.$refs.table.clearSelection()
