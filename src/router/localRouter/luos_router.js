@@ -106,10 +106,10 @@ export default [
     hidden: false,
     children: [
       {
-        name: 'qualityTestitngRecord',
+        name: 'qualityTestingRecord',
         path: 'record',
         meta: { title: '质检记录', noCache: true },
-        component: _import('qualityTesting/qualityTestitngRecord'),
+        component: _import('qualityTesting/qualityTestingRecord'),
         hidden: false,
       },
       {

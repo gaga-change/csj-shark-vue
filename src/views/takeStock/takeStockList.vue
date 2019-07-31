@@ -34,18 +34,26 @@
         :select="true"
         :selectRows.sync="selectRows"
         :showControl="true"
-        :controlWidth="160"
+        :controlWidth="180"
       >
         <template slot-scope="scope">
           <router-link
             :to="{path:`/takeStock/detail`,query:{id: scope.row.id}}"
             :style="{color:'#3399ea'}"
           >查看</router-link>
+          <el-divider
+            v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
+            direction="vertical"
+          ></el-divider>
           <router-link
             v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
             :to="{path:`/takeStock/record`,query:{id: scope.row.id}}"
             :style="{color:'#3399ea'}"
           >盘点录入</router-link>
+          <el-divider
+            v-if="scope.row.executeStatus === 0"
+            direction="vertical"
+          ></el-divider>
           <el-button
             class="btn-link"
             v-if="scope.row.executeStatus === 0"
@@ -53,6 +61,10 @@
           >
             取消
           </el-button>
+          <el-divider
+            v-if="scope.row.executeStatus === 1"
+            direction="vertical"
+          ></el-divider>
           <el-button
             class="btn-link"
             v-if="scope.row.executeStatus === 1"
