@@ -57,7 +57,6 @@ export const planChildTableLabelConfig = [// 计划单商品条码打印列表
   { label: '货主', prop: 'ownerName', width: 150 },
   { label: '供应商', prop: 'providerName', width: 150 },
   { label: '入库数量', prop: 'realInQty', minWidth: 120 },
-  { label: '批次', prop: 'batchNo', minWidth: 120 },
   { label: '打印条数', prop: 'printNum', width: 200, editable: true, editType: 'inputNumber', fixed: 'right', max: 100 },//unconfirm 
 ]
 
