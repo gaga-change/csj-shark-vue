@@ -53,6 +53,19 @@
               :min="item.min || 0"
               :max="item.max || 99999999"
             ></el-input-number>
+            <el-select
+              v-if="item.inputType==='select'"
+              v-model="scope.row[item.prop]"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="(v, i) in Enum[item.type]"
+                :key="i"
+                :label="v.name"
+                :value="v.value"
+              >
+              </el-option>
+            </el-select>
           </template>
         </el-table-column>
         <el-table-column
@@ -263,6 +276,7 @@ export default {
   },
   data() {
     return {
+      Enum,
       tableConfig: [],
       selfTotal: 0,
       selfPageSize: 10,

@@ -424,6 +424,11 @@ export const checkResult2Enum = [
   { name: '合格', value: 2 },
 ]
 
+export const checkResult3Enum = [
+  { name: '不合格', value: 1 },
+  { name: '合格', value: 2 },
+]
+
 export const executeStatusEnum = [
   { name: '待盘点', value: 0 },
   { name: '盘点中', value: 1 },

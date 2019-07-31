@@ -11,7 +11,7 @@
     </div>
     <div class="mt20">
       <base-table
-        :config="arrivalConfig"
+        :config="qualityTestingCreateTableConfig"
         :tableData="tableData"
         :showControl="true"
       >
@@ -88,13 +88,13 @@
 <script>
 import BaseTable from '@/components/Table'
 import { checkOrderAddCheckOrder, uploadReportFile } from '@/api'
-import { arrivalConfig } from './components/config'
+import { qualityTestingCreateTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
 export default {
   components: { selectProduct, BaseTable },
   data() {
     return {
-      arrivalConfig,
+      qualityTestingCreateTableConfig,
       checkOrderAddCheckOrderLoading: false,
       selectProductVisible: false,
       tableData: [],
@@ -144,7 +144,7 @@ export default {
     /** 提交 */
     handleSubmitForm() {
       if (!this.tableData.length) {
-        return this.$message.error('请选择收货单！')
+        return this.$message.error('请引入收货单！')
       }
       if (!this.fileList.length) {
         return this.$message.error('请上传质检报告！')
@@ -152,6 +152,12 @@ export default {
       this.checkOrderAddCheckOrderLoading = true
       checkOrderAddCheckOrder({
         receiveOrderCode: this.tableData[0].orderCode,
+        deatilReqs: this.tableData.map(v => (
+          {
+            detailId: v.id,
+            checkResult: v.checkResult
+          }
+        )),
         attachmentList: this.fileList.map(v => {
           return {
             reportName: v.name,
@@ -161,7 +167,7 @@ export default {
       }).then(res => {
         this.checkOrderAddCheckOrderLoading = false
         if (!res) return
-        this.$message.success('提交成功！')
+        this.$message.success('操作成功！')
         this.handleResetForm()
       })
     },

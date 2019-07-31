@@ -33,6 +33,18 @@ export const arrivalConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 
+export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
+  { label: '业务行号', prop: 'busiIndex', },
+  { label: '商品编码', prop: 'skuCode', },
+  { label: '商品名称', prop: 'skuName', },
+  { label: '规格型号', prop: 'skuFormat', },
+  { label: '单位', prop: 'skuUnitName', },
+  { label: '商品数量', prop: 'planQty', },
+  { label: '批次', prop: 'batchNo', },
+  { label: '收货数量', prop: 'receiveQty', width: 100, editable: true },
+  { label: '已入库数量', prop: 'realInQty', width: 85 },
+]
+
 export const qualityTestingDetailTableConfig = [
   { label: '收货单号', prop: 'orderCode' },
   { label: '商品编码', prop: 'skuCode' },
@@ -40,6 +52,15 @@ export const qualityTestingDetailTableConfig = [
   { label: '收货数量', prop: 'receiveQty' },
   { label: '质检数量', prop: 'checkQty' },
   { label: '质检结果', prop: 'checkResult', useLocalEnum: true, type: 'checkResult2Enum' },
+]
+
+export const qualityTestingCreateTableConfig = [
+  { label: '收货单号', prop: 'orderCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '收货数量', prop: 'receiveQty' },
+  { label: '质检数量', prop: 'receiveQty' },
+  { label: '质检结果', prop: 'checkResult', edit: true, inputType: 'select', type: 'checkResult3Enum' },
 ]
 
 export const takeStockRecordConfig = [

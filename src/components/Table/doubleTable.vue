@@ -54,6 +54,7 @@
             </template>
             <template v-else>
               <el-table
+                border
                 :data="childTable.row[childDataName]"
                 ref="multipleTable"
                 @select="(...key) => handleSelection(String(childTable.row[expandKey]), ...key,childTable.row[childDataName])"
