@@ -17,7 +17,7 @@
       class="mt20"
     >
       <div slot="header">
-        收货单列表
+        明细列表
       </div>
       <base-table
         :config="qualityTestingDetailTableConfig"
