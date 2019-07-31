@@ -22,7 +22,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入仓库名称"
               v-model="searchForms.warehouseName"
             ></el-input>
@@ -38,7 +38,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入商品编码"
               v-model="searchForms.skuCode"
             ></el-input>
@@ -54,7 +54,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入商品名称"
               v-model="searchForms.skuName"
             ></el-input>
@@ -71,7 +71,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入货主名称"
               v-model="searchForms.ownerName"
             ></el-input>
@@ -88,7 +88,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入库位编码"
               v-model="searchForms.warehouseSpaceCode"
             ></el-input>
@@ -103,7 +103,7 @@
             <el-date-picker
               v-model="searchForms.durationTime"
               type="daterange"
-              size="small"
+              size="mini"
               style="min-width:400px"
               range-separator="至"
               start-placeholder="开始日期"
@@ -125,7 +125,7 @@
               filterable
               clearable
               placeholder="请选择入库状态"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -151,7 +151,7 @@
               filterable
               clearable
               placeholder="请选择商品状态"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -170,12 +170,12 @@
           <el-form-item label-width="0">
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="submitIt"
             >查询</el-button>
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="resetForm"
             >重置</el-button>
           </el-form-item>

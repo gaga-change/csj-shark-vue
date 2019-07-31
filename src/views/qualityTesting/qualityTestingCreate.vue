@@ -3,7 +3,7 @@
     <div>
       <el-button
         type="primary"
-        size="small"
+        size="mini"
         @click="showChooseProdDialog"
       >
         引入收货单
@@ -65,14 +65,14 @@
     <div class="mt20">
       <el-button
         type="primary"
-        size="small"
+        size="mini"
         @click="handleSubmitForm"
         :loading="checkOrderAddCheckOrderLoading"
       >
         提交
       </el-button>
       <el-button
-        size="small"
+        size="mini"
         @click="handleResetForm"
       >
         重置

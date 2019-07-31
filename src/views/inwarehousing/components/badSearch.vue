@@ -7,7 +7,7 @@
               label="计划单号"  
               label-width="70px"
               prop="planCode"  >
-              <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="searchForm.planCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入计划单号"    v-model.trim="searchForm.planCode" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6"  style="min-width:300px" v-if="searchForm.providerName!==undefined">
@@ -15,7 +15,7 @@
               label="供应商名称"  
               label-width="80px"
               prop="providerName"  >
-              <el-input type="text" size="small"    placeholder="请输入供应商名称"    v-model.trim="searchForm.providerName" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入供应商名称"    v-model.trim="searchForm.providerName" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6"  style="min-width:300px">
@@ -24,7 +24,7 @@
                prop="orderType" 
               >
               <el-select v-model="searchForm.execState" 
-              size="small"  filterable clearable placeholder="请选择入库状态" prefix-icon="el-icon-search">
+              size="mini"  filterable clearable placeholder="请选择入库状态" prefix-icon="el-icon-search">
                 <el-option
                   v-for="item in badStatuslist"
                   :key="item.value"

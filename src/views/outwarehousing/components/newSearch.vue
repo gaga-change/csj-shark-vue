@@ -7,7 +7,7 @@
               label="拣货单号"  
               label-width="80px"
               prop="orderCode"  >
-              <el-input type="text" size="small"    placeholder="请输入拣货单号"    v-model.trim="searchForm.orderCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入拣货单号"    v-model.trim="searchForm.orderCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -16,7 +16,7 @@
               label="计划单号"  
               label-width="80px"
               prop="outOrderCode"  >
-              <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="searchForm.outOrderCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入计划单号"    v-model.trim="searchForm.outOrderCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -25,7 +25,7 @@
               label="拣货单号"  
               label-width="80px"
               prop="pickOrderCode"  >
-              <el-input type="text" size="small"    placeholder="请输入拣货单号"    v-model.trim="searchForm.pickOrderCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入拣货单号"    v-model.trim="searchForm.pickOrderCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -34,7 +34,7 @@
               label="出库计划单号"  
               label-width="100px"
               prop="planCode"  >
-              <el-input type="text" size="small"    placeholder="请输入出库计划单号"    v-model.trim="searchForm.planCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入出库计划单号"    v-model.trim="searchForm.planCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -53,7 +53,7 @@
             <el-form-item label-width="70px" label="拣货状态" class="postInfo-container-item">
               <el-select v-model="searchForm.orderState" 
                filterable clearable placeholder="请选择拣货状态" 
-              size="small" prefix-icon="el-icon-search">
+              size="mini" prefix-icon="el-icon-search">
               <template v-for="item in orderStatus">
                 <el-option
                   :key="item.value"

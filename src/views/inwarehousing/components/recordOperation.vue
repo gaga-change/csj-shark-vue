@@ -5,12 +5,12 @@
   >
     <el-button
       type="primary"
-      size="small"
+      size="mini"
       @click="makeInbound"
     >收货登记</el-button>
     <el-button
       type="primary"
-      size="small"
+      size="mini"
       @click="priviewProductLabel"
     >打印商品标签</el-button>
     <div>
@@ -60,8 +60,12 @@
           slot="footer"
           class="dialog-footer"
         >
-          <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button
+            size="mini"
+            @click="dialogVisible = false"
+          >取 消</el-button>
+          <el-button
+            size="mini"
             type="primary"
             @click="submitForm()"
             :loading="orderAddLoading"
@@ -112,7 +116,7 @@
             <el-form-item class="addButton">
               <el-button
                 type="primary"
-                size="small"
+                size="mini"
                 @click="addBatch"
               >添加</el-button>
             </el-form-item>
@@ -131,12 +135,12 @@
           <div class="alertBottomArr">
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="sureWarehouse"
             >确认</el-button>
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="cancelWarehouse"
             >取消</el-button>
           </div>
@@ -185,12 +189,17 @@
           class="dialog-footer"
           v-loading="loading"
         >
-          <el-button @click="dialogVisibleLabel = false">取 消</el-button>
           <el-button
+            size="mini"
+            @click="dialogVisibleLabel = false"
+          >取 消</el-button>
+          <el-button
+            size="mini"
             type="primary"
             @click="getCode"
           >预览</el-button>
           <el-button
+            size="mini"
             type="primary"
             v-if="!previewIt"
             @click="printLabel"

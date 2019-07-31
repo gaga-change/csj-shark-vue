@@ -8,7 +8,7 @@
 
     <el-button
       type="primary"
-      size="small"
+      size="mini"
       @click="formHandle('add')"
       style="margin-bottom:15px"
     >添加</el-button>
@@ -81,7 +81,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             v-model="chooseWarehouse"
             disabled
           ></el-input>
@@ -93,7 +93,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             v-model="warehouseName"
             disabled
           ></el-input>
@@ -109,7 +109,7 @@
             clearable
             placeholder="请选择库区"
             :disabled="formType!='add'"
-            size="small"
+            size="mini"
           >
             <el-option
               v-for="item in AtoZ"
@@ -131,7 +131,7 @@
             :disabled="formType!='add'"
             clearable
             placeholder="请选择"
-            size="small"
+            size="mini"
           >
             <el-option
               v-for="item in YesOrNoEnum"
@@ -152,7 +152,7 @@
             clearable
             placeholder="请选择库区性质"
             :disabled="formType!='add'"
-            size="small"
+            size="mini"
           >
             <el-option
               v-for="item in WarehouseAreaNatureEnum"
@@ -170,7 +170,7 @@
           <el-input
             type="textarea"
             :maxlength="100"
-            size="small"
+            size="mini"
             v-model="formParams.warehouseAreaDesc"
             :disabled="this.formType=='watch'"
           ></el-input>
@@ -180,8 +180,12 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
+          @click="dialogVisible = false"
+          size="mini"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="submitIt"
         >确 定</el-button>

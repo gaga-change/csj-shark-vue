@@ -19,13 +19,13 @@
         <el-button
           type="primary"
           :disabled="!SelectionData.length>0"
-          size="small"
+          size="mini"
           @click="outOrder"
         >复核(生成出库单)</el-button>
         <el-button
           type="danger"
           :disabled="!SelectionData.length>0"
-          size="small"
+          size="mini"
           @click="outOrder('delete')"
         >删除</el-button>
       </el-col>

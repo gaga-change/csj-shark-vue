@@ -17,12 +17,12 @@
       >
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="select"
         >查询</el-button>
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="resetForm"
         >重置</el-button>
       </el-col>
@@ -36,7 +36,7 @@
         @click="orderAdd"
         :loading="inOrderAddLoading"
         type="primary"
-        size="small"
+        size="mini"
       >
         生成入库单
       </el-button>

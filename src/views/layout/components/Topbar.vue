@@ -60,8 +60,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="modifyPasswordShow = false">取 消</el-button>
-        <el-button type="primary" @click="modifyPassword">确 定</el-button>
+        <el-button size="mini" @click="modifyPasswordShow = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="modifyPassword">确 定</el-button>
       </div>
     </el-dialog>
   </div>

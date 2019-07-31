@@ -16,7 +16,7 @@
           <el-form-item label="计划单号">
             <el-input
               type="text"
-              size="small"
+              size="mini"
               v-model="searchForm.planCode"
               placeholder="请输入计划单号"
             ></el-input>
@@ -29,7 +29,7 @@
           <el-form-item label="入库单号">
             <el-input
               type="text"
-              size="small"
+              size="mini"
               v-model="searchForm.orderCode"
               placeholder="请输入入库单号"
             ></el-input>
@@ -40,7 +40,7 @@
           <el-form-item label="供应商">
             <el-input
               type="text"
-              size="small"
+              size="mini"
               v-model="searchForm.providerName"
               placeholder="请输入供应商"
             ></el-input>
@@ -61,7 +61,7 @@
               filterable
               clearable
               placeholder="请选择入库状态"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -82,7 +82,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               v-model="searchForm.ownerName"
               placeholder="请输入货主"
             ></el-input>
@@ -99,7 +99,7 @@
               filterable
               clearable
               placeholder="请选择单据状态"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -119,7 +119,7 @@
               filterable
               clearable
               placeholder="请选择"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -139,7 +139,7 @@
               filterable
               clearable
               placeholder="请选择"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -161,7 +161,7 @@
             <el-date-picker
               v-model="searchForm.durationTime"
               type="daterange"
-              size="small"
+              size="mini"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -176,12 +176,12 @@
           <el-form-item label-width="0">
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="submitIt"
             >查询</el-button>
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="resetForm"
             >重置</el-button>
           </el-form-item>

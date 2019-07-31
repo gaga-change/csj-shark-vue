@@ -110,8 +110,12 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="close">取 消</el-button>
         <el-button
+          size="mini"
+          @click="close"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="confrim"
         >确 定</el-button>

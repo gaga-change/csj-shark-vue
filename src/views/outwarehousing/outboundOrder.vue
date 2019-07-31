@@ -8,42 +8,6 @@
       :search-forms="ruleForm"
     >
     </search-warehousing>
-
-    <!--          <div style="margin-bottom:12px;font-size:12px">
-            <span>操作说明：当你点击某一行的同时，即为选中了当前的单据,在确认出库的下方你可以点击叉号取消选择</span>
-         </div>
-
-         <el-button 
-           type="primary" 
-           size="small"
-           @click="quickSubmit" 
-           :disabled="buttonDisable" 
-           v-loading="buttonDisable" 
-           style="margin-bottom:15px">
-           确认出库
-        </el-button>
-
-       <el-button 
-           type="primary" 
-           size="small"
-           @click="quickSubmit('cancel')" 
-           :disabled="buttonDisable" 
-           v-loading="buttonDisable" 
-           style="margin-bottom:15px">
-          取消出库
-        </el-button>
-
-        <div style="margin-bottom:15px" 
-           v-show="planPrintData.length>0">
-            <span style="font-size:13px">当前选中的单据</span>
-            <el-tag v-for="tag in planPrintData" 
-              :key="tag.planCode"
-               closable 
-               @close="closePlanTags(tag)" 
-               style="margin:0 0 10px 10px;">
-               {{tag.planCode}}
-            </el-tag>
-         </div> -->
     <operation-button
       :child-data-arr="childDataArr"
       :planPrintData="planPrintData"

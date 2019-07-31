@@ -8,7 +8,7 @@
 
     <el-button
       type="primary"
-      size="small"
+      size="mini"
       style="margin-bottom:12px"
       @click="logisticsHandle('add')"
     >
@@ -53,7 +53,7 @@
           <el-autocomplete
             v-model="logisticsForm.companyName"
             :debounce="300"
-            size="small"
+            size="mini"
             :fetch-suggestions="querySearchAsync"
             placeholder="请输入物流公司"
             @select="handleSelect"
@@ -68,7 +68,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             placeholder="请输入物流公司编码"
             v-model="logisticsForm.companyCode"
             disabled
@@ -81,7 +81,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             placeholder="请输入联系人名称"
             v-model="logisticsForm.linkUser"
           >
@@ -93,7 +93,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             placeholder="请输入联系电话"
             v-model="logisticsForm.linkTel"
           >
@@ -105,7 +105,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             placeholder="请输入地址"
             v-model="logisticsForm.linkAddress"
           >
@@ -118,9 +118,10 @@
       >
         <el-button
           @click="dialogVisible = false"
-          size=""
+          size="mini"
         >取 消</el-button>
         <el-button
+          size="mini"
           type="primary"
           @click="submitIt"
         >确 定</el-button>

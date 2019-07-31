@@ -1,22 +1,8 @@
 <template>
   <div style="margin-bottom:10px">
-    <!-- <el-button 
-           type="primary" 
-           size="small" 
-           @click="priviewReserve">
-            打印计划单
-        </el-button> -->
-
-    <!-- <el-button 
-          type="primary" 
-          size="small" 
-          @click="PickingOrder">
-            分配拣货任务  
-        </el-button> -->
-
     <el-button
+      size="mini"
       type="primary"
-      size="small"
       @click="priviewBoxLabel"
     >
       打印装箱单
@@ -73,8 +59,12 @@
           class="dialog-footer"
           v-loading="loading"
         >
-          <el-button @click="dialogVisibleLabel = false">取 消</el-button>
           <el-button
+            size="mini"
+            @click="dialogVisibleLabel = false"
+          >取 消</el-button>
+          <el-button
+            size="mini"
             type="primary"
             @click="printLabel"
           >确 定</el-button>

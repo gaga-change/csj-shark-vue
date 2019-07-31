@@ -2,7 +2,7 @@
   <div style="margin-bottom:10px">
     <el-button
       type="primary"
-      size="small"
+      size="mini"
       @click="priviewReserve"
     >
       打印计划单
@@ -25,8 +25,12 @@
           slot="footer"
           class="dialog-footer"
         >
-          <el-button @click="dialogVisibleReserve = false">取 消</el-button>
           <el-button
+            size="mini"
+            @click="dialogVisibleReserve = false"
+          >取 消</el-button>
+          <el-button
+            size="mini"
             type="primary"
             @click="printPlanOrder"
           >打印</el-button>

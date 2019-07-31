@@ -6,7 +6,7 @@
       :element-loading-text="elementLoadingText"
       :element-loading-background="elementLoadingBackground"
       :data="this._events.selectionChange?allTableData:tableData"
-      size="small"
+      size="mini"
       :empty-text="emptyText"
       :border="border"
       @selection-change="handleSelectionChange"
@@ -34,7 +34,7 @@
       :current-page.sync="currentPage"
       :page-sizes="[...pageSizes,total]"
       :page-size="pageSize"
-      size="small"
+      size="mini"
       :layout="layout"
       :total="total"
     >

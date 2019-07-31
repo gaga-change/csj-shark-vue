@@ -34,6 +34,7 @@
           <el-divider direction="vertical"></el-divider>
           <el-button
             class="btn-link"
+            size="mini"
             @click="handleReloadFile(scope.row)"
           >
             质检报告

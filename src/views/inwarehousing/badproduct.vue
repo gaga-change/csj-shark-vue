@@ -17,12 +17,12 @@
       >
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="select"
         >查询</el-button>
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="resetForm"
         >重置</el-button>
       </el-col>
@@ -47,7 +47,7 @@
               filterable
               clearable
               placeholder="请选择库位"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -66,7 +66,7 @@
           >
             <el-input-number
               type="text"
-              size="small"
+              size="mini"
               style="width:200px"
               :min="0"
               v-model="addSearchForm.putQty"
@@ -78,7 +78,7 @@
           <el-form-item class="addButton">
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="addWarehouseSpaceCode"
             >添加</el-button>
           </el-form-item>
@@ -97,12 +97,12 @@
         <div class="alertBottomArr">
           <el-button
             type="primary"
-            size="small"
+            size="mini"
             @click="sureWarehouse"
           >确认</el-button>
           <el-button
             type="primary"
-            size="small"
+            size="mini"
             @click="cancelWarehouse"
           >取消</el-button>
         </div>

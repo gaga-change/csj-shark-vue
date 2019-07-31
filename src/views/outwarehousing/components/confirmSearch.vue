@@ -3,7 +3,7 @@
       <el-form  :model="selectForm"  ref="searchForm" label-width="0px" label-position="left">
         <el-form-item  
           prop="outOrderCode"  >
-          <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="selectForm.outOrderCode" @blur="selectCode"></el-input>
+          <el-input type="text" size="mini"    placeholder="请输入计划单号"    v-model.trim="selectForm.outOrderCode" @blur="selectCode"></el-input>
         </el-form-item>
     </el-form>
     <out-table

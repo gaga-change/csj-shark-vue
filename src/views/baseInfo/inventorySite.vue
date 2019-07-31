@@ -7,12 +7,12 @@
     <div style="margin-bottom:12px;">
       <el-button
         type="primary"
-        size="small"
+        size="mini"
         @click="formHandle('add')"
       >添加</el-button>
       <el-button
         type="primary"
-        size="small"
+        size="mini"
         @click="printSite"
       >打印库位码</el-button>
     </div>
@@ -96,7 +96,7 @@
             clearable
             placeholder="请选择库区"
             :disabled="this.formType!='add'"
-            size="small"
+            size="mini"
           >
             <el-option
               v-for="item in warehouseAreaCodeEnum"
@@ -117,7 +117,7 @@
             <el-input
               type="text"
               style="width:150px"
-              size="small"
+              size="mini"
               placeholder="请输入1-99整数"
               :min="1"
               :max="99"
@@ -127,7 +127,7 @@
             <span class="tip">到</span>
             <el-input
               type="text"
-              size="small"
+              size="mini"
               style="width:150px"
               placeholder="请输入1-99整数"
               :min="1"
@@ -142,7 +142,7 @@
             <span class="tip">从第</span>
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入1-99整数"
               :min="1"
               :max="99"
@@ -153,7 +153,7 @@
             <span class="tip">层到</span>
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入1-99整数"
               :min="1"
               :max="99"
@@ -167,7 +167,7 @@
             <span class="tip">库位从第</span>
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入1-99整数"
               :min="1"
               :max="99"
@@ -178,7 +178,7 @@
             <span class="tip">层到</span>
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入1-99整数"
               :min="1"
               :max="99"
@@ -194,8 +194,12 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
+          @click="dialogVisible = false"
+          size="mini"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="submitIt"
         >确 定</el-button>
@@ -224,8 +228,12 @@
         class="dialog-footer"
         v-loading="loading"
       >
-        <el-button @click="dialogVisibleSite = false">取 消</el-button>
         <el-button
+          size="mini"
+          @click="dialogVisibleSite = false"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="printIt"
         >打印</el-button>

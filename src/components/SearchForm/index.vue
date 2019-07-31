@@ -99,15 +99,15 @@
           <el-col :span="6">
             <el-form-item label-width="0">
               <el-button
-                type="primary"
                 size="mini"
+                type="primary"
                 @click="hanldeSubmit"
                 :disabled="resetLoading"
                 :loading="submitLoading"
               >查询</el-button>
               <el-button
-                type="primary"
                 size="mini"
+                type="primary"
                 @click="hanldeResetForm"
                 :disabled="submitLoading"
                 :loading="resetLoading"

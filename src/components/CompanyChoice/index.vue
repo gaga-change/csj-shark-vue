@@ -2,17 +2,17 @@
   <div>
     <el-form :inline="true" :model="postForm" class="demo-form-inline" labelWidth="120px">
       <el-form-item label="企业编号">
-        <el-input v-model="postForm.code" size="small" placeholder="请输入企业编号"></el-input>
+        <el-input v-model="postForm.code" size="mini" placeholder="请输入企业编号"></el-input>
       </el-form-item>
       <el-form-item label="企业名称">
-        <el-input v-model="postForm.name" size="small" placeholder="请输入企业名称"></el-input>
+        <el-input v-model="postForm.name" size="mini" placeholder="请输入企业名称"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit" size="small">查询</el-button>
-        <el-button  @click="onReset" size="small">重置</el-button>
+        <el-button  size="mini" type="primary" @click="onSubmit" >查询</el-button>
+        <el-button  size="mini" @click="onReset" >重置</el-button>
       </el-form-item>
     </el-form>
-    <el-table size="small" :data="currentData" ref="singleTable" highlight-current-row @current-change="handleCurrentChange" :loading="loading">
+    <el-table size="mini" :data="currentData" ref="singleTable" highlight-current-row @current-change="handleCurrentChange" :loading="loading">
       <el-table-column property="code" label="企业编号" ></el-table-column>
       <el-table-column property="name" label="企业名称" ></el-table-column>
     </el-table>
@@ -20,7 +20,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentPageChange"
       :current-page="pageindex"
-      size="small"
+      size="mini"
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pagesize"
       layout="total, sizes, prev, pager, next, jumper"
@@ -42,7 +42,7 @@ export default {
       pageindex: 1,
       total: 0,
       currentData: [],
-      searchData:[],
+      searchData: [],
       loading: false
     }
   },
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     onSubmit() {
-       this.searchData = this.gridData.filter(company => {
+      this.searchData = this.gridData.filter(company => {
         return company.name.includes(this.postForm.name) && company.code.includes(this.postForm.code)
       })
       this.handleCurrentPageChange(1)
@@ -88,7 +88,7 @@ export default {
     },
     getCurrentData(data) {
       const CopyList = data || [...this.searchData]
-      this.currentData = CopyList.slice((this.pageindex - 1) * this.pagesize, this.pagesize * this.pageindex) 
+      this.currentData = CopyList.slice((this.pageindex - 1) * this.pagesize, this.pagesize * this.pageindex)
       this.total = data ? data.length : this.searchData.length
     },
     handleSizeChange(val) {

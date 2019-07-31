@@ -14,14 +14,14 @@
         <el-button
           @click="getExport"
           type="primary"
-          size="small"
+          size="mini"
         >
           导出
         </el-button>
         <el-button
           @click="showStateTransition"
           type="primary"
-          size="small"
+          size="mini"
           :disabled="!selectRows.length"
         >
           状态转移
@@ -55,6 +55,7 @@
         <button
           class="btn-link"
           type="button"
+          size='mini'
           :disabled="scope.row.checkResult !== 1"
           @click="showMoveLibrary(scope.row)"
         >
@@ -97,7 +98,7 @@
               style="display:inline-block;width:100px;"
             >移至</span>
             <el-select
-              size="small"
+              size="mini"
               v-model="newWarehouseSpaceCode"
               placeholder="请选择"
               :loading="warehouseSpaceSelectLoading"
@@ -120,9 +121,13 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="moveLibraryDialogVisible = false;newWarehouseSpaceCode = null;">取 消</el-button>
+        <el-button
+          size="mini"
+          @click="moveLibraryDialogVisible = false;newWarehouseSpaceCode = null;"
+        >取 消</el-button>
         <el-button
           type="primary"
+          size="mini"
           @click="moveLibrary()"
           :loading="skuStockMoveLoading"
         >确 定</el-button>
@@ -147,10 +152,14 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="stateTransitionVisible = false;">取 消</el-button>
+        <el-button
+          @click="stateTransitionVisible = false;"
+          size="mini"
+        >取 消</el-button>
         <el-button
           type="primary"
           @click="stateTransition()"
+          size="mini"
           :loading="skuStockWriteCheckResultLoading"
         >确 定</el-button>
       </span>

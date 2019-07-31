@@ -17,12 +17,12 @@
       >
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="select"
         >查询</el-button>
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="resetForm"
         >重置</el-button>
       </el-col>
@@ -30,19 +30,19 @@
     <div style="margin-bottom:12px">
       <el-button
         type="primary"
-        size="small"
+        size="mini"
         :disabled="!Array.isArray(nowChildDataSelectData)||nowChildDataSelectData.length<=0"
         @click="submitOrider"
       >上架</el-button>
       <el-button
         type="primary"
-        size="small"
+        size="mini"
         :disabled="!selectMainTableRows.length"
         @click="printBillsVisible=true"
       >打印单据</el-button>
       <el-button
         type="danger"
-        size="small"
+        size="mini"
         :disabled="!activeOrder.orderCode"
         @click="deleteOrider"
       >
@@ -82,12 +82,12 @@
       <div class="alertBottomArr">
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="putawayConfirm"
         >上架</el-button>
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="cancelArrivalAlert"
         >取消</el-button>
       </div>
@@ -116,7 +116,7 @@
               filterable
               clearable
               placeholder="请选择库位"
-              size="small"
+              size="mini"
               prefix-icon="el-icon-search"
             >
               <el-option
@@ -135,7 +135,7 @@
           >
             <el-input-number
               type="text"
-              size="small"
+              size="mini"
               style="width:200px"
               :min="0"
               v-model="addSearchForm.putQty"
@@ -147,7 +147,7 @@
           <el-form-item class="addButton">
             <el-button
               type="primary"
-              size="small"
+              size="mini"
               @click="addWarehouseSpaceCode"
             >添加</el-button>
           </el-form-item>
@@ -166,12 +166,12 @@
         <div class="alertBottomArr">
           <el-button
             type="primary"
-            size="small"
+            size="mini"
             @click="sureWarehouse"
           >确认</el-button>
           <el-button
             type="primary"
-            size="small"
+            size="mini"
             @click="cancelWarehouse"
           >取消</el-button>
         </div>
@@ -262,12 +262,17 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisibleLabel = false">取 消</el-button>
         <el-button
+          size="mini"
+          @click="dialogVisibleLabel = false"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="getCode"
         >预览</el-button>
         <el-button
+          size="mini"
           type="primary"
           v-if="!previewIt"
           @click="printLabel"

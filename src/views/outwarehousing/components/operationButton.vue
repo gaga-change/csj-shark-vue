@@ -1,27 +1,12 @@
 <template>
   <div style="margin-bottom:10px">
-    <!-- <el-button 
-           type="primary" 
-           size="small" 
-           @click="priviewReserve">
-            打印计划单
-        </el-button> -->
-
     <el-button
       type="primary"
-      size="small"
+      size="mini"
       @click="PickingOrder"
     >
       分配拣货任务
     </el-button>
-
-    <!-- <el-button 
-           type="primary" 
-           size="small"
-           @click="priviewBoxLabel">
-           打印装箱单 
-        </el-button> -->
-
     <div>
       <el-dialog
         title="按单拣货"
@@ -32,7 +17,7 @@
           <span>拣货人姓名:</span>
           <el-input
             type="text"
-            size="small"
+            size="mini"
             style="width:200px;margin-bottom:12px;"
             placeholder="请输入拣货人姓名"
             v-model="pickOperatorName"
@@ -130,8 +115,12 @@
           slot="footer"
           class="dialog-footer"
         >
-          <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button
+            size="mini"
+            @click="dialogVisible = false"
+          >取 消</el-button>
+          <el-button
+            size="mini"
             @click="surePicking"
             type="primary"
           >确认</el-button>

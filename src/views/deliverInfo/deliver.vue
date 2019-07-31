@@ -11,8 +11,7 @@
 
     <el-button
       type="primary"
-      st
-      size="small"
+      size="mini"
       @click="logisticsHandle"
       :disabled="selectdisabled"
       style="margin-bottom:15px"
@@ -71,7 +70,7 @@
             v-model="logisticsForm.logisticsComCode"
             clearable
             placeholder="请选择物流公司"
-            size="small"
+            size="mini"
             prefix-icon="el-icon-search"
           >
             <el-option
@@ -91,7 +90,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             placeholder="请输入物流单号"
             v-model="logisticsForm.logisticsOrderCode"
           >
@@ -105,7 +104,7 @@
         >
           <el-input
             type="number"
-            size="small"
+            size="mini"
             placeholder="请输入件数"
             v-model.number="logisticsForm.carrierQty"
           >
@@ -119,7 +118,7 @@
         >
           <el-input
             type="number"
-            size="small"
+            size="mini"
             placeholder="请输入运费"
             v-model="logisticsForm.freightAmt"
           >
@@ -132,7 +131,7 @@
         >
           <el-input
             type="number"
-            size="small"
+            size="mini"
             placeholder="请输入其它费用"
             v-model="logisticsForm.otherAmt"
           >
@@ -145,7 +144,7 @@
         >
           <el-input
             type="number"
-            size="small"
+            size="mini"
             placeholder="请输入物流总额"
             v-model="logisticsForm.skuAmt"
             disabled
@@ -161,7 +160,7 @@
         >
           <el-select
             v-model="logisticsForm.payType"
-            size="small"
+            size="mini"
           >
             <el-option
               key="我方承担"
@@ -186,7 +185,7 @@
         >
           <el-input
             type="text"
-            size="small"
+            size="mini"
             placeholder="请输入备注"
             v-model="logisticsForm.remarkInfo"
           >
@@ -198,8 +197,12 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
+          @click="dialogVisible = false"
+          size="mini"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="submitDeliver"
         >确 定</el-button>
@@ -215,7 +218,10 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisibleDeliver = false">关闭</el-button>
+        <el-button
+          size="mini"
+          @click="dialogVisibleDeliver = false"
+        >关闭</el-button>
       </span>
     </el-dialog>
   </div>

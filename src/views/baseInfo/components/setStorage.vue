@@ -176,9 +176,13 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="close()">取 消</el-button>
+        <el-button
+          @click="close()"
+          size="mini"
+        >取 消</el-button>
         <el-button
           type="primary"
+          size="mini"
           :loading="basicWarehouseSpaceUpdateLoading"
           @click="confirm()"
         >确 定</el-button>

@@ -22,7 +22,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入物流公司名称"
               v-model="searchForms.companyName"
             ></el-input>
@@ -41,7 +41,7 @@
               v-model="searchForms.warehouseAreaCode"
               clearable
               placeholder="请选择库区"
-              size="small"
+              size="mini"
             >
               <el-option
                 v-for="item in AtoZ"
@@ -63,7 +63,7 @@
               v-model="searchForms.isVirtual"
               clearable
               placeholder="请选择"
-              size="small"
+              size="mini"
             >
               <el-option
                 v-for="item in YesOrNoEnum"
@@ -88,7 +88,7 @@
               v-model="searchForms.warehouseAreaNature"
               clearable
               placeholder="请选择库区性质"
-              size="small"
+              size="mini"
             >
               <el-option
                 v-for="item in WarehouseAreaNatureEnum"
@@ -111,7 +111,7 @@
           >
             <el-input
               type="text"
-              size="small"
+              size="mini"
               placeholder="请输入库位编码"
               v-model="searchForms.warehouseSpaceCode"
             ></el-input>
@@ -123,13 +123,13 @@
         <el-col :span="6">
           <el-form-item label-width="0">
             <el-button
+              size="mini"
               type="primary"
-              size="small"
               @click="submitIt"
             >查询</el-button>
             <el-button
+              size="mini"
               type="primary"
-              size="small"
               @click="resetForm"
             >重置</el-button>
           </el-form-item>

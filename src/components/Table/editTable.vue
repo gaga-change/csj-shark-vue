@@ -13,7 +13,7 @@
       :show-summary="showSummary"
       @select="handleSelection"
       @select-all="handleSelection"
-      size="small"
+      size="mini"
       :style="tableStyle"
     >
       <el-table-column
@@ -105,20 +105,20 @@
             <span v-if="useEdit">
               <el-button
                 v-if="scope.row.editable"
+                size="mini"
                 type="success"
                 @click="goeditrow(scope.$index,'confirm',scope.row)"
-                size="mini"
               >确定</el-button>
               <el-button
                 v-else
-                @click="goeditrow(scope.$index,'edit',scope.row)"
                 size="mini"
+                @click="goeditrow(scope.$index,'edit',scope.row)"
               >{{editText}}</el-button>
             </span>
             <el-button
+              v-if="deleteNeed"
               size="mini"
               type="danger"
-              v-if="deleteNeed"
               @click="handleDelete(scope.$index, scope.row)"
             >删除</el-button>
             <slot
@@ -136,7 +136,7 @@
       @current-change="handleCurrentChange"
       :current-page.sync="tableCurrentPage"
       :page-sizes="pageSizes"
-      size="small"
+      size="mini"
       :page-size="tablePageSize"
       :layout="layout"
       v-if="total>tablePageSize"

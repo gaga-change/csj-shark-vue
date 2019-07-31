@@ -14,7 +14,7 @@
       @select-all="handleSelectAll"
       :border="border"
       :show-summary="showSummary"
-      size="small"
+      size="mini"
       :style="tableStyle"
     >
       <el-table-column
@@ -96,7 +96,7 @@
         @current-change="handleSelfCurrentChange"
         :current-page.sync="selfCurrentPage"
         :page-sizes="pageSizes"
-        size="small"
+        size="mini"
         :page-size="selfPageSize"
         :layout="layout"
         v-if="api"
@@ -108,7 +108,7 @@
         @current-change="handleCurrentChange"
         :current-page.sync="tableCurrentPage"
         :page-sizes="pageSizes"
-        size="small"
+        size="mini"
         :page-size="tablePageSize"
         :layout="layout"
         v-else-if="total>maxTotal"

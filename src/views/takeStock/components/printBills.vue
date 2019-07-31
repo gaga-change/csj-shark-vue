@@ -59,12 +59,12 @@
       >
         <el-button
           @click="close"
-          size="small"
+          size="mini"
         >取 消</el-button>
         <el-button
           type="primary"
           @click="confirm"
-          size="small"
+          size="mini"
         >确认打印</el-button>
       </span>
     </el-dialog>

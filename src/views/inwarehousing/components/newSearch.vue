@@ -11,7 +11,7 @@
                 { required: true, message: '该项为必填'},
                ]:[]">
               <el-select v-model="searchForm.orderType" 
-              size="small"  filterable clearable placeholder="请选择单据类型" prefix-icon="el-icon-search">
+              size="mini"  filterable clearable placeholder="请选择单据类型" prefix-icon="el-icon-search">
                 <el-option
                   v-for="item in busiBillTypeEnum"
                   :key="item.value"
@@ -28,7 +28,7 @@
                prop="orderType" 
               >
               <el-select v-model="searchForm.execState" 
-              size="small"  filterable clearable placeholder="请选择上架状态" prefix-icon="el-icon-search">
+              size="mini"  filterable clearable placeholder="请选择上架状态" prefix-icon="el-icon-search">
                 <el-option
                   v-for="item in execStatuslist"
                   :key="item.value"
@@ -44,7 +44,7 @@
               label="供应商名称"  
               label-width="80px"
               prop="providerName"  >
-              <el-input type="text" size="small"    placeholder="请输入供应商名称"    v-model.trim="searchForm.providerName" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入供应商名称"    v-model.trim="searchForm.providerName" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -54,7 +54,7 @@
               label="入库单号"  
               label-width="80px"
               prop="orderCode"  >
-              <el-input type="text" size="small"    placeholder="请输入入库单号"    v-model.trim="searchForm.orderCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入入库单号"    v-model.trim="searchForm.orderCode" ></el-input>
             </el-form-item>
           </el-col> -->
 
@@ -63,7 +63,7 @@
               label="计划单号"  
               label-width="70px"
               prop="planCode"  >
-              <el-input type="text" size="small"    placeholder="请输入计划单号"    v-model.trim="searchForm.planCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入计划单号"    v-model.trim="searchForm.planCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -72,7 +72,7 @@
               label="收货单号"  
               label-width="80px"
               prop="receiveOrderCode"  >
-              <el-input type="text" size="small"    placeholder="请输入收货单号"    v-model.trim="searchForm.receiveOrderCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入收货单号"    v-model.trim="searchForm.receiveOrderCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -81,7 +81,7 @@
               label="商品名称"  
               label-width="80px"
               prop="skuName"  >
-              <el-input type="text" size="small"    placeholder="请输入商品名称"    v-model.trim="searchForm.skuName" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入商品名称"    v-model.trim="searchForm.skuName" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -90,7 +90,7 @@
               label="货主"  
               label-width="40px"
               prop="ownerName"  >
-              <el-input type="text" size="small"    placeholder="请输入货主"    v-model.trim="searchForm.ownerName" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入货主"    v-model.trim="searchForm.ownerName" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -99,7 +99,7 @@
               label="收货单号"  
               label-width="80px"
               prop="ownerName"  >
-              <el-input type="text" size="small"    placeholder="请输入收货单号"    v-model.trim="searchForm.orderCode" ></el-input>
+              <el-input type="text" size="mini"    placeholder="请输入收货单号"    v-model.trim="searchForm.orderCode" ></el-input>
             </el-form-item>
           </el-col>
 
@@ -124,7 +124,7 @@
                 <el-date-picker
                     v-model="searchForm.orderTime"
                     type="daterange"
-                    size="small"
+                    size="mini"
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">

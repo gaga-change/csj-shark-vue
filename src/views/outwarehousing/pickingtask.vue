@@ -17,12 +17,12 @@
       >
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="select"
         >查询</el-button>
         <el-button
           type="primary"
-          size="small"
+          size="mini"
           @click="resetForm"
         >重置</el-button>
       </el-col>
@@ -128,8 +128,12 @@
         class="dialog-footer"
         v-if="[0,1].includes(activeRow.orderStatus)"
       >
-        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
+          size="mini"
+          @click="dialogVisible = false"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="suerPicking"
         >确认拣货</el-button>
@@ -170,8 +174,12 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="printingAlert = false">取 消</el-button>
         <el-button
+          size="mini"
+          @click="printingAlert = false"
+        >取 消</el-button>
+        <el-button
+          size="mini"
           type="primary"
           @click="planPrintOrder"
         >打印</el-button>
