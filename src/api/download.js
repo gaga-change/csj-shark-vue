@@ -2,10 +2,10 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 
 
-export default (url, parmas, fileName) => axios({
+export default (url, params, fileName) => axios({
   method: 'get',
   url,
-  parmas,
+  params,
   responseType: 'blob'
 }).then(res => {
   if (res.data.type === "application/json") {

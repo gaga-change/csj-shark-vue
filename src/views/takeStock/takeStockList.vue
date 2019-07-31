@@ -8,21 +8,35 @@
       </search-form>
     </div>
     <div>
-      <el-button
-        type="primary"
-        size="mini"
-        :disabled="!selectRows.length"
-        @click="handlePrint"
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="打印表格中勾选的内容"
+        placement="top"
       >
-        打印
-      </el-button>
-      <el-button
-        type="primary"
-        size="mini"
-        @click="handleOutput"
+        <el-button
+          type="primary"
+          size="mini"
+          :disabled="!selectRows.length"
+          @click="handlePrint"
+        >
+          打印
+        </el-button>
+      </el-tooltip>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="导出当前查询的所有记录"
+        placement="top"
       >
-        导出
-      </el-button>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="handleOutput"
+        >
+          导出
+        </el-button>
+      </el-tooltip>
     </div>
     <div class="mt15">
       <base-table
@@ -130,7 +144,7 @@ export default {
     },
     /** 导出 */
     handleOutput() {
-      inventoryRecordExport(this.SearchForm, '盘点明细.xls')
+      inventoryRecordExport(this.searchParams, '盘点明细.xls')
     },
     /** 打印 */
     handlePrint() {

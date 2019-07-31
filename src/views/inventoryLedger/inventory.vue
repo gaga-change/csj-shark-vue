@@ -11,21 +11,35 @@
       v-if="SumSkuQty"
     >
       <div>
-        <el-button
-          @click="getExport"
-          type="primary"
-          size="mini"
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="状态转移表格中勾选的内容"
+          placement="top"
         >
-          导出
-        </el-button>
-        <el-button
-          @click="showStateTransition"
-          type="primary"
-          size="mini"
-          :disabled="!selectRows.length"
+          <el-button
+            @click="showStateTransition"
+            type="primary"
+            size="mini"
+            :disabled="!selectRows.length"
+          >
+            状态转移
+          </el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="导出当前查询的所有记录"
+          placement="top"
         >
-          状态转移
-        </el-button>
+          <el-button
+            @click="getExport"
+            type="primary"
+            size="mini"
+          >
+            导出
+          </el-button>
+        </el-tooltip>
       </div>
       <div class="Total">
         <span>库存合计 ：</span> <span>{{SumSkuQty}}</span>
@@ -188,6 +202,7 @@ export default {
         checkResult: '',
         warehouseSpaceCode: '',
       },
+      nowRuleForm: {},
       tableData: [],
       inventoryTableConfig,
       total: 0,
@@ -313,6 +328,7 @@ export default {
       })
       this.loading = true;
       let data = { ...this.ruleForm }
+      this.nowRuleForm = data
       selectSumSkuQty(data).then(res => {
         if (res) {
           this.SumSkuQty = res.data;
@@ -340,7 +356,7 @@ export default {
       this.getTableData();
     },
     getExport() {
-      exportLedger(this.ruleForm, '库存台账.xls')
+      exportLedger(this.nowRuleForm, '库存台账.xls')
     }
   }
 }
