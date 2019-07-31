@@ -95,8 +95,9 @@
                   </el-col>
                 </el-row>
               </el-form-item>
+              <br>
               <el-form-item label="库位长宽高">
-                <el-row :gutter="20">
+                <el-row :gutter="30">
                   <el-col :span="6">
                     <el-input-number
                       size="mini"

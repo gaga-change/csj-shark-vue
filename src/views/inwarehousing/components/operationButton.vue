@@ -42,7 +42,7 @@ import editTable from '@/components/Table/editTable'
 import { getBatchNo, modifyPrintState } from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
-import { businessChildTableEditConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
+import { businessChildTableEditConfig, planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
 
 export default {
@@ -60,7 +60,6 @@ export default {
       parentData: {},
       childData: [],
       businessChildTableEditConfig,
-      planChildTableLabelConfig,
       planChildTablePrintConfig,
       printPlan: [],//打印计划单
     }

@@ -221,7 +221,7 @@
       width="70%"
     >
       <edit-table
-        :config="planChildTableLabelConfig"
+        :config="planChildTableLabelArrivalConfig"
         :table-data="childData"
         v-loading="loading"
         :default-edit="false"
@@ -297,7 +297,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { MakePrint } from '@/utils'
 import { PositiveIntegerReg } from '@/utils/validator'
-import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig, planChildTableLabelConfig } from './components/config'
+import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig, planChildTableLabelArrivalConfig } from './components/config'
 import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, getBatchNo } from '@/api'
 export default {
   components: { DoubleTable, newSearch, webPaginationTable, editTable, printBills },
@@ -339,7 +339,7 @@ export default {
       skuRow: {},
       previewIt: true,
       selectMainTableRows: [],
-      planChildTableLabelConfig
+      planChildTableLabelArrivalConfig
     }
   },
 

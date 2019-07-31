@@ -49,6 +49,18 @@ export const businessChildTableEditConfig = [// 计划单操作列表
   { label: '正品数量(自动计算)', prop: 'receiveQty', width: 180 }
 ]
 
+export const planChildTableLabelArrivalConfig = [
+  { label: '业务行号', prop: 'busiIndex', minWidth: 80 },
+  { label: '商品编码', prop: 'skuCode', width: 150 },
+  { label: '商品名称', prop: 'skuName', width: 150 },
+  { label: '规格型号', prop: 'skuFormat', minWidth: 120 },
+  { label: '货主', prop: 'ownerName', width: 150 },
+  { label: '供应商', prop: 'providerName', width: 150 },
+  { label: '收货数量', prop: 'realInQty', minWidth: 120 },
+  { label: '批次', prop: 'batchNo', minWidth: 120 },
+  { label: '打印条数', prop: 'printNum', width: 200, editable: true, editType: 'inputNumber', fixed: 'right', max: 100 },//unconfirm 
+]
+
 export const planChildTableLabelConfig = [// 计划单商品条码打印列表
   { label: '业务行号', prop: 'busiIndex', minWidth: 80 },
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -112,8 +124,6 @@ export const arrivalConfig = [// 收货单列表 unconfirmed
   { label: '操作人', prop: 'createrName' },
 ]
 
-
-// flowChildTableConfig
 export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
   { label: '业务行号', prop: 'busiIndex', },
   { label: '商品编码', prop: 'skuCode', },
@@ -125,7 +135,6 @@ export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
   { label: '收货数量', prop: 'receiveQty', width: 100, editable: true },
   { label: '已入库数量', prop: 'realInQty', width: 85 },
 ]
-
 
 export const arrivalAlertConfig = [
   { label: '序号', type: 'index', width: 50 },
@@ -188,7 +197,6 @@ export const recordListConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 
-
 export const inPushOrderConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '入库单号', prop: 'orderCode' },
@@ -206,8 +214,6 @@ export const inPushOrderDetailConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuFormat' },
   { label: '单位', prop: 'skuUnitCode' },
-  // { label:'商品数量',prop:''},
   { label: '入库数量', prop: 'inQty' },
   { label: '库位', dom: Storehouse() },
-  // { label:'批次',prop:''},
 ]
