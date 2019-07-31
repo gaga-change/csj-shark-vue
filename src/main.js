@@ -25,7 +25,7 @@ import { EXTENDS } from './assets/extends'
 Vue.component('BaseTable', BaseTable);
 Vue.component('SearchForm', SearchForm);
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, { locale, size: 'mini' })
 Vue.use(EXTENDS)
 Vue.use(ItemTitle);
 Vue.use(ItemCard);

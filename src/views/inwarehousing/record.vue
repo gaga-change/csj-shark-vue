@@ -179,6 +179,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.record {
-}
+// .record {
+// }
 </style>
