@@ -20,7 +20,7 @@
         收货单列表
       </div>
       <base-table
-        :config="arrivalConfig"
+        :config="qualityTestingDetailTableConfig"
         :tableData="prodList"
       >
       </base-table>
@@ -51,13 +51,13 @@
 <script>
 import DetailItem from '@/components/DetailItem'
 import { getCheckOrderDetail } from '@/api'
-import { quailtyTestingDetailConfig, arrivalConfig } from './components/config'
+import { quailtyTestingDetailConfig, qualityTestingDetailTableConfig } from './components/config'
 export default {
   components: { DetailItem },
   data() {
     return {
       getCheckOrderDetailLoading: false,
-      arrivalConfig,
+      qualityTestingDetailTableConfig,
       quailtyTestingDetailConfig,
       detail: {},
       prodList: [],
@@ -73,7 +73,7 @@ export default {
       if (!res) return
       this.detail = res.data.checkOrderDO
       this.attachments = res.data.attachments
-      this.prodList = [res.data.receiveOrderDO]
+      this.prodList = res.data.detailDOS
     })
   },
 }

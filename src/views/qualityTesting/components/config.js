@@ -33,6 +33,15 @@ export const arrivalConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 
+export const qualityTestingDetailTableConfig = [
+  { label: '收货单号', prop: 'orderCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '收货数量', prop: 'receiveQty' },
+  { label: '质检数量', prop: 'checkQty' },
+  { label: '质检结果', prop: 'checkResult', useLocalEnum: true, type: 'checkResult2Enum' },
+]
+
 export const takeStockRecordConfig = [
   { label: '盘点单号', prop: 'orderCode' },
   { label: '创建人', prop: 'createrName' },
