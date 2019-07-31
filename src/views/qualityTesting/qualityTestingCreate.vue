@@ -5,6 +5,7 @@
         type="primary"
         size="mini"
         @click="showChooseProdDialog"
+        :disabled="end"
       >
         引入收货单
       </el-button>
@@ -52,6 +53,7 @@
             <el-button
               class="btn-link f14"
               size="mini"
+              :disabled="end"
               type="primary"
             >点击上传</el-button>
             <div
@@ -67,12 +69,14 @@
         type="primary"
         size="mini"
         @click="handleSubmitForm"
+        :disabled="end"
         :loading="checkOrderAddCheckOrderLoading"
       >
         提交
       </el-button>
       <el-button
         size="mini"
+        :disabled="end"
         @click="handleResetForm"
       >
         重置
@@ -90,10 +94,12 @@ import BaseTable from '@/components/Table'
 import { checkOrderAddCheckOrder, uploadReportFile } from '@/api'
 import { qualityTestingCreateTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
+import { mapGetters } from 'vuex'
 export default {
   components: { selectProduct, BaseTable },
   data() {
     return {
+      end: false,
       qualityTestingCreateTableConfig,
       checkOrderAddCheckOrderLoading: false,
       selectProductVisible: false,
@@ -102,6 +108,11 @@ export default {
       checkOrderAddReportLoading: false,
       fileList: [],
     }
+  },
+  computed: {
+    ...mapGetters({
+      visitedViews: 'visitedViews'
+    })
   },
   created() {
 
@@ -143,6 +154,8 @@ export default {
     },
     /** 提交 */
     handleSubmitForm() {
+      const view = this.visitedViews.filter(v => v.path === this.$route.path)
+
       if (!this.tableData.length) {
         return this.$message.error('请引入收货单！')
       }
@@ -167,8 +180,18 @@ export default {
       }).then(res => {
         this.checkOrderAddCheckOrderLoading = false
         if (!res) return
-        this.$message.success('操作成功！')
         this.handleResetForm()
+        this.$message.success('新建质检记录成功，即将跳转到质检记录列表！')
+        this.end = true
+        setTimeout(() => {
+          this.$store.dispatch('delVisitedViews', view[0]).then(() => {
+            this.$router.push({
+              path: `/qualityTesting/record`,
+              query: { t: Date.now() }
+            })
+          }).catch(err => {
+          })
+        }, 3000);
       })
     },
     /** 重置 */
