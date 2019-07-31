@@ -37,9 +37,11 @@
         <el-form-item label="备注">
           <el-input
             style="width:300px;"
+            maxlength="20"
             type="textarea"
             placeholder="根据需要填写，比如重新盘点"
             v-model="remark"
+            show-word-limit
           ></el-input>
         </el-form-item>
       </el-form>
@@ -99,7 +101,7 @@ export default {
       }).then(res => {
         this.insertInventoryOrderLoading = false
         if (!res) return
-        this.$message.success('提交成功！')
+        this.$message.success('操作成功！')
         this.handleResetForm()
       })
     },
