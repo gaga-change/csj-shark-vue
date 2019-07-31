@@ -80,7 +80,7 @@
             <span class="fw700">商品批次</span>：<span>{{selectRow.batchNo}}</span>
           </span>
           <span class="mr25 nowrap">
-            <span class="fw700">残次品数量</span>：<span>{{selectRow.badReceiveQty || 0}}</span>
+            <span class="fw700">残次品数量</span>：<span>{{selectRow.skuQty}}</span>
           </span>
         </div>
         <div class="mt25">
