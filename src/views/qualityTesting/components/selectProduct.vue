@@ -7,7 +7,7 @@
       :before-close="handleClose"
       @close="close"
     >
-      <div class="arrival Arrival">
+      <div class="">
         <div class="mt10">
           <search-form
             :config="selectGoodsSearchConfig"
