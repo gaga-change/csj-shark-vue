@@ -49,7 +49,7 @@
           <el-button
             class="btn-link"
             v-if="scope.row.executeStatus === 0"
-            @click="handleChangeStatus(scope.row, 1)"
+            @click="handleChangeStatus(scope.row, 0)"
           >
             取消
           </el-button>
