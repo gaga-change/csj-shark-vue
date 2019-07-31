@@ -7,6 +7,7 @@ export const takeStockSelectProductTableConfig = [
   { label: '单位', prop: 'skuUnitName' },
   { label: '库存数量', prop: 'skuQty' },
   { label: '仓库名称', prop: 'warehouseName' },
+  { label: '库区库位', prop: 'areaSpceCode' },
 ]
 
 export const takeStockListConfig = [

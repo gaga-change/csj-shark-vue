@@ -91,6 +91,7 @@
         <base-table
           ref='baseTable'
           :config="takeStockSelectProductTableConfig"
+          :parseData="parseData"
           :api="planInventoryQuerysSkuStockList"
           :select="true"
           :selectTotal="true"
@@ -176,6 +177,15 @@ export default {
     this.initData()
   },
   methods: {
+    parseData(res) {
+      return {
+        data: res.data.list.map(v => {
+          v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+          return v
+        }),
+        total: res.data.total
+      }
+    },
     initData() {
       this.getSelectInventoryAreaListLoading = true
       getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
