@@ -44,7 +44,7 @@
                     <td>{{son.skuFormat}}</td>
                     <td>{{son.skuUnitCode}}</td>
                     <td>{{son.areaSpceCode}}</td>
-                    <td>{{son.skuQty}}</td>
+                    <td>{{son.stockQty}}</td>
                     <td>{{son.inventoryQty}}</td>
                   </tr>
                 </table>
