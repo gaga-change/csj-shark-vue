@@ -125,7 +125,7 @@ export default {
     },
     /** 输入框内容改变 */
     inputNumberChange({ row, index, value }) {
-      this.prodList[index].profitLossQty = value - (Number(row.skuQty) || 0)
+      this.prodList[index].profitLossQty = value - (Number(row.stockQty) || 0)
     }
   },
 }
