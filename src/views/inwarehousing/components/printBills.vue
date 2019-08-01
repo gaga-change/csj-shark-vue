@@ -2,8 +2,9 @@
   <div>
     <el-dialog
       title="打印预览"
-      :visible.sync="visible"
+      :visible="visible"
       width="80%"
+      @close="close"
       :before-close="handleClose"
     >
       <div v-loading="orderDetailListLoading">
