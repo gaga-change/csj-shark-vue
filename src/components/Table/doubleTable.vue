@@ -35,6 +35,7 @@
                 @editDataSelect="editDataSelect"
                 @dataChange="dataChange"
                 :editText="editText"
+                :useEdit="false"
                 :table-data="childTable.row[childDataName]"
                 :unique="String(childTable.row[expandKey])"
                 :config="childTableConfigFilter"

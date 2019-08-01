@@ -132,7 +132,7 @@ export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
   { label: '单位', prop: 'skuUnitName', },
   { label: '商品数量', prop: 'planQty', },
   { label: '批次', prop: 'batchNo', },
-  { label: '收货数量', prop: 'receiveQty', width: 100, editable: true },
+  { label: '收货数量', prop: 'receiveQty' },
   { label: '已入库数量', prop: 'realInQty', width: 85 },
 ]
 

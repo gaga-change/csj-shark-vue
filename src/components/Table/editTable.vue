@@ -36,8 +36,8 @@
               <el-input-number
                 v-model="scope.row[item.prop]"
                 controls-position="right"
-                :min="item.min || 1"
-                :max="item.max || 1000"
+                :min="typeof item.min === 'number' ? item.min:  1"
+                :max="item.max || 99999999"
                 size="mini"
               ></el-input-number>
             </template>

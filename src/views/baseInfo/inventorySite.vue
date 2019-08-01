@@ -251,7 +251,6 @@
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import BaseTable from '@/components/Table'
-import DoubleTable from '@/components/Table/doubleTable'
 import { SimpleMsg } from '@/utils/luoFun'
 import { siteTableConfig } from './components/config'
 import { addInventorySite, getInventorySite, warehouseSpaceUpdateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
