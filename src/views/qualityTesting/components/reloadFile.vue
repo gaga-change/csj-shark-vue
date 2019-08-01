@@ -15,6 +15,7 @@
           :on-remove="handleRemove"
           :on-success="handleSuccess"
           :before-remove="beforeRemove"
+          :before-upload="beforeAvatarUpload"
           multiple
           :http-request="uploadSectionFile"
           :limit="10"
@@ -28,7 +29,7 @@
           <div
             slot="tip"
             class="el-upload__tip"
-          ></div>
+          >支持扩展名：.doc .docx .pdf .jpg .png，大小不能超过2M，限制10条。</div>
         </el-upload>
       </div>
       <span slot="footer">
@@ -65,6 +66,7 @@ export default {
       checkOrderAddReportLoading: false,
       fileList: [],
       addFile: [],
+      supportFileSuffix: ['.doc', '.docx', '.pdf', '.jpg', '.png'],
     }
   },
   watch: {
@@ -89,6 +91,23 @@ export default {
         })
       })
     },
+    beforeAvatarUpload(file) {
+      return this.checkFile(file)
+    },
+    /** 文件校验 */
+    checkFile(file) {
+      let temp = file.name.split('.')
+      let suffix = '.' + temp[temp.length - 1]
+      const isSupport = !!~this.supportFileSuffix.findIndex(v => v === suffix)
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isSupport) {
+        this.$message.error('不支持扩展名：' + suffix)
+      }
+      if (!isLt2M) {
+        this.$message.error('上传文件大小不能超过 2MB!')
+      }
+      return isSupport && isLt2M
+    },
     uploadSectionFile(param) {
       let fileObj = param.file
       let form = new FormData()
@@ -109,7 +128,8 @@ export default {
       })
     },
     handleRemove(file, fileList) {
-
+      let index = this.fileList.findIndex(v => v.uid === file.uid)
+      ~index && this.fileList.splice(index, 1)
     },
     handleSuccess(file, fileList) {
       this.addFile.push(file)
@@ -121,6 +141,8 @@ export default {
       this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     beforeRemove(file, fileList) {
+      // file.raw === true  说明是不符合格式，自动删除的
+      if (file.raw) return true
       return new Promise((resulve, reject) => {
         this.$msgbox({
           title: '消息',

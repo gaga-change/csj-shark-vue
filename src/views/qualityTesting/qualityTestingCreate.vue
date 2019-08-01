@@ -44,6 +44,7 @@
             :on-remove="handleRemove"
             :on-success="handleSuccess"
             :before-remove="beforeRemove"
+            :before-upload="beforeAvatarUpload"
             multiple
             :http-request="uploadSectionFile"
             :limit="10"
@@ -51,15 +52,16 @@
             :file-list="fileList"
           >
             <el-button
-              class="btn-link f14"
+              class="f14"
               size="mini"
+              type="success"
+              plain
               :disabled="end"
-              type="primary"
             >点击上传</el-button>
             <div
               slot="tip"
               class="el-upload__tip"
-            ></div>
+            >支持扩展名：.doc .docx .pdf .jpg .png，大小不能超过2M，限制10条。</div>
           </el-upload>
         </div>
       </div>
@@ -107,6 +109,7 @@ export default {
       getCheckReportByOrderCodeLoading: false,
       checkOrderAddReportLoading: false,
       fileList: [],
+      supportFileSuffix: ['.doc', '.docx', '.pdf', '.jpg', '.png'],
     }
   },
   computed: {
@@ -118,6 +121,9 @@ export default {
 
   },
   methods: {
+    beforeAvatarUpload(file) {
+      return this.checkFile(file)
+    },
     uploadSectionFile(param) {
       let fileObj = param.file
       let form = new FormData()
@@ -137,19 +143,36 @@ export default {
         }
       })
     },
+    /** 文件校验 */
+    checkFile(file) {
+      let temp = file.name.split('.')
+      let suffix = '.' + temp[temp.length - 1]
+      const isSupport = !!~this.supportFileSuffix.findIndex(v => v === suffix)
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isSupport) {
+        this.$message.error('不支持扩展名：' + suffix)
+      }
+      if (!isLt2M) {
+        this.$message.error('上传文件大小不能超过 2MB!')
+      }
+      return isSupport && isLt2M
+    },
     handleRemove(file, fileList) {
-      this.fileList.splice(this.fileList.find(v => v.uid === file.uid), 1)
+      let index = this.fileList.findIndex(v => v.uid === file.uid)
+      ~index && this.fileList.splice(index, 1)
     },
     handleSuccess(file, fileList) {
       this.fileList.push(file)
     },
     handlePreview(file) {
-      window.open(file.url)
+     window.open(file.url)
     },
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     beforeRemove(file, fileList) {
+      // file.raw === true  说明是不符合格式，自动删除的
+      if (file.raw) return true
       return this.$confirm(`确定移除 ${file.name}？`)
     },
     /** 提交 */
@@ -191,7 +214,7 @@ export default {
             })
           }).catch(err => {
           })
-        }, 3000);
+        }, 3000)
       })
     },
     /** 重置 */

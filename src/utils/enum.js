@@ -1,6 +1,5 @@
 //入库状态
 export const SortStatus = [
-
   {
     name: '未拣货',
     value: 0
@@ -14,11 +13,10 @@ export const SortStatus = [
     name: '拣货完成',
     value: 2
   },
-];
+]
 
 //入库状态
 export const ExecStatusEnum = [
-
   {
     name: '未入库',
     value: 0
@@ -32,10 +30,10 @@ export const ExecStatusEnum = [
     name: '全部入库',
     value: 8
   },
-];
+]
+
 //出库状态
 export const OutExecStatusEnum = [
-
   {
     name: '未出库',
     value: 0
@@ -49,11 +47,10 @@ export const OutExecStatusEnum = [
     name: '全部出库',
     value: 8
   },
-];
+]
 
 //单据状态
 export const OrderStatusEnum = [
-
   {
     name: '草稿',
     value: 0,
@@ -75,10 +72,10 @@ export const OrderStatusEnum = [
     value: 3,
     show: false,
   },
-];
+]
+
 //
 export const OutOrderStatusEnum = [
-
   {
     name: '草稿',
     value: 0,
@@ -100,7 +97,7 @@ export const OutOrderStatusEnum = [
     value: 3,
     show: false,
   },
-];
+]
 
 export const outboundOrderStatus = [
   {
@@ -116,6 +113,7 @@ export const outboundOrderStatus = [
     value: 2
   },
 ]
+
 //物流状态
 export const logisticsStatusEnum = [
   {
