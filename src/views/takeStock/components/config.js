@@ -6,7 +6,6 @@ export const takeStockSelectProductTableConfig = [
   { label: '规格型号', prop: 'skuFormat' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '库存数量', prop: 'skuQty' },
-  { label: '仓库名称', prop: 'warehouseName' },
   { label: '库区库位', prop: 'areaSpceCode' },
 ]
 
@@ -66,7 +65,7 @@ export const takeStockRecordProductTableConfig = [
   { label: '规格型号', prop: 'skuFormat' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '库区库位', prop: 'areaSpceCode' },
-  { label: '库存数量', prop: 'skuQty' },
+  { label: '库存数量', prop: 'stockQty' },
   { label: '实际盘点数量', prop: 'inventoryQty', edit: true, inputType: "number", width: 160 },
   { label: '盈亏数量（自动计算）', prop: 'profitLossQty', width: 150 },
   { label: '状态', prop: 'executeStatus', useLocalEnum: true, type: 'executeStatus2Enum' },

@@ -62,24 +62,3 @@ export const qualityTestingCreateTableConfig = [
   { label: '质检数量', prop: 'receiveQty' },
   { label: '质检结果', prop: 'checkResult', edit: true, inputType: 'select', type: 'checkResult3Enum' },
 ]
-
-export const takeStockRecordConfig = [
-  { label: '盘点单号', prop: 'orderCode' },
-  { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
-  { label: '仓库名称', prop: 'warehouseName' },
-  { label: '备注', prop: 'remarkInfo' },
-]
-
-export const takeStockRecordProductTableConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '批次', prop: 'batchNo' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '单位', prop: 'skuUnitName' },
-  { label: '库区库位', prop: 'areaSpceCode' },
-  { label: '库存数量', prop: 'skuQty' },
-  { label: '实际盘点数量', prop: 'inventoryQty', edit: true, inputType: "number", width: 160 },
-  { label: '盈亏数量（自动计算）', prop: 'profitLossQty', width: 150 },
-  { label: '状态', prop: 'executeStatus', useLocalEnum: true, type: 'executeStatus2Enum' },
-]
