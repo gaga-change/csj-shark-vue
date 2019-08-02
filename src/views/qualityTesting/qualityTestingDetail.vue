@@ -79,7 +79,7 @@ export default {
   methods: {
     handlePreview(url, name) {
       if (!url) return this.$message.error('链接地址已失效！')
-      window.open(url.replace('http://dfs.csjscm.com', '/preview_file') + '?name=' + encodeURIComponent(name))
+      window.open(url + '?name=' + encodeURIComponent(name))
     },
   },
 }

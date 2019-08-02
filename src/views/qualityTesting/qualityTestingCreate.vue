@@ -167,7 +167,7 @@ export default {
     handlePreview(file) {
       if ((!file.raw && !file.url) || (file.raw && !file.raw.url)) return this.$message.error('链接地址已失效！')
       let url = file.url || file.raw.url
-      window.open(url.replace('http://dfs.csjscm.com', '/preview_file') + '?name=' + encodeURIComponent(file.name))
+      window.open(url + '?name=' + encodeURIComponent(file.name))
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
