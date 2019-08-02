@@ -40,13 +40,13 @@
         >
         </double-table>
       </div>
-      <el-alert
+      <!-- <el-alert
         class="mt15"
         title="注：点击表格中的行即可选中！"
         type="info"
         :closable="false"
       >
-      </el-alert>
+      </el-alert> -->
       <span
         slot="footer"
         class="dialog-footer"
