@@ -34,6 +34,7 @@
                     <th>总数量</th>
                     <th>已入库</th>
                     <th>收货数量</th>
+                    <!-- <th>上架量/货位</th> -->
                   </tr>
                   <tr
                     v-for="(son, i) in item.children"
@@ -47,6 +48,7 @@
                     <td>{{son.planQty}}</td>
                     <td>{{son.realInQty}}</td>
                     <td>{{son.receiveQty}}</td>
+                    <!-- <td>{{son.putQty/son.warehouseSpaceCode}}</td> -->
                   </tr>
                 </table>
               </div>

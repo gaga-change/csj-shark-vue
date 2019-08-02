@@ -46,7 +46,7 @@ export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
 ]
 
 export const qualityTestingDetailTableConfig = [
-  { label: '收货单号', prop: 'orderCode' },
+  { label: '收货单号', prop: 'receiveOrderCode' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '收货数量', prop: 'receiveQty' },

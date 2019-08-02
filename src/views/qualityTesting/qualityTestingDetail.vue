@@ -38,9 +38,9 @@
           :key="index"
         >
           <a
+            @click="handlePreview(item.reportUrl, item.reportName)"
             class="btn-link"
-            :href="item.reportUrl"
-            target="_blank"
+            href="JavaScript:void(0)"
           >{{item.reportName}}</a>
         </p>
       </div>
@@ -75,6 +75,12 @@ export default {
       this.attachments = res.data.attachments
       this.prodList = res.data.detailDOS
     })
+  },
+  methods: {
+    handlePreview(url, name) {
+      if (!url) return this.$message.error('链接地址已失效！')
+      window.open(url.replace('http://dfs.csjscm.com', '/preview_file') + '?name=' + encodeURIComponent(name))
+    },
   },
 }
 </script>
