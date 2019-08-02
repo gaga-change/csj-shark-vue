@@ -10,12 +10,17 @@
       <div v-loading="orderDetailListLoading">
         <div ref="print">
           <div
+            class="mt20"
             v-for="(item ,index) in showRowsData"
             :key="index"
           >
             <div :class="{'hide': index}">
-              <div>
-                <h3>基本信息</h3>
+              <div style="display: flex;">
+                <h3 style="flex: 1;">基本信息</h3>
+                <bar-code
+                  :code="item.orderCode"
+                  style="width: auto;max-height:70px;padding-top:5px"
+                />
               </div>
               <div class="mb15">
                 <span class="f14 mr15 mt10 nowrap"><span>收货单号:</span><span>{{item.orderCode}}</span></span>
@@ -74,10 +79,12 @@
   </div>
 </template>
 <script>
+import BarCode from '@/components/BarCode/BarCode'
 import { orderDetailList } from '@/api'
 import { MakePrint } from '@/utils'
 import moment from 'moment'
 export default {
+  components: { BarCode },
   props: {
     visible: {
       type: Boolean,
