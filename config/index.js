@@ -24,6 +24,13 @@ proxyTableArr.forEach(item => {
   }
 })
 
+// 文件服务器代理，和项目根目录下 nginx.conf 配置相关连
+proxyTable['/preview_file'] = {
+  target: 'http://dfs.csjscm.com',
+  changeOrigin: true,
+  pathRewrite: {'^/preview_file': '/'}
+}
+
 module.exports = {
   dev: {
     // Paths
