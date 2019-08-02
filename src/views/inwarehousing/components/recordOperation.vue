@@ -178,7 +178,7 @@
                 <div class="labelItem"><span class="labelItemLeft">规格型号</span><span>{{item.skuFormat}}</span></div>
                 <div class="labelItem"><span class="labelItemLeft">货主</span><span>{{item.ownerName}}</span></div>
                 <div>
-                  <bar-code :code="item.batchNo"></bar-code>
+                  <bar-code :code="item.skuCode"></bar-code>
                 </div>
               </div>
             </div>
