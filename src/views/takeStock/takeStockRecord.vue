@@ -76,7 +76,7 @@ export default {
       takeStockRecordProductTableConfig,
       takeStockRecordConfig,
       detail: {},
-      prodList: []
+      prodList: [],
     }
   },
   computed: {
@@ -93,7 +93,9 @@ export default {
       this.detail = res.data.inventoryOrderDO
       this.prodList = res.data.orderDetailDOS.map(v => {
         v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+        if (v.inventoryQty === null) v.inventoryQty = v.stockQty
         v.inputTypeNumberDisabled = v.executeStatus !== 0
+        v.profitLossQty = (Number(v.inventoryQty) || 0) - (Number(v.stockQty) || 0)
         return v
       })
     })
@@ -101,7 +103,6 @@ export default {
   methods: {
     submit(isSubmit) {
       const view = this.visitedViews.filter(v => v.path === this.$route.path)
-
       this.inventoryInbentoryRecordLoading = true
       inventoryInbentoryRecord({
         inventoryOrderId: this.$route.query.id,
@@ -120,12 +121,18 @@ export default {
             })
           }).catch(err => {
           })
-        }, 3000);
+        }, 3000)
       })
     },
     /** 输入框内容改变 */
     inputNumberChange({ row, index, value }) {
-      this.prodList[index].profitLossQty = value - (Number(row.stockQty) || 0)
+      if (value === undefined || value === '') {
+        value = 0
+        this.$nextTick(v => {
+          row.inventoryQty = 0
+        })
+      }
+      this.prodList[index].profitLossQty = (Number(value) || 0) - (Number(row.stockQty) || 0)
     }
   },
 }
