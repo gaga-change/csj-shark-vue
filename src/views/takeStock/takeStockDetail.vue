@@ -52,7 +52,7 @@ export default {
       if (!res) return
       this.detail = res.data.inventoryOrderDO
       this.prodList = res.data.orderDetailDOS.map(v => {
-        v.profitLossQty = v.inventoryQty - v.stockQty
+        if (v.inventoryQty !== null) v.profitLossQty = v.inventoryQty - v.stockQty
         v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
         return v
       })
