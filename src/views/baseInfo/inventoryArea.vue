@@ -86,7 +86,6 @@
             disabled
           ></el-input>
         </el-form-item>
-
         <el-form-item
           label="仓库名称"
           prop="warehouseName"
@@ -98,50 +97,34 @@
             disabled
           ></el-input>
         </el-form-item>
-
         <el-form-item
           label="库区编码"
           prop="warehouseAreaCode"
-          :rules="[{ required: true, message: '请选择库区'}]"
+          :rules="[
+          { required: true, message: '请选择库区'},
+          { min: 1, max: 6, message: '长度在 1 到 6 个字符', trigger: 'change' }, 
+          { pattern: /^[0-9a-zA-Z]+$/, message: '只能输入字母和数字' }]"
         >
-          <el-select
-            v-model="formParams.warehouseAreaCode"
-            clearable
-            placeholder="请选择库区"
+          <el-input
             :disabled="formType!='add'"
-            size="mini"
-          >
-            <el-option
-              v-for="item in AtoZ"
-              :key="item.name"
-              :label="item.name"
-              :disabled="item.isUsed"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+            type="primary"
+            v-model="formParams.warehouseAreaCode"
+            placeholder="请输入库区"
+          ></el-input>
         </el-form-item>
-
         <el-form-item
           label="是否虚拟区"
           label-width="90px"
-          :rules="[{ required: true, message: '请选择'}]"
+          prop="isVirtual"
         >
-          <el-select
+          <el-switch
             v-model="formParams.isVirtual"
             :disabled="formType!='add'"
-            clearable
-            placeholder="请选择"
-            size="mini"
+            :active-value="1"
+            :inactive-value="0"
           >
-            <el-option
-              v-for="item in YesOrNoEnum"
-              :key="item.name"
-              :label="item.name"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+          </el-switch>
         </el-form-item>
-
         <el-form-item
           label="库区性质"
           prop="warehouseAreaNature"
@@ -162,7 +145,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item
           label="库区功能"
           prop="warehouseAreaDesc"
@@ -203,7 +185,7 @@ import { SimpleMsg } from '@/utils/luoFun'
 import { areaTableConfig } from './components/config'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea, getSelectInventoryAreaList } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
-import { WarehouseAreaNatureEnum, YesOrNoEnum, AtoZ, isVirtualenum } from '@/utils/enum'
+import { WarehouseAreaNatureEnum, YesOrNoEnum, isVirtualenum } from '@/utils/enum'
 import SearchLogistics from './components/search'
 
 export default {
@@ -225,7 +207,6 @@ export default {
       YesOrNoEnum,
       WarehouseAreaNatureEnum,
       isVirtualenum,
-      AtoZ,
       formRules: {},
       selectData: {//x选中的单据
 
@@ -240,14 +221,14 @@ export default {
       childDataName: '',
       //表格配置
       tableConfig: areaTableConfig,
-      // currentPage:1,
-      // pageSize:10,
       total: 0,
       childCanSelect: false,//子表可选择,false不可选，
       // accordionExpand:true,//手风琴展开
       multipleSelection: [],//选中的子表数据
       expandKey: 'id',
-      formParams: {},
+      formParams: {
+        isVirtual: 0
+      },
       logisticsFilter: [],
       formType: '',
       warehouseName: '',
@@ -274,8 +255,6 @@ export default {
           })
         }
       },
-      // 深度观察监听
-      // deep: true
     }
   },
   created() {
@@ -342,7 +321,7 @@ export default {
           SimpleMsg({
             result: res.success, msgType: 'user', msg: this.formParams.warehouseAreaStatus ? '启用' : '禁用',
             cb: () => {
-              this.dialogVisible = false;
+              this.dialogVisible = false
               this.getTableData()
             }
           })
@@ -355,7 +334,6 @@ export default {
         query: { data: JSON.stringify(this.ruleForm) }
       })
       this.loading = true;
-
       let data = { ...this.ruleForm, warehouseCode: this.chooseWarehouse }
       getInventoryArea(data).then(res => {
         this.loading = false
@@ -366,22 +344,6 @@ export default {
           return v
         })
         this.total = res.data.total
-      })
-      getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
-        if (res && res.data && res.data.length > 0) {
-          let tempList = [...this.AtoZ]
-          let temp = res.data.map(item => item.warehouseAreaCode)
-          tempList.map(item => {
-            if (temp.includes(item.value)) {
-              item.isUsed = true
-            } else {
-              item.isUsed = false
-            }
-            return item
-          })
-          this.AtoZ = [...tempList]
-
-        }
       })
     },
 
@@ -397,15 +359,13 @@ export default {
     },
     submitForm(ruleForm) {
       this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1 }
-      this.getTableData();
+      this.getTableData()
 
     },
 
     submitIt() {
-
       this.$refs['subForm'].validate((valid) => {
         if (valid) {
-
           this.formParams.warehouseCode = this.chooseWarehouse
           this.formParams.warehouseAreaName = this.formParams.warehouseAreaCode
           if (this.formParams.id) {
@@ -436,14 +396,14 @@ export default {
             })
           }
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
 
     formHandle(type) {
       if (type == 'add') {
-        this.formParams = {}
+        this.formParams = { isVirtual: 0 }
       } else if (type == 'edit') {
         this.dialogTitle = '修改'
       } else if (type == "watch") {
