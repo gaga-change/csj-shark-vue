@@ -35,7 +35,7 @@ newAxios.interceptors.response.use(function (response) {
   return data
 }, function (error) {
   let message = error.message || err.errorMsg || ''
-  if (message = 'timeout of 1500ms exceeded') message = '请求超时，请稍后再试！'
+  if (message === 'timeout of 1500ms exceeded') message = '请求超时，请稍后再试！'
   Notification({
     title: '错误信息',
     message: message,
