@@ -220,7 +220,10 @@
           class="printItemCss"
           :key="item.warehouseSpaceCode"
         >
-          <bar-code :code="item.warehouseSpaceCode"></bar-code>
+          <bar-code
+            :code="item.warehouseSpaceCode"
+            fontSize="5mm"
+          ></bar-code>
         </div>
       </div>
       <span
