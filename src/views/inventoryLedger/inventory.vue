@@ -70,7 +70,7 @@
           class="btn-link"
           type="button"
           size='mini'
-          :disabled="scope.row.checkResult !== 1"
+          :disabled="scope.row.skuQty === 0"
           @click="showMoveLibrary(scope.row)"
         >
           移库
@@ -100,6 +100,19 @@
         </div>
         <div class="mt25">
           <div>
+            <span
+              class="fw700"
+              style="display:inline-block;width:100px;"
+            >数量</span>
+            <el-input-number
+              v-model="newSkuQty"
+              controls-position="right"
+              :min="1"
+              :precision="0"
+              :max="selectRow.skuQty"
+            ></el-input-number>
+          </div>
+          <div class="mt15">
             <span
               class="fw700"
               style="display:inline-block;width: 100px;"
@@ -209,7 +222,8 @@ export default {
       SumSkuQty: 0,
       moveLibraryDialogVisible: false,
       selectRow: null,
-      newWarehouseSpaceCode: null, // 新库位
+      newWarehouseSpaceCode: undefined, // 新库位
+      newSkuQty: undefined, // 新库存
       warehouseSpaceCodeConfig: [],
       warehouseSpaceSelectLoading: false,
       skuStockMoveLoading: false,
@@ -291,7 +305,8 @@ export default {
     handleClose(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
-          this.newWarehouseSpaceCode = null
+          this.newWarehouseSpaceCode = undefined
+          this.newSkuQty = undefined
           done()
         })
         .catch(_ => { })
@@ -299,19 +314,22 @@ export default {
     /** 显示移库操作 */
     showMoveLibrary(row) {
       this.selectRow = row
+      this.newSkuQty = row.skuQty
       this.moveLibraryDialogVisible = true
     },
     /** 移库处理 */
     moveLibrary() {
       let code = this.newWarehouseSpaceCode
+      let newSkuQty = this.newSkuQty
       let row = this.selectRow
       if (!code) {
-        return this.$message('请选择新库位！')
+        return this.$message.error('请选择新库位！')
       }
       this.skuStockMoveLoading = true
       skuStockMove({
         stockId: row.id,
         warehouseSpaceCode: code,
+        moveQty: newSkuQty,
         warehouseAreaCode: this.warehouseSpaceCodeConfig.find(v => v.warehouseSpaceCode === code).warehouseAreaCode,
       }).then(res => {
         this.skuStockMoveLoading = false
