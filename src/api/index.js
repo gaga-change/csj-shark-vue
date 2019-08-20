@@ -88,18 +88,9 @@ export const getCheckReportByOrderCode = params => http.get(`/webApi/plan/checkO
 export const getCheckOrderDetail = params => http.get(`/webApi/plan/checkOrder/getCheckOrderDetail`, { params })
 /** 引入收货单查询收货单记录 */
 export const queryReceiverOrder = params => http.get(`/webApi/plan/checkOrder/queryReceiverOrder`, { params })
-
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)
-/** 新增库位
- * "warehouseAreaCode": "string //库区编码",
-  "platoonStart": "int //库位排号 开始位置",
-  "platoonEnd": "int //库位排号 结束位置",
-  "columnStart": "int //库位列号 开始位置",
-  "columnEnd": "int //库位列号 结束位置",
-  "floorStart": "int //库位层号 开始位置",
-  "floorEnd": "int //库位层号 结束位置"
- */
+/** 新增库位 */
 export const addInventorySite = params => http.post(`/webApi/basic/warehouseSpace/addByBatch`, params)
 /** 库位列表 */
 export const getInventorySite = params => http.post(`/webApi/basic/warehouseSpace/select`, params)

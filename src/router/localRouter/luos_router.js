@@ -218,6 +218,27 @@ export default [
         component: _import('baseInfo/inventorySite'),
         hidden: false,
       },
+      {
+        name: 'productList',
+        path: 'productList',
+        meta: { title: '商品管理', noCache: true },
+        component: _import('baseInfo/productList'),
+        hidden: false,
+      },
+      {
+        name: 'containerList',
+        path: 'containerList',
+        meta: { title: '容器管理', noCache: true },
+        component: _import('baseInfo/containerList'),
+        hidden: false,
+      },
+      {
+        name: 'packList',
+        path: 'packList',
+        meta: { title: '包装管理', noCache: true },
+        component: _import('baseInfo/packList'),
+        hidden: false,
+      },
     ]
   },
   {
