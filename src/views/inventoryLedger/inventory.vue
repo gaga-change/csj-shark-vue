@@ -70,7 +70,7 @@
           class="btn-link"
           type="button"
           size='mini'
-          :disabled="scope.row.skuQty === 0"
+          :disabled="(scope.row.skuQty - scope.row.blockQty) <= 0"
           @click="showMoveLibrary(scope.row)"
         >
           移库
@@ -95,7 +95,7 @@
             <span class="fw700">商品批次</span>：<span>{{selectRow.batchNo}}</span>
           </span>
           <span class="mr25 nowrap">
-            <span class="fw700">残次品数量</span>：<span>{{selectRow.skuQty}}</span>
+            <span class="fw700">数量</span>：<span>{{Number(selectRow.skuQty - selectRow.blockQty).toFixed()}}</span>
           </span>
         </div>
         <div class="mt25">
@@ -109,7 +109,7 @@
               controls-position="right"
               :min="1"
               :precision="0"
-              :max="selectRow.skuQty"
+              :max="selectRow.skuQty - selectRow.blockQty"
             ></el-input-number>
           </div>
           <div class="mt15">
