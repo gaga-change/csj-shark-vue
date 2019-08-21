@@ -1,10 +1,3 @@
-export const tableConfig = [
-  { label: '公司编码', prop: 'companyCode' },
-  { label: '物流公司名称', prop: 'companyName' },
-  { label: '地址', prop: 'linkAddress' },
-  { label: '联系人', prop: 'linkUser' },
-  { label: '创建人  ', prop: 'createrName' },
-]
 export const areaTableConfig = [// 库区列表
   { label: '库区编码', prop: 'warehouseAreaCode' },
   { label: '库区性质', prop: 'warehouseAreaNature', useLocalEnum: true, type: 'WarehouseAreaNatureEnum' },

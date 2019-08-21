@@ -1,41 +1,40 @@
 <template>
-  <div>
-    <search-logistics
-      @searchTrigger="submitForm"
-      :search-forms="ruleForm"
+  <div class="LogisticsComponent">
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="getLogisticsList"
+      :showControl="true"
+      :labelWidth="100"
     >
-    </search-logistics>
-
-    <el-button
-      type="primary"
-      size="mini"
-      style="margin-bottom:12px"
-      @click="logisticsHandle('add')"
-    >
-      添加
-    </el-button>
-
-    <double-table
-      :loading="loading"
-      :table-data="tableData"
-      :handle-button-map="handleButtonMap"
-      :config="tableConfig"
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :total="total"
-      :maxTotal="10"
-      :expand-key="expandKey"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
-    >
-    </double-table>
-
+      <template slot-scope="scope">
+        <el-link
+          type="primary"
+          @click="logisticsForm={...scope.row};logisticsHandle('edit')"
+        >修改</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="logisticsDelect(scope.row)"
+        >删除</el-link>
+      </template>
+      <template slot="btns">
+        <el-button
+          type="primary"
+          size="mini"
+          style="margin-bottom:12px"
+          @click="logisticsHandle('add')"
+        >
+          添加
+        </el-button>
+      </template>
+    </base-list>
     <el-dialog
       :title="dialogTitle+'物流公司'"
       :visible.sync="dialogVisible"
       width="420px"
     >
-
       <el-form
         :model="logisticsForm"
         class="formInput"
@@ -133,19 +132,27 @@
 <script>
 import _ from 'lodash'
 import DoubleTable from '@/components/Table/doubleTable'
-import { tableConfig } from './components/config'
 import { getLogisticsList, addLogistics, updateLogistics, deleteLogistics, getLogisticsSearch } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import SearchLogistics from './components/search'
-
+const tableConfig = [
+  { label: '公司编码', prop: 'companyCode' },
+  { label: '物流公司名称', prop: 'companyName' },
+  { label: '地址', prop: 'linkAddress' },
+  { label: '联系人', prop: 'linkUser' },
+  { label: '创建人  ', prop: 'createrName' },
+]
+const searchConfig = [
+  { label: '物流公司名称', prop: 'companyName', type: 'input' }
+]
 export default {
   components: { DoubleTable, SearchLogistics },
   data() {
     return {
-      imgs: '',
-      loading: false,
+      tableConfig,
+      searchConfig,
+      getLogisticsList,
       dialogVisible: false,
-      dialogData: {},
       dialogTitle: '',
       ruleForm: {
         pageNum: 1,
@@ -153,39 +160,10 @@ export default {
         companyName: '',
       },
       logisticsRules: {},
-      selectData: {//x选中的单据
-
-      },
-      // searchForms,
       tableData: [
       ],
-      // pageNum:0,
-      // pageSize:10,
-      //子表数据名称 为空时不显示不可展开
       childDataName: '',
-      //表格配置
-      tableConfig: tableConfig,
-      // currentPage:1,
-      // pageSize:10,
-      total: 0,
-      //主表操作
-      handleButtonMap: [
-        {          title: '修改', handle: (index, data) => {
-            this.logisticsHandle('edit')
-            this.logisticsForm = { ...data }
-
-          }        },
-        {          title: '删除', handle: (index, data) => {
-            this.logisticsDelect(data)
-
-          }        }
-      ],
-      childCanSelect: false,//子表可选择,false不可选，
-      // accordionExpand:true,//手风琴展开
-      multipleSelection: [],//选中的子表数据
-      expandKey: 'id',
       logisticsForm: {},
-      logisticsFilter: []
     }
   },
   methods: {
@@ -217,38 +195,8 @@ export default {
     handleSelect(item) {
       this.logisticsForm.companyCode = item.companyCode
     },
-
     getTableData() {
-      this.$router.replace({
-        path: '/baseInfo/logistics',
-        query: { data: JSON.stringify(this.ruleForm) }
-      })
-      this.loading = true;
-      let data = { ...this.ruleForm }
-      getLogisticsList(data).then(res => {
-        this.loading = false;
-        if (res && res.data && res.data.list) {
-          this.tableData = [...res.data.list]
-          this.total = res.data.total
-        } else {
-          this.tableData = []
-          this.total = 0
-        }
-      })
-    },
-
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1 }
-      this.getTableData();
+      this.$refs['baseList'].fetchData()
     },
     submitIt() {
       this.$refs['subForm'].validate((valid) => {
@@ -289,7 +237,6 @@ export default {
         this.dialogTitle = '修改'
       }
     },
-
     logisticsDelect(data) {
       this.$confirm('是否确定删除?', '提示', {
         confirmButtonText: '确定',
@@ -306,16 +253,15 @@ export default {
       }).catch(() => { })
     },
   },
-  created() {
-    this.getTableData()
-  }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.formInput {
-  input {
-    width: 220px;
+.LogisticsComponent {
+  .formInput {
+    input {
+      width: 220px;
+    }
   }
 }
 </style>
