@@ -1,12 +1,12 @@
 <template>
   <div class="ComponentNameClass">
     <div>
-      <search-form
+      <search-form2
         :config="searchConfig"
         @search="handleSearch"
         :labelWidth="labelWidth"
       >
-      </search-form>
+      </search-form2>
     </div>
     <div class="f12">
       <slot name="btns"></slot>
@@ -15,6 +15,7 @@
       <base-table2
         ref='baseTable'
         :api="api"
+        :parseData="parseData"
         :config="tableConfig"
         :tableData.sync="tableData"
         :searchParams="searchParams"
@@ -36,6 +37,11 @@
 <script>
 export default {
   props: {
+    /** 附加的搜索条件 */
+    appendSearchParams: {
+      type: Object,
+      default: () => ({})
+    },
     searchConfig: {
       type: Array,
       default: () => []
@@ -51,6 +57,11 @@ export default {
     },
     /** 表格api接口 */
     api: {
+      type: Function,
+      default: null,
+    },
+    /** 表格api接口 -  解析接口返回的数据。 */
+    parseData: {
       type: Function,
       default: null,
     },
@@ -73,7 +84,7 @@ export default {
   data() {
     return {
       tableData: [],
-      searchParams: {},
+      searchParams: { ...this.appendSearchParams },
       selectRows: [],
       rowNow: {},
     }

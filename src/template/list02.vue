@@ -1,6 +1,7 @@
 <template>
   <div class="ComponentNameClass">
     <base-list
+      ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="checkOrderList"
@@ -28,15 +29,18 @@
 
 <script>
 import { checkOrderList } from '@/api'
+import { AtoZ, isVirtualenum } from '@/utils/enum'
 const tableConfig = [
   { label: '质检单号 ', prop: 'orderCode' },
   { label: '收货单号 ', prop: 'receiveOrderCode' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: isVirtualenum },
 ]
 const searchConfig = [
   { label: '质检单号', prop: 'orderCode', type: 'input' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'select', enum: WarehouseAreaNatureEnum },
 ]
 export default {
   data() {
@@ -44,12 +48,22 @@ export default {
       tableConfig,
       searchConfig,
       checkOrderList,
-      selectRows: [],
-      rowNow: {},
+      // 可选 附加查询条件
+      appendSearchParams: {},
     }
   },
   methods: {
-    /** 新建质检记录 */
+    /** 可选 返回列表添加字段 */
+    parseData(res) {
+      let data = res.data.list || []
+      let total = res.data.total
+      data.forEach(v => {
+        v.updateLockStatusOutLoading = false
+        v.updateLockStatusInLoading = false
+      })
+      return { data, total }
+    },
+    /** 新建 */
     handleCreate() {
       this.$router.push({ path: '/qualityTesting/create' })
     }

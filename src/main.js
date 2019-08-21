@@ -7,7 +7,8 @@ import BarCode from '@/components/BarCode/index'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 
 import BaseTable from '@/components/Table'
-import Table2 from '@/components/Table2'
+import BaseTable2 from '@/components/BaseTable2'
+import SearchForm2 from '@/components/SearchForm2'
 import BaseList from '@/components/BaseList'
 import SearchForm from '@/components/SearchForm/index'
 
@@ -25,9 +26,10 @@ import '@/permission'
 import { EXTENDS } from './assets/extends'
 
 Vue.component('BaseTable', BaseTable);
-Vue.component('BaseTable2', Table2);
-Vue.component('BaseList', BaseList);
+Vue.component('BaseTable2', BaseTable2);
 Vue.component('SearchForm', SearchForm);
+Vue.component('SearchForm2', SearchForm2);
+Vue.component('BaseList', BaseList);
 
 Vue.use(ElementUI, { locale, size: 'mini' })
 Vue.use(EXTENDS)
