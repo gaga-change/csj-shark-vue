@@ -174,3 +174,7 @@ export const deleteCheckReportById = params => http.post(`/webApi/plan/checkOrde
 export const checkOrderAddCheckOrder = params => http.post(`/webApi/plan/checkOrder/addCheckOrder`, params)
 /** 商品列表 */
 export const skuSelect = params => http.post(`/webApi/basic/sku/select`, params)
+/** 包装列表 */
+export const packageSelect = params => http.post(`/webApi/basic/package/select`, params)
+/** 删除包装 */
+export const packageDelete = id => http.get(`/webApi/basic/package/delete/${id}`)

@@ -16,6 +16,12 @@
           :style="{color:'#3399ea'}"
         >查看</router-link>
         <el-divider direction="vertical"></el-divider>
+        <el-link type="primary">修改</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="handleDeleteRow(scope.row)"
+        >删除</el-link>
       </template>
       <template slot="btns">
         <el-button
@@ -32,7 +38,7 @@
 
 <script>
 import { checkOrderList } from '@/api'
-import { AtoZ, isVirtualenum } from '@/utils/enum'
+import { WarehouseAreaNatureEnum, isVirtualenum } from '@/utils/enum'
 const tableConfig = [
   { label: '质检单号 ', prop: 'orderCode' },
   { label: '收货单号 ', prop: 'receiveOrderCode' },
@@ -64,6 +70,10 @@ export default {
     /** 主表多选 */
     selectionChange(selectRows) {
       this.selectRows = [...selectRows]
+    },
+    /** 删除当前行 */
+    handleDeleteRow(row) {
+      // this.$delConfirm('是否确定删除？', () => delApi(row.id)).then(this.getTableData)
     },
     /** 可选 返回列表添加字段 */
     parseData(res) {

@@ -7,19 +7,13 @@
       :showControl="true"
     >
       <template slot-scope="scope">
-        <router-link
-          :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
-          :style="{color:'#3399ea'}"
-        >查看</router-link>
+        <el-link
+          type="primary"
+          @click="handleSet(scope.row)"
+        >扩展配置</el-link>
       </template>
       <template slot="btns">
-        <el-button
-          type="primary"
-          size="mini"
-          @click="handleCreate"
-        >
-          新建质检记录
-        </el-button>
+        <!-- 操作区域 -->
       </template>
     </base-list>
   </div>
@@ -50,9 +44,9 @@ export default {
     }
   },
   methods: {
-    /** 新建质检记录 */
-    handleCreate() {
-      this.$router.push({ path: '/qualityTesting/create' })
+    /** 扩展配置 按钮点击 */
+    handleSet(row) {
+      this.$message('功能正在开发...')
     }
   }
 }
