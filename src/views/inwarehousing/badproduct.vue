@@ -130,7 +130,7 @@ import webPaginationTable from '@/components/Table/webPaginationTable'
 import _ from 'lodash';
 import moment from 'moment';
 import { arrivalTableConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig } from './components/config'
-import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, badproductlist } from '@/api'
+import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceList, jobAdd, badproductlist } from '@/api'
 export default {
   components: { BaseTable, newSearch, webPaginationTable, editTable },
   data() {
@@ -182,7 +182,7 @@ export default {
       }
     });
     if (sessionStorage.getItem('warehouse')) {
-      warehouseSpaceSelect().then(res => {
+      warehouseSpaceList().then(res => {
         if (res) {
           this.warehouseSpaceCodeConfig = res.data || [];
         }

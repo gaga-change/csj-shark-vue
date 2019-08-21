@@ -54,6 +54,10 @@ export default {
     }
   },
   methods: {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
     /** 可选 返回列表添加字段 */
     parseData(res) {
       let data = res.data.list || []

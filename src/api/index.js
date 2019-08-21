@@ -59,7 +59,7 @@ export const orderUpdateReceiveQty = params => http.get(`/webApi/receive/order/u
 /** 删除单据 */
 export const receiveOrderDelete = id => http.get(`/webApi/receive/order/delete/${id}`)
 /** 根据条件查询库位 */
-export const warehouseSpaceSelect = params => http.get(`/webApi/basic/warehouseSpace/list`, { params })
+export const warehouseSpaceList = params => http.get(`/webApi/basic/warehouseSpace/list`, { params })
 /** 根据入库单号查询详情列表 */
 export const inOrderSelectDetailList = id => http.get(`/webApi/in/order/selectDetailList/${id}`)
 /** 查询拣货单列表 */
@@ -93,7 +93,7 @@ export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, pa
 /** 新增库位 */
 export const addInventorySite = params => http.post(`/webApi/basic/warehouseSpace/addByBatch`, params)
 /** 库位列表 */
-export const getInventorySite = params => http.post(`/webApi/basic/warehouseSpace/select`, params)
+export const warehouseSpaceSelect = params => http.post(`/webApi/basic/warehouseSpace/select`, params)
 /** 增加物流公司 */
 export const addLogistics = params => http.post(`/webApi/logistics/add`, params)
 /** 修改物流公司 */

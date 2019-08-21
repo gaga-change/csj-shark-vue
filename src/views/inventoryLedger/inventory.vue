@@ -197,7 +197,7 @@
 <script>
 import BaseTable from '@/components/Table'
 import { inventoryTableConfig, stateTransitionTableConfig } from './components/config'
-import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQty, warehouseSpaceSelect, skuStockMove } from '@/api'
+import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQty, warehouseSpaceList, skuStockMove } from '@/api'
 import { uniqueArray } from '@/utils/arrayHandler'
 import SearchInventory from './components/search'
 
@@ -248,7 +248,7 @@ export default {
   created() {
     this.getTableData()
     this.warehouseSpaceSelectLoading = true
-    warehouseSpaceSelect().then(res => {
+    warehouseSpaceList().then(res => {
       this.warehouseSpaceSelectLoading = false
       if (res) {
         this.warehouseSpaceCodeConfig = res.data || [];

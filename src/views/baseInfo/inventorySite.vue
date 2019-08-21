@@ -1,41 +1,18 @@
 <template>
-  <div>
-    <search-logistics
-      @searchTrigger="submitForm"
-      :search-forms="ruleForm"
-    ></search-logistics>
-    <div style="margin-bottom:12px;">
-      <el-button
-        type="primary"
-        size="mini"
-        @click="formHandle('add')"
-      >添加</el-button>
-      <el-button
-        type="primary"
-        size="mini"
-        @click="printSite"
-      >打印库位码</el-button>
-    </div>
-
-    <base-table
-      :loading="loading"
-      :tableData="tableData"
-      :select="canSelect"
-      @currentChange="handleCurrentChange"
-      @sizeChange="handleSizeChange"
-      @selectionChange="dataSelect"
+  <div class="InventorySiteComponent">
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="warehouseSpaceSelect"
+      :parseData="parseData"
+      :appendSearchParams="appendSearchParams"
       :showControl="true"
       :controlWidth="240"
-      :config="tableConfig"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
+      :select="true"
+      @selectionChange="dataSelect"
     >
-      <template
-        slot="edit"
-        slot-scope="scope"
-      >
+      <template slot-scope="scope">
         <el-button
           class=" ml5 mr5"
           size="mini"
@@ -64,16 +41,18 @@
         >
           库位设置
         </button>
-        <!-- <button
-          class="btn-link"
-          type="button"
-          :disabled="scope.row.checkResult !== 1"
-          @click="formDelect(scope.row)"
-        >
-          删除
-        </button> -->
       </template>
-    </base-table>
+      <template slot="btns">
+        <el-button
+          type="primary"
+          @click="formHandle('add')"
+        >添加</el-button>
+        <el-button
+          type="primary"
+          @click="printSite"
+        >打印库位码</el-button>
+      </template>
+    </base-list>
     <el-dialog
       :title="dialogTitle+'库位'"
       :visible.sync="dialogVisible"
@@ -229,7 +208,6 @@
       <span
         slot="footer"
         class="dialog-footer"
-        v-loading="loading"
       >
         <el-button
           size="mini"
@@ -251,52 +229,37 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import { mapGetters } from 'vuex'
-import BaseTable from '@/components/Table'
 import { SimpleMsg } from '@/utils/luoFun'
-import { siteTableConfig } from './components/config'
-import { addInventorySite, getInventorySite, warehouseSpaceUpdateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
+import { addInventorySite, warehouseSpaceSelect, warehouseSpaceUpdateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
 import { MakePrint } from '@/utils/luoFun'
-import SearchLogistics from './components/search'
 import setStorage from './components/setStorage'
-
+import { inLockEnum, outLockEnum } from '@/utils/enum'
+const tableConfig = [
+  { label: '库区编码', prop: 'warehouseAreaCode', minWidth: 120 },
+  { label: '库位编码', prop: 'warehouseSpaceCode', minWidth: 120 },
+  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: inLockEnum },
+  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: outLockEnum },
+  { label: '创建人', prop: 'createrName', minWidth: 90 },
+  { label: '创建时间', prop: 'gmtCreate', minWdth: 120, type: 'time' },
+]
+const searchConfig = [
+  { label: '库区编码', prop: 'warehouseAreaCode', type: 'input' },
+  { label: '库位编码', prop: 'warehouseSpaceCode', type: 'input' },
+]
 export default {
-  components: { SearchLogistics, BaseTable, setStorage },
+  components: { setStorage },
   data() {
     return {
+      tableConfig,
+      searchConfig,
+      warehouseSpaceSelect,
       setStorageVisible: false,
-      imgs: '',
-      loading: false,
+      appendSearchParams: { warehouseCode: undefined },
       dialogVisible: false,
-      dialogData: {},
       dialogTitle: '',
-      ruleForm: {
-        pageNum: 1,
-        pageSize: 10,
-        warehouseAreaCode: '',
-        warehouseSpaceCode: '',
-      },
-      formRules: {},
-      selectData: {//x选中的单据
-
-      },
-      searchForm: {},
-      tableData: [
-      ],
-      //子表数据名称 为空时不显示不可展开
-      childDataName: '',
-      //表格配置
-      tableConfig: siteTableConfig,
-      total: 0,
-      canSelect: true,
       multipleParentSelection: [],//选中的主表
-      childCanSelect: false,//子表可选择,false不可选，
-      multipleSelection: [],//选中的子表数据
-      expandKey: 'id',
       formParams: {},
-      logisticsFilter: [],
       formType: '',
       warehouseAreaCodeEnum: [],
       dialogVisibleSite: false,
@@ -309,22 +272,30 @@ export default {
       'chooseWarehouse',
     ]),
   },
-  watch: {
-    chooseWarehouse: {
-      handler: function (val, oldVal) {
-        if (val != oldVal) {
-          //仓库更改数据重新请求
-          this.getTableData()
-          this.warehouseMap.map(item => {
-            if (item.warehouseNo == this.chooseWarehouse) {
-              this.warehouseName = item.warehouseName
-            }
-          })
-        }
-      },
-    }
+  created() {
+    this.appendSearchParams.warehouseCode = this.chooseWarehouse
+    getSelectInventoryAreaList({
+      warehouseCode: this.chooseWarehouse
+    }).then(res => {
+      if (!res) return
+      this.warehouseAreaCodeEnum = res.data || []
+    })
   },
   methods: {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
+    /** 返回列表添加字段 */
+    parseData(res) {
+      let data = res.data.list || []
+      let total = res.data.total
+      data.forEach(v => {
+        v.updateLockStatusOutLoading = false
+        v.updateLockStatusInLoading = false
+      })
+      return { data, total }
+    },
     /** 出入库 解锁或锁定 */
     handleLock(row, index, type) {
       let flag = null
@@ -340,12 +311,12 @@ export default {
         flag = 3 // 出库锁定
       }
       isIn ? row.updateLockStatusInLoading = true : row.updateLockStatusOutLoading = true
+      let item = row
       warehouseSpaceUpdateLockStatus(id, {
         flag
       }).then(res => {
         isIn ? row.updateLockStatusInLoading = false : row.updateLockStatusOutLoading = false
         if (!res) return
-        let item = this.tableData.find(v => v.id === id)
         if (isIn && row.inLock) {
           item.inLock = 0
         } else if (isIn && !row.inLock) {
@@ -361,9 +332,6 @@ export default {
     handleSetStorage(row) {
       this.setStorageVisible = true
       this.selectedRow = row
-    },
-    handleSelect(item) {
-      this.formParams.companyCode = item.companyCode
     },
     //主表多选
     dataSelect(selectData) {
@@ -392,53 +360,6 @@ export default {
                                </style>`
       MakePrint(document.getElementById('print').innerHTML, useStyle)
     },
-    getTableData() {
-      this.$router.replace({
-        path: '/baseInfo/inventorySite',
-        query: { data: JSON.stringify(this.ruleForm) }
-      })
-      this.loading = true;
-      let data = {
-        ...this.ruleForm,
-        warehouseCode: this.chooseWarehouse
-      }
-      getInventorySite(data).then(res => {
-        this.loading = false
-        if (!res) return
-        this.tableData = [...res.data.list].map(v => {
-          v.updateLockStatusOutLoading = false
-          v.updateLockStatusInLoading = false
-          return v
-        })
-
-        this.total = res.data.total
-      })
-      getSelectInventoryAreaList({
-        warehouseCode: this.chooseWarehouse
-      }).then(res => {
-        if (!res) return
-        if (res.data && res.data.length > 0) {
-          this.warehouseAreaCodeEnum = [...res.data]
-        }
-      })
-    },
-
-
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1 }
-      this.getTableData();
-
-    },
-
     submitIt() {
       this.$refs['subForm'].validate((valid) => {
         if (valid) {
@@ -515,40 +436,34 @@ export default {
         })
       }).catch(() => { })
     },
-  },
-  created() {
-    this.getTableData()
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.formInput {
-  input {
-    width: 220px;
+.InventorySiteComponent {
+  .inventorySite {
+    display: flex;
+    .tip {
+      flex: 2;
+      text-align: center;
+    }
+    .siteInput {
+      flex: 4;
+    }
   }
-}
-.inventorySite {
-  display: flex;
-  .tip {
-    flex: 2;
-    text-align: center;
-  }
-  .siteInput {
-    flex: 4;
-  }
-}
-.printSiteCss {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: space-between;
-  .printItemCss {
-    width: 40mm;
-    height: 25mm;
-    img {
-      width: 100%;
-      height: 100%;
+  .printSiteCss {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
+    .printItemCss {
+      width: 40mm;
+      height: 25mm;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

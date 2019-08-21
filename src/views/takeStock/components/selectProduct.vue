@@ -128,7 +128,7 @@
 <script>
 import BaseTable from '@/components/Table'
 import { mapGetters } from 'vuex'
-import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, getInventorySite } from '@/api'
+import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
 import { takeStockSelectProductTableConfig } from './config'
 export default {
   components: { BaseTable },
@@ -198,7 +198,7 @@ export default {
     warehouseAreaCodeChange(val) {
       this.formData.warehouseSpaceCode = ''
       this.getInventorySiteLoading = true
-      getInventorySite({
+      warehouseSpaceSelect({
         pageNum: 1,
         pageSize: 9999,
         warehouseAreaCode: val,

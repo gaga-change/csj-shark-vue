@@ -130,11 +130,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import DoubleTable from '@/components/Table/doubleTable'
 import { getLogisticsList, addLogistics, updateLogistics, deleteLogistics, getLogisticsSearch } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchLogistics from './components/search'
 const tableConfig = [
   { label: '公司编码', prop: 'companyCode' },
   { label: '物流公司名称', prop: 'companyName' },
@@ -146,7 +142,6 @@ const searchConfig = [
   { label: '物流公司名称', prop: 'companyName', type: 'input' }
 ]
 export default {
-  components: { DoubleTable, SearchLogistics },
   data() {
     return {
       tableConfig,

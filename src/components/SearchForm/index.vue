@@ -122,7 +122,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import * as Enum from "@/utils/enum";
-import { getSelectInventoryAreaList, getInventorySite } from '@/api'
+import { getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
 export default {
   props: {
     config: {
@@ -215,7 +215,7 @@ export default {
     warehouseAreaCodeChange(val) {
       this.searchForms.warehouseSpaceCode = ''
       this.getInventorySiteLoading = true
-      getInventorySite({
+      warehouseSpaceSelect({
         pageNum: 1,
         pageSize: 9999,
         warehouseAreaCode: val,

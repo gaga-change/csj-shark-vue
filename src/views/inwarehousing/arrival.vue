@@ -298,7 +298,7 @@ import moment from 'moment';
 import { MakePrint } from '@/utils'
 import { PositiveIntegerReg } from '@/utils/validator'
 import { arrivalConfig, arrivalChildTableConfig, arrivalAlertConfig, putQtyConfig, planChildTableLabelArrivalConfig } from './components/config'
-import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceSelect, jobAdd, getBatchNo } from '@/api'
+import { orderList, orderDetailList, orderUpdateReceiveQty, receiveOrderDelete, warehouseSpaceList, jobAdd, getBatchNo } from '@/api'
 export default {
   components: { DoubleTable, newSearch, webPaginationTable, editTable, printBills },
   data() {
@@ -354,7 +354,7 @@ export default {
     });
 
     if (sessionStorage.getItem('warehouse')) {
-      warehouseSpaceSelect().then(res => {
+      warehouseSpaceList().then(res => {
         if (res) {
           this.warehouseSpaceCodeConfig = res.data || [];
         }

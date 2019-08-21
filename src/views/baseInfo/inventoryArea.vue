@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="InventoryAreaComponent">
     <base-list
       ref="baseList"
       v-if="chooseWarehouse"
@@ -170,10 +170,8 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
-import DoubleTable from '@/components/Table/doubleTable'
-import BaseTable from '@/components/Table'
 import { SimpleMsg } from '@/utils/luoFun'
-import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea, getSelectInventoryAreaList } from '@/api'
+import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea } from '@/api'
 import { AtoZ, YesOrNoEnum, WarehouseAreaNatureEnum, inLockEnum, outLockEnum, isVirtualenum } from '@/utils/enum'
 const tableConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode' },
@@ -192,7 +190,6 @@ const searchConfig = [
 ]
 
 export default {
-  components: { DoubleTable, BaseTable },
   data() {
     return {
       tableConfig,
@@ -352,9 +349,11 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.formInput {
-  input {
-    width: 220px;
+.InventoryAreaComponent {
+  .formInput {
+    input {
+      width: 220px;
+    }
   }
 }
 </style>

@@ -57,6 +57,10 @@ export default {
     }
   },
   methods: {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
     /** 主表多选 */
     selectionChange(selectRows) {
       this.selectRows = [...selectRows]
