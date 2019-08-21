@@ -10,12 +10,25 @@ export default {
 }
 </script>
 <style lang="scss">
+/* element ui 样式重置 start*/
 .el-card__header {
   padding: 9px 10px;
 }
 .el-card__body {
   padding: 10px;
 }
+
+.el-button {
+  font-size: 12px;
+}
+
+.el-divider__text,
+.el-link {
+  font-size: 12px;
+  line-height: 1.3;
+}
+/* element ui 样式重置 end*/
+
 .link_dom {
   color: rgb(51, 153, 234);
   cursor: pointer;
@@ -24,9 +37,7 @@ export default {
     cursor: not-allowed;
   }
 }
-.el-button {
-  font-size: 12px;
-}
+
 .simpleCard {
   padding-bottom: 0;
   margin-bottom: 20px;

@@ -9,7 +9,7 @@
         :model="searchForms"
         :rules="searchRules"
         ref="searchForm"
-        label-width="80px"
+        :label-width="labelWidth+'px'"
         :inline="true"
       >
         <el-form-item
@@ -128,6 +128,11 @@ export default {
     config: {
       type: Array,
       default: () => []
+    },
+    /** 搜索 label宽度 */
+    labelWidth: {
+      type: Number,
+      default: 80
     }
   },
   computed: {
@@ -184,6 +189,9 @@ export default {
     }
   },
   computed: {
+    configRange() {
+      return this.config.filter(v => v.props)
+    },
     ...mapGetters([
       'chooseWarehouse',
     ]),
@@ -232,7 +240,19 @@ export default {
     },
     hanldeSubmit() {
       this.submitLoading = true
-      this.$emit('search', { ...this.searchForms }, () => {
+      let searchForms = { ...this.searchForms }
+      // 获取需要解析的字段, 针对 范围型数据
+      if (this.configRange.length) {
+        this.configRange.forEach(({ prop, props }) => {
+          let valArr = searchForms[prop]
+          delete searchForms[prop]
+          if (valArr && valArr.length === 2) {
+            searchForms[props[0]] = new Date(valArr[0]).getTime()
+            searchForms[props[1]] = new Date(valArr[1]).getTime()
+          }
+        })
+      }
+      this.$emit('search', { ...searchForms }, () => {
         this.submitLoading = false
       })
     },
