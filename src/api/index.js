@@ -172,3 +172,5 @@ export const checkOrderAddReport = params => http.post(`/webApi/plan/checkOrder/
 export const deleteCheckReportById = params => http.post(`/webApi/plan/checkOrder/deleteCheckReportById`, params)
 /** 新增质检单 */
 export const checkOrderAddCheckOrder = params => http.post(`/webApi/plan/checkOrder/addCheckOrder`, params)
+/** 商品列表 */
+export const skuSelect = params => http.post(`/webApi/basic/sku/select`, params)
