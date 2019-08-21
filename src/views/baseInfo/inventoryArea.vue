@@ -1,36 +1,19 @@
 <template>
   <div>
-    <search-logistics
-      @searchTrigger="submitForm"
-      :search-name="searchName"
-      :search-forms="ruleForm"
-    ></search-logistics>
-
-    <el-button
-      type="primary"
-      size="mini"
-      @click="formHandle('add')"
-      style="margin-bottom:15px"
-    >添加</el-button>
-    <base-table
-      :loading="loading"
-      :tableData="tableData"
-      :config="tableConfig"
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
+    <base-list
+      ref="baseList"
+      v-if="chooseWarehouse"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="getInventoryArea"
+      :parseData="parseData"
       :showControl="true"
+      :appendSearchParams="appendSearchParams"
       :controlWidth="240"
     >
-      <template
-        slot="edit"
-        slot-scope="scope"
-      >
+      <template slot-scope="scope">
         <el-button
-          class=" ml5 mr5"
+          class="ml5 mr5"
           size="mini"
           :type="scope.row.inLock ? 'primary': 'warning'"
           plain
@@ -62,7 +45,15 @@
           删除
         </el-button>
       </template>
-    </base-table>
+      <template slot="btns">
+        <el-button
+          type="primary"
+          size="mini"
+          @click="formHandle('add')"
+          style="margin-bottom:15px"
+        >添加</el-button>
+      </template>
+    </base-list>
     <el-dialog
       :title="dialogTitle+'库区'"
       :visible.sync="dialogVisible"
@@ -182,57 +173,41 @@ import { mapGetters } from 'vuex'
 import DoubleTable from '@/components/Table/doubleTable'
 import BaseTable from '@/components/Table'
 import { SimpleMsg } from '@/utils/luoFun'
-import { areaTableConfig } from './components/config'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea, getSelectInventoryAreaList } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import { WarehouseAreaNatureEnum, YesOrNoEnum, isVirtualenum } from '@/utils/enum'
-import SearchLogistics from './components/search'
+import { AtoZ, YesOrNoEnum, WarehouseAreaNatureEnum, inLockEnum, outLockEnum, isVirtualenum } from '@/utils/enum'
+const tableConfig = [
+  { label: '库区编码', prop: 'warehouseAreaCode' },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
+  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: inLockEnum },
+  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: outLockEnum },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: isVirtualenum },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '描述', prop: 'warehouseAreaDesc' },
+]
+const searchConfig = [
+  { label: '库区编码', prop: 'warehouseAreaCode', type: 'select', enum: AtoZ },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'select', enum: YesOrNoEnum },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'select', enum: WarehouseAreaNatureEnum },
+]
 
 export default {
-  components: { DoubleTable, SearchLogistics, BaseTable },
+  components: { DoubleTable, BaseTable },
   data() {
     return {
-      imgs: '',
-      loading: false,
+      tableConfig,
+      searchConfig,
+      getInventoryArea,
+      appendSearchParams: { warehouseCode: undefined },
       dialogVisible: false,
-      dialogData: {},
       dialogTitle: '',
-      ruleForm: {
-        pageNum: 1,
-        pageSize: 10,
-        warehouseAreaCode: '',
-        isVirtual: 0,
-        warehouseAreaNature: ''
-      },
       YesOrNoEnum,
       WarehouseAreaNatureEnum,
-      isVirtualenum,
-      formRules: {},
-      selectData: {//x选中的单据
-
-      },
-      searchForm: {},
-      // searchForms,
-      tableData: [
-      ],
-      // pageNum:0,
-      // pageSize:10,
-      //子表数据名称 为空时不显示不可展开
-      childDataName: '',
-      //表格配置
-      tableConfig: areaTableConfig,
-      total: 0,
-      childCanSelect: false,//子表可选择,false不可选，
-      // accordionExpand:true,//手风琴展开
-      multipleSelection: [],//选中的子表数据
-      expandKey: 'id',
       formParams: {
         isVirtual: 0
       },
-      logisticsFilter: [],
       formType: '',
       warehouseName: '',
-      searchName: 'inventory'
     }
   },
   computed: {
@@ -241,24 +216,8 @@ export default {
       'chooseWarehouse',
     ]),
   },
-  watch: {
-    chooseWarehouse: {
-      handler: function (val, oldVal) {
-        if (val != oldVal) {
-          //仓库更改数据重新请求
-          this.getTableData()
-          this.warehouseMap.map(item => {
-            if (item.warehouseNo == this.chooseWarehouse) {
-              this.warehouseName = item.warehouseName
-
-            }
-          })
-        }
-      },
-    }
-  },
   created() {
-    this.getTableData()
+    this.appendSearchParams.warehouseCode = this.chooseWarehouse
     this.warehouseMap.map(item => {
       if (item.warehouseNo == this.chooseWarehouse) {
         this.warehouseName = item.warehouseName
@@ -275,6 +234,16 @@ export default {
     this.getTableData()
   },
   methods: {
+    /** 返回列表添加字段 */
+    parseData(res) {
+      let data = res.data.list || []
+      let total = res.data.total
+      data.forEach(v => {
+        v.updateLockStatusOutLoading = false
+        v.updateLockStatusInLoading = false
+      })
+      return { data, total }
+    },
     /** 出入库 解锁或锁定 */
     handleLock(row, index, type) {
       let flag = null
@@ -290,12 +259,12 @@ export default {
         flag = 3 // 出库锁定
       }
       isIn ? row.updateLockStatusInLoading = true : row.updateLockStatusOutLoading = true
+      let item = row
       warehouseAreaUpdateLockStatus(id, {
         flag
       }).then(res => {
         isIn ? row.updateLockStatusInLoading = false : row.updateLockStatusOutLoading = false
         if (!res) return
-        let item = this.tableData.find(v => v.id === id)
         if (isIn && row.inLock) {
           item.inLock = 0
         } else if (isIn && !row.inLock) {
@@ -307,62 +276,9 @@ export default {
         }
       })
     },
-    handleSelect(item) {
-      this.formParams.companyCode = item.companyCode
-    },
-    changeStatus() {
-      this.$confirm('是否确定更改?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        updateInventoryArea({ ...this.formParams, warehouseAreaStatus: this.formParams.warehouseAreaStatus ? 0 : 1 }).then(res => {
-          if (!res) return
-          SimpleMsg({
-            result: res.success, msgType: 'user', msg: this.formParams.warehouseAreaStatus ? '启用' : '禁用',
-            cb: () => {
-              this.dialogVisible = false
-              this.getTableData()
-            }
-          })
-        })
-      }).catch(() => { })
-    },
     getTableData() {
-      this.$router.replace({
-        path: '/baseInfo/inventoryArea',
-        query: { data: JSON.stringify(this.ruleForm) }
-      })
-      this.loading = true;
-      let data = { ...this.ruleForm, warehouseCode: this.chooseWarehouse }
-      getInventoryArea(data).then(res => {
-        this.loading = false
-        if (!res) return
-        this.tableData = [...res.data.list].map(v => {
-          v.updateLockStatusOutLoading = false
-          v.updateLockStatusInLoading = false
-          return v
-        })
-        this.total = res.data.total
-      })
+      this.$refs['baseList'].fetchData()
     },
-
-
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1 }
-      this.getTableData()
-
-    },
-
     submitIt() {
       this.$refs['subForm'].validate((valid) => {
         if (valid) {
@@ -400,7 +316,6 @@ export default {
         }
       })
     },
-
     formHandle(type) {
       if (type == 'add') {
         this.formParams = { isVirtual: 0 }
@@ -410,9 +325,7 @@ export default {
         this.dialogTitle = '查看'
       }
       this.formType = type
-
       this.dialogVisible = true
-
     },
     formDelete(data) {
       this.$confirm('是否确定删除?', '提示', {
