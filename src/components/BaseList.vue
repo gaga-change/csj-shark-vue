@@ -25,6 +25,8 @@
         :showControl="showControl"
         :controlName="controlName"
         :controlWidth="controlWidth"
+        :select="select"
+        @selectionChange="selectionChange"
       >
         <template slot-scope="scope">
           <slot
@@ -83,6 +85,11 @@ export default {
       type: Number,
       default: 160
     },
+    /** 是否可选 */
+    select: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -101,7 +108,7 @@ export default {
   methods: {
     /** 搜索 */
     handleSearch(params, callback) {
-      let obj = { ...params }
+      let obj = { ...params, ...this.appendSearchParams }
       this.searchParams = obj
       this.$nextTick(() => {
         this.$refs['baseTable'].fetchData().then(callback)
@@ -110,6 +117,10 @@ export default {
     /** 刷新列表 */
     fetchData(callback) {
       this.$refs['baseTable'].fetchData().then(callback)
+    },
+    /** 多选选择 */
+    selectionChange(val) {
+      this.$emit('selectionChange', val)
     }
   }
 }

@@ -7,6 +7,8 @@
       :api="checkOrderList"
       :showControl="true"
       :controlWidth="160"
+      :select="true"
+      @selectionChange="selectionChange"
     >
       <template slot-scope="scope">
         <router-link
@@ -49,11 +51,16 @@ export default {
       tableConfig,
       searchConfig,
       checkOrderList,
+      selectRows: [],
       // 可选 附加查询条件
       appendSearchParams: {},
     }
   },
   methods: {
+    /** 主表多选 */
+    selectionChange(selectRows) {
+      this.selectRows = [...selectRows]
+    },
     /** 可选 返回列表添加字段 */
     parseData(res) {
       let data = res.data.list || []
