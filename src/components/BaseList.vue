@@ -1,5 +1,8 @@
 <template>
-  <div class="ComponentNameClass">
+  <div
+    class="BaseListComponent"
+    :class="{red: development}"
+  >
     <div>
       <search-form2
         :config="searchConfig"
@@ -83,10 +86,16 @@ export default {
   },
   data() {
     return {
+      development: false,
       tableData: [],
       searchParams: { ...this.appendSearchParams },
       selectRows: [],
       rowNow: {},
+    }
+  },
+  created() {
+    if (process.env.NODE_ENV === "development") {
+      this.development = true
     }
   },
   methods: {
@@ -105,3 +114,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.BaseListComponent {
+  .el-card {
+    border: 1px solid#f56c6c6e !important;
+  }
+}
+</style>
