@@ -24,7 +24,7 @@ import '@/icons'
 import '@/permission'
 
 import { EXTENDS } from './assets/extends'
-
+const { MessageBox } = ElementUI
 Vue.component('BaseTable', BaseTable);
 Vue.component('BaseTable2', BaseTable2);
 Vue.component('SearchForm', SearchForm);
