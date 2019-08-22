@@ -80,6 +80,15 @@
           </el-form-item>
         </el-form>
       </div>
+      <el-alert
+        class="mt15"
+        title="温馨提示："
+        type="info"
+        :closable="false"
+      >
+        <p>举例，商品最小单位默认为1,4个最小单位为一个内包装【一个内包装数量为4】，
+          2个内包装为1箱【一箱数量8】，10箱为一个容器【一容器数量为80】</p>
+      </el-alert>
       <span
         slot="footer"
         class="dialog-footer"
@@ -136,7 +145,8 @@ export default {
       },
       rules: {
         packageDesc: [
-          { required: true, message: '请输入包装描述', trigger: 'blur' }
+          { required: true, message: '请输入包装描述', trigger: 'blur' },
+          { min: 0, max: 20, message: '长度不能超过20个字', trigger: 'blur' }
         ],
         box: [
           { required: true, message: '必填项', trigger: 'blur' },
@@ -176,6 +186,7 @@ export default {
             if (!res) return
             this.$refs['form'] && this.$refs['form'].resetFields()
             this.$emit('submited')
+            this.$message.success('操作成功！')
             this.close()
           })
         }

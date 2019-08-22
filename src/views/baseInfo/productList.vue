@@ -1,6 +1,7 @@
 <template>
   <div class="ComponentNameClass">
     <base-list
+      ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="skuSelect"
@@ -16,10 +17,16 @@
         <!-- 操作区域 -->
       </template>
     </base-list>
+    <product-set-dialog
+      :visible.sync="productSetDialogVisible"
+      :row="selectedRow"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
+import ProductSetDialog from './components/productSetDialog'
 import { skuSelect } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
@@ -34,19 +41,27 @@ const searchConfig = [
   { label: '规格型号', prop: 'lotAttrCode1', type: 'input' },
 ]
 export default {
+  components: { ProductSetDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       skuSelect,
-      selectRows: [],
-      rowNow: {},
+      selectedRow: {},
+      productSetDialogVisible: false,
     }
   },
   methods: {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
     /** 扩展配置 按钮点击 */
     handleSet(row) {
-      this.$message('功能正在开发...')
+      this.selectedRow = row
+      this.$nextTick(() => {
+        this.productSetDialogVisible = true
+      })
     }
   }
 }
