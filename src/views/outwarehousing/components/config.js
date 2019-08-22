@@ -121,15 +121,6 @@ export const planChildTablePrintConfig = [// 计划单打印列表
   { label: '条形码', prop: 'planCode', width: 150, userIf: 'images' },//unconfirm
 ]
 
-export const pickingtaskConfig = [
-  { label: '拣货单号', prop: 'orderCode' },
-  { label: '应拣货总量', prop: 'pickQty' },
-  { label: '已拣货总数', prop: 'realPickQty' },
-  { label: '状态', prop: 'orderStatus', type: 'orderStatus', useLocalEnum: true },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
-  { label: '操作', useDom: true, width: 300 },
-]
-
 export const pickingtaskdetailConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '商品编码', prop: 'skuCode' },

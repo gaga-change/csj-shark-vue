@@ -1,45 +1,55 @@
 <template>
   <div class="pickingtask">
-    <el-card
-      class="simpleCard"
-      shadow="never"
-      body-style="padding:12px"
+
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="360"
     >
-      <new-search
-        @submit="submit"
-        :searchForm="searchForm"
-        ref="arrivalDom"
-      >
-      </new-search>
-      <el-col
-        :span="24"
-        style="margin-bottom:12px;"
-      >
-        <el-button
+      <template slot-scope="scope">
+        <el-link
           type="primary"
-          size="mini"
-          @click="select"
-        >查询</el-button>
-        <el-button
+          @click="handleDetail(scope.row)"
+        >详情</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
           type="primary"
-          size="mini"
-          @click="resetForm"
-        >重置</el-button>
-      </el-col>
-    </el-card>
-
-    <base-table
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :loading="loading"
-      :config="pickingtaskConfig"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="searchForm.pageSize"
-      :currentPage="searchForm.pageNum"
-      :tableData="tableData"
-    />
-
+          @click="handePrint(scope.row, 'Printing')"
+        >打印拣货单</el-link>
+        <el-divider
+          v-if="[0, 1].includes(scope.row.orderStatus)"
+          direction="vertical"
+        ></el-divider>
+        <el-link
+          v-if="[0, 1].includes(scope.row.orderStatus)"
+          type="primary"
+          @click="handleDetail(scope.row)"
+        >拣货</el-link>
+        <el-divider
+          v-if="[0, 1].includes(scope.row.orderStatus)"
+          direction="vertical"
+        ></el-divider>
+        <el-link
+          v-if="[0, 1].includes(scope.row.orderStatus)"
+          type="primary"
+          @click="handlePickStop(scope.row)"
+        >终止拣货</el-link>
+        <el-divider
+          v-if="[0].includes(scope.row.orderStatus)"
+          direction="vertical"
+        ></el-divider>
+        <el-link
+          v-if="[0].includes(scope.row.orderStatus)"
+          type="primary"
+          @click="handleDelete(scope.row)"
+        >删除拣货</el-link>
+      </template>
+      <template slot="btns">
+      </template>
+    </base-list>
     <el-dialog
       :title="`拣货单详情 ( 拣货单号:${activeRow.orderCode} ) `"
       :visible.sync="dialogVisible"
@@ -190,38 +200,40 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import moment from 'moment';
 import { mapGetters } from 'vuex'
-import newSearch from './components/newSearch'
-import BaseTable from '@/components/Table/index'
-import { jobStatusList } from '@/utils/enum'
-import { pickingtaskConfig, pickingtaskdetailConfig, printinConfig } from './components/config'
+import { pickingtaskdetailConfig, printinConfig } from './components/config'
 import { pickOrderList, pickOrderDetail, orderPickConfirm, orderDelete, orderPickStop, querySkuStockByOutJobId } from '@/api'
 import webPaginationTable from '@/components/Table/webPaginationTable'
 import { MakePrint } from '@/utils'
+import { orderStatus, jobStatusList } from '@/utils/enum'
+
+const tableConfig = [
+  { label: '拣货单号', prop: 'orderCode' },
+  { label: '应拣货总量', prop: 'pickQty' },
+  { label: '已拣货总数', prop: 'realPickQty' },
+  { label: '状态', prop: 'orderStatus', type: 'enum', enum: orderStatus },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+]
+const searchConfig = [
+  { label: '拣货单号', prop: 'orderCode', type: 'input' },
+  { label: '计划单号', prop: 'outOrderCode', type: 'input' },
+  { label: '拣货状态', prop: 'orderStatus', type: 'select', enum: orderStatus },
+]
+
 export default {
-  components: { newSearch, BaseTable, webPaginationTable },
+  components: { webPaginationTable },
   data() {
     return {
-      searchForm: {
-        outOrderCode: '',
-        orderCode: '',
-        pageSize: 10,
-        pageNum: 1,
-        orderState: '',
-        orderStatus: 9
-      },
-      loading: false,
-      total: 0,
-      pickingtaskConfig,
-      tableData: [],
+      tableConfig,
+      searchConfig,
+      listApi: pickOrderList,
       dialogVisible: false,
       pickingtaskdetailConfig,
       pickingtaskdetailTableData: [],
       detailLoding: false,
       activeRow: '',
-      SelectionData: [],
+      selectionData: [],
       printingAlert: false,
       printinConfig,
       warehouseName: '',
@@ -244,44 +256,13 @@ export default {
       let warehousesConfig = this.userInfo.warehouses.find(v => v.warehouseNo === sessionStorage.getItem('warehouse'))
       this.warehouseName = warehousesConfig.warehouseName;
     }
-    this.pickingtaskConfig.forEach(element => {
-      if (element.useDom) {
-        element.dom = (row, column, cellValue, index) => {
-          return <span class="tableBtnBox">
-            {
-              <span onClick={this.pickingDetail.bind(this, row, false)}>详情</span>
-            }
-
-            {
-              <span onClick={this.pickingDetail.bind(this, row, 'Printing')}>打印拣货单</span>
-            }
-
-            {
-              [0, 1].includes(row.orderStatus) &&
-              <span onClick={this.pickingDetail.bind(this, row, false)}>拣货</span>
-            }
-            {
-              [0, 1].includes(row.orderStatus) &&
-              <span onClick={this.pickingDetail.bind(this, row, '确定要终止操作码?', orderPickStop)}>终止拣货</span>
-            }
-            {
-              [0].includes(row.orderStatus) &&
-              <span onClick={this.pickingDetail.bind(this, row, '确定要删除吗?', orderDelete)}>删除拣货</span>
-            }
-
-          </span>
-        }
-      }
-    });
   },
-
-  mounted() {
-    this.getCurrentTableData();
-  },
-
   methods: {
     moment,
-    MakePrint,
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
     selectable(row, index) {
       return !(row.jobStatus > 3)
     },
@@ -367,32 +348,6 @@ export default {
       let printPlanContainer = document.getElementById('pickingOrder').innerHTML
       MakePrint(printPlanContainer)
     },
-
-    handleSizeChange(val) {
-      this.searchForm = { ...this.searchForm, pageSize: val, pageNum: 1 }
-      this.getCurrentTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.searchForm = { ...this.searchForm, pageNum: val }
-      this.getCurrentTableData()
-    },
-
-    submit(value) {
-      this.searchForm = value;
-      this.searchForm.orderStatus = this.searchForm.orderState
-      this.getCurrentTableData()
-    },
-
-    select() {
-      this.$refs['arrivalDom'].submit()
-    },
-
-    resetForm() {
-      this.searchForm.orderStatus = ''
-      this.$refs['arrivalDom'].resetForm()
-    },
-
     pickOrderDetailaPI(id) {
       this.detailLoding = true;
       pickOrderDetail(id).then(res => {
@@ -407,35 +362,8 @@ export default {
         }
       })
     },
-
-    pickingDetail(row, tips, Api) {
-      if (!tips) {
-        this.SelectionData = [];
-        this.dialogVisible = true;
-        this.activeRow = row;
-        this.pickOrderDetailaPI(row.id);
-      } else if (tips === 'Printing') {
-        this.printingAlert = true;
-        this.activeRow = row;
-        this.pickOrderDetailaPI(row.id);
-      } else {
-        this.$confirm(tips, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          Api(row.id).then(res => {
-            if (res) {
-              this.$message({ type: 'success', message: '操作成功!' });
-              this.getCurrentTableData();
-            }
-          })
-        }).catch(() => { })
-      }
-    },
-
     selectionChange(val) {
-      this.SelectionData = val
+      this.selectionData = val
       if (val.length > 1) {
         val.forEach((v, index) => {
           if (index === (val.length - 1)) return
@@ -443,19 +371,18 @@ export default {
         })
       }
     },
-
     suerPicking() {
-      if (this.SelectionData.length === 0) {
+      if (this.selectionData.length === 0) {
         this.$message({ type: 'info', message: '请先选择商品' });
         return;
       }
       let json = {};
-      json.pickConfirmItemReqList = this.SelectionData
-      json.planCode = this.SelectionData[0].planCode;
+      json.pickConfirmItemReqList = this.selectionData
+      json.planCode = this.selectionData[0].planCode;
       json.pickOrderId = this.activeRow.id;
       let skuStock = JSON.parse(JSON.stringify(this.skuStock))
       let message = ''
-      this.SelectionData.forEach(v => {
+      this.selectionData.forEach(v => {
         v.realSortStocks && Object.keys(v.realSortStocks).forEach(id => {
           skuStock[id].num = skuStock[id].num || 0
           skuStock[id].num += v.realSortStocks[id]
@@ -473,7 +400,7 @@ export default {
           return this.$message({ type: 'error', message: `库位【${item.code}】的可用库存为${item.qty}，当前已使用${item.num}` })
         }
       }
-      this.SelectionData.forEach(v => {
+      this.selectionData.forEach(v => {
         if (!v.realSortStocks || !Object.keys(v.realSortStocks).length) {
           v.realSortStocks = {}
           v.realSortStocks[v.stockId] = v.jobQty
@@ -487,28 +414,38 @@ export default {
       })
 
     },
-
     handleClose() {
       this.dialogVisible = false;
       this.printingAlert = false;
     },
-
-    getCurrentTableData() {
-      this.SelectionData = [];
-      let json = {};
-      for (let i in this.searchForm) {
-        if (this.searchForm[i] !== '') {
-          json[i] = this.searchForm[i];
-        }
-      }
-
-      pickOrderList(json).then(res => {
-        if (res) {
-          this.total = res.data && res.data.total;
-          this.tableData = res.data && res.data.list || []
-        }
-      })
-    }
+    /** 详情 按钮点击 */
+    handleDetail(row) {
+      this.selectionData = [];
+      this.dialogVisible = true;
+      this.activeRow = row;
+      this.pickOrderDetailaPI(row.id);
+    },
+    /** 打印拣货单 按钮点击 */
+    handePrint(row) {
+      this.printingAlert = true;
+      this.activeRow = row;
+      this.pickOrderDetailaPI(row.id);
+    },
+    /** 终止拣货 点击 */
+    handlePickStop(row) {
+      this.$apiConfirm('确定要终止操作码？', () => orderPickStop(row.id)).then((action) => {
+        console.log(action)
+        this.$message.success('操作成功！')
+        this.getTableData()
+      }).catch(() => { })
+    },
+    /** 删除拣货 点击 */
+    handleDelete(row) {
+      this.$apiConfirm('确定要删除吗？', () => orderDelete(row.id)).then(() => {
+        this.$message.success('操作成功！')
+        this.getTableData()
+      }).catch(() => { })
+    },
   },
 }
 </script>
