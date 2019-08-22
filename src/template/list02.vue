@@ -4,7 +4,7 @@
       ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
-      :api="checkOrderList"
+      :api="listApi"
       :showControl="true"
       :controlWidth="160"
     >
@@ -48,7 +48,7 @@ export default {
     return {
       tableConfig,
       searchConfig,
-      checkOrderList,
+      listApi: checkOrderList,
       // 可选 附加查询条件
       appendSearchParams: {},
     }

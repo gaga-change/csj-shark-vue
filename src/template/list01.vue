@@ -19,7 +19,7 @@
     <div class="mt15">
       <base-table
         ref='baseTable'
-        :api="checkOrderList"
+        :api="listApi"
         :config="tableConfig"
         :tableData.sync="tableData"
         :searchParams="searchParams"
@@ -55,7 +55,7 @@ export default {
     return {
       tableConfig,
       searchConfig,
-      checkOrderList,
+      listApi: checkOrderList,
       tableData: [],
       searchParams: {},
       selectRows: [],
