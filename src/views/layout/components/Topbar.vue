@@ -4,7 +4,7 @@
       <img :src="logoPath" />
     </div>
     <div class="plant-text">
-      供应链云仓库管理系统WMS
+      供应链云仓库管理系统WMS{{development ? '【开发环境】': ''}}
     </div>
      <el-dropdown class="avatar-container warehouse" @command="handleCommand">
       <div class="avatar-wrapper">
@@ -98,6 +98,7 @@ export default {
       }
     }
     return {
+      development: false,
       logoPath,
       TiggerUrl,
       modifyPasswordShow: false,
@@ -147,6 +148,9 @@ export default {
     }
   },
   created() {
+    if (process.env.NODE_ENV === "development") {
+      this.development = true
+    }
     this.preWarehouse = this.chooseWarehouse
     this.warehouse = this.chooseWarehouse || sessionStorage.getItem('warehouse')
   },

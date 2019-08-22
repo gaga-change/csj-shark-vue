@@ -50,7 +50,6 @@
           type="primary"
           size="mini"
           @click="formHandle('add')"
-          style="margin-bottom:15px"
         >添加</el-button>
       </template>
     </base-list>

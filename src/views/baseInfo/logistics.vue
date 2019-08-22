@@ -23,7 +23,6 @@
         <el-button
           type="primary"
           size="mini"
-          style="margin-bottom:12px"
           @click="logisticsHandle('add')"
         >
           添加
