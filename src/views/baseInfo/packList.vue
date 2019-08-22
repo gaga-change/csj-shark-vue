@@ -37,7 +37,7 @@ import { packageSelect, packageDelete } from '@/api'
 const tableConfig = [
   { label: '包装编码', prop: 'packageCode' },
   { label: '包装描述', prop: 'packageDesc' },
-  { label: '最小单元', prop: 'each' },
+  { label: '最小单元', prop: 'single' },
   { label: '内包装', prop: 'innerPackage' },
   { label: '箱', prop: 'box' },
   { label: '容器', prop: 'palet' },

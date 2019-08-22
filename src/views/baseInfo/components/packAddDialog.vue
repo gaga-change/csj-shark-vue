@@ -27,11 +27,11 @@
           </el-form-item>
           <el-form-item
             label="最小单位"
-            prop="each"
+            prop="single"
           >
             <el-input-number
               placeholder="最小单位"
-              v-model="formData.each"
+              v-model="formData.single"
               :precision="0"
               :min="0"
               :max="99999999"
@@ -138,7 +138,7 @@ export default {
       loading: false,
       formData: {
         packageDesc: undefined,
-        each: 1,
+        single: 1,
         innerPackage: undefined,
         box: undefined,
         palet: undefined,

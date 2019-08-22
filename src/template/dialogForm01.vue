@@ -36,11 +36,11 @@
           <!-- 数字框 -->
           <el-form-item
             label="最小单位"
-            prop="each"
+            prop="single"
           >
             <el-input-number
               placeholder="最小单位"
-              v-model="formData.each"
+              v-model="formData.single"
               :precision="0"
               :min="0"
               :max="99999999"
