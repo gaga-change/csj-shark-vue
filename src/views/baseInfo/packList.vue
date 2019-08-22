@@ -4,7 +4,7 @@
       ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
-      :api="packageSelect"
+      :api="listApi"
       :showControl="true"
       :controlWidth="160"
     >
@@ -24,10 +24,15 @@
         </el-button>
       </template>
     </base-list>
+    <pack-add-dialog
+      :visible.sync="packAddDialogVisible"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
+import PackAddDialog from './components/packAddDialog'
 import { packageSelect, packageDelete } from '@/api'
 const tableConfig = [
   { label: '包装编码', prop: 'packageCode' },
@@ -43,11 +48,13 @@ const searchConfig = [
   { label: '包装描述', prop: 'packageDesc', type: 'input' },
 ]
 export default {
+  components: { PackAddDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
-      packageSelect
+      listApi: packageSelect,
+      packAddDialogVisible: false,
     }
   },
   methods: {
@@ -57,7 +64,7 @@ export default {
     },
     /** 新建按钮 点击 */
     handleCreate() {
-      this.$message('功能正在开发...')
+      this.packAddDialogVisible = true
     },
     /** 删除当前行 */
     handleDeleteRow(row) {

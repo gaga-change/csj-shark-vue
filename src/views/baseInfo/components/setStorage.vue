@@ -202,7 +202,7 @@ export default {
     },
     row: {
       type: Object,
-      default: {}
+      default: () => ({})
     }
   },
   computed: {

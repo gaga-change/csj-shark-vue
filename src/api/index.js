@@ -178,3 +178,5 @@ export const skuSelect = params => http.post(`/webApi/basic/sku/select`, params)
 export const packageSelect = params => http.post(`/webApi/basic/package/select`, params)
 /** 删除包装 */
 export const packageDelete = id => http.get(`/webApi/basic/package/delete/${id}`)
+/** 添加包装 */
+export const packageSave = params => http.post(`/webApi/basic/package/save`, params)
