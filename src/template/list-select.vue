@@ -4,7 +4,7 @@
       ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
-      :api="checkOrderList"
+      :api="listApi"
       :showControl="true"
       :controlWidth="160"
       :select="true"
@@ -31,6 +31,20 @@
         >
           新建质检记录
         </el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="导出当前查询的所有记录"
+          placement="top"
+        >
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handleOutput"
+          >
+            导出
+          </el-button>
+        </el-tooltip>
       </template>
     </base-list>
   </div>
@@ -56,7 +70,7 @@ export default {
     return {
       tableConfig,
       searchConfig,
-      checkOrderList,
+      listApi: checkOrderList,
       selectRows: [],
       // 可选 附加查询条件
       appendSearchParams: {},

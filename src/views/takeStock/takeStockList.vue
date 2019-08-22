@@ -1,94 +1,85 @@
 <template>
   <div class="TakeStockListCom">
-    <div>
-      <search-form
-        :config="takeStockListSearchConfig"
-        @search="handleSearch"
-      >
-      </search-form>
-    </div>
-    <div>
-      <el-tooltip
-        class="item"
-        effect="dark"
-        content="打印表格中勾选的内容"
-        placement="top"
-      >
+
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
+      :select="true"
+      @selectionChange="selectionChange"
+    >
+      <template slot-scope="scope">
+        <router-link
+          :to="{path:`/takeStock/detail`,query:{id: scope.row.id}}"
+          :style="{color:'#3399ea'}"
+        >查看</router-link>
+        <el-divider
+          v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
+          direction="vertical"
+        ></el-divider>
+        <router-link
+          v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
+          :to="{path:`/takeStock/record`,query:{id: scope.row.id}}"
+          :style="{color:'#3399ea'}"
+        >盘点录入</router-link>
+        <el-divider
+          v-if="scope.row.executeStatus === 0"
+          direction="vertical"
+        ></el-divider>
         <el-button
-          type="primary"
-          size="mini"
-          :disabled="!selectRows.length"
-          @click="handlePrint"
+          class="btn-link"
+          v-if="scope.row.executeStatus === 0"
+          @click="handleChangeStatus(scope.row, 0)"
         >
-          打印
+          取消
         </el-button>
-      </el-tooltip>
-      <el-tooltip
-        class="item"
-        effect="dark"
-        content="导出当前查询的所有记录"
-        placement="top"
-      >
+        <el-divider
+          v-if="scope.row.executeStatus === 1"
+          direction="vertical"
+        ></el-divider>
         <el-button
-          type="primary"
-          size="mini"
-          @click="handleOutput"
+          class="btn-link"
+          v-if="scope.row.executeStatus === 1"
+          @click="handleChangeStatus(scope.row, 1)"
         >
-          导出
+          终止
         </el-button>
-      </el-tooltip>
-    </div>
-    <div class="mt15">
-      <base-table
-        ref='baseTable'
-        :api="planInventoryList"
-        :config="takeStockListConfig"
-        :tableData.sync="tableData"
-        :searchParams="searchParams"
-        :select="true"
-        :selectRows.sync="selectRows"
-        :showControl="true"
-        :controlWidth="180"
-      >
-        <template slot-scope="scope">
-          <router-link
-            :to="{path:`/takeStock/detail`,query:{id: scope.row.id}}"
-            :style="{color:'#3399ea'}"
-          >查看</router-link>
-          <el-divider
-            v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
-            direction="vertical"
-          ></el-divider>
-          <router-link
-            v-if="scope.row.executeStatus === 0 || scope.row.executeStatus === 1"
-            :to="{path:`/takeStock/record`,query:{id: scope.row.id}}"
-            :style="{color:'#3399ea'}"
-          >盘点录入</router-link>
-          <el-divider
-            v-if="scope.row.executeStatus === 0"
-            direction="vertical"
-          ></el-divider>
+      </template>
+      <template slot="btns">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="打印表格中勾选的内容"
+          placement="top"
+        >
           <el-button
-            class="btn-link"
-            v-if="scope.row.executeStatus === 0"
-            @click="handleChangeStatus(scope.row, 0)"
+            type="primary"
+            size="mini"
+            :disabled="!selectRows.length"
+            @click="handlePrint"
           >
-            取消
+            打印
           </el-button>
-          <el-divider
-            v-if="scope.row.executeStatus === 1"
-            direction="vertical"
-          ></el-divider>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="导出当前查询的所有记录"
+          placement="top"
+        >
           <el-button
-            class="btn-link"
-            v-if="scope.row.executeStatus === 1"
-            @click="handleChangeStatus(scope.row, 1)"
+            type="primary"
+            size="mini"
+            @click="handleOutput"
           >
-            终止
+            导出
           </el-button>
-        </template>
-      </base-table>
-    </div>
+        </el-tooltip>
+      </template>
+    </base-list>
     <print-bills
       :visible.sync="printBillsVisible"
       :rows="selectRows"
@@ -97,71 +88,61 @@
 </template>
 
 <script>
-import BaseTable from '@/components/Table/index'
 import printBills from './components/printBills'
-import SearchForm from '@/components/SearchForm/index'
 import { planInventoryList, inventoryRemoveOrStop, inventoryRecordExport } from '@/api'
-import { takeStockListConfig, takeStockListSearchConfig } from './components/config'
+import { executeStatusEnum } from '@/utils/enum'
+const tableConfig = [
+  { label: '盘点单号', prop: 'orderCode' },
+  { label: '状态', prop: 'executeStatus', type: 'enum', type: executeStatusEnum },
+  { label: '仓库名称', prop: 'warehouseName' },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '盘点人', prop: 'inventoryName' },
+  { label: '盘点时间', prop: 'inventoryTime', type: 'time' },
+]
+const searchConfig = [
+  { label: '盘点单号', prop: 'orderCode', type: 'input' },
+  { label: '状态', prop: 'executeStatus', type: 'select', enum: executeStatusEnum },
+  { label: '创建时间', prop: 'createTimeArea', type: 'timeArea', props: ['startDate', 'endtDate'] },
+]
 export default {
-  components: { BaseTable, SearchForm, printBills },
+  components: { printBills },
   data() {
     return {
+      tableConfig,
+      searchConfig,
+      listApi: planInventoryList,
+      selectRows: [],
       printBillsVisible: false,
-      takeStockListConfig,
-      takeStockListSearchConfig,
-      planInventoryList,
-      tableData: [],
       searchParams: {},
-      selectRows: []
     }
   },
   methods: {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
+    /** 主表多选 */
+    selectionChange(selectRows) {
+      this.selectRows = [...selectRows]
+    },
     /** 取消或终止 */
     handleChangeStatus(row, operate) {
-      this.$confirm(`此操作将${operate ? '终止' : '取消'}该盘点单，是否继续`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true
-            inventoryRemoveOrStop({
-              id: row.id,
-              operate
-            }).then(res => {
-              instance.confirmButtonLoading = false
-              if (res) {
-                this.$message.success('操作成功！')
-                done()
-              }
-            })
-          } else {
-            done()
-          }
-        }
-      }).then(() => {
-      }).catch(() => { })
+      this.$delConfirm(`此操作将${operate ? '终止' : '取消'}该盘点单，是否继续`, () => inventoryRemoveOrStop({
+        id: row.id,
+        operate
+      })).then(() => {
+        this.$message.success('操作成功！')
+        this.getTableData()
+      })
     },
     /** 导出 */
     handleOutput() {
-      inventoryRecordExport(this.searchParams, '盘点明细.xls')
+      inventoryRecordExport(this.$refs['baseList'].searchParams, '盘点明细.xls')
     },
     /** 打印 */
     handlePrint() {
       this.printBillsVisible = true
-    },
-    /** 搜索 */
-    handleSearch(params, callback) {
-      let obj = { ...params }
-      if (params.createTimeArea) {
-        delete obj.createTimeArea
-        obj.startDate = new Date(params.createTimeArea[0]).getTime()
-        obj.endtDate = new Date(params.createTimeArea[1]).getTime()
-      }
-      this.searchParams = obj
-      this.$nextTick(() => {
-        this.$refs['baseTable'].fetchData().then(callback)
-      })
     }
   }
 }

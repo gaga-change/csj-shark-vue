@@ -9,24 +9,6 @@ export const takeStockSelectProductTableConfig = [
   { label: '库区库位', prop: 'areaSpceCode' },
 ]
 
-export const takeStockListConfig = [
-  { label: '盘点单号', prop: 'orderCode' },
-  { label: '状态', prop: 'executeStatus', useLocalEnum: true, type: 'executeStatusEnum' },
-  { label: '仓库名称', prop: 'warehouseName' },
-  { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
-  { label: '盘点人', prop: 'inventoryName' },
-  { label: '盘点时间', prop: 'inventoryTime', type: 'time' },
-]
-
-export const takeStockListSearchConfig = [
-  { label: '盘点单号', prop: 'orderCode', type: 'input' },
-  { label: '状态', prop: 'executeStatus', type: 'select', enum: 'executeStatusEnum' },
-  { label: '创建时间', prop: 'createTimeArea', type: 'timeArea' },
-  // { label: '库区', prop: 'warehouseAreaCode', type: 'warehouseAreaCode' },
-  // { label: '库位', prop: 'warehouseSpaceCode', type: 'warehouseSpaceCode' }
-]
-
 export const takeStockDetailConfig = [
   { label: '盘点单号', prop: 'orderCode' },
   { label: '创建人', prop: 'createrName' },
