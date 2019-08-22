@@ -30,7 +30,7 @@ Vue.component('BaseTable2', BaseTable2);
 Vue.component('SearchForm', SearchForm);
 Vue.component('SearchForm2', SearchForm2);
 Vue.component('BaseList', BaseList);
-Vue.prototype.$delConfirm = (msg, api) => MessageBox.confirm(msg || '此操作将永久删除改行, 是否继续?', '提示', {
+Vue.prototype.$apiConfirm = (msg, api) => MessageBox.confirm(msg || '此操作将永久删除改行, 是否继续?', '提示', {
   confirmButtonText: '确定',
   cancelButtonText: '取消',
   type: 'warning',
@@ -47,8 +47,7 @@ Vue.prototype.$delConfirm = (msg, api) => MessageBox.confirm(msg || '此操作�
       done()
     }
   }
-}).then(() => {
-}).catch(() => { })
+})
 
 Vue.use(ElementUI, { locale, size: 'mini' })
 Vue.use(EXTENDS)

@@ -128,13 +128,13 @@ export default {
     },
     /** 取消或终止 */
     handleChangeStatus(row, operate) {
-      this.$delConfirm(`此操作将${operate ? '终止' : '取消'}该盘点单，是否继续`, () => inventoryRemoveOrStop({
+      this.$apiConfirm(`此操作将${operate ? '终止' : '取消'}该盘点单，是否继续`, () => inventoryRemoveOrStop({
         id: row.id,
         operate
       })).then(() => {
         this.$message.success('操作成功！')
         this.getTableData()
-      })
+      }).catch(() => { })
     },
     /** 导出 */
     handleOutput() {

@@ -68,10 +68,10 @@ export default {
     },
     /** 删除当前行 */
     handleDeleteRow(row) {
-      this.$delConfirm('是否确定删除？', () => packageDelete(row.id)).then(() => {
+      this.$apiConfirm('是否确定删除？', () => packageDelete(row.id)).then(() => {
         this.$message.success('操作成功！')
         this.getTableData()
-      })
+      }).catch(() => { })
     },
   }
 }
