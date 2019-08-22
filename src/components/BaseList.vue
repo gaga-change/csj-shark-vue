@@ -128,8 +128,10 @@ export default {
 
 <style lang="scss">
 .BaseListComponent {
-  .el-card {
-    border: 1px solid#f56c6c6e !important;
+  &.red {
+    .el-card {
+      border: 1px solid#f56c6c6e !important;
+    }
   }
 }
 </style>
