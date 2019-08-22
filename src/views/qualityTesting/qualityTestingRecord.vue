@@ -1,47 +1,37 @@
 <template>
   <div class="TakeStockListCom">
-    <div>
-      <search-form
-        :config="qualityTestingListSearchConfig"
-        @search="handleSearch"
-      >
-      </search-form>
-    </div>
-    <div>
-      <el-button
-        type="primary"
-        size="mini"
-        @click="handleCreate"
-      >
-        新建质检记录
-      </el-button>
-    </div>
-    <div class="mt15">
-      <base-table
-        ref='baseTable'
-        :api="checkOrderList"
-        :config="qualityTestingListConfig"
-        :tableData.sync="tableData"
-        :searchParams="searchParams"
-        :showControl="true"
-        :controlWidth="160"
-      >
-        <template slot-scope="scope">
-          <router-link
-            :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
-            :style="{color:'#3399ea'}"
-          >查看</router-link>
-          <el-divider direction="vertical"></el-divider>
-          <el-button
-            class="btn-link"
-            size="mini"
-            @click="handleReloadFile(scope.row)"
-          >
-            质检报告
-          </el-button>
-        </template>
-      </base-table>
-    </div>
+
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
+    >
+      <template slot-scope="scope">
+        <router-link
+          :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
+          :style="{color:'#3399ea'}"
+        >查看</router-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-button
+          class="btn-link"
+          @click="handleReloadFile(scope.row)"
+        >
+          质检报告
+        </el-button>
+      </template>
+      <template slot="btns">
+        <el-button
+          type="primary"
+          @click="handleCreate"
+        >
+          新建质检记录
+        </el-button>
+      </template>
+    </base-list>
+
     <reload-file
       :visible.sync="reloadFileVisible"
       :row.sync="rowNow"
@@ -51,23 +41,35 @@
 
 <script>
 import { checkOrderList, getCheckReportByOrderCode } from '@/api'
-import { qualityTestingListConfig, qualityTestingListSearchConfig } from './components/config'
 import reloadFile from './components/reloadFile'
+
+const tableConfig = [
+  { label: '质检单号 ', prop: 'orderCode' },
+  { label: '收货单号 ', prop: 'receiveOrderCode' },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+]
+const searchConfig = [
+  { label: '质检单号', prop: 'orderCode', type: 'input' },
+  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+]
+
 export default {
   components: { reloadFile },
   data() {
     return {
+      tableConfig,
+      searchConfig,
+      listApi: checkOrderList,
       reloadFileVisible: false,
-      qualityTestingListConfig,
-      qualityTestingListSearchConfig,
-      checkOrderList,
-      tableData: [],
-      searchParams: {},
-      selectRows: [],
       rowNow: {},
     }
   },
   methods: {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
     /** 重新上传 */
     handleReloadFile(row, operate) {
       this.rowNow = row
@@ -76,19 +78,6 @@ export default {
     /** 新建质检记录 */
     handleCreate() {
       this.$router.push({ path: '/qualityTesting/create' })
-    },
-    /** 搜索 */
-    handleSearch(params, callback) {
-      let obj = { ...params }
-      if (params.createTimeArea) {
-        delete obj.createTimeArea
-        obj.startDate = new Date(params.createTimeArea[0]).getTime()
-        obj.endtDate = new Date(params.createTimeArea[1]).getTime()
-      }
-      this.searchParams = obj
-      this.$nextTick(() => {
-        this.$refs['baseTable'].fetchData().then(callback)
-      })
     }
   }
 }

@@ -1,16 +1,3 @@
-
-export const qualityTestingListConfig = [
-  { label: '质检单号 ', prop: 'orderCode' },
-  { label: '收货单号 ', prop: 'receiveOrderCode' },
-  { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
-]
-
-export const qualityTestingListSearchConfig = [
-  { label: '质检单号', prop: 'orderCode', type: 'input' },
-  { label: '创建时间', prop: 'createTimeArea', type: 'timeArea' },
-]
-
 export const selectGoodsSearchConfig = [
   { label: '收货单号', prop: 'orderCode', type: 'input' },
   { label: '收货时间', prop: 'createTimeArea', type: 'timeArea' },
