@@ -265,9 +265,6 @@ export default {
       this.fetchData()
     }
   },
-  created() {
-    console.log('table2')
-  },
   beforeMount() {
     let tableConfig = JSON.parse(JSON.stringify(this.config))
     tableConfig.forEach(configItem => {
