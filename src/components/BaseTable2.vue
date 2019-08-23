@@ -11,8 +11,7 @@
       @current-change="handleCurrentRadioChange"
       :summary-method="summaryMethod"
       @selection-change="handleSelectionChange"
-      @select="handleSelect"
-      @select-all="handleSelectAll"
+      @expand-change="handleExpandChange"
       :border="border"
       :show-summary="showSummary"
       size="mini"
@@ -96,7 +95,7 @@
       <el-table-column
         v-if="showControl"
         :width="controlWidth"
-        fixed="right"
+        :fixed="showControlFixed ?'right' : false"
         :label="controlName"
       >
         <template slot-scope="scope">
@@ -164,31 +163,12 @@ export default {
       type: Boolean,
       default: false,
     },
-    /** 多选选中的内容 */
-    selectRows: {
-      type: Array,
-      default: () => []
-    },
     /** 多选框 可选条件 */
     selectable: {
       type: Function,
       default: () => true
     },
-    /** 跨分页多选 */
-    selectTotal: {
-      type: Boolean,
-      default: false
-    },
-    /** 跨分页多选 - 唯一键 */
-    selectTotalKey: {
-      type: String,
-      default: 'id'
-    },
-    /** 跨分页多选 - 最大数量限制。 */
-    selectTotalMax: {
-      type: Number,
-      default: 50
-    },
+    /** 是否展示序号 */
     showIndex: {
       type: Boolean,
       default: false
@@ -197,6 +177,11 @@ export default {
     showControl: {
       type: Boolean,
       default: false
+    },
+    /** 操作栏 是否固定右侧 */
+    showControlFixed: {
+      type: Boolean,
+      default: true
     },
     /** 显示 【操作】 - 更改名称 */
     controlName: {
@@ -216,10 +201,6 @@ export default {
       type: Boolean,
       default: false
     },
-    useRadio: {
-      type: Boolean,
-      default: false
-    },
     showSummary: {
       type: Boolean,
       defalut: false
@@ -236,17 +217,9 @@ export default {
       type: Array,
       default: () => []
     },
-    currentPage: {
-      type: Number,
-      default: 1
-    },
     pageSizes: {
       type: Array,
       default: () => [10, 20, 30, 50]
-    },
-    pageSize: {
-      type: Number,
-      default: 10
     },
     layout: {
       type: String,
@@ -282,20 +255,6 @@ export default {
       selfLoading: true,
     }
   },
-  watch: {
-    selectRows(val, oldVal) {
-      // 重置选中
-      if (val.length === 0) {
-        this.$refs.table.clearSelection()
-      } else if (this.selectTotal) {
-        this.$refs.table.clearSelection()
-        this.selectTotalKey && val.forEach(checkRow => {
-          let row = this.data.find(v => v[this.selectTotalKey] === checkRow[this.selectTotalKey])
-          row && this.$refs['table'].toggleRowSelection(row, true)
-        })
-      }
-    }
-  },
   computed: {
     ...mapGetters([
       'mapConfig',
@@ -305,6 +264,9 @@ export default {
     if (this.api) {
       this.fetchData()
     }
+  },
+  created() {
+    console.log('table2')
   },
   beforeMount() {
     let tableConfig = JSON.parse(JSON.stringify(this.config))
@@ -335,7 +297,7 @@ export default {
             break
           case 'Boolean': configItem.formatter = (row, column, cellValue, index) => cellValue ? '是' : '否'
             break
-          case 'index': configItem.formatter = (row, column, cellValue, index) => (this.pageSize) * (this.currentPage - 1) + index + 1
+          case 'index': configItem.formatter = (row, column, cellValue, index) => (this.selfPageSize) * (this.selfCurrentPage - 1) + index + 1
             break
           case 'toFixed': configItem.formatter = (row, column, cellValue, index) => cellValue && Number(Number(cellValue).toFixed(2))
             break
@@ -377,9 +339,17 @@ export default {
     this.tableConfig = tableConfig;
   },
   methods: {
+    /** 清除选中 */
+    clearSelection() {
+      this.$refs.table.clearSelection()
+    },
     /** 输入框内容改变 */
     handleInputNumberChange(row, index, item, value) {
       this.$emit('inputNumberChange', { row, index, item, value })
+    },
+    /** 展开 行 */
+    handleExpandChange(row) {
+      this.$emit('expandChange', row)
     },
     fetchData() {
       this.selfLoading = true
@@ -400,22 +370,7 @@ export default {
           data = res.data.list || []
           total = res.data.total
         }
-        let recoverSelectRows = []
-        if (this.selectTotal) {
-          // 需要恢复选中状态
-          let keys = this.selectRows.map(v => v[this.selectTotalKey]).join(',') + ','
-          data.forEach(v => {
-            if (~keys.indexOf(v[this.selectTotalKey])) {
-              recoverSelectRows.push(v)
-            }
-          })
-        }
         this.$emit('update:data', data)
-        this.selectTotal && this.$nextTick(() => {
-          recoverSelectRows.forEach(v => {
-            this.$refs['table'].toggleRowSelection(v, true)
-          })
-        })
         this.selfTotal = total
       })
     },
@@ -427,62 +382,12 @@ export default {
       this.selfCurrentPage = val
       this.fetchData()
     },
+    /** 单选 */
     handleCurrentRadioChange(currentRow, oldCurrentRow) {
       this.$emit('currentChange', currentRow, oldCurrentRow)
     },
-    handleSelect(selection, row) {
-      // 如果 selectTotal= false, 走 handleSelectionChange
-      if (!this.selectTotal) return
-      let temp = [...this.selectRows]
-      let selected = selection[selection.length - 1] === row
-      row = JSON.parse(JSON.stringify(row))
-      if (selected) {
-        temp.push(row)
-      } else {
-        temp.splice(temp.findIndex(v => v[this.selectTotalKey] === row[this.selectTotalKey]), 1)
-      }
-      if (temp.length > this.selectTotalMax) {
-        this.$message(`最多选取${this.selectTotalMax}条,当前已超出，将自动删除第一条选中内容！`)
-        let delRow = temp.shift()
-        let row = this.data.find(v => v[this.selectTotalKey] === delRow[this.selectTotalKey])
-        row && this.$refs['table'].toggleRowSelection(row, false)
-      }
-      this.$emit('update:selectRows', temp)
-    },
-    handleSelectAll(selection) {
-      // 如果 selectTotal= false, 走 handleSelectionChange
-      if (!this.selectTotal) return
-      let temp = [...this.selectRows]
-      if (selection.length) { // 全选
-        this.data.forEach(row => {
-          // 在已选的总库中，添加当前列表中的项
-          if (!temp.find(v => v[this.selectTotalKey] === row[this.selectTotalKey])) {
-            temp.push(row)
-          }
-        })
-      } else { // 全不选
-        this.data.forEach(row => {
-          // 在已选的总库中，剔除当前列表中的项
-          let index = temp.findIndex(v => v[this.selectTotalKey] === row[this.selectTotalKey])
-          if (~index) {
-            temp.splice(index, 1)
-          }
-        })
-      }
-      if (temp.length > this.selectTotalMax) {
-        this.$message(`最多选取${this.selectTotalMax},当前已超出，将自动删除前${temp.length - this.selectTotalMax}条选中内容！`)
-        let delRows = temp.splice(0, temp.length - this.selectTotalMax)
-        delRows.forEach(delRow => {
-          let row = this.data.find(v => v[this.selectTotalKey] === delRow[this.selectTotalKey])
-          row && this.$refs['table'].toggleRowSelection(row, false)
-        })
-      }
-      this.$emit('update:selectRows', temp)
-    },
+    /** 多选 */
     handleSelectionChange(val) {
-      // 如果 selectTotal= true, 走handleSelect
-      if (this.selectTotal) return
-      this.$emit('update:selectRows', val)
       this.$emit('selectionChange', val)
     }
   }

@@ -25,12 +25,25 @@
         :showControl="showControl"
         :controlName="controlName"
         :controlWidth="controlWidth"
+        :showControlFixed="showControlFixed"
         :select="select"
         @selectionChange="selectionChange"
+        @expandChange="row => $emit('expandChange', row)"
         :selectable="selectable"
+        :expand="expand"
       >
         <template slot-scope="scope">
           <slot
+            v-bind:row="scope.row"
+            v-bind:index="scope.index"
+          ></slot>
+        </template>
+        <template
+          slot="expand"
+          slot-scope="scope"
+        >
+          <slot
+            name="expand"
             v-bind:row="scope.row"
             v-bind:index="scope.index"
           ></slot>
@@ -43,6 +56,11 @@
 <script>
 export default {
   props: {
+    /** 是否扩展 */
+    expand: {
+      type: Boolean,
+      default: false,
+    },
     /** 附加的搜索条件 */
     appendSearchParams: {
       type: Object,
@@ -86,6 +104,11 @@ export default {
       type: Number,
       default: 160
     },
+    /** 操作栏 是否固定右侧 */
+    showControlFixed: {
+      type: Boolean,
+      default: true
+    },
     /** 是否可选 */
     select: {
       type: Boolean,
@@ -112,6 +135,10 @@ export default {
     }
   },
   methods: {
+    /** 清除选中 */
+    clearSelection() {
+      this.$refs['baseTable'].clearSelection()
+    },
     /** 搜索 */
     handleSearch(params, callback) {
       let obj = { ...params, ...this.appendSearchParams }
