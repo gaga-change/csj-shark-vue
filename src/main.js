@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import moment from 'moment'
 import ItemTitle from '@/components/ItemTitle/index'
 import ItemCard from '@/components/ItemCard/index'
 import TabLabel from '@/components/TabLabel/index'
@@ -47,6 +48,11 @@ Vue.prototype.$apiConfirm = (msg, api) => MessageBox.confirm(msg || '此操作�
       done()
     }
   }
+})
+
+Vue.filter('date', function (value, format) {
+  if (!value) return ''
+  return moment(value).format(format || "YYYY-MM-DD HH:mm:ss")
 })
 
 Vue.use(ElementUI, { locale, size: 'mini' })
