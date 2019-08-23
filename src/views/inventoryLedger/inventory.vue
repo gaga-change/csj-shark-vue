@@ -317,7 +317,7 @@ export default {
           }
         })
         if (msg) {
-          return this.$message(msg)
+          return this.$message.error(msg)
         }
         this.skuStockWriteCheckResultLoading = true
         skuStockWriteCheckResult({

@@ -1,93 +1,53 @@
 <template>
   <div>
-    <search-inventory
-      @searchTrigger="submitForm"
-      ref="searchWarhouse"
-      :search-forms="ruleForm"
-      :pageName="'stream'"
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
     >
-    </search-inventory>
-    <base-table
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :loading="loading"
-      :config="streamTableConfig"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
-      :tableData="tableData"
-    />
+    </base-list>
   </div>
 </template>
 
 <script>
-import BaseTable from '@/components/Table'
-import { streamTableConfig } from './components/config'
 import { querySkuStockRecord } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchInventory from './components/search'
+
+import { busiBillTypeEnum } from '@/utils/enum'
+const tableConfig = [
+  { label: '库位', prop: 'warehouseSpaceCode', width: 80 },
+  { label: '业务单号', prop: 'planCode', width: 150 },
+  { label: '货主', prop: 'arrivalName', width: 150 },
+  { label: '供应商', prop: 'providerName' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号  ', prop: 'skuFormat' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '变动类型  ', prop: 'busiBillType', type: 'enum', type: busiBillTypeEnum },
+  { label: '变动前数量', prop: 'beforeQty', width: 100 },
+  { label: '变动数量', prop: 'changeQty' },
+  { label: '变动后数量', prop: 'afterQty', width: 100 },
+  { label: '变动时间', prop: 'gmtModify', type: 'time' },
+]
+const searchConfig = [
+  { label: '商品编码', prop: 'skuCode', type: 'input' },
+  { label: '商品名称', prop: 'skuName', type: 'input' },
+  { label: '货主名称', prop: 'ownerName', type: 'input' },
+  { label: '库位编码', prop: 'warehouseSpaceCode', type: 'input' },
+  { label: '变动时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
+  { label: '变动类型', prop: 'busiBillType', type: 'select', enum: busiBillTypeEnum },
+]
+
 
 export default {
-  components: { BaseTable, SearchInventory },
   data() {
     return {
-      loading: false,
-      ruleForm: {
-        pageNum: 1,
-        pageSize: 10,
-        skuCode: '',
-        skuName: '',
-        ownerName: '',
-        warehouseSpaceCode: '',
-        busiBillType: '',
-        durationTime: [],
-      },
-      tableData: [],
-      streamTableConfig,
-      total: 0,
+      tableConfig,
+      searchConfig,
+      listApi: querySkuStockRecord,
     }
   },
   methods: {
-    getTableData() {
-      this.$router.replace({
-        path: '/inventoryLedger/stream',
-        query: { data: JSON.stringify(this.ruleForm) }
-      })
-      this.loading = true;
-      let data = { ...this.ruleForm }
-      querySkuStockRecord(data).then(res => {
-        if (res && res.data && res.data.list) {
-          var tempList = [...res.data.list]
-          this.tableData = tempList.map(list => { list.childData = []; return list })
-          this.total = res.data.total
-        }
-        this.loading = false;
-      })
-    },
-
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      var createBeginDate = '', createEndDate = '';//unforim
-      if (ruleForm.durationTime && ruleForm.durationTime[0]) {
-        createBeginDate = +ruleForm.durationTime[0]
-        createEndDate = +ruleForm.durationTime[1]
-      }
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1, createBeginDate, createEndDate }
-      this.getTableData();
-
-    },
-  },
-  created() {
-    this.getTableData()
   }
 }
 </script>
