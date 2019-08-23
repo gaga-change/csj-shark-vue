@@ -27,6 +27,7 @@
         :controlWidth="controlWidth"
         :select="select"
         @selectionChange="selectionChange"
+        :selectable="selectable"
       >
         <template slot-scope="scope">
           <slot
@@ -90,6 +91,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    /** 可选条件 */
+    selectable: {
+      type: Function,
+      default: () => true
+    },
   },
   data() {
     return {
@@ -111,6 +117,7 @@ export default {
       let obj = { ...params, ...this.appendSearchParams }
       this.searchParams = obj
       this.$nextTick(() => {
+        this.$emit('search', { ...obj })
         this.$refs['baseTable'].fetchData().then(callback)
       })
     },

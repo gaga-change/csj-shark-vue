@@ -9,6 +9,7 @@
       :controlWidth="160"
       :select="true"
       @selectionChange="selectionChange"
+      :selectable="() => true"
     >
       <template slot-scope="scope">
         <router-link

@@ -143,13 +143,20 @@ export default {
       type: Object,
       default: () => { }
     },
+    /** 是否可多选 */
     select: {
       type: Boolean,
       default: false,
     },
+    /** 多选选中的内容 */
     selectRows: {
       type: Array,
       default: () => []
+    },
+    /** 多选框 可选条件 */
+    selectable: {
+      type: Function,
+      default: () => true
     },
     /** 跨分页多选 */
     selectTotal: {
@@ -165,10 +172,6 @@ export default {
     selectTotalMax: {
       type: Number,
       default: 50
-    },
-    selectable: {
-      type: Function,
-      default: () => true
     },
     showIndex: {
       type: Boolean,

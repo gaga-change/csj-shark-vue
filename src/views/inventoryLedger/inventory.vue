@@ -1,82 +1,68 @@
 <template>
   <div>
-    <search-inventory
-      @searchTrigger="submitForm"
-      ref="searchWarhouse"
-      :search-forms="ruleForm"
-    >
-    </search-inventory>
-    <div
-      class="export_box"
-      v-if="SumSkuQty"
-    >
-      <div>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="状态转移表格中勾选的内容"
-          placement="top"
-        >
-          <el-button
-            @click="showStateTransition"
-            type="primary"
-            size="mini"
-            :disabled="!selectRows.length"
-          >
-            状态转移
-          </el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="导出当前查询的所有记录"
-          placement="top"
-        >
-          <el-button
-            @click="getExport"
-            type="primary"
-            size="mini"
-          >
-            导出
-          </el-button>
-        </el-tooltip>
-      </div>
-      <div class="Total">
-        <span>库存合计 ：</span> <span>{{SumSkuQty}}</span>
-      </div>
-    </div>
 
-    <base-table
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :selectRows.sync="selectRows"
-      :selectable="selectable"
-      :select="true"
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
       :showControl="true"
-      :controlWidth="100"
-      :loading="loading"
-      :config="inventoryTableConfig"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
-      :tableData="tableData"
+      :controlWidth="160"
+      :select="true"
+      @selectionChange="selectionChange"
+      :selectable="selectable"
+      @search="handleSearch"
     >
-      <template
-        slot="edit"
-        slot-scope="scope"
-      >
-        <button
-          class="btn-link"
-          type="button"
-          size='mini'
+      <template slot-scope="scope">
+        <el-link
+          type="primary"
           :disabled="(scope.row.skuQty - scope.row.blockQty) <= 0"
           @click="showMoveLibrary(scope.row)"
-        >
-          移库
-        </button>
+        >移库</el-link>
       </template>
-    </base-table>
+      <template slot="btns">
+        <div
+          class="export_box"
+          v-if="sumSkuQty"
+        >
+          <div>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="状态转移表格中勾选的内容"
+              placement="top"
+            >
+              <el-button
+                @click="showStateTransition"
+                type="primary"
+                size="mini"
+                :disabled="!selectRows.length"
+              >
+                状态转移
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="导出当前查询的所有记录"
+              placement="top"
+            >
+              <el-button
+                @click="getExport"
+                type="primary"
+                size="mini"
+              >
+                导出
+              </el-button>
+            </el-tooltip>
+          </div>
+          <div class="Total">
+            <span>库存合计 ：</span> <span>{{sumSkuQty}}</span>
+          </div>
+        </div>
+      </template>
+    </base-list>
+
     <el-dialog
       title="移库"
       :visible.sync="moveLibraryDialogVisible"
@@ -167,12 +153,10 @@
       :before-close="handleClose"
     >
 
-      <base-table
+      <base-table2
         :config="stateTransitionTableConfig"
-        :total="selectRows.length"
-        :maxTotal="100"
         :showIndex="true"
-        :tableData="selectRows"
+        :data="selectRows"
       />
 
       <span
@@ -195,42 +179,65 @@
 </template>
 
 <script>
-import BaseTable from '@/components/Table'
-import { inventoryTableConfig, stateTransitionTableConfig } from './components/config'
+
 import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQty, warehouseSpaceList, skuStockMove } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchInventory from './components/search'
+import { checkResultEnum } from '@/utils/enum'
+
+const stateTransitionTableConfig = [// 库存列表
+  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName', width: '200' },
+  { label: '规格型号', prop: 'skuFormat' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '商品状态', prop: 'checkResult', enum: true, type: checkResultEnum },
+  { label: '收货数量', prop: 'skuQty' },
+  { label: '正品数量', prop: 'goodQty', fixed: 'right', edit: true, inputType: 'number', max: 99999999, min: 0, width: '160' },
+  { label: '残次品数量', prop: 'badQty', fixed: 'right', edit: true, inputType: 'number', max: 99999999, min: 0, width: '160' },
+]
+
+const tableConfig = [
+  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName', width: '200' },
+  { label: '货主', prop: 'ownerName' },
+  { label: '规格型号', prop: 'skuFormat' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '单价', prop: 'inPrice' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: checkResultEnum },
+  { label: '冻结数量', prop: 'blockQty' },
+  { label: '库存', prop: 'skuQty' },
+  { label: '最近入库时间', prop: 'lastInTime', type: 'time', width: '135' },
+  { label: '最近出库时间', prop: 'lastOutTime', type: 'time', width: '135' },
+]
+const searchConfig = [
+  { label: '商品编码', prop: 'skuCode', type: 'input' },
+  { label: '商品名称', prop: 'skuName', type: 'input' },
+  { label: '货主名称', prop: 'ownerName', type: 'input' },
+  { label: '库位编码', prop: 'warehouseSpaceCode', type: 'input' },
+  { label: '商品状态', prop: 'checkResult', type: 'select', enum: checkResultEnum },
+]
 
 export default {
-  components: { BaseTable, SearchInventory },
   data() {
     return {
-      loading: false,
-      ruleForm: {
-        pageNum: 1,
-        pageSize: 10,
-        skuCode: '',
-        skuName: '',
-        ownerName: '',
-        checkResult: '',
-        warehouseSpaceCode: '',
-      },
-      nowRuleForm: {},
-      tableData: [],
-      inventoryTableConfig,
-      total: 0,
-      SumSkuQty: 0,
+      listApi: getInfoInventory,
+      tableConfig,
+      searchConfig,
+      stateTransitionTableConfig,
       moveLibraryDialogVisible: false,
-      selectRow: null,
+      stateTransitionVisible: false,
+      skuStockMoveLoading: false,
+      warehouseSpaceSelectLoading: false,
+      skuStockWriteCheckResultLoading: false,
+      selectRows: [],
+      selectRow: {},
+      searchParams: {},
+      sumSkuQty: 0,
       newWarehouseSpaceCode: undefined, // 新库位
       newSkuQty: undefined, // 新库存
       warehouseSpaceCodeConfig: [],
-      warehouseSpaceSelectLoading: false,
-      skuStockMoveLoading: false,
-      selectRows: [],
-      stateTransitionVisible: false,
-      skuStockWriteCheckResultLoading: false,
-      stateTransitionTableConfig,
     }
   },
   computed: {
@@ -246,7 +253,7 @@ export default {
     }
   },
   created() {
-    this.getTableData()
+    this.updateSum()
     this.warehouseSpaceSelectLoading = true
     warehouseSpaceList().then(res => {
       this.warehouseSpaceSelectLoading = false
@@ -256,6 +263,27 @@ export default {
     })
   },
   methods: {
+    /** 点击搜索 */
+    handleSearch(params) {
+      this.searchParams = params
+      this.updateSum(params)
+    },
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
+    /** 获取 库存合计 */
+    updateSum(data = {}) {
+      selectSumSkuQty(data).then(res => {
+        if (res) {
+          this.sumSkuQty = res.data;
+        }
+      })
+    },
+    /** 主表多选 */
+    selectionChange(selectRows) {
+      this.selectRows = [...selectRows]
+    },
     /** 判断是否可选 */
     selectable(row) {
       return row.checkResult === 0
@@ -339,42 +367,9 @@ export default {
         this.getTableData()
       })
     },
-    getTableData() {
-      this.$router.replace({
-        path: '/inventoryLedger/inventory',
-        query: { data: JSON.stringify(this.ruleForm) }
-      })
-      this.loading = true;
-      let data = { ...this.ruleForm }
-      this.nowRuleForm = data
-      selectSumSkuQty(data).then(res => {
-        if (res) {
-          this.SumSkuQty = res.data;
-        }
-      })
-      getInfoInventory(data).then(res => {
-        this.loading = false;
-        if (res && res.data && res.data.list) {
-          var tempList = [...res.data.list]
-          this.tableData = uniqueArray([...tempList.map(list => { list.childData = []; return list })], 'id')
-          this.total = res.data.total
-        }
-      })
-    },
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1 }
-      this.getTableData();
-    },
+    /** 导出 */
     getExport() {
-      exportLedger(this.nowRuleForm, '库存台账.xls')
+      exportLedger(this.searchParams, '库存台账.xls')
     }
   }
 }
