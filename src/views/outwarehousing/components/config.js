@@ -33,28 +33,6 @@ export const planOrderChildTableConfig = [// 出库计划单子列表
   { label: '已拣货数量', prop: 'realSortQty', minWidth: 120 },
 ]
 
-export const orderTableConfig = [// 出库单列表
-  { label: '出库时间', prop: 'gmtCreate', type: 'time' },
-  { label: '出库单号', prop: 'orderCode' },
-  { label: '计划单号', prop: 'planCode' },
-  { label: '推送状态', prop: 'isPush', useLocalEnum: true, type: 'isPushStateEnum' },
-  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'busiBillTypeEnum' },
-  { label: '单据状态', prop: 'orderStatus', useLocalEnum: true, type: 'outboundOrderStatus' },
-  { label: '客户/供应商', prop: 'ownerName', },
-  { label: '操作人', prop: 'createrName' },
-]
-
-export const orderChildTableConfig = [
-  { label: '商品编码', prop: 'skuCode', width: 150 },
-  { label: '商品名称', prop: 'skuName', width: 150 },
-  { label: '规格型号', prop: 'skuModel', minWidth: 120 },
-  { label: '单位', prop: 'skuUnitCode', minWidth: 120 },
-  { label: '商品数量', prop: 'numberOfProducts', minWidth: 120 },
-  { label: '出库数量', prop: 'realOutQty', minWidth: 120 },
-  { label: '出库批次', prop: 'batchNo', minWidth: 120 },
-  { label: '备注', prop: 'remarkInfo', minWidth: 120 },
-]
-
 export const planChildTableEditConfig = [// 计划单操作列表
   { label: '计划单号', prop: 'planCode', minWidth: 150 },
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -84,15 +62,6 @@ export const planChildTableLabelConfig = [// 计划单打印列表
   { label: '规格型号', prop: 'skuFormat' },
   { label: '数量', prop: 'printNum', editable: true, editType: 'number' },
   { label: '单位', prop: 'skuUnitName' },
-]
-
-export const outChildTableLabelConfig = [// 计划单打印列表
-  { label: '计划单号', prop: 'planCode' },
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
-  { label: '数量', prop: 'realOutQty' },
-  { label: '单位', prop: 'skuUnitCode' },
 ]
 
 export const planChildTablePrintConfig = [// 计划单打印列表

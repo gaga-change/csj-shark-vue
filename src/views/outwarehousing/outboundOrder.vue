@@ -1,251 +1,131 @@
 <template>
   <div>
-    <search-warehousing
-      @searchTrigger="submitForm"
-      ref="searchWarhouse"
-      :outbound="outbound"
-      @resetSearch="resetForm"
-      :search-forms="ruleForm"
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
+      :showControlFixed="false"
+      :expand="true"
+      @expandChange="hanldeExpandChange"
+      :parseData="parseData"
     >
-    </search-warehousing>
-    <operation-button
-      :child-data-arr="childDataArr"
-      :planPrintData="planPrintData"
-      :selectChiledByPlanCode="selectChiledByPlanCode"
-    />
-    <double-table
-      :loading="loading"
-      :table-data="tableData"
-      ref="tableChild"
-      :handle-button-map="handleButtonMap"
-      :highlight-current-row="highlightCurrentRow"
-      child-data-name="childData"
-      :config="tableConfig"
-      :childTableConfig="childTableConfig"
-      :expands-parent="expandsParent"
-      @expandChangePa="expandChange"
-      :accordion-expand="accordionExpand"
-      @currentRadioChange="currentRadioChange"
-      :child-can-select="childCanSelect"
-      :expand-key="expandKey"
-      @childDataSelect="childDataSelect"
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
-    >
-    </double-table>
-
+      <template slot-scope="scope">
+        <!-- <el-link type="primary">修改</el-link> -->
+      </template>
+      <template
+        slot="expand"
+        slot-scope="scope"
+      >
+        <base-table2
+          :ref="`childTable-${scope.index}`"
+          :config="childTableConfig"
+          :data="scope.row.childData"
+          :loading="scope.row.childLoading"
+          :select="true"
+          @selectionChange="rows => childSelectionChange(rows, scope.row, scope.index)"
+        >
+        </base-table2>
+      </template>
+      <template slot="btns">
+        <operation-button :data="childSelectRows" />
+      </template>
+    </base-list>
   </div>
 </template>
 
 <script>
-import DoubleTable from '@/components/Table/doubleTable'
-import { orderTableConfig, orderChildTableConfig } from './components/config'
-import { getInfoOutWarehousing, getInfoDetailOutWarehousing, confirmOutOfTheLibrary, cancelOutOfTheLibrary } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchWarehousing from './components/search'
+import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
 import operationButton from './components/outButton'
-import { busiBillTypeEnum } from "@/utils/enum"
-const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('out'))
+import { outboundOrderStatus, isPushStateEnum, busiBillTypeEnum } from '@/utils/enum'
+
+const childTableConfig = [
+  { label: '商品编码', prop: 'skuCode', width: 150 },
+  { label: '商品名称', prop: 'skuName', width: 150 },
+  { label: '规格型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitCode' },
+  { label: '商品数量', prop: 'numberOfProducts' },
+  { label: '出库数量', prop: 'realOutQty' },
+  { label: '出库批次', prop: 'batchNo' },
+  { label: '备注', prop: 'remarkInfo' },
+]
+const tableConfig = [
+  { label: '出库时间', prop: 'gmtCreate', type: 'time' },
+  { label: '出库单号', prop: 'orderCode' },
+  { label: '计划单号', prop: 'planCode' },
+  { label: '推送状态', prop: 'isPush', type: 'enum', enum: isPushStateEnum },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: outboundOrderStatus },
+  { label: '客户/供应商', prop: 'ownerName', },
+  { label: '操作人', prop: 'createrName' },
+]
+const searchConfig = [
+  { label: '计划单号', prop: 'planCode', type: 'input' },
+  { label: '出库单号', prop: 'orderCode', type: 'input' },
+  { label: '客户/供应商', prop: 'ownerName', type: 'input' },
+  { label: '单据状态', prop: 'orderStatus', type: 'select', enum: outboundOrderStatus },
+  { label: '出库时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+]
+
 export default {
-  components: { DoubleTable, SearchWarehousing, operationButton },
+  components: { operationButton },
   data() {
     return {
-      loading: false,
-      dialogVisible: false,
-      dialogData: {},
-      highlightCurrentRow: true,
-      busiBillTypeEnum: BusiBillTypeEnumFilter,
-      tabDefault: BusiBillTypeEnumFilter[0].value + '',
-      currentTab: BusiBillTypeEnumFilter[0].value + '',
-      ruleForm: {
-        pageNum: 1,
-        pageSize: 10,
-        planCode: '',
-        orderCode: '',
-        providerName: '',
-        ownerName: '',
-        orderStatus: '',
-        durationTime: [],
-        text: '出库时间'
-      },
-      selectData: {},
-      tableData: [],
-      tableConfig: orderTableConfig,
-      childTableConfig: orderChildTableConfig,
-      total: 0,
-      //主表操作
-      handleButtonMap: [],
-      childCanSelect: true,
-      accordionExpand: true,
-      multipleSelection: [],
-      expandsParent: [],
-      expandKey: 'orderCode',
-      quickSubmitData: {},
-      buttonDisable: false,
-      outbound: true,
-      planPrintData: [],
-      childDataArr: [],
-      selectChiledByPlanCode: {}
+      tableConfig,
+      searchConfig,
+      childTableConfig,
+      listApi: getInfoOutWarehousing,
+      childSelectRows: [],
     }
   },
   methods: {
-
-    expandChange(row, expandedRows) {
-      var arr = []
-      arr.push(row[this.expandKey])
-      if (this.expandsParent == row[this.expandKey]) {
-        this.expandsParent = []
-      } else {
-        this.expandsParent = [...arr]
-      }
-      this.currentRadioChange(row)
-    },
-
+    /** 刷新列表 */
     getTableData() {
-      this.$router.replace({
-        path: '/outwarehousing/outboundOrder',
-        query: { data: JSON.stringify({ ...this.ruleForm, busiBillType: this.currentTab }) }
+      this.$refs['baseList'].fetchData()
+    },
+    /** 返回列表添加字段 */
+    parseData(res) {
+      let data = res.data.list || []
+      let total = res.data.total
+      data.forEach(v => {
+        v.childData = []
+        v.childLoading = false
       })
-      this.loading = true;
-      let data = { ...this.ruleForm, busiBillType: this.currentTab }
-      getInfoOutWarehousing(data).then(res => {
-        if (res && res.data && res.data.list) {
-          var tempList = [...res.data.list]
-          this.tableData = uniqueArray(tempList, 'orderCode')
-          this.total = res.data.total
-          this.tableData.map(item => {
-            if (item.queryOutWarehouseOrderDetailVOList && item.queryOutWarehouseOrderDetailVOList.length > 0) {
-              item.queryOutWarehouseOrderDetailVOList.map(childitem => {
-                childitem.printNum = 0
-                childitem.planCode = item.planCode
-                childitem.customerCode = item.customerCode
-                childitem.customerName = item.customerName
-                childitem.arrivalAddress = item.arrivalAddress
-              })
-            }
+      return { data, total }
+    },
+    /** 子表多选 */
+    childSelectionChange(selectRows, mainRow, index) {
+      let oldIndex = this.childSelectRows.index
+      let oldRows = this.childSelectRows
+      if (oldIndex !== index && (selectRows.length !== 0 || oldRows.length === 0)) {
+        // 更换列
+        this.childSelectRows = [...selectRows]
+        this.childSelectRows.index = index
+        this.childSelectRows.mainRow = mainRow
+        if (oldIndex !== undefined) {
+          // 准备重置 上一个列
+          this.$nextTick(() => {
+            this.$refs[`childTable-${oldIndex}`].clearSelection()
           })
-          var a = this.$refs.tableChild.expands//之前打开过 
-          if (a && a.length > 0) {
-            var info = {
-              childData: [],
-              orderCode: a[0]
-            }
-            this.currentRadioChange(info)
-          }
         }
-        this.loading = false;
-      })
-    },
-    currentRadioChange(data) {
-      var chooseList = data
-      if (!data.childData || data.childData.length <= 0) {
-        this.loading = true
-        getInfoDetailOutWarehousing({ orderCode: data.orderCode }).then(res => {
-          if (res && res.data[0] && res.data[0].queryOutWarehouseOrderDetailVOSList && res.data[0].queryOutWarehouseOrderDetailVOSList.length > 0) {
-            var queryOutWarehouseOrderDetailVOSList = res.data[0].queryOutWarehouseOrderDetailVOSList
-            let owndata = res.data[0]
-            queryOutWarehouseOrderDetailVOSList.map(item => {
-              item.printNum = 0
-              item.planCode = owndata.planCode
-            })
-            var tempList = [...this.tableData]
-            this.tableData = tempList.map(list => {
-
-              if (list.orderCode == data.orderCode) {
-                list.childData = queryOutWarehouseOrderDetailVOSList;
-                chooseList = list
-              }
-              return list
-            })
-          }
-          this.loading = false
-        })
-      }
-      this.quickSubmitData = { ...chooseList }
-    },
-
-    closePlanTags(tag) {
-      let index = this.planPrintData.findIndex(v => v.id === tag.id);
-      this.planPrintData.splice(index, 1)
-    },
-
-    quickSubmit(type) {
-      if (!this.planPrintData.length) {
-        this.$message({ type: 'error', message: '请至少选择一条数据,或当前数据都已确认出库过' });
-        return
-      }
-
-      let Api = confirmOutOfTheLibrary;
-      if (type === 'cancel') {
-        Api = cancelOutOfTheLibrary
-      }
-      Api({
-        ids: this.planPrintData.map(v => v.id)
-      }).then(res => {
-        if (res) {
-          this.getTableData()
-          this.$message({ type: 'success', message: '操作成功' });
-        }
-      })
-    },
-
-    childDataSelect(selectedData) {
-      this.multipleSelection = []
-      this.childDataArr = []
-      if (selectedData.length) {
-        this.selectChiledByPlanCode[selectedData[0].planCode] = selectedData
-        this.multipleSelection = [...selectedData]
-        this.childDataArr = [...selectedData].map(v => {
-          return {
-            ...v
-          }
-        })
-        this.planPrintData = [...selectedData]
+      } else if (oldIndex === index) {
+        // 更新列
+        this.childSelectRows = [...selectRows]
       } else {
-        this.selectChiledByPlanCode = {}
-        this.multipleSelection = []
-        this.childDataArr = []
+        // 被重置
       }
     },
-
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
+    /** 子列表展开 */
+    hanldeExpandChange(row) {
+      row.childLoading = true
+      getInfoDetailOutWarehousing({ orderCode: row.orderCode }).then(res => {
+        row.childLoading = false
+        if (!res || !res.data || !res.data[0]) return
+        row.childData = res.data[0].queryOutWarehouseOrderDetailVOSList || []
+      })
     },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-
-    submitForm(ruleForm) {
-      let startDate = '', endDate = '';
-      if (Array.isArray(ruleForm.durationTime) && ruleForm.durationTime.length) {
-        startDate = +ruleForm.durationTime[0]
-        endDate = +ruleForm.durationTime[1]
-      }
-      this.ruleForm = { ...ruleForm, startDate, endDate, pageSize: 10, pageNum: 1 }
-      this.getTableData();
-    },
-
-    resetForm() {
-      for (let i in this.ruleForm) {
-        if (Array.isArray(this.ruleForm[i])) {
-          this.ruleForm[i] = []
-        } else {
-          this.ruleForm[i] = ''
-        }
-      }
-      this.ruleForm = { ...this.ruleForm, text: '出库时间', pageNum: 1, pageSize: 10, }
-      this.getTableData()
-    },
-  },
-  created() {
-    this.getTableData()
   }
 }
 </script>

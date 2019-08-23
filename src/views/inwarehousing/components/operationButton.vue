@@ -115,7 +115,8 @@ export default {
       var childData = [...this.childData]
       var batchNoArr = []
       var canPriview = true
-      childData.map(item => {        if (!PositiveIntegerReg.test(item.printNum)) {
+      childData.map(item => {
+        if (!PositiveIntegerReg.test(item.printNum)) {
           canPriview = false
         }
         batchNoArr.push({ skuCode: item.skuCode, ownerCode: this.parentData.ownerCode, providerCode: this.parentData.providerCode })

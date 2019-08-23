@@ -146,10 +146,6 @@ export const orderDelete = id => http.delete(`/webApi/pick/order/delete/${id}`)
 export const orderPickStop = id => http.post(`/webApi/pick/order/pickStop/${id}`)
 /** 根据拣货任务生成出库单 */
 export const createOutWareHouseOrder = params => http.post(`/webApi/outWarehouse/order/createOutWareHouseOrder`, params)
-/** 确认出库 */
-export const confirmOutOfTheLibrary = params => http.post(`/webApi/outWarehouse/order/confirmOutOfTheLibrary`, params)
-/** 取消出库 */
-export const cancelOutOfTheLibrary = params => http.post(`/webApi/outWarehouse/order/cancelOutOfTheLibrary`, params)
 /** 获取残次品列表 */
 export const badproductlist = params => http.post(`/webApi/receive/order/bad/list`, params)
 /** 库存移库 */
