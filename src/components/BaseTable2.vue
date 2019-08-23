@@ -18,6 +18,17 @@
       size="mini"
       :style="tableStyle"
     >
+      <template v-if="expand">
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <slot
+              name="expand"
+              v-bind:row="scope.row"
+              v-bind:index="scope.$index"
+            ></slot>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column
         v-if="select"
         type="selection"
@@ -128,6 +139,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   props: {
+    /** 是否扩展 */
+    expand: {
+      type: Boolean,
+      default: false,
+    },
     /** 表格api接口 */
     api: {
       type: Function,

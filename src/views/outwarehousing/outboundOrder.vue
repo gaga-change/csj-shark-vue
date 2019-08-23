@@ -13,14 +13,13 @@
       :planPrintData="planPrintData"
       :selectChiledByPlanCode="selectChiledByPlanCode"
     />
-
     <double-table
       :loading="loading"
       :table-data="tableData"
       ref="tableChild"
       :handle-button-map="handleButtonMap"
       :highlight-current-row="highlightCurrentRow"
-      child-data-name="queryOutWarehouseOrderDetailVOList"
+      child-data-name="childData"
       :config="tableConfig"
       :childTableConfig="childTableConfig"
       :expands-parent="expandsParent"
