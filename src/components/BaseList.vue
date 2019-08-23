@@ -20,7 +20,7 @@
         :api="api"
         :parseData="parseData"
         :config="tableConfig"
-        :tableData.sync="tableData"
+        :data.sync="tableData"
         :searchParams="searchParams"
         :showControl="showControl"
         :controlName="controlName"
