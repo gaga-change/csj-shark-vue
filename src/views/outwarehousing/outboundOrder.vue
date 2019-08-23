@@ -30,7 +30,7 @@
         </base-table2>
       </template>
       <template slot="btns">
-        <operation-button :data="childSelectRows" />
+        <print-out-plan-detail-button :data="childSelectRows" />
       </template>
     </base-list>
   </div>
@@ -38,7 +38,7 @@
 
 <script>
 import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
-import operationButton from './components/outButton'
+import printOutPlanDetailButton from './components/printOutPlanDetailButton'
 import { outboundOrderStatus, isPushStateEnum, busiBillTypeEnum } from '@/utils/enum'
 
 const childTableConfig = [
@@ -70,7 +70,7 @@ const searchConfig = [
 ]
 
 export default {
-  components: { operationButton },
+  components: { printOutPlanDetailButton },
   data() {
     return {
       tableConfig,

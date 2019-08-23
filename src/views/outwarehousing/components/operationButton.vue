@@ -465,7 +465,7 @@ export default {
       })
     },
 
-    //打印装箱单
+    //打印出库明细
     priviewBoxLabel() {
       let arr = []
       for (let i in this.selectChiledByPlanCode) {

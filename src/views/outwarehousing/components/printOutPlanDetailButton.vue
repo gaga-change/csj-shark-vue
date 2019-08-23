@@ -9,6 +9,7 @@
     </el-button>
     <print-table-dialog
       :visible.sync="printTableDialogVisible"
+      title="打印出库明细"
       :topConfig="printTopConfig"
       :tableConfig="printTableConfig"
       :detail="detail"
@@ -36,17 +37,17 @@ const printTableConfig = [// 计划单打印列表
 ]
 
 export default {
-  props: {
-    data: {
-      type: Array,
-      default: () => []
-    }
-  },
   data() {
     return {
       printTableConfig,
       printTopConfig,
       printTableDialogVisible: false,
+    }
+  },
+  props: {
+    data: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
