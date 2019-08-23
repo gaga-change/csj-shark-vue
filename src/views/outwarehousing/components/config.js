@@ -27,9 +27,7 @@ export const outTableConfig = [// 计划单号列表
   { label: '计划单号', prop: 'value', width: 150 },
 ]
 
-// orderTableConfig, orderChildTableConfig
 export const planOrderChildTableConfig = [// 出库计划单子列表
-  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
   { label: '规格型号', prop: 'skuModel', minWidth: 120 },
@@ -39,6 +37,7 @@ export const planOrderChildTableConfig = [// 出库计划单子列表
   { label: '已通知拣货数量', prop: 'sortQty', minWidth: 120 },
   { label: '已拣货数量', prop: 'realSortQty', minWidth: 120 },
 ]
+
 export const orderTableConfig = [// 出库单列表
   { label: '出库时间', prop: 'gmtCreate', type: 'time' },
   { label: '出库单号', prop: 'orderCode' },
@@ -49,9 +48,8 @@ export const orderTableConfig = [// 出库单列表
   { label: '客户/供应商', prop: 'ownerName', },
   { label: '操作人', prop: 'createrName' },
 ]
-// orderTableConfig, orderChildTableConfig
-export const orderChildTableConfig = [// 出库单子列表
-  // { label:'业务行号',prop:'busiIndex', minWidth:80 },
+
+export const orderChildTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
   { label: '规格型号', prop: 'skuModel', minWidth: 120 },
@@ -74,16 +72,6 @@ export const planChildTableEditConfig = [// 计划单操作列表
   { label: '通知拣货数量', prop: 'sortQty', width: 120, editable: true, fixed: 'right' },
 ]
 
-// export const planChildTableEditAllocationConfig = [ // 计划单操作列表 之 波次分配
-//   { label:'计划单号',prop:'planCode', minWidth:150 },
-//   { label:'商品编码',prop:'skuCode', width:150 },
-//   { label:'商品名称',prop:'skuName', width:150 },
-//   { label:'规格型号',prop:'skuFormat', minWidth:120 },
-//   { label:'单位',prop:'skuUnitName', minWidth:100 },
-//   { label:'商品数量',prop:'planOutQty', minWidth:120 },
-//   { label:'通知拣货数量',prop:'sortQty', width:120,},
-//   { label:'本次拣货数量',prop:'sum', width:120,},
-// ]
 export const planChildTableEditAllocationConfig = [ // 计划单操作列表 之 波次分配
   { label: '计划单号', prop: 'planCode', minWidth: 150 },
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -120,29 +108,6 @@ export const planChildTablePrintConfig = [// 计划单打印列表
   { label: '应出/已出', prop: 'planReal', minWidth: 100 },
   { label: '条形码', prop: 'planCode', width: 150, userIf: 'images' },//unconfirm
 ]
-
-export const pickingtaskdetailConfig = [
-  { label: '计划单号', prop: 'planCode' },
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '任务状态', prop: 'status' },
-  { label: '通知拣货数', prop: 'jobQty' },
-  { label: '已拣货数', prop: 'realSortQty' },
-  // { label:'货位',prop:'warehouseSpaceCode'},
-  { label: '货位', prop: 'sum' },
-]
-
-export const printinConfig = [
-  { label: '序号', type: 'index', width: 50 },
-  { label: '计划单号', prop: 'planCode' },
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '商品数量', prop: 'jobQty' },
-  { label: '货位', prop: 'warehouseSpaceCode' },
-]
-
 
 export const temporaryStorageConfig = [
   { label: '拣货单号', prop: 'pickOrderCode' },
