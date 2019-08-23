@@ -1,91 +1,85 @@
-<template lang="html">
-  <div class="refund-form">
-      <el-form  :model="selectForm"  ref="searchForm" label-width="0px" label-position="left">
-        <el-form-item  
-          prop="outOrderCode"  >
-          <el-input type="text" size="mini"    placeholder="请输入计划单号"    v-model.trim="selectForm.outOrderCode" @blur="selectCode"></el-input>
-        </el-form-item>
+<template>
+  <div
+    class="TemporaryStorageConfirmSearch"
+    v-loading="pickOrderNotCreateOrderLoading"
+  >
+    <el-form
+      :model="selectForm"
+      ref="searchForm"
+      label-width="0px"
+      label-position="left"
+    >
+      <el-form-item prop="outOrderCode">
+        <el-input
+          type="text"
+          size="mini"
+          placeholder="请输入计划单号"
+          v-model.trim="selectForm.outOrderCode"
+          @input="handelCodeInputChange"
+          clearable
+        ></el-input>
+      </el-form-item>
     </el-form>
-    <out-table
-      :loading="loading"
-      :config="outTableConfig"  
-      :tableData="totalcode"
-      @currentRadioChange="currentRadioChange"
-    />
+    <base-table2
+      :config="tableConfig"
+      :data="selectCode"
+      :highlightCurrentRow="true"
+      @currentChange="currentChange"
+    ></base-table2>
   </div>
 </template>
 
 <script>
-import { outcodelist } from '@/api'
-import outTable from '@/components/Table/outTable'
-import { outTableConfig } from './config'
+import { pickOrderNotCreateOrder } from '@/api'
+
+const tableConfig = [// 计划单号列表
+  { label: '序号', prop: 'index' },
+  { label: '计划单号', prop: 'value', width: 150 },
+]
+
 export default {
-  components: { outTable },
-  props: {
-    searchForm: {
-      type: Object,
-      default: () => { }
-    },
-  },
   data() {
     return {
+      tableConfig,
+      pickOrderNotCreateOrderLoading: true,
       selectForm: {
         outOrderCode: null
       },
-      oldcode: [],
-      totalcode: [],
-      loading: false,
-      outTableConfig,
+      totalCode: [],
+      selectCode: [],
       activeOrder: null
     }
   },
   created() {
-    this.getcodelist()
+    this.initData()
   },
   methods: {
-    getcodelist() {
-      outcodelist().then(res => {
-        if (res && res.data && res.data.length > 0) {
-          let owndata = res.data
-          this.totalcode = []
-          this.oldcode = []
-          for (let i = 0; i < owndata.length; i++) {
-            this.totalcode.push({ index: i + 1, value: owndata[i] })
-            this.oldcode.push({ index: i + 1, value: owndata[i] })
-          }
-        } else {
-          this.totalcode = []
-          this.oldcode = []
-        }
+    initData() {
+      pickOrderNotCreateOrder().then(res => {
+        this.pickOrderNotCreateOrderLoading = false
+        if (!res) return
+        let owndata = res.data || []
+        this.selectCode = this.totalCode = owndata.map((v, i) => ({
+          index: i + 1,
+          value: v
+        }))
       })
     },
-    currentRadioChange(currentRow) {
+    currentChange(currentRow) {
       if (currentRow) {
-        this.searchForm.planCode = currentRow.value
-        this.$emit('submit', this.searchForm)
+        this.$emit('submit', currentRow.value)
       } else {
-        this.$emit('submit', this.searchForm)
+        this.$emit('submit', '')
       }
-      // this.searchForm.planCode=currentRow.value
-      // this.$emit('submit',this.searchForm)
     },
-    selectCode() {
-      this.searchForm.planCode = ''
-      this.currentRadioChange()
-      if (this.selectForm.outOrderCode) {
-        let owndata = []
-        this.oldcode.map(item => {
-          if (item.value.indexOf(this.selectForm.outOrderCode) > -1) {
-            owndata.push(item)
-          }
-        })
-        if (owndata.length > 0) {
-          this.totalcode = [...owndata]
-        } else {
-          this.totalcode = [...this.oldcode]
-        }
+    /** 计划单号搜索内容改变 */
+    handelCodeInputChange() {
+      this.currentChange()
+      let outOrderCode = this.selectForm.outOrderCode.toLocaleLowerCase()
+      if (outOrderCode) {
+        this.selectCode = this.totalCode.filter(v => ~v.value.toLocaleLowerCase().indexOf(outOrderCode))
       } else {
-        this.totalcode = [...this.oldcode]
+        this.selectCode = [...this.totalCode]
       }
     }
   }
@@ -94,7 +88,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.refund-form {
+.TemporaryStorageConfirmSearch {
   &::before,
   &::after {
     clear: both;
@@ -110,28 +104,6 @@ export default {
     color: rgb(51, 153, 234);
     margin-left: 12px;
     cursor: pointer;
-  }
-}
-
-.codeNoStyle {
-  float: left;
-  color: #8492a6;
-  font-size: 12px;
-  width: 150px;
-  &:last-child {
-    float: right;
-  }
-}
-.providerList {
-  display: flex;
-  justify-content: space-between;
-  > span {
-    &:first-child {
-      min-width: 150px;
-    }
-    &:nth-child(2) {
-      min-width: 100px;
-    }
   }
 }
 </style>

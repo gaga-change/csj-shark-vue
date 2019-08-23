@@ -1,13 +1,14 @@
 <template>
   <div class="ctabel TableIndexCom">
     <el-table
+      :class="{'radio-table': highlightCurrentRow}"
       ref="table"
       v-loading="api ? selfLoading: loading"
       :element-loading-text="elementLoadingText"
       :element-loading-background="elementLoadingBackground"
       :data="data"
       :highlight-current-row="highlightCurrentRow"
-      @current-change="handleCurrentRedioChange"
+      @current-change="handleCurrentRadioChange"
       :summary-method="summaryMethod"
       @selection-change="handleSelectionChange"
       @select="handleSelect"
@@ -302,7 +303,8 @@ export default {
                   if (temp) {
                     res = temp.name
                   } else {
-                    console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                    // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                    res = ''
                   }
                 }
                 return res
@@ -406,8 +408,8 @@ export default {
       this.selfCurrentPage = val
       this.fetchData()
     },
-    handleCurrentRedioChange(currentRow, oldCurrentRow) {
-      this.$emit('currentRedioChange', currentRow, oldCurrentRow)
+    handleCurrentRadioChange(currentRow, oldCurrentRow) {
+      this.$emit('currentChange', currentRow, oldCurrentRow)
     },
     handleSelect(selection, row) {
       // 如果 selectTotal= false, 走 handleSelectionChange
@@ -472,6 +474,13 @@ export default {
 .TableIndexCom {
   td {
     word-break: break-word;
+  }
+  .radio-table {
+    tbody {
+      tr {
+        cursor: pointer;
+      }
+    }
   }
 }
 .ctabel {

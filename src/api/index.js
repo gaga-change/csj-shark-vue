@@ -65,11 +65,11 @@ export const inOrderSelectDetailList = id => http.get(`/webApi/in/order/selectDe
 /** 查询拣货单列表 */
 export const pickOrderList = params => http.get(`/webApi/pick/order/list`, { params })
 /** 查询出库暂存列表 */
-export const selectOutWarehouseJobDetail = params => http.get(`/webApi/outWarehouse/job/selectOutWarehouseJobDetail`, { params })
+export const selectNotCreateOrderList = params => http.get(`/webApi/outWarehouse/job/selectNotCreateOrderList`, { params })
 /** 根据拣货单id获取拣货单详情信息 */
 export const pickOrderDetail = id => http.get(`/webApi/pick/order/detail/${id}`)
-/** 获取所有计划单号 */
-export const outcodelist = params => http.get(`/webApi/outWarehouse/job/selectPlanCodeList`, { params })
+/** 查询存在需要复核任务的拣货单 */
+export const pickOrderNotCreateOrder = params => http.get(`/webApi/pick/order/notCreateOrder`, { params })
 /** 修改库位状态接口 */
 export const warehouseSpaceUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseSpace/updateLockStatus/${id}`, { params })
 /** 修改库区状态接口 */
@@ -146,8 +146,6 @@ export const orderDelete = id => http.delete(`/webApi/pick/order/delete/${id}`)
 export const orderPickStop = id => http.post(`/webApi/pick/order/pickStop/${id}`)
 /** 根据拣货任务生成出库单 */
 export const createOutWareHouseOrder = params => http.post(`/webApi/outWarehouse/order/createOutWareHouseOrder`, params)
-/** 根据出库计划单号列表删除出库作业 */
-export const deleteByIds = params => http.delete(`/webApi/outWarehouse/job/deleteByIds`, { params })
 /** 确认出库 */
 export const confirmOutOfTheLibrary = params => http.post(`/webApi/outWarehouse/order/confirmOutOfTheLibrary`, params)
 /** 取消出库 */

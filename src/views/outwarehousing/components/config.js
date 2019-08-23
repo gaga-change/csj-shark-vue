@@ -22,11 +22,6 @@ export const planTableConfig = [// 打印出库计划单列表
   { label: '打印状态', prop: 'isPrint', useLocalEnum: true, type: 'printState', minWidth: 90 }
 ]
 
-export const outTableConfig = [// 计划单号列表
-  { label: '序号', prop: 'index' },
-  { label: '计划单号', prop: 'value', width: 150 },
-]
-
 export const planOrderChildTableConfig = [// 出库计划单子列表
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
@@ -109,15 +104,3 @@ export const planChildTablePrintConfig = [// 计划单打印列表
   { label: '条形码', prop: 'planCode', width: 150, userIf: 'images' },//unconfirm
 ]
 
-export const temporaryStorageConfig = [
-  { label: '拣货单号', prop: 'pickOrderCode' },
-  { label: '计划单号', prop: 'planCode' },
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '商品数量', prop: 'sortQty' },
-  { label: '拣货数量', prop: 'realSortQty' },
-  { label: '是否已生成出库单', prop: 'isCreateOrder', type: 'Boolean', width: 120 },
-  { label: '库位', prop: 'warehouseSpaceCode' },
-  { label: '创建时间', width: 150, prop: 'gmtCreate', type: 'time' },
-]

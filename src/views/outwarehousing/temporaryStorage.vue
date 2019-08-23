@@ -1,152 +1,111 @@
 <template>
-  <div class="pickingtask">
+  <div class="TemporaryStorageComponent clearfix">
     <el-card
       shadow="never"
       body-style="padding:12px"
       class="confirmstyle"
     >
-      <new-search
+      <confirm-search
         @submit="submit"
         :searchForm="searchForm"
         ref="arrivalDom"
-      ></new-search>
+      />
     </el-card>
-    <div style="margin-left:280px;">
+    <div class="right-area">
       <el-col
         :span="24"
         style="margin-bottom:12px;"
       >
         <el-button
           type="primary"
-          :disabled="!SelectionData.length>0"
+          :disabled="!selectRows.length>0"
           size="mini"
-          @click="outOrder"
+          @click="handleCreateOutOrder"
         >复核(生成出库单)</el-button>
-        <el-button
-          type="danger"
-          :disabled="!SelectionData.length>0"
-          size="mini"
-          @click="outOrder('delete')"
-        >删除</el-button>
       </el-col>
-      <edit-table
-        :loading="loding"
-        :config="temporaryStorageConfig"
-        :tableData="TableData"
-        :useEdit="true"
-        :defaultEdit="false"
-        :childCanSelect="true"
-        @currentChange="currentChange"
-        @editDataSelect="selectionChange"
+      <base-table2
+        :loading="loading"
+        :config="tableConfig"
+        :data="tableData"
+        :select="true"
+        @selectionChange="selectionChange"
       />
     </div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
-import moment from 'moment';
-import newSearch from './components/confirmSearch'
-import { temporaryStorageConfig } from './components/config'
-import { selectOutWarehouseJobDetail, createOutWareHouseOrder, deleteByIds } from '@/api'
-import editTable from '@/components/Table/outTable'
+import confirmSearch from './components/confirmSearch'
+import { selectNotCreateOrderList, createOutWareHouseOrder } from '@/api'
+import { jobStatusList } from '@/utils/enum'
+
+const tableConfig = [
+  { label: '拣货单号', prop: 'pickOrderCode' },
+  { label: '计划单号', prop: 'planCode' },
+  { label: '外部订单号', prop: 'busiBillNo', width: 90 },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuFormat' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '容器', prop: 'trayCode' },
+  { label: '通知拣货数', prop: 'sortQty' },
+  { label: '已拣货数', prop: 'realSortQty' },
+  { label: '是否已生成出库单', prop: 'isCreateOrder', type: 'Boolean', width: 120 },
+  { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: jobStatusList },
+  { label: '库位', prop: 'warehouseSpaceCode' },
+]
+
 export default {
-  components: { newSearch, editTable },
+  components: { confirmSearch },
   data() {
     return {
       searchForm: {
-        planCode: '',
+        pickOrderCode: '',
         isCreateOrder: 0
       },
-      loding: false,
-      temporaryStorageConfig,
-      TableData: [],
+      loading: false,
+      tableConfig,
+      tableData: [],
       total: 0,
-      SelectionData: [],
+      selectRows: [],
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
       isShow: false
     }
   },
-  mounted() {
-    // this.getCurrentTableData();
-  },
-
   methods: {
-    moment,
-    sizeChange(val) {
-      this.pageSize = val
-      this.getCurrentTableData()
-    },
-    currentChange(val) {
-      this.pageIndex = val
-      this.getCurrentTableData()
-    },
+    /** 点击计划单号，刷新列表 */
     submit(value) {
-      this.searchForm = value;
+      this.searchForm.pickOrderCode = value
       this.getCurrentTableData()
     },
-
-    select() {
-      this.$refs['arrivalDom'].submit()
+    /** 多选 */
+    selectionChange(selectRows) {
+      this.selectRows = [...selectRows]
     },
-
-    resetForm() {
-      this.$refs['arrivalDom'].resetForm()
-    },
-
-    selectionChange(val) {
-      this.SelectionData = val.arr;
-    },
-    outOrder(type) {
+    /** 复核（生成出库单） 按钮点击 */
+    handleCreateOutOrder() {
       let src = '';
-      this.SelectionData.forEach(v => {
+      this.selectRows.forEach(v => {
         src += ` ${v.pickOrderCode} , `
       })
-      let tips = `确定要为 ${src} 生成出库单吗?`;
-      let Api = createOutWareHouseOrder;
-      let data = { sortTaskIds: this.SelectionData.map(v => v.id) }
-      if (type === 'delete') {
-        tips = `确定要删除 ${src} 吗?`;
-        data = this.SelectionData.map(v => v.jobId)
-        Api = deleteByIds
-      }
-      this.$confirm(tips, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      }).then(() => {
-        Api(data).then(res => {
-          if (res) {
-            this.$message({ type: 'success', message: '操作成功' });
-          }
-        })
+      this.$apiConfirm(`确定要为 ${src} 生成出库单吗?`, () => createOutWareHouseOrder(
+        { sortTaskIds: this.selectRows.map(v => v.id) }
+      )).then(() => {
+        this.$message({ type: 'success', message: '操作成功' })
       }).catch(() => { })
     },
-
+    /** 刷新左侧列表 */
     getCurrentTableData() {
-      this.loding = true;
-      this.SelectionData = [];
-      let json = {};
-      for (let i in this.searchForm) {
-        if (this.searchForm[i] !== '') {
-          json[i] = this.searchForm[i];
-        }
+      if (!this.searchForm.pickOrderCode) {
+        return this.tableData = []
       }
-      if (!json.planCode) {
-        this.TableData = []
-        this.loding = false
-        return
-      }
-      selectOutWarehouseJobDetail({ ...json }).then(res => {
-        this.loding = false;
-        if (res) {
-          if (res.data && res.data.length > 0) {
-            this.TableData = res.data
-          } else {
-            this.TableData = []
-          }
-        }
+      this.loading = true;
+      selectNotCreateOrderList(this.searchForm).then(res => {
+        this.loading = false;
+        if (!res) return
+        this.tableData = res.data || []
       })
     }
   },
@@ -154,7 +113,12 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
-.pickingtask {
+.TemporaryStorageComponent {
+  .right-area {
+    margin-left: 280px;
+    position: sticky;
+    top: 97px;
+  }
   .tableBtnBox {
     font-size: 12px;
     color: #3399ea;
@@ -166,14 +130,10 @@ export default {
       }
     }
   }
-}
-.confirmstyle {
-  float: left;
-  width: 260px;
-  min-height: 400px;
-}
-
-.el-dialog__body {
-  padding-top: 0;
+  .confirmstyle {
+    float: left;
+    width: 260px;
+    min-height: 400px;
+  }
 }
 </style>
