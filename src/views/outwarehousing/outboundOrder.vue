@@ -1,7 +1,7 @@
 <template>
   <div>
-    <base-list
-      ref="baseList"
+    <double-list
+      ref="doubleList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="listApi"
@@ -9,8 +9,9 @@
       :controlWidth="160"
       :showControlFixed="false"
       :expand="true"
-      @expandChange="hanldeExpandChange"
-      :parseData="parseData"
+      @childSelectionChange="childSelectionChange"
+      :childApi="childApi"
+      :childTableConfig="childTableConfig"
     >
       <template slot-scope="scope">
         <el-link
@@ -18,25 +19,13 @@
           @click="printMark(scope.row)"
         >打印装箱唛头</el-link>
       </template>
-      <template
-        slot="expand"
-        slot-scope="scope"
-      >
-        <!-- row.id  有两个地方，一个ref,一个【childSelectionChange】中传递为key -->
-        <base-table2
-          :ref="`childTable-${scope.row.id}`"
-          :config="childTableConfig"
-          :data="scope.row.childData"
-          :loading="scope.row.childLoading"
-          :select="true"
-          @selectionChange="rows => childSelectionChange(rows, scope.row, scope.row.id)"
-        >
-        </base-table2>
-      </template>
       <template slot="btns">
-        <print-out-plan-detail-button :data="childSelectRows" />
+        <print-out-plan-detail-button
+          :childSelectRows="childSelectRows"
+          :mainRow="mainRow"
+        />
       </template>
-    </base-list>
+    </double-list>
   </div>
 </template>
 
@@ -82,55 +71,26 @@ export default {
       childTableConfig,
       listApi: getInfoOutWarehousing,
       childSelectRows: [],
+      mainRow: {},
     }
   },
   methods: {
+    /** 子表内容获取 */
+    childApi(row) {
+      return getInfoDetailOutWarehousing({ orderCode: row.orderCode }).then(res => {
+        if (!res || !res.data || !res.data[0]) return
+        return res.data[0].queryOutWarehouseOrderDetailVOSList || []
+      })
+    },
     /** 刷新列表 */
     getTableData() {
-      this.$refs['baseList'].fetchData()
-    },
-    /** 返回列表添加字段 */
-    parseData(res) {
-      let data = res.data.list || []
-      let total = res.data.total
-      data.forEach(v => {
-        v.childData = []
-        v.childLoading = false
-      })
-      return { data, total }
+      this.$refs['doubleList'].fetchData()
     },
     /** 子表多选 */
-    childSelectionChange(selectRows, mainRow, key) {
-      let oldKey = this.childSelectRows.key
-      let oldRows = this.childSelectRows
-      if (oldKey !== key && (selectRows.length !== 0 || oldRows.length === 0)) {
-        // 更换列
-        this.childSelectRows = [...selectRows]
-        this.childSelectRows.key = key
-        this.childSelectRows.mainRow = mainRow
-        if (oldKey !== undefined) {
-          // 准备重置 上一个列
-          this.$nextTick(() => {
-            // 翻页后元素消失判断
-            this.$refs[`childTable-${oldKey}`] && this.$refs[`childTable-${oldKey}`].clearSelection()
-          })
-        }
-      } else if (oldKey === key) {
-        // 更新列
-        this.childSelectRows = [...selectRows]
-      } else {
-        // 被重置
-      }
-    },
-    /** 子列表展开 */
-    hanldeExpandChange(row) {
-      row.childLoading = true
-      getInfoDetailOutWarehousing({ orderCode: row.orderCode }).then(res => {
-        row.childLoading = false
-        if (!res || !res.data || !res.data[0]) return
-        row.childData = res.data[0].queryOutWarehouseOrderDetailVOSList || []
-      })
-    },
+    childSelectionChange(selectRows, mainRow) {
+      this.childSelectRows = selectRows
+      this.mainRow = mainRow
+    }
   }
 }
 </script>

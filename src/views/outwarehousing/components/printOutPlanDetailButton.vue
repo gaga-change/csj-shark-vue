@@ -45,20 +45,23 @@ export default {
     }
   },
   props: {
-    data: {
+    childSelectRows: {
       type: Array,
       default: () => []
+    },
+    mainRow: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
     childData() {
-      let temp = this.data || []
-      let mainRow = temp.mainRow || {}
+      let temp = this.childSelectRows || []
+      let mainRow = this.mainRow || {}
       return temp.map(v => ({ ...mainRow, ...v }))
     },
     detail() {
-      let temp = this.data || []
-      return temp.mainRow || {}
+      return this.mainRow || {}
     }
   },
   methods: {
