@@ -26,12 +26,17 @@
         />
       </template>
     </double-list>
+    <print-mark-dialog
+      :visible.sync="printMarkDialogVisible"
+      :row="nowRow"
+    ></print-mark-dialog>
   </div>
 </template>
 
 <script>
 import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
 import printOutPlanDetailButton from './components/printOutPlanDetailButton'
+import printMarkDialog from './components/printMarkDialog'
 import { outboundOrderStatus, isPushStateEnum, busiBillTypeEnum } from '@/utils/enum'
 
 const childTableConfig = [
@@ -48,6 +53,7 @@ const tableConfig = [
   { label: '出库时间', prop: 'gmtCreate', type: 'time' },
   { label: '出库单号', prop: 'orderCode' },
   { label: '计划单号', prop: 'planCode' },
+  { label: '外部订单号', prop: 'busiBillNo', width: 90 },
   { label: '推送状态', prop: 'isPush', type: 'enum', enum: isPushStateEnum },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
   { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: outboundOrderStatus },
@@ -63,15 +69,17 @@ const searchConfig = [
 ]
 
 export default {
-  components: { printOutPlanDetailButton },
+  components: { printOutPlanDetailButton, printMarkDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       childTableConfig,
       listApi: getInfoOutWarehousing,
+      printMarkDialogVisible: false,
       childSelectRows: [],
       mainRow: {},
+      nowRow: {}
     }
   },
   methods: {
@@ -90,6 +98,11 @@ export default {
     childSelectionChange(selectRows, mainRow) {
       this.childSelectRows = selectRows
       this.mainRow = mainRow
+    },
+    /** 打印麦头 */
+    printMark(row) {
+      this.nowRow = row
+      this.printMarkDialogVisible = true
     }
   }
 }
