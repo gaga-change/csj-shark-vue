@@ -11,13 +11,6 @@ export default [
     hidden: false,
     children: [
       {
-        name: 'planIn',
-        path: 'planIn',
-        meta: { title: '打印入库计划单', noCache: true },
-        component: _import('inwarehousing/planIn'),
-        hidden: false,
-      },
-      {
         name: 'inrecord',
         path: 'inrecord',
         meta: { title: '到货登记', noCache: true },
@@ -57,17 +50,10 @@ export default [
   {
     path: '/outwarehousing',
     component: Layout,
-    redirect: 'outwarehousing/outboundPlan',
+    redirect: 'outwarehousing/assignmentPlan',
     meta: { title: '出库管理', noCache: true, icon: 'out' },
     hidden: false,
     children: [
-      {
-        name: 'outboundPlan',
-        path: 'outboundPlan',
-        meta: { title: '出库计划单', noCache: true },
-        component: _import('outwarehousing/outboundPlan'),
-        hidden: false,
-      },
       {
         name: 'assignmentPlan',
         path: 'assignmentPlan',

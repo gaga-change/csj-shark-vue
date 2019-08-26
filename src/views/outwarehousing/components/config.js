@@ -13,15 +13,6 @@ export const planOrderTableConfig = [// 出库计划单列表
   { label: '已出库数量', prop: 'outQty', minWidth: 90 },
 ]
 
-export const planTableConfig = [// 打印出库计划单列表
-  { label: '计划单号', prop: 'planCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'busiBillTypeEnum', width: 90 },
-  { label: '货主名称', prop: 'ownerName', width: 150 },
-  { label: '客户名称', prop: 'arrivalName', width: 150 },
-  { label: '应出/已出', prop: 'printplanReal', minWidth: 90 },
-  { label: '打印状态', prop: 'isPrint', useLocalEnum: true, type: 'printState', minWidth: 90 }
-]
-
 export const planOrderChildTableConfig = [// 出库计划单子列表
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },

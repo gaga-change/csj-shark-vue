@@ -11,20 +11,6 @@ export const planTableConfig = [// 计划单列表
   { label: '已入库数量', prop: 'inQty', width: 85 },
 ]
 
-export const printplanTableConfig = [// 计划单列表
-  { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time' },
-  { label: '计划单号', prop: 'planCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', useLocalEnum: true, type: 'busiBillTypeEnum', width: 130 },
-  { label: '货主', prop: 'ownerName', width: 150 },
-  { label: '供应商', prop: 'providerName', width: 150 },
-  { label: '商品总数', prop: 'inPlanQty', minWidth: 90 },
-  { label: '入库状态', prop: 'execStatus', useLocalEnum: true, type: 'ExecStatusEnum', minWidth: 120 },
-  { label: '收货状态', prop: 'receiveStatus', useLocalEnum: true, type: 'receiveStatusEnum', minWidth: 120 },
-  { label: '制单人', prop: 'createrName', minWidth: 90 },
-  { label: '应入/已入', prop: 'printplanReal', minWidth: 90 },
-  { label: '打印状态', prop: 'isPrint', useLocalEnum: true, type: 'printState', minWidth: 90 },
-]
-
 // flowChildTableConfig
 export const planChildTableConfig = [// 计划单子列表
   { label: '业务行号', prop: 'busiIndex', minWidth: 80 },

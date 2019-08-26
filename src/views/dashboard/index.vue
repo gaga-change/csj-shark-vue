@@ -79,7 +79,7 @@
                   alt=""
                   class="singleimg"
                 >
-                <p>打印出库计划单</p>
+                <p>打印出库计划单123</p>
               </div>
             </router-link>
           </el-col>
