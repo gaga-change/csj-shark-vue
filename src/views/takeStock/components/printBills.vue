@@ -34,6 +34,7 @@
                     <th>商品编码</th>
                     <th>商品名称</th>
                     <th>批次</th>
+                    <th>容器</th>
                     <th>规格型号</th>
                     <th>单位</th>
                     <th>库区库位</th>
@@ -47,6 +48,7 @@
                     <td>{{son.skuCode}}</td>
                     <td>{{son.skuName}}</td>
                     <td>{{son.batchNo}}</td>
+                    <td>{{son.trayCode}}</td>
                     <td>{{son.skuFormat}}</td>
                     <td>{{son.skuUnitCode}}</td>
                     <td>{{son.areaSpceCode}}</td>
