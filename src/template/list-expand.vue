@@ -112,9 +112,26 @@ export default {
       return { data, total }
     },
     /** 子表多选 */
-    childSelectionChange(selectRows, mainRow) {
-      this.childSelectRowsMainRow = mainRow
-      this.childSelectRows = [...selectRows]
+    childSelectionChange(selectRows, mainRow, index) {
+      let oldIndex = this.childSelectRows.index
+      let oldRows = this.childSelectRows
+      if (oldIndex !== index && (selectRows.length !== 0 || oldRows.length === 0)) {
+        // 更换列
+        this.childSelectRows = [...selectRows]
+        this.childSelectRows.index = index
+        this.childSelectRows.mainRow = mainRow
+        if (oldIndex !== undefined) {
+          // 准备重置 上一个列
+          this.$nextTick(() => {
+            this.$refs[`childTable-${oldIndex}`].clearSelection()
+          })
+        }
+      } else if (oldIndex === index) {
+        // 更新列
+        this.childSelectRows = [...selectRows]
+      } else {
+        // 被重置
+      }
     },
     /** 子列表展开 */
     hanldeExpandChange(row) {

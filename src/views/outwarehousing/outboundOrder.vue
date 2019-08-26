@@ -13,19 +13,23 @@
       :parseData="parseData"
     >
       <template slot-scope="scope">
-        <!-- <el-link type="primary">修改</el-link> -->
+        <el-link
+          type="primary"
+          @click="printMark(scope.row)"
+        >打印装箱唛头</el-link>
       </template>
       <template
         slot="expand"
         slot-scope="scope"
       >
+        <!-- row.id  有两个地方，一个ref,一个【childSelectionChange】中传递为key -->
         <base-table2
-          :ref="`childTable-${scope.index}`"
+          :ref="`childTable-${scope.row.id}`"
           :config="childTableConfig"
           :data="scope.row.childData"
           :loading="scope.row.childLoading"
           :select="true"
-          @selectionChange="rows => childSelectionChange(rows, scope.row, scope.index)"
+          @selectionChange="rows => childSelectionChange(rows, scope.row, scope.row.id)"
         >
         </base-table2>
       </template>
@@ -96,21 +100,22 @@ export default {
       return { data, total }
     },
     /** 子表多选 */
-    childSelectionChange(selectRows, mainRow, index) {
-      let oldIndex = this.childSelectRows.index
+    childSelectionChange(selectRows, mainRow, key) {
+      let oldKey = this.childSelectRows.key
       let oldRows = this.childSelectRows
-      if (oldIndex !== index && (selectRows.length !== 0 || oldRows.length === 0)) {
+      if (oldKey !== key && (selectRows.length !== 0 || oldRows.length === 0)) {
         // 更换列
         this.childSelectRows = [...selectRows]
-        this.childSelectRows.index = index
+        this.childSelectRows.key = key
         this.childSelectRows.mainRow = mainRow
-        if (oldIndex !== undefined) {
+        if (oldKey !== undefined) {
           // 准备重置 上一个列
           this.$nextTick(() => {
-            this.$refs[`childTable-${oldIndex}`].clearSelection()
+            // 翻页后元素消失判断
+            this.$refs[`childTable-${oldKey}`] && this.$refs[`childTable-${oldKey}`].clearSelection()
           })
         }
-      } else if (oldIndex === index) {
+      } else if (oldKey === key) {
         // 更新列
         this.childSelectRows = [...selectRows]
       } else {
