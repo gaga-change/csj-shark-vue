@@ -1,216 +1,97 @@
 <template>
   <div>
-    <!-- <tab-label 
-          :tab-config="busiBillTypeEnum" 
-          @tabSwitch="tabSwitch" 
-          :tab-default="tabDefault">
-        </tab-label> -->
 
-    <search-warehousing
-      @searchTrigger="submitForm"
-      ref="searchWarhouse"
-      @resetSearch="resetForm"
-      :search-forms="ruleForm"
-    >
-    </search-warehousing>
-
-    <operation-button
-      :child-data-arr="childDataArr"
-      :planPrintData="planPrintData"
-      :selectChiledByPlanCode="selectChiledByPlanCode"
-      :orderType="currentTab"
-    />
-
-    <div
-      style="margin-bottom:15px"
-      v-show="planPrintData.length>0"
-    >
-      <span style="font-size:13px">当前选中的计划单</span>
-      <el-tag
-        v-for="tag in planPrintData"
-        :key="tag.planCode"
-        closable
-        @close="closePlanTags(tag)"
-        style="margin:0 0 10px 10px;"
-      >
-        {{tag.planCode}}
-      </el-tag>
-    </div>
-
-    <double-table
-      :loading="loading"
-      :table-data="tableData"
-      ref="tableChild"
-      :highlight-current-row="highlightCurrentRow"
-      child-data-name="outWarehousePlanDetailRespList"
-      :config="parentTableConfig"
-      :expands-parent="expandsParent"
+    <double-list
+      ref="doubleList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
+      @childSelectionChange="childSelectionChange"
+      :childApi="childApi"
       :childTableConfig="childTableConfig"
-      :accordion-expand="true"
-      :child-can-select="true"
-      expand-key="planCode"
-      @childDataSelect="childDataSelect"
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      @currentRadioChange="currentRadioChange"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
+      :selectTables="true"
     >
-    </double-table>
+      <template slot="btns">
+        <operation-button :childSelectRows="childSelectRows" />
+      </template>
+    </double-list>
 
   </div>
 </template>
 
 <script>
-import DoubleTable from '@/components/Table/doubleTable'
-import { planOrderTableConfig, planOrderChildTableConfig } from './components/config'
-import { getInfoPlanOutWarehousing, getInfoPlanDetailOutWarehousing } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchWarehousing from './components/search'
+import { getInfoPlanOutWarehousing } from '@/api'
 import operationButton from './components/operationButton'
-import { busiBillTypeEnum } from "@/utils/enum"
-const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('out'))
+import { SortStatus, busiBillTypeEnum, OutExecStatusEnum } from '@/utils/enum'
 
+const childTableConfig = [
+  { label: '商品编码', prop: 'skuCode', width: 150 },
+  { label: '商品名称', prop: 'skuName', width: 150 },
+  { label: '规格型号', prop: 'skuModel', minWidth: 120 },
+  { label: '单位', prop: 'skuUnitName', minWidth: 120 },
+  { label: '商品数量', prop: 'planOutQty', minWidth: 120 },
+  { label: '出库数量', prop: 'realOutQty', minWidth: 120 },
+  { label: '已通知拣货数量', prop: 'sortQty', minWidth: 120 },
+  { label: '已拣货数量', prop: 'realSortQty', minWidth: 120 },
+]
+const tableConfig = [
+  { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time' },
+  { label: '拣货状态', prop: 'sortStatus', type: 'enum', enum: SortStatus, width: 90 },
+  { label: '计划单号', prop: 'planCode', width: 150 },
+  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum, width: 90 },
+  { label: '货主', prop: 'ownerName', width: 150 },
+  { label: '客户/供应商', prop: 'arrivalName', width: 150 },
+  { label: '商品总数', prop: 'outPlanQty', minWidth: 90 },
+  { label: '出库状态', prop: 'execStatus', minWidth: 90, type: 'enum', enum: OutExecStatusEnum, },
+  { label: '收货人', prop: 'arrivalLinkName', minWidth: 90 },
+  { label: '收货地址', prop: 'arrivalAddress', width: 120 },
+  { label: '联系电话', prop: 'arrivalLinkTel', width: 150 },
+  { label: '已出库数量', prop: 'outQty', minWidth: 90 },
+]
+const searchConfig = [
+  { label: '单据类型', prop: 'busiBillType', type: 'select', enum: busiBillTypeEnum },
+  { label: '计划单号', prop: 'planCode', type: 'input' },
+  { label: '客户/供应商', prop: 'arrivalName', type: 'input' },
+  { label: '出库状态', prop: 'execStatus', type: 'select', enum: OutExecStatusEnum },
+  { label: '拣货状态', prop: 'sortStatus', type: 'select', enum: SortStatus },
+  { label: '下单时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
+]
 export default {
-  components: { DoubleTable, SearchWarehousing, operationButton },
+  components: { operationButton },
   data() {
     return {
-      loading: false,
-      dialogVisible: false,
-      dialogData: {},
-      highlightCurrentRow: true,
-      busiBillTypeEnum: BusiBillTypeEnumFilter,
-      tabDefault: BusiBillTypeEnumFilter[0].value + '',
-      currentTab: BusiBillTypeEnumFilter[0].value + '',
-      ruleForm: {
-        pageNum: 1,
-        pageSize: 10,
-        durationTime: [],//时间，
-        planCode: '',
-        providerName: '',
-        execStatus: '',
-        ownerName: '',
-        busiBillType: 21,
-        sortStatus: 9,
-        sortState: ''
-      },
-      selectData: {},
-      tableData: [],
-      parentTableConfig: planOrderTableConfig,
-      childTableConfig: planOrderChildTableConfig,
-      total: 0,
-      multipleSelection: [],
-      expandsParent: [],
-      childDataArr: [],
-      planPrintData: [],
-      activeOwnerCode: '',
-      selectChiledByPlanCode: {},
+      tableConfig,
+      searchConfig,
+      childTableConfig,
+      listApi: getInfoPlanOutWarehousing,
+      childSelectRows: [],
     }
   },
-
-
   methods: {
-
-    currentRadioChange(row) {
-      this.planPrintData.push(row)
-
+    /** 子表内容获取 */
+    childApi(row) {
+      return Promise.resolve(row.outWarehousePlanDetailRespList)
     },
-
+    /** 刷新列表 */
     getTableData() {
-      this.$router.replace({
-        path: '/outwarehousing/assignmentPlan',
-        query: { data: JSON.stringify({ ...this.ruleForm }) }
+      this.$refs['doubleList'].fetchData()
+    },
+    /** 子表多选 */
+    childSelectionChange(selectRowsAndMainRow) {
+      let temp = []
+      selectRowsAndMainRow.forEach(({ selectRows, mainRow }) => {
+        temp.push(...selectRows.map(v => {
+          return {
+            planCode: mainRow.planCode,
+            ownerCode: mainRow.ownerCode,
+            ...v,
+          }
+        }))
       })
-      this.loading = true;
-      let data = { ...this.ruleForm }
-
-      getInfoPlanOutWarehousing(data).then(res => {
-        if (res && res.data && res.data.list) {
-          var tempList = [...res.data.list].map(v => {
-            v.outWarehousePlanDetailRespList = v.outWarehousePlanDetailRespList.map(item => {
-              item.planCode = v.planCode;
-              item.ownerCode = v.ownerCode;
-              return item
-            })
-            return v;
-          })
-          this.tableData = uniqueArray([...tempList], 'planCode')
-          this.total = res.data.total
-          var a = this.$refs.tableChild.expands//之前打开过 
-        } else {
-          this.tableData = []
-        }
-        this.loading = false;
-      })
-    },
-
-
-    childDataSelect(selectedData, arr) {
-      if (selectedData.length) {
-        this.selectChiledByPlanCode[selectedData[0].planCode] = selectedData
-      } else {
-        this.selectChiledByPlanCode[arr[0].planCode] = []
-      }
-      this.multipleSelection = [...selectedData]
-      this.childDataArr = [...selectedData].map(v => {
-        return {
-          ...v,
-          ownerCode: this.activeOwnerCode        }
-      })
-    },
-
-
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-
-    submitForm(ruleForm) {
-      var createBeginDate = '', createEndDate = '';
-      if (ruleForm.durationTime && ruleForm.durationTime[0]) {
-        createBeginDate = +ruleForm.durationTime[0]
-        createEndDate = +ruleForm.durationTime[1]
-      }
-      if (this.ruleForm.sortState === 0 || this.ruleForm.sortState) {
-        this.ruleForm.sortStatus = this.ruleForm.sortState
-      }
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1, createBeginDate, createEndDate }
-      this.getTableData();
-
-    },
-
-    resetForm() {
-      for (let i in this.ruleForm) {
-        if (Array.isArray(this.ruleForm[i])) {
-          this.ruleForm[i] = []
-        } else if (i === 'execStatus') {
-          this.ruleForm[i] = ''
-        } else {
-          this.ruleForm[i] = ''
-        }
-      }
-      this.ruleForm = { ...this.ruleForm, pageNum: 1, pageSize: 10 }
-      this.getTableData()
-    },
-
-    closePlanTags(tag) {
-      var planPrintData = [...this.planPrintData]
-      var b = [...planPrintData.filter(item => {
-        return item.planCode != tag.planCode
-      })]
-      this.planPrintData = [...b]
+      this.childSelectRows = temp
     }
-  },
-
-  created() {
-    this.getTableData()
   }
 }
 </script>

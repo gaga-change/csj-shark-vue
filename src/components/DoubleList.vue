@@ -11,6 +11,7 @@
       :showControlFixed="false"
       :expand="true"
       @expandChange="hanldeExpandChange"
+      @updateData="updateData"
       :parseData="middleParseData"
     >
       <template slot-scope="scope">
@@ -44,6 +45,11 @@
 
 export default {
   props: {
+    /** 允许多表勾选 */
+    selectTables: {
+      type: Boolean,
+      default: false
+    },
     /** 子表表格配置 */
     childTableConfig: {
       type: Array,
@@ -110,10 +116,19 @@ export default {
   },
   data() {
     return {
-      childSelectRows: [],
+      childSelectRows: [], // 单表
+      childSelectRowsTotal: {}, // 跨多表
     }
   },
   methods: {
+    /** 列表内容刷新 */
+    updateData() {
+      // 重置选中
+      this.childSelectRowsTotal = {}
+      if (this.selectTables) {
+        this.$emit('childSelectionChange', [])
+      }
+    },
     /** 刷新列表 */
     fetchData() {
       this.$refs['baseList'].fetchData()
@@ -140,28 +155,37 @@ export default {
     },
     /** 子表多选 */
     childSelectionChange(selectRows, mainRow, key) {
-      let oldKey = this.childSelectRows.key
-      let oldRows = this.childSelectRows
-      if (oldKey !== key && (selectRows.length !== 0 || oldRows.length === 0)) {
-        // 更换列
-        this.childSelectRows = [...selectRows]
-        this.childSelectRows.key = key
-        this.childSelectRows.mainRow = mainRow
-        this.$emit('childSelectionChange', this.childSelectRows, this.childSelectRows.mainRow)
-        if (oldKey !== undefined) {
-          // 准备重置 上一个列
-          this.$nextTick(() => {
-            // 翻页后元素消失判断
-            this.$refs[`childTable-${oldKey}`] && this.$refs[`childTable-${oldKey}`].clearSelection()
-          })
-        }
-      } else if (oldKey === key) {
-        // 更新列
-        this.childSelectRows.splice(0)
-        this.childSelectRows.push(...selectRows)
-        this.$emit('childSelectionChange', this.childSelectRows, this.childSelectRows.mainRow)
+      if (this.selectTables) {
+        this.childSelectRowsTotal[key + ''] = { selectRows, mainRow }
+        let temp = []
+        Object.keys(this.childSelectRowsTotal).forEach(key => {
+          temp.push(this.childSelectRowsTotal[key])
+        })
+        this.$emit('childSelectionChange', temp)
       } else {
-        // 被重置
+        let oldKey = this.childSelectRows.key
+        let oldRows = this.childSelectRows
+        if (oldKey !== key && (selectRows.length !== 0 || oldRows.length === 0)) {
+          // 更换列
+          this.childSelectRows = [...selectRows]
+          this.childSelectRows.key = key
+          this.childSelectRows.mainRow = mainRow
+          this.$emit('childSelectionChange', this.childSelectRows, this.childSelectRows.mainRow)
+          if (oldKey !== undefined) {
+            // 准备重置 上一个列
+            this.$nextTick(() => {
+              // 翻页后元素消失判断
+              this.$refs[`childTable-${oldKey}`] && this.$refs[`childTable-${oldKey}`].clearSelection()
+            })
+          }
+        } else if (oldKey === key) {
+          // 更新列
+          this.childSelectRows.splice(0)
+          this.childSelectRows.push(...selectRows)
+          this.$emit('childSelectionChange', this.childSelectRows, this.childSelectRows.mainRow)
+        } else {
+          // 被重置
+        }
       }
     },
     /** 子列表展开 */

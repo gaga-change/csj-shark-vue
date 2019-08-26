@@ -42,8 +42,6 @@ export const selectSumSkuQty = params => http.get(`/webApi/sku/stock/selectSumSk
 export const getInfoDetailWarehousing = params => http.get(`/webApi/plan/in/detail`, { params })
 /** 获取入库详情 */
 export const getInfoDetailInWarehousing = params => http.get(`/webApi/in/selectBarcodePrinting`, { params })
-/** 获取出库计划单详情 */
-export const getInfoPlanDetailOutWarehousing = params => http.get(`/webApi/plan/out/detail`, { params })
 /** 获取出库单列表 */
 export const getInfoOutWarehousing = params => http.get(`/webApi/outWarehouse/order/queryOutWarehouseOrder`, { params })
 /** 获取出库单详情 */
@@ -122,8 +120,6 @@ export const modifyPrintState = params => http.post(`/webApi/plan/in/print`, par
 export const modifyOutPrint = params => http.post(`/webApi/plan/out/print`, params)
 /** 获取出库计划单列表 */
 export const getInfoPlanOutWarehousing = params => http.post(`/webApi/plan/out/list`, params)
-/** 提交出库单 */
-export const outboundOrderSubmit = params => http.post(`/webApi/outWarehouse/order/addOutWarehouseOrder`, params)
 /** 一键提交出库单 */
 export const outboundOrderSubmitQuick = params => http.post(`/webApi/outWarehouse/order/directOutOfTheLibrary`, params)
 /** 查询到货单列表 */

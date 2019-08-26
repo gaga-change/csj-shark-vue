@@ -7,8 +7,6 @@
       :api="listApi"
       :showControl="true"
       :controlWidth="160"
-      :showControlFixed="false"
-      :expand="true"
       @childSelectionChange="childSelectionChange"
       :childApi="childApi"
       :childTableConfig="childTableConfig"
@@ -89,7 +87,21 @@ export default {
     childSelectionChange(selectRows, mainRow) {
       this.childSelectRows = selectRows
       this.mainRow = mainRow
-    }
+    },
+    // /** 子表多选（允许跨多表） */
+    // childSelectionChange(selectRowsAndMainRow) {
+    //   let temp = []
+    //   selectRowsAndMainRow.forEach(({ selectRows, mainRow }) => {
+    //     temp.push(...selectRows.map(v => {
+    //       return {
+    //         planCode: mainRow.planCode,
+    //         ownerCode: mainRow.ownerCode,
+    //         ...v,
+    //       }
+    //     }))
+    //   })
+    //   this.childSelectRows = temp
+    // }
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <el-button
       type="primary"
       size="mini"
-      @click="PickingOrder"
+      @click="pickingOrder"
     >
       分配拣货任务
     </el-button>
@@ -23,12 +23,6 @@
             v-model="pickOperatorName"
           >
           </el-input>
-          <!-- <edit-table
-            :config="planChildTableEditAllocationConfig"
-            :table-data="PickingOrderData"
-            :default-edit="false"
-          >
-          </edit-table> -->
           <el-button
             size="mini"
             type="primary"
@@ -132,11 +126,20 @@
 <script>
 import moment from 'moment'
 import editTable from '@/components/Table/editTable'
-import { outboundOrderSubmit, pickOrderAdd, getInfoOnPageInventory } from '@/api'
+import { pickOrderAdd, getInfoOnPageInventory } from '@/api'
 import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
-import { planChildTableEditAllocationConfig, planChildTableLabelConfig, planChildTablePrintConfig } from './config'
 import { printPlanDataFn } from './dataHandler'
+
+const planChildTableEditAllocationConfig = [ // 计划单操作列表 之 波次分配
+  { label: '计划单号', prop: 'planCode', minWidth: 150 },
+  { label: '商品编码', prop: 'skuCode', width: 150 },
+  { label: '商品名称', prop: 'skuName', width: 150 },
+  { label: '规格型号', prop: 'skuFormat', minWidth: 120 },
+  { label: '单位', prop: 'skuUnitName', minWidth: 100 },
+  { label: '商品数量', prop: 'planOutQty', minWidth: 120 },
+  { label: '通知拣货数量', prop: 'sortQty', width: 120 },
+]
 
 export default {
   name: 'operationButton',
@@ -152,8 +155,6 @@ export default {
       loading: false,
       childData: [],
       planChildTableEditAllocationConfig,
-      planChildTableLabelConfig,
-      planChildTablePrintConfig,
       printPlan: [],//打印计划单
       defaultCanedit: true,
       PickingOrderData: [],
@@ -171,29 +172,9 @@ export default {
     }
   },
   props: {
-    parentDataObj: {
-      type: Object,
-      default: () => { }
-    },
-    childDataArr: {
+    childSelectRows: {
       type: Array,
       default: () => []
-    },
-    planPrintData: {
-      type: Array,
-      default: () => []
-    },
-    orderType: {
-      type: String,
-      default: ''
-    },
-    activePlanCode: {
-      type: String,
-      default: ''
-    },
-    selectChiledByPlanCode: {
-      type: Object,
-      default: () => { }
     }
   },
   watch: {
@@ -310,9 +291,6 @@ export default {
               that.newgridData = []
             }
           }
-          // if(basicnum>0){
-
-          // }
           if (that.newcacheApi[ownkey]) {
             _(that.newcacheApi[ownkey])
             if (that.newcacheApi[ownkey].length <= 0) {
@@ -464,27 +442,6 @@ export default {
         }
       })
     },
-
-    //打印出库明细
-    priviewBoxLabel() {
-      let arr = []
-      for (let i in this.selectChiledByPlanCode) {
-        arr = [...arr, ...this.selectChiledByPlanCode[i]]
-      }
-      this.childData = arr.map(v => {
-        v.editable = true;
-        v.printNum = Number(v.realOutQty).toFixed(0);
-        return v
-      })
-
-      if (!this.childData.length) {
-        this.$message({ type: 'error', message: '未选择子表里商品' });
-        return
-      }
-      this.dialogVisibleLabel = true
-      this.defaultCanedit = true
-    },
-
     printLabel() {
       var childData = [...this.childData]
       this.childData = childData.map(v => {
@@ -499,31 +456,14 @@ export default {
         MakePrint(label, style)
       }, 500)
     },
-
-    PickingOrder() {
-      let arr = []
-      for (let i in this.selectChiledByPlanCode) {
-        arr = [...arr, ...this.selectChiledByPlanCode[i]]
-      }
-      this.PickingOrderData = arr.map(v => {
-        return v
-      })
+    pickingOrder() {
+      this.PickingOrderData = [...this.childSelectRows]
       if (!this.PickingOrderData.length) {
         this.$message({ type: 'error', message: '未选择子表里商品' });
         return
       }
       this.dialogVisible = true;
     },
-
-    priviewReserve() {
-      this.printPlan = [...printPlanDataFn([...this.planPrintData])]
-      if (!this.printPlan.length) {
-        this.$message({ type: 'error', message: '未选择单据,可点击任意行选择' });
-        return
-      }
-      this.dialogVisibleReserve = true
-    },
-
     printPlanOrder() {
       var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
       MakePrint(printPlanContainer)

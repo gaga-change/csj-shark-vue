@@ -129,6 +129,11 @@ export default {
       rowNow: {},
     }
   },
+  watch: {
+    tableData(val) {
+      this.$emit('updateData')
+    }
+  },
   created() {
     if (process.env.NODE_ENV === "development") {
       this.development = true
