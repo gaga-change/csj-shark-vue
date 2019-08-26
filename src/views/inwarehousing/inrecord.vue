@@ -1,237 +1,128 @@
 <template>
-  <div>
-    <search-warehousing
-      @searchTrigger="submitForm"
-      ref="searchWarhouse"
-      @resetSearch="resetForm"
-      :search-forms="ruleForm"
+  <div class="ComponentNameClass">
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :labelWidth="90"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
+      :select="true"
+      @selectionChange="selectionChange"
+      :selectable="() => true"
     >
-    </search-warehousing>
-    <operation-button
-      @lodash="lodash"
-      :child-data-arr="childDataArr"
-      :plan-print-data="planPrintData"
-      :parent-data-obj="parentDataObj"
-    />
-    <double-table
-      :loading="loading"
-      :table-data="tableData"
-      ref="tableChild"
-      :handle-button-map="handleButtonMap"
-      :expands-parent="expandsParent"
-      :highlight-current-row="highlightCurrentRow"
-      :child-data-name="childDataName"
-      :config="parentTableConfig"
-      :childTableConfig="childTableConfig"
-      :accordion-expand="accordionExpand"
-      @currentRadioChange="currentRadioChange"
-      @expandChangePa="expandChange"
-      :child-can-select="childCanSelect"
-      :expand-key="expandKey"
-      @childDataSelect="childDataSelect"
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
-    >
-    </double-table>
+      <template slot-scope="scope">
+        <router-link
+          :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
+          :style="{color:'#3399ea'}"
+        >详情</router-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="handleActive(scope.row)"
+        >激活</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="handleConfirm(scope.row)"
+        >收货确认</el-link>
+      </template>
+      <template slot="btns">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="导出当前选中记录"
+          placement="top"
+        >
+          <el-button
+            type="primary"
+            size="mini"
+            :disabled="!selectRows.length"
+            @click="printOrder"
+          >
+            打印单据
+          </el-button>
+        </el-tooltip>
+      </template>
+    </base-list>
   </div>
 </template>
 
 <script>
-import DoubleTable from '@/components/Table/doubleTable'
-import { planTableConfig, planChildTableConfig } from './components/config'
-import { getInfoWarehousing, getInfoDetailWarehousing } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchWarehousing from './components/search'
-import operationButton from './components/recordOperation'
-import { busiBillTypeEnum } from "@/utils/enum"
-const BusiBillTypeEnumFilter = busiBillTypeEnum.filter(item => item.type.includes('in'))
-const ruleForm = {
-  pageNum: 1,
-  pageSize: 10,
-  durationTime: ['', ''],//时间，
-  createBeginDate: '',
-  createEndDate: '',
-  planCode: '',
-  providerName: '',
-  execStatus: '',
-  ownerName: '',
-  receiveStatus: 9,
-  receiveStates: '',
-  busiBillType: 11
-}
-
+import { receiveOrderList } from '@/api'
+import { busiBillTypeEnum, receiveState } from '@/utils/enum'
+const tableConfig = [
+  { label: '收货单号 ', prop: 'orderCode' },
+  { label: '入库计划单号 ', prop: 'planCode' },
+  { label: '外部订单号', prop: 'busiBillNo' },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '货主', prop: 'ownerName' },
+  { label: '供应商', prop: 'providerName' },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+]
+const searchConfig = [
+  { label: '收货单号', prop: 'orderCode', type: 'input' },
+  { label: '入库计划单', prop: 'planCode', type: 'input' },
+  { label: '货主', prop: 'ownerName', type: 'input' },
+  { label: '供应商', prop: 'providerName', type: 'input' },
+  { label: '单据类型', prop: 'orderType', type: 'select', enum: busiBillTypeEnum },
+  { label: '状态', prop: 'execStatus', type: 'select', enum: receiveState },
+  { label: '外部订单号', prop: 'busiBillNo', type: 'input' },
+  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+]
 export default {
-  components: { DoubleTable, SearchWarehousing, operationButton },
   data() {
     return {
-      loading: false,
-      dialogVisible: false,
-      dialogData: {},
-      highlightCurrentRow: true,
-      busiBillTypeEnum: BusiBillTypeEnumFilter,
-      tabDefault: BusiBillTypeEnumFilter[0].value + '',
-      currentTab: BusiBillTypeEnumFilter[0].value + '',
-      ruleForm,
-      selectData: {//x选中的单据
-
-      },
-      // searchForms,
-      tableData: [],
-      // pageNum:0,
-      // pageSize:10,
-      //子表数据名称
-      childDataName: 'childData',
-      //表格配置
-      parentTableConfig: planTableConfig,
-      childTableConfig: planChildTableConfig,
-      // currentPage:1,
-      // pageSize:10,
-      total: 0,
-      //主表操作
-      handleButtonMap: [
-        // {title:'详情',handle:(index,data)=>{
-        //     this.dialogVisible = true
-        //     this.dialogData = {...data}
-        // }}
-      ],
-      childCanSelect: true,//子表可选择,false全选，
-      accordionExpand: true,//手风琴展开
-      multipleSelection: [],//选中的子表数据
-      expandKey: 'planCode',
-      //按钮操作所需数据
-      parentDataObj: {},
-      childDataArr: [],
-      //计划单打印的选择数据
-      planPrintData: [],
-      expandsParent: [],
-      activePlanCode: ''
+      tableConfig,
+      searchConfig,
+      listApi: receiveOrderList,
+      selectRows: [],
+      // 可选 附加查询条件
+      appendSearchParams: {},
     }
   },
   methods: {
 
-    expandChange(row, expandedRows) {
-      var arr = []
-      arr.push(row[this.expandKey])
-      if (this.expandsParent == row[this.expandKey]) {
-        this.expandsParent = []
-      } else {
-        this.expandsParent = [...arr]
-      }
-      this.currentRadioChange(row)
-    },
+    /** 打印单据 */
+    printOrder() {
 
-    lodash() {
-      this.getInfoDetailWarehousingApi({
-        planCode: this.activePlanCode
-      })
     },
-
+    /** 刷新列表 */
     getTableData() {
-      this.$router.replace({
-        path: '/inwarehousing/inrecord',
-        query: { data: JSON.stringify(this.ruleForm) }
+      this.$refs['baseList'].fetchData()
+    },
+    /** 主表多选 */
+    selectionChange(selectRows) {
+      this.selectRows = [...selectRows]
+    },
+    /** 收货确认 */
+    handleConfirm(row) {
+
+    },
+    /** 激活 */
+    handleActive(row) {
+      // this.$apiConfirm('是否确定删除？', () => delApi(row.id)).then(() => {
+      //   this.$message.success('操作成功！')
+      //   this.getTableData()
+      // }).catch(() => { })
+    },
+    /** 可选 返回列表添加字段 */
+    parseData(res) {
+      let data = res.data.list || []
+      let total = res.data.total
+      data.forEach(v => {
+        v.updateLockStatusOutLoading = false
+        v.updateLockStatusInLoading = false
       })
-      this.loading = true;
-      let data = { ...this.ruleForm }
-      getInfoWarehousing(data).then(res => {
-        if (res && res.data && res.data.list) {
-          var tempList = [...res.data.list]
-          this.tableData = uniqueArray([...tempList.map(list => { list.childData = []; return list })], 'planCode')
-          this.total = res.data.total
-          var a = this.$refs.tableChild.expands//之前打开过 
-          if (a && a.length > 0) {
-            var info = {
-              childData: [],
-              planCode: a[0]
-            }
-            this.currentRadioChange(info)
-          }
-        } else {
-          this.tableData = []
-        }
-        this.loading = false;
-
-      })
+      return { data, total }
     },
-
-    currentRadioChange(data) {
-      var templatePlanTag = [...this.planPrintData, data]
-      this.planPrintData = uniqueArray([...templatePlanTag], 'planCode')
-      if (!data.childData || data.childData.length <= 0) {
-        this.activePlanCode = data.planCode;
-        this.getInfoDetailWarehousingApi({
-          planCode: data.planCode
-        })
-      }
-      this.parentDataObj = { ...data }
-    },
-
-    getInfoDetailWarehousingApi(data) {
-      this.loading = true
-      getInfoDetailWarehousing(data).then(res => {
-        if (res && res.data && res.data.inWarehousePlanDetailRespList && res.data.inWarehousePlanDetailRespList.length > 0) {
-          var tempList = [...this.tableData]
-          this.tableData = tempList.map(list => {
-            if (list.planCode == data.planCode) {
-              list.childData = res.data.inWarehousePlanDetailRespList.map(v => {
-                v.hasReceiveQty = v.receiveQty || 0;
-                v.receiveQty = v.planInQty - v.receiveQty || 0
-                v.receiveQty = 0
-                v.editable = true
-                v.printNum = 0
-                return v
-              });
-            }
-            return list
-          })
-        }
-        this.loading = false
-      })
-    },
-
-
-    childDataSelect(selectedData) {
-      this.multipleSelection = [...selectedData]
-      this.childDataArr = [...selectedData]
-    },
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      var createBeginDate = '', createEndDate = '';
-      if (ruleForm.durationTime && ruleForm.durationTime[0]) {
-        createBeginDate = +ruleForm.durationTime[0]
-        createEndDate = +ruleForm.durationTime[1]
-      }
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1, createBeginDate, createEndDate }
-      this.ruleForm.receiveStatus = ruleForm.receiveStates
-      this.getTableData();
-
-    },
-
-    resetForm() {
-      ruleForm.busiBillType = ''
-      ruleForm.receiveStatus = ''
-      this.ruleForm = { ...ruleForm }
-      this.getTableData()
-    },
-
-  },
-  created() {
-    this.getTableData()
+    /** 新建 */
+    handleCreate() {
+      this.$router.push({ path: '/qualityTesting/create' })
+    }
   }
 }
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-</style>

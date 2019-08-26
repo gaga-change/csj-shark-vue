@@ -13,7 +13,7 @@ export default [
       {
         name: 'inrecord',
         path: 'inrecord',
-        meta: { title: '到货登记', noCache: true },
+        meta: { title: '收货单', noCache: true },
         component: _import('inwarehousing/inrecord'),
         hidden: false,
       },

@@ -172,3 +172,5 @@ export const packageDelete = id => http.get(`/webApi/basic/package/delete/${id}`
 export const packageSave = params => http.post(`/webApi/basic/package/save`, params)
 /** 商品扩展配置 */
 export const skuUpdate = params => http.post(`/webApi/basic/sku/update`, params)
+/** 收货单列表 */
+export const receiveOrderList = params => http.get(`/webApi/receive/order/list`, { params })
