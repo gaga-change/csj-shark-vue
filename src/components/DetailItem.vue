@@ -9,6 +9,9 @@
       <template v-if="item.type === 'time'">
         <span class="value-content">{{detail[item.prop] | timeFormat}}</span>
       </template>
+      <template v-else-if="item.type === 'enum'">
+        <span class="value-content">{{detail[item.prop] | parseEnum(item)}}</span>
+      </template>
       <template v-else>
         <span class="value-content">{{detail[item.prop]}}</span>
       </template>
@@ -43,6 +46,21 @@ export default {
     timeFormat(val) {
       if (!val) return ''
       return moment(val).format('YYYY-MM-DD HH:mm:ss')
+    },
+    parseEnum(val, item) {
+      if (val === '' || val === undefined || val === null) {
+        return ''
+      }
+      if (!item.enum) {
+        console.error(`列【${item.label} : ${item.prop}】,需要 【enum】字段`)
+        return ''
+      }
+      let temp = item.enum.find(v => v.value == val)
+      if (!temp) {
+        console.error(`列【${item.label} : ${item.prop}】,没有对应枚举值（${val}）`)
+        return ''
+      }
+      return temp.name
     }
   }
 }

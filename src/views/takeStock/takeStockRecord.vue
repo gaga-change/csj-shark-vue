@@ -65,8 +65,19 @@
 <script>
 import DetailItem from '@/components/DetailItem'
 import { planInventoryQueryByOrderId, inventoryInbentoryRecord } from '@/api'
-import { takeStockRecordConfig, takeStockRecordProductTableConfig } from './components/config'
+import { takeStockRecordProductTableConfig } from './components/config'
 import { mapGetters } from 'vuex'
+import { takeStockTypeEnum } from '@/utils/enum'
+
+const takeStockRecordConfig = [
+  { label: '盘点单号', prop: 'orderCode' },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '仓库名称', prop: 'warehouseName' },
+  { label: '盘点类型', prop: 'orderType', type: 'enum', enum: takeStockTypeEnum },
+  { label: '备注', prop: 'remarkInfo' },
+]
+
 export default {
   components: { DetailItem },
   data() {

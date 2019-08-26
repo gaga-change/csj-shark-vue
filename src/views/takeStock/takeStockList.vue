@@ -90,9 +90,10 @@
 <script>
 import printBills from './components/printBills'
 import { planInventoryList, inventoryRemoveOrStop, inventoryRecordExport } from '@/api'
-import { executeStatusEnum } from '@/utils/enum'
+import { executeStatusEnum, takeStockTypeEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '盘点单号', prop: 'orderCode' },
+  { label: '盘点类型', prop: 'orderType', type: 'enum', enum: takeStockTypeEnum },
   { label: '状态', prop: 'executeStatus', type: 'enum', enum: executeStatusEnum },
   { label: '仓库名称', prop: 'warehouseName' },
   { label: '创建人', prop: 'createrName' },

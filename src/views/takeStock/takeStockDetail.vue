@@ -31,7 +31,19 @@
 <script>
 import DetailItem from '@/components/DetailItem'
 import { planInventoryQueryByOrderId } from '@/api'
-import { takeStockDetailConfig, takeStockDetailProductTableConfig } from './components/config'
+import { takeStockDetailProductTableConfig } from './components/config'
+import { takeStockTypeEnum } from '@/utils/enum'
+
+const takeStockDetailConfig = [
+  { label: '盘点单号', prop: 'orderCode' },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '仓库名称', prop: 'warehouseName' },
+  { label: '盘点人', prop: 'inventoryName' },
+  { label: '盘点时间', prop: 'inventoryTime', type: 'time' },
+  { label: '盘点类型', prop: 'orderType', type: 'enum', enum: takeStockTypeEnum },
+  { label: '备注', prop: 'remarkInfo' },
+]
 export default {
   components: { DetailItem },
   data() {
