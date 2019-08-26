@@ -15,6 +15,23 @@
             :model="formData"
             class="demo-form-inline"
           >
+            <el-form-item label="类型">
+              {{takeStockTypeEnum.find(v => v.value == orderType).name}}
+            </el-form-item>
+            <el-form-item
+              label="上次盘点时间"
+              prop="changeBeginDate"
+            >
+              <el-date-picker
+                v-model="formData.changeBeginDate"
+                type="datetime"
+                placeholder="选择日期时间"
+                align="right"
+                :picker-options="pickerOptions"
+                value-format="timestamp"
+              >
+              </el-date-picker>
+            </el-form-item>
             <el-form-item
               label="库区"
               prop="warehouseAreaCode"
@@ -130,12 +147,17 @@ import BaseTable from '@/components/Table'
 import { mapGetters } from 'vuex'
 import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
 import { takeStockSelectProductTableConfig } from './config'
+import { takeStockTypeEnum } from '@/utils/enum'
 export default {
   components: { BaseTable },
   props: {
     visible: {
       type: Boolean,
       default: false,
+    },
+    orderType: {
+      type: Number,
+      default: 0
     },
     selectData: {
       type: Array,
@@ -150,6 +172,7 @@ export default {
         skuName: '',
         skuCode: ''
       },
+      takeStockTypeEnum,
       takeStockSelectProductTableConfig,
       selectRows: [],
       tableData: [],
@@ -158,6 +181,28 @@ export default {
       getInventorySiteLoading: false,
       getSelectInventoryAreaListLoading: false,
       planInventoryQuerysSkuStockList,
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date());
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        }]
+      }
     }
   },
   computed: {
@@ -224,7 +269,13 @@ export default {
     },
     /** 确认 */
     confrim() {
-      this.$emit('update:selectData', [...this.selectRows])
+      this.$emit('update:selectData', [...this.selectRows].sort((a, b) => {
+        if (a.warehouseAreaCode === b.warehouseAreaCode) {
+          return b.warehouseSpaceCode > a.warehouseSpaceCode ? -1 : 1
+        } else {
+          return b.warehouseAreaCode > a.warehouseAreaCode ? 1 : -1
+        }
+      }))
       this.selectRows = []
       this.close()
     },

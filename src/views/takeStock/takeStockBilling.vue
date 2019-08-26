@@ -1,70 +1,88 @@
 <template>
   <div class="TakeStockBillingCom">
-    <div>
-      <el-button
-        type="primary"
-        size="mini"
-        @click="showChooseProdDialog"
+    <el-form
+      ref="form"
+      label-width="80px"
+      :model="formData"
+      :rules="rules"
+    >
+      <el-form-item
+        label="盘点类型"
+        prop="orderType"
       >
-        获取盘点商品
-      </el-button>
-    </div>
-    <div class="mt20">
-      <base-table
-        :config="takeStockSelectProductTableConfig"
-        :tableData="tableData"
-        :showControl="true"
-      >
-        <template
-          slot="edit"
-          slot-scope="scope"
+        <el-select
+          v-model="formData.orderType"
+          placeholder="请选择盘点类型"
         >
-          <el-button
-            size="mini"
-            type="warning"
-            @click="handleDelRow(scope.row, scope.index)"
-          >
-            删除
-          </el-button>
-        </template>
-      </base-table>
-    </div>
-    <div class="mt20">
-      <el-form
-        ref="form"
-        label-width="40px"
-      >
-        <el-form-item label="备注">
+          <el-option
+            v-for="item in takeStockTypeEnum"
+            :key="item.name"
+            :label="item.name"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <div>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="showChooseProdDialog"
+        >
+          获取盘点商品
+        </el-button>
+      </div>
+      <div class="mt20">
+        <base-table2
+          :config="takeStockSelectProductTableConfig"
+          :data="tableData"
+          :showControl="orderType === 0"
+        >
+          <template slot-scope="scope">
+            <el-link
+              type="warning"
+              @click="handleDelRow(scope.row, scope.index)"
+            >
+              删除
+            </el-link>
+          </template>
+        </base-table2>
+      </div>
+      <div class="mt20">
+        <el-form-item
+          label="备注"
+          prop="remark"
+        >
           <el-input
             style="width:300px;"
             maxlength="20"
             type="textarea"
             placeholder="根据需要填写，比如重新盘点"
-            v-model="remark"
+            v-model="formData.remark"
             show-word-limit
           ></el-input>
         </el-form-item>
-      </el-form>
-    </div>
-    <div class="mt20">
-      <el-button
-        type="primary"
-        size="mini"
-        @click="handleSubmitForm"
-        :loading="insertInventoryOrderLoading"
-      >
-        提交
-      </el-button>
-      <el-button
-        size="mini"
-        @click="handleResetForm"
-      >
-        重置
-      </el-button>
-    </div>
+      </div>
+      <div class="mt20">
+        <el-button
+          type="primary"
+          size="mini"
+          @click="handleSubmitForm"
+          :loading="insertInventoryOrderLoading"
+        >
+          提交
+        </el-button>
+        <el-button
+          size="mini"
+          @click="handleResetForm"
+        >
+          重置
+        </el-button>
+      </div>
+    </el-form>
     <select-product
       :visible.sync="selectProductVisible"
       :selectData.sync="tableData"
+      :orderType="orderType"
     />
   </div>
 </template>
@@ -74,6 +92,8 @@ import BaseTable from '@/components/Table'
 import { insertInventoryOrder } from '@/api'
 import { takeStockSelectProductTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
+import { takeStockTypeEnum } from '@/utils/enum'
+
 export default {
   components: { selectProduct, BaseTable },
   data() {
@@ -81,8 +101,24 @@ export default {
       takeStockSelectProductTableConfig,
       insertInventoryOrderLoading: false,
       selectProductVisible: false,
+      takeStockTypeEnum,
       tableData: [],
-      remark: ''
+      formData: {
+        //  ... 表单字段
+        remark: '',
+        orderType: 0,
+      },
+      rules: {
+        //  ... 表单校验
+        orderType: [
+          { required: true, message: '必填项', trigger: 'blur' },
+        ]
+      }
+    }
+  },
+  computed: {
+    orderType() {
+      return this.formData.orderType
     }
   },
   created() {
@@ -97,7 +133,7 @@ export default {
       this.insertInventoryOrderLoading = true
       insertInventoryOrder({
         stockIdList: this.tableData.map(v => v.id),
-        remark: this.remark
+        ...this.formData
       }).then(res => {
         this.insertInventoryOrderLoading = false
         if (!res) return
@@ -107,7 +143,7 @@ export default {
     },
     /** 重置 */
     handleResetForm() {
-      this.remark = ''
+      this.$refs['form'] && this.$refs['form'].resetFields()
       this.tableData = []
     },
     /** 删除行 */

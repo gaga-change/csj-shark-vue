@@ -7,7 +7,7 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
-      :controlWidth="160"
+      :controlWidth="200"
       :select="true"
       @selectionChange="selectionChange"
     >
@@ -93,7 +93,7 @@ import { planInventoryList, inventoryRemoveOrStop, inventoryRecordExport } from 
 import { executeStatusEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '盘点单号', prop: 'orderCode' },
-  { label: '状态', prop: 'executeStatus', type: 'enum', type: executeStatusEnum },
+  { label: '状态', prop: 'executeStatus', type: 'enum', enum: executeStatusEnum },
   { label: '仓库名称', prop: 'warehouseName' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },

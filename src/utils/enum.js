@@ -439,3 +439,7 @@ export const executeStatus2Enum = [
   { name: '已执行', value: 1 },
   { name: '已终止', value: 2 },
 ]
+export const takeStockTypeEnum = [
+  { name: '定期盘点', value: 0 },
+  { name: '动态盘点', value: 1 },
+]
