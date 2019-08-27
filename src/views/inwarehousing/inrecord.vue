@@ -1,5 +1,5 @@
 <template>
-  <div class="ComponentNameClass">
+  <div class="">
     <base-list
       ref="baseList"
       :tableConfig="tableConfig"
@@ -50,12 +50,17 @@
         </el-tooltip>
       </template>
     </base-list>
+    <inrecord-print-dialog
+      :visible.sync="inrecordPrintDialogVisible"
+      :rows="selectRows"
+    ></inrecord-print-dialog>
   </div>
 </template>
 
 <script>
 import { receiveOrderList, receiveOrderActivate } from '@/api'
 import { busiBillTypeEnum, receiveState } from '@/utils/enum'
+import inrecordPrintDialog from './components/inrecordPrintDialog'
 
 const tableConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
@@ -80,20 +85,21 @@ const searchConfig = [
 ]
 
 export default {
+  components: { inrecordPrintDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       listApi: receiveOrderList,
       selectRows: [],
-      // 可选 附加查询条件
+      inrecordPrintDialogVisible: false,
       appendSearchParams: {},
     }
   },
   methods: {
     /** 打印单据 */
     printOrder() {
-
+      this.inrecordPrintDialogVisible = true
     },
     /** 刷新列表 */
     getTableData() {

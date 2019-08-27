@@ -1,5 +1,5 @@
 <template>
-  <div class="ComponentNameClass">
+  <div class="">
     <base-list
       ref="baseList"
       :tableConfig="tableConfig"
