@@ -18,6 +18,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'inrecordDetail',
+        path: 'inrecordDetail',
+        meta: { title: '收货单详情', noCache: true },
+        component: _import('inwarehousing/inrecordDetail'),
+        hidden: false,
+      },
+      {
         name: 'arrival',
         path: 'arrival',
         meta: { title: '到货单', noCache: false },

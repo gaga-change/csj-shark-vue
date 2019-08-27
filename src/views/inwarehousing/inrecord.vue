@@ -13,20 +13,24 @@
       :selectable="() => true"
     >
       <template slot-scope="scope">
-        <router-link
-          :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
-          :style="{color:'#3399ea'}"
-        >详情</router-link>
-        <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="handleActive(scope.row)"
-        >激活</el-link>
-        <el-divider direction="vertical"></el-divider>
-        <el-link
-          type="primary"
-          @click="handleConfirm(scope.row)"
-        >收货确认</el-link>
+          @click="$router.push({path:`/inwarehousing/inrecordDetail`,query:{id: scope.row.id}})"
+        >详情</el-link>
+        <template v-if="scope.row.execStatus === 2">
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="handleActive(scope.row)"
+          >激活</el-link>
+        </template>
+        <template v-if="scope.row.execStatus === 1 || scope.row.execStatus === 3">
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="$router.push({path:`/inwarehousing/inrecordDetail`,query:{id: scope.row.id}})"
+          >收货确认</el-link>
+        </template>
       </template>
       <template slot="btns">
         <el-tooltip
@@ -50,8 +54,9 @@
 </template>
 
 <script>
-import { receiveOrderList } from '@/api'
+import { receiveOrderList, receiveOrderActivate } from '@/api'
 import { busiBillTypeEnum, receiveState } from '@/utils/enum'
+
 const tableConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
@@ -73,6 +78,7 @@ const searchConfig = [
   { label: '外部订单号', prop: 'busiBillNo', type: 'input' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
 ]
+
 export default {
   data() {
     return {
@@ -85,7 +91,6 @@ export default {
     }
   },
   methods: {
-
     /** 打印单据 */
     printOrder() {
 
@@ -98,16 +103,12 @@ export default {
     selectionChange(selectRows) {
       this.selectRows = [...selectRows]
     },
-    /** 收货确认 */
-    handleConfirm(row) {
-
-    },
     /** 激活 */
     handleActive(row) {
-      // this.$apiConfirm('是否确定删除？', () => delApi(row.id)).then(() => {
-      //   this.$message.success('操作成功！')
-      //   this.getTableData()
-      // }).catch(() => { })
+      this.$apiConfirm('是否确定激活？', () => receiveOrderActivate({ id: row.id })).then(() => {
+        this.$message.success('操作成功！')
+        this.getTableData()
+      }).catch(() => { })
     },
     /** 可选 返回列表添加字段 */
     parseData(res) {

@@ -311,7 +311,11 @@ export const receiveState = [
   {
     name: '全部收货',
     value: 2
-  }
+  },
+  {
+    name: '已激活',
+    value: 3
+  },
 ]
 
 export const execStatuslist = [

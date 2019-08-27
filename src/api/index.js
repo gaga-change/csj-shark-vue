@@ -174,3 +174,7 @@ export const packageSave = params => http.post(`/webApi/basic/package/save`, par
 export const skuUpdate = params => http.post(`/webApi/basic/sku/update`, params)
 /** 收货单列表 */
 export const receiveOrderList = params => http.get(`/webApi/receive/order/list`, { params })
+/** 收货单 激活 */
+export const receiveOrderActivate = params => http.post(`/webApi/receive/order/activate`, params)
+/** 作废或删除收货明细 */
+export const receiveOrderDeleteOrInvalide = params => http.post(`/webApi/receive/order/deleteOrInvalid`, params)
