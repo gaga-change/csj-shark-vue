@@ -37,7 +37,7 @@ Vue.component('BaseList', BaseList);
 Vue.component('DoubleList', DoubleList);
 Vue.component('PrintTableDialog', PrintTableDialog);
 Vue.component('DetailItem', DetailItem);
-Vue.prototype.$apiConfirm = (msg, api) => MessageBox.confirm(msg || '此操作将永久删除改行, 是否继续?', '提示', {
+Vue.prototype.$apiConfirm = (msg, api) => MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {
   confirmButtonText: '确定',
   cancelButtonText: '取消',
   type: 'warning',

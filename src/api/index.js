@@ -180,4 +180,8 @@ export const receiveOrderList = params => http.get(`/webApi/receive/order/list`,
 export const receiveOrderActivate = params => http.post(`/webApi/receive/order/activate`, params)
 /** 作废或删除收货明细 */
 export const receiveOrderDeleteOrInvalide = params => http.post(`/webApi/receive/order/deleteOrInvalid`, params)
+/** 收货单详情 */
+export const receiveOrderQueryDetails = params => http.get(`/webApi/receive/order/queryDetails`, { params })
+/** 收货登记 */
+export const receiveRegistration = params => http.post(`/webApi/receive/order/receiveRegistration`, params)
 
