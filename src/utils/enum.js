@@ -158,18 +158,7 @@ export const WarehouseAreaNatureEnum = [
 ]
 
 //是否
-export const YesOrNoEnum = [
-  {
-    name: '否',
-    value: 0
-  },
-  {
-    name: '是',
-    value: 1
-  },
-]
-
-export const warehouseSpaceStatus = [
+export const yesOrNoEnum = [
   {
     name: '否',
     value: 0
@@ -243,17 +232,6 @@ export const outLockEnum = [
   },
   {
     name: '锁定',
-    value: 1
-  },
-]
-
-export const isVirtualenum = [
-  {
-    name: '否',
-    value: 0
-  },
-  {
-    name: '是',
     value: 1
   },
 ]

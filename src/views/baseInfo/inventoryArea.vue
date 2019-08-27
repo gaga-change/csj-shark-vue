@@ -171,20 +171,20 @@ import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { SimpleMsg } from '@/utils/luoFun'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea } from '@/api'
-import { AtoZ, YesOrNoEnum, WarehouseAreaNatureEnum, inLockEnum, outLockEnum, isVirtualenum } from '@/utils/enum'
+import { AtoZ, WarehouseAreaNatureEnum, inLockEnum, outLockEnum, yesOrNoEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode' },
   { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
   { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: inLockEnum },
   { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: outLockEnum },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: isVirtualenum },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
   { label: '描述', prop: 'warehouseAreaDesc' },
 ]
 const searchConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode', type: 'select', enum: AtoZ },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'select', enum: YesOrNoEnum },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'select', enum: yesOrNoEnum },
   { label: '库区性质', prop: 'warehouseAreaNature', type: 'select', enum: WarehouseAreaNatureEnum },
 ]
 
@@ -197,7 +197,7 @@ export default {
       appendSearchParams: { warehouseCode: undefined },
       dialogVisible: false,
       dialogTitle: '',
-      YesOrNoEnum,
+      yesOrNoEnum,
       WarehouseAreaNatureEnum,
       formParams: {
         isVirtual: 0

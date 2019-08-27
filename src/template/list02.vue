@@ -30,13 +30,13 @@
 
 <script>
 import { checkOrderList } from '@/api'
-import { AtoZ, isVirtualenum } from '@/utils/enum'
+import { AtoZ, yesOrNoEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '质检单号 ', prop: 'orderCode' },
   { label: '收货单号 ', prop: 'receiveOrderCode' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: isVirtualenum },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
 ]
 const searchConfig = [
   { label: '质检单号', prop: 'orderCode', type: 'input' },
