@@ -14,6 +14,7 @@ import BaseList from '@/components/BaseList'
 import DoubleList from '@/components/DoubleList'
 import PrintTableDialog from '@/components/PrintTableDialog'
 import SearchForm from '@/components/SearchForm/index'
+import DetailItem from '@/components/DetailItem'
 
 import 'normalize.css/normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -35,6 +36,7 @@ Vue.component('SearchForm2', SearchForm2);
 Vue.component('BaseList', BaseList);
 Vue.component('DoubleList', DoubleList);
 Vue.component('PrintTableDialog', PrintTableDialog);
+Vue.component('DetailItem', DetailItem);
 Vue.prototype.$apiConfirm = (msg, api) => MessageBox.confirm(msg || '此操作将永久删除改行, 是否继续?', '提示', {
   confirmButtonText: '确定',
   cancelButtonText: '取消',

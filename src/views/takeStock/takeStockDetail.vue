@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import DetailItem from '@/components/DetailItem'
 import { planInventoryQueryByOrderId } from '@/api'
 import { takeStockDetailProductTableConfig } from './components/config'
 import { takeStockTypeEnum } from '@/utils/enum'
@@ -45,7 +44,6 @@ const takeStockDetailConfig = [
   { label: '备注', prop: 'remarkInfo' },
 ]
 export default {
-  components: { DetailItem },
   data() {
     return {
       planInventoryQueryByOrderIdLoading: false,

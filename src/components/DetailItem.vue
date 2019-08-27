@@ -2,10 +2,14 @@
   <div class="DetailItemCom">
     <div
       class="item"
+      :style="{width: labelWidth ? (labelWidth + 120) + 'px' : undefined}"
       v-for="(item, index) in config"
       :key="index"
     >
-      <span class="label-text">{{item.label}} ：</span>
+      <span
+        class="label-text"
+        :style="{width: labelWidth ? labelWidth + 'px' : undefined}"
+      >{{item.label}} ：</span>
       <template v-if="item.type === 'time'">
         <span class="value-content">{{detail[item.prop] | timeFormat}}</span>
       </template>

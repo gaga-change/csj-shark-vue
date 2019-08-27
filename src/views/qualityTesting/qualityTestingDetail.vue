@@ -49,11 +49,9 @@
 </template>
 
 <script>
-import DetailItem from '@/components/DetailItem'
 import { getCheckOrderDetail } from '@/api'
 import { quailtyTestingDetailConfig, qualityTestingDetailTableConfig } from './components/config'
 export default {
-  components: { DetailItem },
   data() {
     return {
       getCheckOrderDetailLoading: false,

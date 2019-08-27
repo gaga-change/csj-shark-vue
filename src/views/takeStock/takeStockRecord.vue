@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import DetailItem from '@/components/DetailItem'
 import { planInventoryQueryByOrderId, inventoryInbentoryRecord } from '@/api'
 import { takeStockRecordProductTableConfig } from './components/config'
 import { mapGetters } from 'vuex'
@@ -79,7 +78,6 @@ const takeStockRecordConfig = [
 ]
 
 export default {
-  components: { DetailItem },
   data() {
     return {
       planInventoryQueryByOrderIdLoading: true,
