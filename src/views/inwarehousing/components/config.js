@@ -146,20 +146,6 @@ function Storehouse() {
   }
 }
 
-export const recordListConfig = [
-  { label: '计划单号', prop: 'planCode', width: 140 },
-  { label: '收货单', prop: 'receiveOrderCode', width: 130 },
-  { label: '已生成入库单', type: 'Boolean', prop: 'isCreateOrder' },
-  { label: '库位', prop: 'warehouseSpaceCode' },
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '上架时间', type: 'time', prop: 'gmtCreate', width: 120, format: 'YYYY-MM-DD  HH:mm' },
-  { label: '上架数量', prop: 'jobQty', editable: true },
-  { label: '操作人', prop: 'createrName' },
-]
-
 export const inPushOrderConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '入库单号', prop: 'orderCode' },

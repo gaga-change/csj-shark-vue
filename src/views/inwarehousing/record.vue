@@ -1,178 +1,87 @@
 <template>
-  <div class="record">
-    <el-card
-      class="simpleCard"
-      shadow="never"
-      body-style="padding:12px"
+  <div class="">
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="false"
+      :select="true"
+      @selectionChange="selectionChange"
+      :selectable="selectable"
     >
-      <new-search
-        @submit="submit"
-        :searchForm="searchForm"
-        ref="arrivalDom"
-      >
-      </new-search>
-      <el-col
-        :span="24"
-        style="margin-bottom:12px;"
-      >
+      <template slot="btns">
         <el-button
+          :disabled="!selectRows.length"
+          @click="orderAdd"
           type="primary"
-          size="mini"
-          @click="select"
-        >查询</el-button>
-        <el-button
-          type="primary"
-          size="mini"
-          @click="resetForm"
-        >重置</el-button>
-      </el-col>
-    </el-card>
-
-    <div style="margin-bottom:12px">
-      <el-button
-        :disabled="
-          !Array.isArray(inOriderSelectData) || inOriderSelectData.length <= 0
-        "
-        @click="orderAdd"
-        :loading="inOrderAddLoading"
-        type="primary"
-        size="mini"
-      >
-        生成入库单
-      </el-button>
-    </div>
-
-    <edit-table
-      :loading="false"
-      :config="recordListConfig"
-      :useEdit="true"
-      :defaultEdit="false"
-      :checkSelectable="checkSelectable"
-      :childCanSelect="true"
-      editText="修改上架数量"
-      :pageSize="pageSize"
-      :currentPage="currentPage"
-      @currentChange="currentChange"
-      @sizeChange="sizeChange"
-      :total="total"
-      :pageSizes="[10, 20, 50]"
-      @editDataSelect="editDataSelect"
-      @dataChange="dataChange"
-      :tableData="recordListTableData"
-    />
+        >
+          生成入库单
+        </el-button>
+      </template>
+    </base-list>
   </div>
 </template>
 
 <script>
-import newSearch from './components/newSearch'
-import editTable from '@/components/Table/editTable'
-import webPaginationTable from '@/components/Table/webPaginationTable'
-import _ from 'lodash'
-import moment from 'moment'
-import { recordListConfig } from './components/config'
 import { jobList, inOrderAdd } from '@/api'
+import { yesOrNoEnum } from '@/utils/enum'
+
+const tableConfig = [
+  { label: '入库计划单号', prop: 'planCode', width: 140 },
+  { label: '外部订单号', prop: 'busiBillNo', width: 90 },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuFormat' },
+  { label: '单位', prop: 'skuUnitCode' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '容器', prop: 'trayCode' },
+  { label: '上架数量', prop: 'jobQty' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '已生成入库单', prop: 'isCreateOrder', type: 'Boolean', width: 100 },
+  { label: '上架时间', prop: 'gmtCreate', type: 'time', width: 120, format: 'YYYY-MM-DD  HH:mm' },
+  { label: '操作人', prop: 'createrName' },
+]
+const searchConfig = [
+  { label: '容器', prop: 'trayCode', type: 'input' },
+  { label: '库位', prop: 'warehouseSpaceCode', type: 'input' },
+  { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: yesOrNoEnum, default: 0 },
+]
+
 export default {
-  components: { newSearch, webPaginationTable, editTable },
   data() {
     return {
-      inOrderAddLoading: false,
-      searchForm: {
-        receiveOrderCode: '',
-        planCode: '',
-        skuName: '',
-        isCreateOrder: 0
-      },
-      recordListConfig,
-      recordListTableData: [],
-      inOriderSelectData: [],
-      pageIndex: 1,
-      pageSize: 10,
-      total: 0,
-      currentPage: 1
+      tableConfig,
+      searchConfig,
+      listApi: jobList,
+      selectRows: [],
     }
   },
-
-  mounted() {
-    this.getCurrentTableData()
-  },
-
   methods: {
-    moment,
-    checkSelectable(row) {
+    /** 列表可选条件 */
+    selectable(row) {
       return !row.isCreateOrder
     },
-    dataChange(index, type, changeData) {
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
     },
-
-    editDataSelect(val) {
-      this.inOriderSelectData = val.arr
+    /** 主表多选 */
+    selectionChange(selectRows) {
+      this.selectRows = [...selectRows]
     },
-
+    /** 生成入库单 */
     orderAdd() {
       let inWarehouseJobList = []
       let receiveOrderCodeList = []
-      _.cloneDeep(this.inOriderSelectData).forEach(item => {
+      this.selectRows.forEach(item => {
         inWarehouseJobList.push(item.id)
         receiveOrderCodeList.push(item.receiveOrderCode)
       })
-      this.$confirm(
-        `确定要为 ${receiveOrderCodeList.join(
-          ' , '
-        )} 生成入库单吗?`,
-        '生成入库单',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }
-      ).then(() => {
-        this.inOrderAddLoading = true
-        inOrderAdd({
-          inWarehouseJobList
-        }).then(res => {
-          this.inOrderAddLoading = false
-          if (!res) return
-          this.getCurrentTableData()
-          this.inOriderSelectData = []
-          this.$message({ type: 'success', message: '操作成功！' })
-        })
+      this.$apiConfirm(`确定要为 ${receiveOrderCodeList.join(' , ')} 生成入库单吗?`, () => inOrderAdd(inWarehouseJobList)).then(() => {
+        this.$message.success('操作成功！')
+        this.getTableData()
       }).catch(() => { })
-    },
-
-    submit(value) {
-      this.searchForm = value
-      this.getCurrentTableData()
-    },
-    currentChange(val) {
-      this.pageIndex = val
-      this.getCurrentTableData()
-    },
-    sizeChange(val) {
-      this.pageSize = val
-      this.getCurrentTableData()
-    },
-    select() {
-      this.$refs['arrivalDom'].submit()
-    },
-
-    resetForm() {
-      this.$refs['arrivalDom'].resetForm()
-    },
-
-    getCurrentTableData() {
-      let json = {}
-      for (let i in this.searchForm) {
-        if (this.searchForm[i] !== '') {
-          json[i] = this.searchForm[i]
-        }
-      }
-      jobList({ pageNum: this.pageIndex, pageSize: this.pageSize, ...json })
-        .then(res => {
-          if (res) {
-            this.recordListTableData = (res.data && res.data.list) || []
-            this.total = res.data.total
-            this.currentPage = res.data.pageNum
-          }
-        })
     }
   }
 }
