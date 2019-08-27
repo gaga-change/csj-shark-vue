@@ -12,10 +12,10 @@
       :selectable="() => true"
     >
       <template slot-scope="scope">
-        <router-link
-          :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
-          :style="{color:'#3399ea'}"
-        >查看</router-link>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+        >详情</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link type="primary">修改</el-link>
         <el-divider direction="vertical"></el-divider>

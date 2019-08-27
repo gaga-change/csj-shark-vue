@@ -9,10 +9,10 @@
       :controlWidth="160"
     >
       <template slot-scope="scope">
-        <router-link
-          :to="{path:`/qualityTesting/detail`,query:{id: scope.row.id}}"
-          :style="{color:'#3399ea'}"
-        >查看</router-link>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+        >详情</el-link>
         <el-divider direction="vertical"></el-divider>
       </template>
       <template slot="btns">
