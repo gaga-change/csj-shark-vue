@@ -121,10 +121,16 @@ export default {
     },
   },
   data() {
+    let initSearchParams = {}
+    this.searchConfig.forEach(v => {
+      if (v.default !== undefined && v.default !== null) {
+        initSearchParams[v.prop] = v.default
+      }
+    })
     return {
       development: false,
       tableData: [],
-      searchParams: { ...this.appendSearchParams },
+      searchParams: { ...this.appendSearchParams, ...initSearchParams, },
       selectRows: [],
       rowNow: {},
     }

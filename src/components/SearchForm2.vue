@@ -17,6 +17,7 @@
           :key="index"
           :label="item.label"
           :prop="item.prop"
+          :label-width="item.labelWidth ? item.labelWidth + 'px' : undefined"
         >
 
           <template v-if="item.type === 'input'">
@@ -29,7 +30,6 @@
             ></el-input>
           </template>
           <template v-else-if="item.type === 'select'">
-
             <el-select
               v-model="searchForms[item.prop]"
               clearable
@@ -44,6 +44,15 @@
               >
               </el-option>
             </el-select>
+          </template>
+          <template v-else-if="item.type === 'radio'">
+            <el-radio-group v-model="searchForms[item.prop]">
+              <el-radio
+                :label="v.value"
+                v-for="v in item.radio"
+                :key="v.value"
+              >{{v.name}}</el-radio>
+            </el-radio-group>
           </template>
           <template v-else-if="item.type === 'timeArea'">
             <el-date-picker
@@ -226,7 +235,12 @@ export default {
     },
     bindKeys() {
       this.config.forEach(v => {
-        this.$set(this.searchForms, v.prop, undefined)
+        if (v.default !== undefined && v.default !== null) {
+          this.$set(this.searchForms, v.prop, v.default)
+        } else {
+          this.$set(this.searchForms, v.prop, undefined)
+
+        }
       })
     },
     hanldeSubmit() {
@@ -250,8 +264,10 @@ export default {
     hanldeResetForm() {
       this.resetLoading = true
       this.$refs['searchForm'].resetFields()
-      this.$emit('search', {}, () => {
-        this.resetLoading = false
+      this.$nextTick(() => {
+        this.$emit('search', { ...this.searchForms }, () => {
+          this.resetLoading = false
+        })
       })
     }
   }
