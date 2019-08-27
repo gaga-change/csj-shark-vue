@@ -1,6 +1,8 @@
 import http from './http'
 import download from './download'
 
+export * from './config'
+
 /** 导出库位库存 */
 export const exportLedger = (params, fileName) => download(`/webApi/sku/stock/exportLedger`, params, fileName)
 /** 盘点管理导出 */
@@ -178,3 +180,4 @@ export const receiveOrderList = params => http.get(`/webApi/receive/order/list`,
 export const receiveOrderActivate = params => http.post(`/webApi/receive/order/activate`, params)
 /** 作废或删除收货明细 */
 export const receiveOrderDeleteOrInvalide = params => http.post(`/webApi/receive/order/deleteOrInvalid`, params)
+

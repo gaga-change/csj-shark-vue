@@ -24,6 +24,12 @@ proxyTableArr.forEach(item => {
   }
 })
 
+proxyTable['/config'] = {
+  target: 'http://localhost:7002',
+  pathRewrite: { '^/config': '/' },
+  changeOrigin: true
+}
+
 module.exports = {
   dev: {
     // Paths
