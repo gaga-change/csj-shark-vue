@@ -283,7 +283,7 @@ export const receiveState = [
     value: 0
   },
   {
-    name: '部分收货',
+    name: '收货中',
     value: 1
   },
   {
@@ -308,7 +308,11 @@ export const execStatuslist = [
   {
     name: '全部上架',
     value: 2
-  }
+  },
+  {
+    name: '作废',
+    value: 9
+  },
 ]
 
 export const badStatuslist = [
