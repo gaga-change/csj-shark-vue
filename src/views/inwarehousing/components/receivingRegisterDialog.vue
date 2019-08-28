@@ -138,7 +138,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-          receiveRegistration({ ...this.formData, detailId: this.$route.query.id }).then(res => {
+          receiveRegistration({ ...this.formData, detailId: this.rowData.id }).then(res => {
             this.loading = false
             if (!res) return
             this.$refs['form'] && this.$refs['form'].resetFields()
