@@ -296,6 +296,22 @@ export const receiveState = [
   },
 ]
 
+export const receiveState2 = [
+  {
+    name: '未收货',
+    value: 0
+  },
+  {
+    name: '部分收货',
+    value: 1
+  },
+  {
+    name: '全部收货',
+    value: 2
+  }
+]
+
+
 export const execStatuslist = [
   {
     name: '未上架',

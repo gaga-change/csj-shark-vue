@@ -186,4 +186,5 @@ export const receiveOrderQueryDetails = params => http.get(`/webApi/receive/orde
 export const receiveRegistration = params => http.post(`/webApi/receive/order/receiveRegistration`, params)
 /** 获取动态盘点列表 */
 export const queryDynamicSkuStockList = params => http.get(`/webApi/sku/stock/queryDynamicSkuStockList`, { params })
-
+/** 创建收货单 */
+export const createReceiveOrder = params => http.post(`/webApi/receive/order/createReceiveOrder`, params)

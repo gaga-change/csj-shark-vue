@@ -11,6 +11,13 @@ export default [
     hidden: false,
     children: [
       {
+        name: 'inPlanList',
+        path: 'inPlanList',
+        meta: { title: '入库计划', noCache: true },
+        component: _import('inwarehousing/inPlanList'),
+        hidden: false,
+      },
+      {
         name: 'inrecord',
         path: 'inrecord',
         meta: { title: '收货单', noCache: true },
