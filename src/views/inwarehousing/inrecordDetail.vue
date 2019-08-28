@@ -41,7 +41,31 @@
       <base-table
         :config="detailItemDosConfig"
         :data="detail.detailItemDos"
+        :showControl="receivingRegisterShow"
+        :controlWidth="160"
       >
+        <template slot-scope="scope">
+          <!-- 收货中  未上架 -->
+
+          <!-- <template v-if="detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0"> -->
+          <el-link
+            type="primary"
+            @click="handleDelete(scope.row)"
+          >删除</el-link>
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="handleModify(scope.row)"
+          >编辑</el-link>
+          <!-- </template> -->
+
+          <!-- 已激活 未上架 -->
+          <el-link
+            type="primary"
+            @click="handleDiscard(scope.row)"
+            v-if="detail.receiveOrderDO.execStatus===3 && scope.row.isPut === 0"
+          >作废</el-link>
+        </template>
       </base-table>
     </el-card>
     <receiving-register-dialog
@@ -52,7 +76,7 @@
   </div>
 </template>
 <script>
-import { receiveOrderQueryDetails } from '@/api'
+import { receiveOrderQueryDetails, receiveOrderDeleteOrInvalid } from '@/api'
 import { busiBillTypeEnum, receiveState, execStatuslist } from '@/utils/enum'
 import receivingRegisterDialog from './components/receivingRegisterDialog'
 
@@ -128,7 +152,26 @@ export default {
     handleReceivingRegister(row) {
       this.receivingRegisterDialogVisible = true
       this.nowRow = row
-    }
+    },
+    /** 删除 按钮点击 */
+    handleDelete(row) {
+      this.$apiConfirm('是否确定删除？', () => receiveOrderDeleteOrInvalid({ status: 0, itemId: row.id })).then(() => {
+        this.$message.success('操作成功！')
+        this.initData()
+      }).catch(() => { })
+    },
+    /** 编辑 按钮点击 */
+    handleModify(row) {
+
+    },
+    /** 废弃 按钮点击 */
+    handleDiscard(row) {
+      this.$apiConfirm('是否确定作废？', () => receiveOrderDeleteOrInvalid({ status: 1, itemId: row.id })).then(() => {
+        this.$message.success('操作成功！')
+        this.initData()
+      }).catch(() => { })
+    },
+
   },
 }
 </script>

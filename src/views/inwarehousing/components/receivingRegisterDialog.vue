@@ -72,7 +72,7 @@
           size="mini"
           :loading="loading"
           @click="confirm()"
-        >确 定</el-button>
+        >收货确认</el-button>
       </span>
     </el-dialog>
   </div>

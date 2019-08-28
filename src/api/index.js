@@ -184,3 +184,5 @@ export const createReceiveOrder = params => http.post(`/webApi/receive/order/cre
 export const selectSumReceiveDetail = params => http.post(`/webApi/receive/order/selectSumReceiveDetail`, params)
 /** 收货明细查询 */
 export const selectReceiveDetailItem = params => http.post(`/webApi/receive/order/selectReceiveDetailItem`, params)
+/** 作废或删除收货明细 */
+export const receiveOrderDeleteOrInvalid = params => http.post(`/webApi/receive/order/deleteOrInvalid`, params)
