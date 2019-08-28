@@ -7,8 +7,7 @@ import TabLabel from '@/components/TabLabel/index'
 import BarCode from '@/components/BarCode/index'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 
-import BaseTable from '@/components/Table'
-import BaseTable2 from '@/components/BaseTable2'
+import BaseTable from '@/components/BaseTable'
 import SearchForm2 from '@/components/SearchForm2'
 import BaseList from '@/components/BaseList'
 import DoubleList from '@/components/DoubleList'
@@ -30,7 +29,6 @@ import '@/permission'
 import { EXTENDS } from './assets/extends'
 const { MessageBox } = ElementUI
 Vue.component('BaseTable', BaseTable);
-Vue.component('BaseTable2', BaseTable2);
 Vue.component('SearchForm', SearchForm);
 Vue.component('SearchForm2', SearchForm2);
 Vue.component('BaseList', BaseList);

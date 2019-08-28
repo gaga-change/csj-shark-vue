@@ -23,7 +23,7 @@
           @click="handleCreateOutOrder"
         >复核(生成出库单)</el-button>
       </el-col>
-      <base-table2
+      <base-table
         :loading="loading"
         :config="tableConfig"
         :data="tableData"

@@ -21,7 +21,7 @@
         ref='baseTable'
         :api="listApi"
         :config="tableConfig"
-        :tableData.sync="tableData"
+        :data.sync="tableData"
         :searchParams="searchParams"
         :showControl="true"
         :controlWidth="160"

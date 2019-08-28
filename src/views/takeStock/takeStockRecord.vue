@@ -29,7 +29,7 @@
       </div>
       <base-table
         :config="takeStockRecordProductTableConfig"
-        :tableData="prodList"
+        :data="prodList"
         @inputNumberChange="inputNumberChange"
       >
       </base-table>

@@ -17,7 +17,7 @@
       <div slot="header">
         商品明细
       </div>
-      <base-table2
+      <base-table
         :config="detailDOsConfig"
         :data="detail.detailDOs"
         :showControl="receivingRegisterShow"
@@ -29,7 +29,7 @@
             @click="handleReceivingRegister(scope.row)"
           >收货登记</el-link>
         </template>
-      </base-table2>
+      </base-table>
     </el-card>
     <el-card
       shadow="never"
@@ -38,11 +38,11 @@
       <div slot="header">
         收货明细
       </div>
-      <base-table2
+      <base-table
         :config="detailItemDosConfig"
         :data="detail.detailItemDos"
       >
-      </base-table2>
+      </base-table>
     </el-card>
     <receiving-register-dialog
       :visible.sync="receivingRegisterDialogVisible"

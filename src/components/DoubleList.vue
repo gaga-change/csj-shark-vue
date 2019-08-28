@@ -31,7 +31,7 @@
         slot="expand"
         slot-scope="scope"
       >
-        <base-table2
+        <base-table
           :ref="`childTable-${scope.row._key}`"
           :config="childTableConfig"
           :data="scope.row._childData"
@@ -40,7 +40,7 @@
           :showIndex="childShowIndex"
           @selectionChange="rows => childSelectionChange(rows, scope.row, scope.row._key)"
         >
-        </base-table2>
+        </base-table>
       </template>
     </base-list>
   </div>

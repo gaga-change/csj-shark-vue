@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    <!-- 600px【小型，单列】 70% 【中型，双列】-->
     <el-dialog
       title="打印拣货单"
       :visible="visible"
@@ -24,21 +23,12 @@
             <span style="padding-right:12px">打印时间 :</span>
             <span>{{Date.now() | date}}</span>
           </div>
-          <web-pagination-table
+          <base-table
             :config="printConfig"
-            :allTableData="pickingtaskdetailTableData"
+            :data="pickingtaskdetailTableData"
           />
         </div>
       </div>
-      <!-- <el-alert
-        class="mt15"
-        title="温馨提示："
-        type="info"
-        :closable="false"
-      >
-        <p>举例，商品最小单位默认为1,4个最小单位为一个内包装【一个内包装数量为4】，
-          2个内包装为1箱【一箱数量8】，10箱为一个容器【一容器数量为80】</p>
-      </el-alert> -->
       <span
         slot="footer"
         class="dialog-footer"
@@ -62,7 +52,6 @@
 <script>
 import { MakePrint } from '@/utils'
 import { mapGetters } from 'vuex'
-import webPaginationTable from '@/components/Table/webPaginationTable'
 import { jobStatusList } from '@/utils/enum'
 import { pickOrderDetail } from '@/api'
 
@@ -77,7 +66,6 @@ const printConfig = [
 ]
 
 export default {
-  components: { webPaginationTable },
   props: {
     visible: {
       type: Boolean,

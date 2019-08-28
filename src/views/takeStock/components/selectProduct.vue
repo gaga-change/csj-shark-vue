@@ -105,7 +105,7 @@
         </el-card>
       </div>
       <div>
-        <base-table
+        <select-table
           ref='baseTable'
           :config="takeStockSelectProductTableConfig"
           :parseData="parseData"
@@ -143,13 +143,13 @@
 </template>
 
 <script>
-import BaseTable from '@/components/Table'
 import { mapGetters } from 'vuex'
 import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
 import { takeStockSelectProductTableConfig } from './config'
 import { takeStockTypeEnum } from '@/utils/enum'
+import SelectTable from './selectTable'
 export default {
-  components: { BaseTable },
+  components: { SelectTable },
   props: {
     visible: {
       type: Boolean,

@@ -15,7 +15,7 @@
       <slot name="btns"></slot>
     </div>
     <div class="mt15">
-      <base-table2
+      <base-table
         ref='baseTable'
         :api="api"
         :parseData="parseData"
@@ -48,7 +48,7 @@
             v-bind:index="scope.index"
           ></slot>
         </template>
-      </base-table2>
+      </base-table>
     </div>
   </div>
 </template>

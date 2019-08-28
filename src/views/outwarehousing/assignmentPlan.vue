@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <double-list
       ref="doubleList"
       :tableConfig="tableConfig"

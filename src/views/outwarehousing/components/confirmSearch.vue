@@ -20,12 +20,12 @@
         ></el-input>
       </el-form-item>
     </el-form>
-    <base-table2
+    <base-table
       :config="tableConfig"
       :data="selectCode"
       :highlightCurrentRow="true"
       @currentChange="currentChange"
-    ></base-table2>
+    ></base-table>
   </div>
 </template>
 

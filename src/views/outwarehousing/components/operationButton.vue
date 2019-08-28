@@ -124,12 +124,8 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
-import editTable from '@/components/Table/editTable'
 import { pickOrderAdd, getInfoOnPageInventory } from '@/api'
-import { PositiveIntegerReg, MoneyPositiveReg } from '@/utils/validator'
 import { MakePrint } from '@/utils'
-import { printPlanDataFn } from './dataHandler'
 
 const planChildTableEditAllocationConfig = [ // 计划单操作列表 之 波次分配
   { label: '计划单号', prop: 'planCode', minWidth: 150 },
@@ -142,10 +138,6 @@ const planChildTableEditAllocationConfig = [ // 计划单操作列表 之 波次
 ]
 
 export default {
-  name: 'operationButton',
-  components: {
-    editTable
-  },
   data() {
     return {
       dialogVisible: false,

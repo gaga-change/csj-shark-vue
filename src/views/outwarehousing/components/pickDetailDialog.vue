@@ -8,7 +8,7 @@
       @close="close"
     >
       <div v-loading="pickOrderDetailLoading">
-        <base-table2
+        <base-table
           :config="tableConfig"
           :data="tableData"
           :showControl="true"
@@ -30,7 +30,7 @@
               ></el-input-number>
             </div>
           </template>
-        </base-table2>
+        </base-table>
       </div>
       <!-- <el-alert
         class="mt15"

@@ -19,7 +19,6 @@
 </template>
 <script>
 import moment from 'moment'
-import { printPlanDataFn } from './dataHandler'
 
 const printTopConfig = [
   { label: '客户编码', prop: 'customerCode' },

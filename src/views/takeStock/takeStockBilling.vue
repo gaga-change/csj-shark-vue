@@ -41,7 +41,7 @@
         </el-button>
       </div>
       <div class="mt20">
-        <base-table2
+        <base-table
           :config="takeStockSelectProductTableConfig"
           :data="tableData"
           :showControl="orderType === 0"
@@ -54,7 +54,7 @@
               删除
             </el-link>
           </template>
-        </base-table2>
+        </base-table>
       </div>
       <div class="mt20">
         <el-form-item
@@ -97,7 +97,6 @@
 </template>
 
 <script>
-import BaseTable from '@/components/Table'
 import moment from 'moment'
 import { insertInventoryOrder, queryDynamicSkuStockList } from '@/api'
 import { takeStockSelectProductTableConfig } from './components/config'
@@ -105,7 +104,7 @@ import selectProduct from './components/selectProduct'
 import { takeStockTypeEnum } from '@/utils/enum'
 
 export default {
-  components: { selectProduct, BaseTable },
+  components: { selectProduct },
   data() {
     return {
       takeStockSelectProductTableConfig,

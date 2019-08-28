@@ -13,7 +13,7 @@
     <div class="mt20">
       <base-table
         :config="qualityTestingCreateTableConfig"
-        :tableData="tableData"
+        :data="tableData"
         :showControl="true"
       >
         <template
@@ -92,13 +92,12 @@
 </template>
 
 <script>
-import BaseTable from '@/components/Table'
 import { checkOrderAddCheckOrder, uploadReportFile } from '@/api'
 import { qualityTestingCreateTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
 import { mapGetters } from 'vuex'
 export default {
-  components: { selectProduct, BaseTable },
+  components: { selectProduct },
   data() {
     return {
       end: false,

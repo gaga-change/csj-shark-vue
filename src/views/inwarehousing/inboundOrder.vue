@@ -29,11 +29,11 @@
           <span>供应商 : {{activeOrder.providerName}}</span>
           <span>收货时间 : {{ activeOrder.gmtCreate | date('YYYY-MM-DD') }}</span>
         </div>
-        <base-table2
+        <base-table
           :config="detailTableConfig"
           :data="inPushOrderDetailTable"
         >
-        </base-table2>
+        </base-table>
       </div>
     </el-dialog>
   </div>

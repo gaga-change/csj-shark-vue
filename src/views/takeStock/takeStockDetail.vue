@@ -21,7 +21,7 @@
       </div>
       <base-table
         :config="takeStockDetailProductTableConfig"
-        :tableData="prodList"
+        :data="prodList"
       >
       </base-table>
     </el-card>

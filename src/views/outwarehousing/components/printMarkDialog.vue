@@ -9,7 +9,7 @@
       @close="close"
     >
       <div>
-        <base-table2
+        <base-table
           :config="tableConfig"
           :data="tableData"
           :showControl="true"
@@ -26,7 +26,7 @@
               controls-position="right"
             ></el-input-number>
           </template>
-        </base-table2>
+        </base-table>
       </div>
       <div style="width: 0; height: 0; overflow: hidden;">
         <div ref="print">

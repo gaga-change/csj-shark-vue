@@ -153,7 +153,7 @@
       :before-close="handleClose"
     >
 
-      <base-table2
+      <base-table
         :config="stateTransitionTableConfig"
         :showIndex="true"
         :data="selectRows"
