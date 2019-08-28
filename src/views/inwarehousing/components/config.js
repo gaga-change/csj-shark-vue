@@ -135,34 +135,3 @@ function formatWareHousing() {
     return str.slice(0, -1)
   }
 }
-
-function Storehouse() {
-  return (row, column, cellValue, index) => {
-    let str = '';
-    row['putSpaceInfoVOList'].forEach(item => {
-      str += item.warehouseSpaceCode + ' , '
-    })
-    return str.slice(0, -1)
-  }
-}
-
-export const inPushOrderConfig = [
-  { label: '计划单号', prop: 'planCode' },
-  { label: '入库单号', prop: 'orderCode' },
-  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'busiBillTypeEnum' },
-  { label: '入库日期', prop: 'gmtCreate', type: 'time' },
-  { label: '推送状态', prop: 'isPush', useLocalEnum: true, type: 'isPushStateEnum' },
-  { label: '货主', prop: 'ownerName' },
-  { label: '供应商', prop: 'providerName' },
-  { label: '操作人', prop: 'createrName' },
-  { label: '操作', useLink: true },
-]
-
-export const inPushOrderDetailConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuFormat' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '入库数量', prop: 'inQty' },
-  { label: '库位', dom: Storehouse() },
-]

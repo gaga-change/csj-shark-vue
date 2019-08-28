@@ -1,180 +1,112 @@
 <template>
-  <div class="refund">
-    <el-card
-      class="simpleCard"
-      shadow="never"
-      body-style="padding:12px"
+  <div class="InboundOrderComponent">
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
     >
-      <search-invoice
-        @submit="submit"
-        :searchForm="searchForm"
-        ref="inboundOrder"
-      />
-
-      <el-col
-        :span="24"
-        style="margin-bottom:12px;"
-      >
-        <el-button
+      <template slot-scope="scope">
+        <el-link
           type="primary"
-          size="mini"
-          @click="select"
-        >查询</el-button>
-        <el-button
-          type="primary"
-          size="mini"
-          @click="resetForm"
-        >重置</el-button>
-      </el-col>
-    </el-card>
-
-    <base-table
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      :loading="loading"
-      :config="inPushOrderConfig"
-      :total="total"
-      :maxTotal="10"
-      :pageSize="pageSize"
-      :currentPage="pageNum"
-      :tableData="inPushOrderTableData"
-    />
-
+          @click="shouDetail(scope.row)"
+        >详情</el-link>
+      </template>
+      <template slot="btns">
+      </template>
+    </base-list>
     <el-dialog
       style="z-index:900"
       title="详情"
       :visible.sync="dialogVisible"
       width="70%"
     >
-      <div class="alertInfo">
-        <span>入库计划单 : {{activeOrder.planCode}}</span>
-        <span>供应商 : {{activeOrder.providerName}}</span>
-        <span>收货时间 : {{ moment(activeOrder.gmtCreate).format('YYYY-MM-DD') }}</span>
+      <div v-loading="inOrderSelectDetailListLoading">
+        <div class="alertInfo">
+          <span>入库计划单 : {{activeOrder.planCode}}</span>
+          <span>供应商 : {{activeOrder.providerName}}</span>
+          <span>收货时间 : {{ activeOrder.gmtCreate | date('YYYY-MM-DD') }}</span>
+        </div>
+        <base-table2
+          :config="detailTableConfig"
+          :data="inPushOrderDetailTable"
+        >
+        </base-table2>
       </div>
-      <web-pagination-table
-        :loading="alertLoding"
-        :config="inPushOrderDetailConfig"
-        :allTableData="inPushOrderDetailTable"
-      />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import SearchInvoice from './components/newSearch'
-import webPaginationTable from '@/components/Table/webPaginationTable'
-import { inPushOrderConfig, inPushOrderDetailConfig } from './components/config';
-import BaseTable from '@/components/Table'
 import { inOrderList, inOrderSelectDetailList } from '@/api'
-import _ from 'lodash';
-import moment from 'moment';
+import { busiBillTypeEnum, isPushStateEnum } from '@/utils/enum'
+
+
+const detailTableConfig = [
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuFormat' },
+  { label: '单位', prop: 'skuUnitCode' },
+  { label: '入库数量', prop: 'inQty' },
+  { label: '库位', prop: 'warehouseSpaceCodes' },
+]
+
+const tableConfig = [
+  { label: '计划单号', prop: 'planCode' },
+  { label: '入库单号', prop: 'orderCode' },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '入库日期', prop: 'gmtCreate', type: 'time' },
+  { label: '推送状态', prop: 'isPush', type: 'enum', enum: isPushStateEnum },
+  { label: '货主', prop: 'ownerName' },
+  { label: '供应商', prop: 'providerName' },
+  { label: '操作人', prop: 'createrName' },
+]
+const searchConfig = [
+  { label: '供应商名称', prop: 'providerName', type: 'input' },
+  { label: '计划单号', prop: 'planCode', type: 'input' },
+  { label: '货主', prop: 'ownerName', type: 'input' },
+  { label: '收货单号', prop: 'orderCode', type: 'input' },
+  { label: '入库日期', prop: 'createTimeArea', props: ['orderStartDate', 'orderEndDate'], type: 'timeArea' },
+]
+
 export default {
-  components: { SearchInvoice, BaseTable, webPaginationTable },
   data() {
     return {
-      searchForm: {
-        planCode: '',
-        providerName: '',
-        orderCode: '',
-        ownerName: '',
-        orderTime: ''
-      },
-      pageSize: 10,
-      pageNum: 1,
-      total: 0,
-      loading: false,
-      inPushOrderConfig,
-      inPushOrderDetailConfig,
-      inPushOrderTableData: [],
-      alertLoding: false,
+      tableConfig,
+      searchConfig,
+      detailTableConfig,
+      listApi: inOrderList,
+      inOrderSelectDetailListLoading: false,
       inPushOrderDetailTable: [],
       dialogVisible: false,
       activeOrder: {}
     }
   },
-
-  mounted() {
-    this.getCurrentTableData()
-  },
-
-
-  created() {
-    this.inPushOrderConfig.forEach(item => {
-      if (item.useLink) {
-        item.dom = (row, column, cellValue, index) => {
-          return <span class="link_dom" onClick={this.shouDetail.bind(this, row)} >查看详情</span>
-        }
-      }
-    })
-  },
-
   methods: {
-    moment,
     shouDetail(row) {
       this.dialogVisible = true;
       this.activeOrder = row;
+      this.inOrderSelectDetailListLoading = true
       inOrderSelectDetailList(row.id).then(res => {
+        this.inOrderSelectDetailListLoading = false
         if (res) {
-          this.inPushOrderDetailTable = res.data;
+          res.data = res.data || []
+          this.inPushOrderDetailTable = res.data.map(v => {
+            v.putSpaceInfoVOList = v.putSpaceInfoVOList || []
+            v.warehouseSpaceCodes = v.putSpaceInfoVOList.map(i => i.warehouseSpaceCode).join(',')
+            return v
+          })
         }
       })
     },
-
-    select() {
-      this.$refs['inboundOrder'].submit()
-    },
-
-    resetForm() {
-      this.$refs['inboundOrder'].resetForm()
-    },
-
-    submit(value) {
-      this.searchForm = value;
-      this.getCurrentTableData()
-    },
-
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.pageNum = 1;
-      this.getCurrentTableData();
-    },
-
-    handleCurrentChange(val) {
-      this.pageNum = val;
-      this.getCurrentTableData();
-    },
-
-    getCurrentTableData() {
-      this.loading = true;
-      let json = {};
-      for (let i in this.searchForm) {
-        if (this.searchForm[i] !== '') {
-          json[i] = this.searchForm[i]
-        }
-      }
-      if (json.orderTime && Array.isArray(json.orderTime)) {
-        json['orderStartDate'] = moment(json.orderTime[0]).valueOf()
-        json['orderEndDate'] = moment(json.orderTime[1]).valueOf()
-      }
-      inOrderList({
-        ...json,
-        pageSize: this.pageSize,
-        pageNum: this.pageNum
-      }).then(res => {
-        this.loading = false;
-        if (res) {
-          this.inPushOrderTableData = res.data && res.data.list || [];
-          this.total = res.data && res.data.total
-        }
-      })
-
-    }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.refund {
+.InboundOrderComponent {
   .routerLink {
     color: #3399ea;
     white-space: nowrap;
