@@ -30,7 +30,7 @@
 
 <script>
 import { checkOrderList } from '@/api'
-import { AtoZ, yesOrNoEnum } from '@/utils/enum'
+import { WarehouseAreaNatureEnum, yesOrNoEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '质检单号 ', prop: 'orderCode' },
   { label: '收货单号 ', prop: 'receiveOrderCode' },
