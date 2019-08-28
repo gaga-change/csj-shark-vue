@@ -34,7 +34,12 @@
                 v-for="(item, index) in tableConfig"
                 :key="index"
               >
-                {{row[item.prop] || ''}}
+                <template v-if="item.type === 'enum'">
+                  {{item.enum.find(v => v.value == row[item.prop]) | getName}}
+                </template>
+                <template v-else>
+                  {{row[item.prop] || ''}}
+                </template>
               </td>
             </tr>
           </table>
@@ -90,6 +95,14 @@ export default {
   data() {
     return {
 
+    }
+  },
+  filters: {
+    getName(v) {
+      if (!v) {
+        return ''
+      }
+      return v.name
     }
   },
   methods: {

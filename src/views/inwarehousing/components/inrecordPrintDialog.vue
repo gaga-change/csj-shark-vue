@@ -8,12 +8,21 @@
       :before-close="handleClose"
       @close="close"
     >
-      <div ref="print">
+      <div
+        ref="print"
+        v-loading="loading"
+      >
         <div
-          v-for="(detail, index) in rows"
+          v-for="(detail, index) in detailArr"
           :key="index"
           :class="{hidden: index > 0}"
+          style="margin-bottom: 40px"
         >
+          <div class="text-right">
+            <div style="width:200px;display:inline-block;">
+              <bar-code :code="detail.receiveOrderDO['orderCode']" />
+            </div>
+          </div>
           <div
             class="mb15"
             style="display: flex;flex-flow: wrap;"
@@ -23,7 +32,7 @@
               :key="index"
               class="f14 mr25 mt10"
             >
-              <span>{{item.label}}：</span><span>{{detail[item.prop] || ''}}</span>
+              <span>{{item.label}}：</span><span>{{detail.receiveOrderDO[item.prop] || ''}}</span>
             </span>
           </div>
           <div>
@@ -35,22 +44,30 @@
                 >{{item.label}}</th>
               </tr>
               <tr
-                v-for="(row, i) in []"
+                v-for="(row, i) in detail.detailDOs"
                 :key="i"
               >
                 <td
                   v-for="(item, index) in tableConfig"
                   :key="index"
                 >
-                  {{row[item.prop] || ''}}
+                  <template v-if="item.type === 'enum'">
+                    {{item.enum.find(v => v.value == row[item.prop]) | getName}}
+                  </template>
+                  <template v-else-if="item.type === 'barCode'">
+                    <div style="width:100px;">
+                      <bar-code :code="row[item.prop]" />
+                    </div>
+                  </template>
+                  <template v-else>
+                    {{row[item.prop] || ''}}
+                  </template>
                 </td>
               </tr>
             </table>
           </div>
         </div>
-
       </div>
-
       <span
         slot="footer"
         class="dialog-footer"
@@ -62,14 +79,16 @@
         <el-button
           type="primary"
           @click="print()"
+          :disabled="loading"
         >打 印</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
+import { receiveOrderQueryDetails } from '@/api'
 import { MakePrint } from '@/utils'
-import { busiBillTypeEnum } from '@/utils/enum'
+import { busiBillTypeEnum, yesOrNoEnum } from '@/utils/enum'
 const topConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
@@ -79,7 +98,14 @@ const topConfig = [
   { label: '货主', prop: 'ownerName' },
 ]
 const tableConfig = [
-
+  { label: '商品条码', prop: 'skuCode', type: 'barCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitCode' },
+  { label: '包装', prop: 'packageDesc' },
+  { label: '是否质检（字段待定）', prop: 'packageDesc', type: 'enum', enum: yesOrNoEnum },
+  { label: '预期收货量', prop: 'planQty' },
 ]
 export default {
   props: {
@@ -94,11 +120,39 @@ export default {
   },
   data() {
     return {
+      loading: true,
       topConfig,
       tableConfig,
+      detailArr: [], // 内容，带详情
+    }
+  },
+  watch: {
+    visible(val) {
+      val && this.initData()
+    }
+  },
+  filters: {
+    getName(v) {
+      if (!v) {
+        return ''
+      }
+      return v.name
     }
   },
   methods: {
+    /** 初始化数据 */
+    async initData() {
+      this.detailRows = []
+      this.loading = true
+      let apis = []
+      for (let i = 0; i < this.rows.length; i++) {
+        let res = await receiveOrderQueryDetails({ id: this.rows[i].id })
+        res.data.detailItemDos = res.data.detailItemDos || []
+        res.data.detailDOs = res.data.detailDOs || []
+        this.detailArr.push(res.data)
+      }
+      this.loading = false
+    },
     /** 确定 */
     print() {
       MakePrint(this.$refs['print'].innerHTML)
@@ -121,6 +175,7 @@ export default {
 .hidden {
   width: 0;
   height: 0;
+  margin: 0 !important;
   overflow: hidden;
 }
 </style>

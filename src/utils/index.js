@@ -610,6 +610,7 @@ export function MakePrint(content, userStyle, w = null, h = null) {
     table th {text-align: left; border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #dedede;}
     table td {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #ffffff;}
     img{max-width:130px;}
+    img {width: 100%;}
     .card-list{margin-bottom: 6px;width:25%;display:inline-block}
     .el-dropdown{display:inline-block}
   </style>`;

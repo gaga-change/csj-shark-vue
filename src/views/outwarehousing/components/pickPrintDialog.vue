@@ -17,7 +17,7 @@
               <span>仓库:</span> <span>{{warehouseName}}</span>
             </div>
             <div style="width:200px;padding-top:5px">
-              <BarCode :code="rowData.orderCode" />
+              <bar-code :code="rowData.orderCode" />
             </div>
           </div>
           <div style=" display: flex;justify-content: flex-end;margin-bottom:12px">
