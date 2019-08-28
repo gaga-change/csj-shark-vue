@@ -4,12 +4,12 @@
     :class="{red: development}"
   >
     <div>
-      <search-form2
+      <search-form
         :config="searchConfig"
         @search="handleSearch"
         :labelWidth="labelWidth"
       >
-      </search-form2>
+      </search-form>
     </div>
     <div class="f12">
       <slot name="btns"></slot>

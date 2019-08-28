@@ -17,8 +17,8 @@
           :key="index"
           :label="item.label"
           :prop="item.prop"
+          :label-width="item.labelWidth ? item.labelWidth + 'px' : undefined"
         >
-
           <template v-if="item.type === 'input'">
             <el-input
               style="width:178px;"
@@ -29,7 +29,6 @@
             ></el-input>
           </template>
           <template v-else-if="item.type === 'select'">
-
             <el-select
               v-model="searchForms[item.prop]"
               clearable
@@ -37,13 +36,22 @@
               size="mini"
             >
               <el-option
-                v-for="item in selectEnums[item.prop]"
+                v-for="item in item.enum"
                 :key="item.name"
                 :label="item.name"
                 :value="item.value"
               >
               </el-option>
             </el-select>
+          </template>
+          <template v-else-if="item.type === 'radio'">
+            <el-radio-group v-model="searchForms[item.prop]">
+              <el-radio
+                :label="v.value"
+                v-for="v in item.radio"
+                :key="v.value"
+              >{{v.name}}</el-radio>
+            </el-radio-group>
           </template>
           <template v-else-if="item.type === 'timeArea'">
             <el-date-picker
@@ -121,7 +129,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import * as Enum from "@/utils/enum";
 import { getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
 export default {
   props: {
@@ -180,7 +187,6 @@ export default {
       submitLoading: false,
       searchForms: {},
       searchRules: {},
-      selectEnums: {},
       warehouseArea: [],
       warehouseSpace: [],
       spanMap: {
@@ -228,13 +234,11 @@ export default {
     },
     bindKeys() {
       this.config.forEach(v => {
-        this.$set(this.searchForms, v.prop, undefined)
-        switch (v.type) {
-          case 'select':
-            this.selectEnums[v.prop] = Enum[v.enum]
-            break
-          default:
-            break
+        if (v.default !== undefined && v.default !== null) {
+          this.$set(this.searchForms, v.prop, v.default)
+        } else {
+          this.$set(this.searchForms, v.prop, undefined)
+
         }
       })
     },
@@ -259,8 +263,10 @@ export default {
     hanldeResetForm() {
       this.resetLoading = true
       this.$refs['searchForm'].resetFields()
-      this.$emit('search', {}, () => {
-        this.resetLoading = false
+      this.$nextTick(() => {
+        this.$emit('search', { ...this.searchForms }, () => {
+          this.resetLoading = false
+        })
       })
     }
   }

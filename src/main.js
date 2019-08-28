@@ -8,11 +8,10 @@ import BarCode from '@/components/BarCode/index'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 
 import BaseTable from '@/components/BaseTable'
-import SearchForm2 from '@/components/SearchForm2'
+import SearchForm from '@/components/SearchForm'
 import BaseList from '@/components/BaseList'
 import DoubleList from '@/components/DoubleList'
 import PrintTableDialog from '@/components/PrintTableDialog'
-import SearchForm from '@/components/SearchForm/index'
 import DetailItem from '@/components/DetailItem'
 
 import 'normalize.css/normalize.css'
@@ -30,7 +29,6 @@ import { EXTENDS } from './assets/extends'
 const { MessageBox } = ElementUI
 Vue.component('BaseTable', BaseTable);
 Vue.component('SearchForm', SearchForm);
-Vue.component('SearchForm2', SearchForm2);
 Vue.component('BaseList', BaseList);
 Vue.component('DoubleList', DoubleList);
 Vue.component('PrintTableDialog', PrintTableDialog);
