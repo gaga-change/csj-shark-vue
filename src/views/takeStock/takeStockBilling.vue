@@ -2,9 +2,10 @@
   <div class="TakeStockBillingCom">
     <el-form
       ref="form"
-      label-width="80px"
+      label-width="100px"
       :model="formData"
       :rules="rules"
+      v-loading="queryDynamicSkuStockListLoading"
     >
       <el-form-item
         label="盘点类型"
@@ -13,6 +14,7 @@
         <el-select
           v-model="formData.orderType"
           placeholder="请选择盘点类型"
+          @change="handleOrderTypeChange"
         >
           <el-option
             v-for="item in takeStockTypeEnum"
@@ -22,11 +24,18 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item
+        label="上次盘点时间"
+        v-if="orderType === 1"
+      >
+        {{lastInventoryDate}}
+      </el-form-item>
       <div>
         <el-button
           type="primary"
           size="mini"
           @click="showChooseProdDialog"
+          v-if="orderType === 0"
         >
           获取盘点商品
         </el-button>
@@ -89,7 +98,8 @@
 
 <script>
 import BaseTable from '@/components/Table'
-import { insertInventoryOrder } from '@/api'
+import moment from 'moment'
+import { insertInventoryOrder, queryDynamicSkuStockList } from '@/api'
 import { takeStockSelectProductTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
 import { takeStockTypeEnum } from '@/utils/enum'
@@ -100,6 +110,7 @@ export default {
     return {
       takeStockSelectProductTableConfig,
       insertInventoryOrderLoading: false,
+      queryDynamicSkuStockListLoading: false,
       selectProductVisible: false,
       takeStockTypeEnum,
       tableData: [],
@@ -113,7 +124,9 @@ export default {
         orderType: [
           { required: true, message: '必填项', trigger: 'blur' },
         ]
-      }
+      },
+      lastInventoryDate: undefined, // 上次盘点时间
+      skuStockList: undefined, // 动态盘点列表
     }
   },
   computed: {
@@ -125,6 +138,26 @@ export default {
 
   },
   methods: {
+    /** 盘点类型切换 */
+    handleOrderTypeChange(v) {
+      this.tableData = []
+      if (v === 0) return
+      if (this.skuStockList) {
+        this.tableData = [...this.skuStockList]
+      } else {
+        this.queryDynamicSkuStockListLoading = true
+        queryDynamicSkuStockList().then(res => {
+          this.queryDynamicSkuStockListLoading = false
+          if (!res) return
+          this.lastInventoryDate = moment(res.data.lastInventoryDate).format('YYYY-MM-DD HH:mm:ss')
+          this.skuStockList = res.data.skuStockList.map(v => {
+            v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+            return v
+          })
+          this.tableData = [...this.skuStockList]
+        })
+      }
+    },
     /** 提交 */
     handleSubmitForm() {
       if (!this.tableData.length) {

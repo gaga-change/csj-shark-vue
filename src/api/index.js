@@ -184,4 +184,6 @@ export const receiveOrderDeleteOrInvalide = params => http.post(`/webApi/receive
 export const receiveOrderQueryDetails = params => http.get(`/webApi/receive/order/queryDetails`, { params })
 /** 收货登记 */
 export const receiveRegistration = params => http.post(`/webApi/receive/order/receiveRegistration`, params)
+/** 获取动态盘点列表 */
+export const queryDynamicSkuStockList = params => http.get(`/webApi/sku/stock/queryDynamicSkuStockList`, { params })
 
