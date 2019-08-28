@@ -30,12 +30,12 @@ const tableConfig = [
   { label: '变动时间', prop: 'gmtModify', type: 'time' },
 ]
 const searchConfig = [
-  { label: '商品编码', prop: 'skuCode', type: 'input' },
-  { label: '商品名称', prop: 'skuName', type: 'input' },
-  { label: '货主名称', prop: 'ownerName', type: 'input' },
-  { label: '库位编码', prop: 'warehouseSpaceCode', type: 'input' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '货主名称', prop: 'ownerName' },
+  { label: '库位编码', prop: 'warehouseSpaceCode' },
   { label: '变动时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
-  { label: '变动类型', prop: 'busiBillType', type: 'select', enum: busiBillTypeEnum },
+  { label: '变动类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum },
 ]
 
 

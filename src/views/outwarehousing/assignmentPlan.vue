@@ -49,11 +49,11 @@ const tableConfig = [
   { label: '已出库数量', prop: 'outQty', minWidth: 90 },
 ]
 const searchConfig = [
-  { label: '单据类型', prop: 'busiBillType', type: 'select', enum: busiBillTypeEnum },
-  { label: '计划单号', prop: 'planCode', type: 'input' },
-  { label: '客户/供应商', prop: 'arrivalName', type: 'input' },
-  { label: '出库状态', prop: 'execStatus', type: 'select', enum: OutExecStatusEnum },
-  { label: '拣货状态', prop: 'sortStatus', type: 'select', enum: SortStatus },
+  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '计划单号', prop: 'planCode' },
+  { label: '客户/供应商', prop: 'arrivalName' },
+  { label: '出库状态', prop: 'execStatus', type: 'enum', enum: OutExecStatusEnum },
+  { label: '拣货状态', prop: 'sortStatus', type: 'enum', enum: SortStatus },
   { label: '下单时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
 ]
 export default {

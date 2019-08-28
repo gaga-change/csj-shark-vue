@@ -43,8 +43,8 @@ const tableConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 const searchConfig = [
-  { label: '容器', prop: 'trayCode', type: 'input' },
-  { label: '库位', prop: 'warehouseSpaceCode', type: 'input' },
+  { label: '容器', prop: 'trayCode' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: yesOrNoEnum, default: 0 },
 ]
 

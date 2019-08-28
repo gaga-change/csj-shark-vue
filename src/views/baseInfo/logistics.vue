@@ -138,7 +138,7 @@ const tableConfig = [
   { label: '创建人  ', prop: 'createrName' },
 ]
 const searchConfig = [
-  { label: '物流公司名称', prop: 'companyName', type: 'input' }
+  { label: '物流公司名称', prop: 'companyName' }
 ]
 export default {
   data() {

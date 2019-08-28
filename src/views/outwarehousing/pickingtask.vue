@@ -78,9 +78,9 @@ const tableConfig = [
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
-  { label: '拣货单号', prop: 'orderCode', type: 'input' },
-  { label: '计划单号', prop: 'outOrderCode', type: 'input' },
-  { label: '拣货状态', prop: 'orderStatus', type: 'select', enum: orderStatus },
+  { label: '拣货单号', prop: 'orderCode' },
+  { label: '计划单号', prop: 'outOrderCode' },
+  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: orderStatus },
 ]
 
 export default {

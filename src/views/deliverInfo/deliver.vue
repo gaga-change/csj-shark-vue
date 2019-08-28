@@ -243,10 +243,10 @@ const tableConfig = [
   { label: '到达时间', prop: 'deliverTime', width: 120, type: 'time' },
 ]
 const searchConfig = [
-  { label: '计划单号', prop: 'planCode', type: 'input' },
-  { label: '物流公司', prop: 'logisticsComCode', type: 'select', enum: [] },
-  { label: '登记状态', prop: 'register', type: 'select', enum: registerStatusEnum },
-  { label: '货主', prop: 'ownerName', type: 'input' },
+  { label: '计划单号', prop: 'planCode' },
+  { label: '物流公司', prop: 'logisticsComCode', type: 'enum', enum: [] },
+  { label: '登记状态', prop: 'register', type: 'enum', enum: registerStatusEnum },
+  { label: '货主', prop: 'ownerName' },
   { label: '下单时间', prop: 'createTimeArea', props: ['placeOrderStartDate', 'placeOrderEndDate'], type: 'timeArea' },
 ]
 

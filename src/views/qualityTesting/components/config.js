@@ -20,5 +20,5 @@ export const qualityTestingCreateTableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '收货数量', prop: 'receiveQty' },
   { label: '质检数量', prop: 'receiveQty' },
-  { label: '质检结果', prop: 'checkResult', edit: true, inputType: 'select', type: 'checkResult3Enum' },
+  { label: '质检结果', prop: 'checkResult', edit: true, inputtype: 'enum', type: 'checkResult3Enum' },
 ]

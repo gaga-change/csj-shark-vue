@@ -50,7 +50,7 @@ const tableConfig = [
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
-  { label: '质检单号', prop: 'orderCode', type: 'input' },
+  { label: '质检单号', prop: 'orderCode' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
 ]
 

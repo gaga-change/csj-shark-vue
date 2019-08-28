@@ -212,11 +212,11 @@ const tableConfig = [
   { label: '最近出库时间', prop: 'lastOutTime', type: 'time', width: '135' },
 ]
 const searchConfig = [
-  { label: '商品编码', prop: 'skuCode', type: 'input' },
-  { label: '商品名称', prop: 'skuName', type: 'input' },
-  { label: '货主名称', prop: 'ownerName', type: 'input' },
-  { label: '库位编码', prop: 'warehouseSpaceCode', type: 'input' },
-  { label: '商品状态', prop: 'checkResult', type: 'select', enum: checkResultEnum },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '货主名称', prop: 'ownerName' },
+  { label: '库位编码', prop: 'warehouseSpaceCode' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: checkResultEnum },
 ]
 
 export default {

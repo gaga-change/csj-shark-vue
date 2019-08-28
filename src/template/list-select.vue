@@ -62,9 +62,9 @@ const tableConfig = [
   { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
 ]
 const searchConfig = [
-  { label: '质检单号', prop: 'orderCode', type: 'input' },
+  { label: '质检单号', prop: 'orderCode' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'select', enum: WarehouseAreaNatureEnum },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
 ]
 export default {
   data() {

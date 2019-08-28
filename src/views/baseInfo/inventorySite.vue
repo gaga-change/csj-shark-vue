@@ -244,8 +244,8 @@ const tableConfig = [
   { label: '创建时间', prop: 'gmtCreate', minWdth: 120, type: 'time' },
 ]
 const searchConfig = [
-  { label: '库区编码', prop: 'warehouseAreaCode', type: 'input' },
-  { label: '库位编码', prop: 'warehouseSpaceCode', type: 'input' },
+  { label: '库区编码', prop: 'warehouseAreaCode' },
+  { label: '库位编码', prop: 'warehouseSpaceCode' },
 ]
 export default {
   components: { setStorage },

@@ -102,8 +102,8 @@ const tableConfig = [
   { label: '盘点时间', prop: 'inventoryTime', type: 'time' },
 ]
 const searchConfig = [
-  { label: '盘点单号', prop: 'orderCode', type: 'input' },
-  { label: '状态', prop: 'executeStatus', type: 'select', enum: executeStatusEnum },
+  { label: '盘点单号', prop: 'orderCode' },
+  { label: '状态', prop: 'executeStatus', type: 'enum', enum: executeStatusEnum },
   { label: '创建时间', prop: 'createTimeArea', type: 'timeArea', props: ['startDate', 'endtDate'] },
 ]
 export default {

@@ -44,8 +44,8 @@ const tableConfig = [
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
-  { label: '包装编码', prop: 'packageCode', type: 'input' },
-  { label: '包装描述', prop: 'packageDesc', type: 'input' },
+  { label: '包装编码', prop: 'packageCode' },
+  { label: '包装描述', prop: 'packageDesc' },
 ]
 export default {
   components: { PackAddDialog },

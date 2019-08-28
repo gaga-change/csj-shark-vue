@@ -74,13 +74,13 @@ const tableConfig = [
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
-  { label: '收货单号', prop: 'orderCode', type: 'input' },
-  { label: '入库计划单', prop: 'planCode', type: 'input' },
-  { label: '货主', prop: 'ownerName', type: 'input' },
-  { label: '供应商', prop: 'providerName', type: 'input' },
-  { label: '单据类型', prop: 'orderType', type: 'select', enum: busiBillTypeEnum },
-  { label: '状态', prop: 'execStatus', type: 'select', enum: receiveState },
-  { label: '外部订单号', prop: 'busiBillNo', type: 'input' },
+  { label: '收货单号', prop: 'orderCode' },
+  { label: '入库计划单', prop: 'planCode' },
+  { label: '货主', prop: 'ownerName' },
+  { label: '供应商', prop: 'providerName' },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
+  { label: '外部订单号', prop: 'busiBillNo' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
 ]
 

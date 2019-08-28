@@ -19,16 +19,7 @@
           :prop="item.prop"
           :label-width="item.labelWidth ? item.labelWidth + 'px' : undefined"
         >
-          <template v-if="item.type === 'input'">
-            <el-input
-              style="width:178px;"
-              type="text"
-              size="mini"
-              :placeholder="`请输入${item.label}`"
-              v-model="searchForms[item.prop]"
-            ></el-input>
-          </template>
-          <template v-else-if="item.type === 'select'">
+          <template v-if="item.type === 'enum'">
             <el-select
               v-model="searchForms[item.prop]"
               clearable
@@ -98,9 +89,13 @@
             </el-select>
           </template>
           <template v-else>
-            <div>
-              配置文件异常，没有相应 【type = {{item.type}}】
-            </div>
+            <el-input
+              style="width:178px;"
+              type="text"
+              size="mini"
+              :placeholder="`请输入${item.label}`"
+              v-model="searchForms[item.prop]"
+            ></el-input>
           </template>
         </el-form-item>
         <el-row :gutter="10">

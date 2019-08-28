@@ -67,7 +67,7 @@ const tableConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 const searchConfig = [
-  { label: '收货单号', prop: 'orderCode', type: 'input' },
+  { label: '收货单号', prop: 'orderCode' },
   { label: '收货时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
 ]
 

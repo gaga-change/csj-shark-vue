@@ -183,9 +183,9 @@ const tableConfig = [
   { label: '描述', prop: 'warehouseAreaDesc' },
 ]
 const searchConfig = [
-  { label: '库区编码', prop: 'warehouseAreaCode', type: 'select', enum: AtoZ },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'select', enum: yesOrNoEnum },
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'select', enum: WarehouseAreaNatureEnum },
+  { label: '库区编码', prop: 'warehouseAreaCode', type: 'enum', enum: AtoZ },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
 ]
 
 export default {
