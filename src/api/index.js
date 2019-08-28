@@ -7,6 +7,8 @@ export * from './config'
 export const exportLedger = (params, fileName) => download(`/webApi/sku/stock/exportLedger`, params, fileName)
 /** 盘点管理导出 */
 export const inventoryRecordExport = (params, fileName) => download(`/webApi/plan/inventory/recordExport`, params, fileName)
+/** 收货汇总导出 */
+export const receiveOrderExportLedger = (params, fileName) => download(`/webApi/receive/order/exportLedger`, params, fileName)
 /** 上传文件 */
 export const uploadReportFile = (formData, options = {}) => http.post('/webApi/plan/checkOrder/uploadReportFile', formData, {
   headers: {
@@ -180,3 +182,5 @@ export const queryDynamicSkuStockList = params => http.get(`/webApi/sku/stock/qu
 export const createReceiveOrder = params => http.post(`/webApi/receive/order/createReceiveOrder`, params)
 /** 收货明细汇总查询 */
 export const selectSumReceiveDetail = params => http.post(`/webApi/receive/order/selectSumReceiveDetail`, params)
+/** 收货明细查询 */
+export const selectReceiveDetailItem = params => http.post(`/webApi/receive/order/selectReceiveDetailItem`, params)

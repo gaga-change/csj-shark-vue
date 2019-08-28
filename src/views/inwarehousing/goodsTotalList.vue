@@ -58,7 +58,7 @@ export default {
     },
     /** 导出 */
     handleOutput() {
-      this.$message('正在开发')
+      receiveOrderExportLedger(this.$refs['baseList'].searchParams, '收货汇总.xls')
     }
   }
 }
