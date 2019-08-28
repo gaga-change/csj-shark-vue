@@ -1,5 +1,16 @@
 <template>
   <div v-loading="receiveOrderQueryDetailsLoading">
+    <div class="mb20">
+      <!-- 收货中 & 已激活 可见 -->
+      <el-button
+        type="primary"
+        v-if="detail.receiveOrderDO.execStatus===3 || detail.receiveOrderDO.execStatus===1"
+        :loading="receiveConfirmLoading"
+        @click="handleConfirm"
+      >
+        收货确认
+      </el-button>
+    </div>
     <el-card shadow="never">
       <div slot="header">
         基本信息
@@ -46,18 +57,17 @@
       >
         <template slot-scope="scope">
           <!-- 收货中  未上架 -->
-
-          <!-- <template v-if="detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0"> -->
-          <el-link
-            type="primary"
-            @click="handleDelete(scope.row)"
-          >删除</el-link>
-          <el-divider direction="vertical"></el-divider>
-          <el-link
-            type="primary"
-            @click="handleModify(scope.row)"
-          >编辑</el-link>
-          <!-- </template> -->
+          <template v-if="detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0">
+            <el-link
+              type="primary"
+              @click="handleDelete(scope.row)"
+            >删除</el-link>
+            <el-divider direction="vertical"></el-divider>
+            <el-link
+              type="primary"
+              @click="handleModify(scope.row)"
+            >编辑</el-link>
+          </template>
 
           <!-- 已激活 未上架 -->
           <el-link
@@ -76,7 +86,7 @@
   </div>
 </template>
 <script>
-import { receiveOrderQueryDetails, receiveOrderDeleteOrInvalid } from '@/api'
+import { receiveOrderQueryDetails, receiveOrderDeleteOrInvalid, receiveConfirm } from '@/api'
 import { busiBillTypeEnum, receiveState, execStatuslist } from '@/utils/enum'
 import receivingRegisterDialog from './components/receivingRegisterDialog'
 
@@ -117,6 +127,7 @@ export default {
   data() {
     return {
       receiveOrderQueryDetailsLoading: true,
+      receiveConfirmLoading: false,
       detailItemConfig,
       detailDOsConfig,
       detailItemDosConfig,
@@ -171,7 +182,39 @@ export default {
         this.initData()
       }).catch(() => { })
     },
-
+    /** 收货确认 */
+    handleConfirm() {
+      let prods = this.detail.detailDOs
+      let out = prods.filter(v => {
+        let planQty = Number(v.planQty) || 0
+        let receiveQty = Number(v.receiveQty) || 0
+        return planQty > receiveQty
+      })
+      let params = {
+        receiveOrderCode: this.detail.receiveOrderDO.orderCode,
+        detailIds: prods.map(v => v.id)
+      }
+      if (out.length) {
+        let msg = ''
+        if (out.length === 1) {
+          msg = `商品【${out[0].skuName}】非全部收货，是否继续收货确认`
+        } else {
+          msg = `商品【${out[0].skuName}】等【${out.length}】项非全部收货，是否继续收货确认`
+        }
+        this.$apiConfirm(msg, () => receiveConfirm(params)).then(() => {
+          this.$message.success('操作成功！')
+          this.initData()
+        }).catch(() => { })
+      } else {
+        this.receiveConfirmLoading = true
+        receiveConfirm(params).then((res) => {
+          this.receiveConfirmLoading = false
+          if (!res) return
+          this.$message.success('操作成功！')
+          this.initData()
+        })
+      }
+    }
   },
 }
 </script>

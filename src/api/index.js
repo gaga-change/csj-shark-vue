@@ -170,8 +170,6 @@ export const skuUpdate = params => http.post(`/webApi/basic/sku/update`, params)
 export const receiveOrderList = params => http.get(`/webApi/receive/order/list`, { params })
 /** 收货单 激活 */
 export const receiveOrderActivate = params => http.post(`/webApi/receive/order/activate`, params)
-/** 作废或删除收货明细 */
-export const receiveOrderDeleteOrInvalide = params => http.post(`/webApi/receive/order/deleteOrInvalid`, params)
 /** 收货单详情 */
 export const receiveOrderQueryDetails = params => http.get(`/webApi/receive/order/queryDetails`, { params })
 /** 收货登记 */
@@ -186,3 +184,5 @@ export const selectSumReceiveDetail = params => http.post(`/webApi/receive/order
 export const selectReceiveDetailItem = params => http.post(`/webApi/receive/order/selectReceiveDetailItem`, params)
 /** 作废或删除收货明细 */
 export const receiveOrderDeleteOrInvalid = params => http.post(`/webApi/receive/order/deleteOrInvalid`, params)
+/** 收货确认 */
+export const receiveConfirm = params => http.post(`/webApi/receive/order/receiveConfirm`, params)
