@@ -54,10 +54,6 @@ export const inboundOrderSubmitQuick = params => http.get(`/webApi/in/upshelf/${
 export const getBatchNo = params => http.get(`/webApi/basic/batch/getBatchNo`, { params })
 /** 查询明细列表 */
 export const orderDetailList = id => http.get(`/webApi/receive/order/detailList/${id}`)
-/** 修改收货数量 */
-export const orderUpdateReceiveQty = params => http.get(`/webApi/receive/order/updateReceiveQty`, { params })
-/** 删除单据 */
-export const receiveOrderDelete = id => http.get(`/webApi/receive/order/delete/${id}`)
 /** 根据条件查询库位 */
 export const warehouseSpaceList = params => http.get(`/webApi/basic/warehouseSpace/list`, { params })
 /** 根据入库单号查询详情列表 */
@@ -124,10 +120,6 @@ export const modifyOutPrint = params => http.post(`/webApi/plan/out/print`, para
 export const getInfoPlanOutWarehousing = params => http.post(`/webApi/plan/out/list`, params)
 /** 一键提交出库单 */
 export const outboundOrderSubmitQuick = params => http.post(`/webApi/outWarehouse/order/directOutOfTheLibrary`, params)
-/** 查询到货单列表 */
-export const orderList = params => http.post(`/webApi/receive/order/list`, params)
-/** 新增上架任务 */
-export const jobAdd = params => http.post(`/webApi/in/job/add`, params)
 /** 查询收货单列表 */
 export const jobList = params => http.post(`/webApi/in/job/list`, params)
 /** 添加入库单以及明细 */
@@ -144,8 +136,6 @@ export const orderDelete = id => http.delete(`/webApi/pick/order/delete/${id}`)
 export const orderPickStop = id => http.post(`/webApi/pick/order/pickStop/${id}`)
 /** 根据拣货任务生成出库单 */
 export const createOutWareHouseOrder = params => http.post(`/webApi/outWarehouse/order/createOutWareHouseOrder`, params)
-/** 获取残次品列表 */
-export const badproductlist = params => http.post(`/webApi/receive/order/bad/list`, params)
 /** 库存移库 */
 export const skuStockMove = params => http.post(`/webApi/sku/stock/stockMove`, params)
 /** 状态转移 */

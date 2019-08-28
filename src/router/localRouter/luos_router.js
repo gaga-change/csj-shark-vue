@@ -32,10 +32,17 @@ export default [
         hidden: false,
       },
       {
-        name: 'arrival',
-        path: 'arrival',
-        meta: { title: '到货单', noCache: false },
-        component: _import('inwarehousing/arrival'),
+        name: 'goodsTotalList',
+        path: 'goodsTotalList',
+        meta: { title: '收货汇总', noCache: false },
+        component: _import('inwarehousing/goodsTotalList'),
+        hidden: false,
+      },
+      {
+        name: 'goodsDetailList',
+        path: 'goodsDetailList',
+        meta: { title: '收货明细', noCache: false },
+        component: _import('inwarehousing/goodsDetailList'),
         hidden: false,
       },
       {
@@ -51,13 +58,6 @@ export default [
         meta: { title: '入库单', noCache: true },
         component: _import('inwarehousing/inboundOrder'),
         hidden: false,
-      },
-      {
-        name: 'badproduct',
-        path: 'badproduct',
-        meta: { title: '残次品记录', noCache: true },
-        component: _import('inwarehousing/badproduct'),
-        hidden: false
       },
     ]
   },

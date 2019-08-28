@@ -12,18 +12,6 @@ export const businessChildTableEditConfig = [// 计划单操作列表
   { label: '正品数量(自动计算)', prop: 'receiveQty', width: 180 }
 ]
 
-export const planChildTableLabelArrivalConfig = [
-  { label: '业务行号', prop: 'busiIndex', minWidth: 80 },
-  { label: '商品编码', prop: 'skuCode', width: 150 },
-  { label: '商品名称', prop: 'skuName', width: 150 },
-  { label: '规格型号', prop: 'skuFormat', minWidth: 120 },
-  { label: '货主', prop: 'ownerName', width: 150 },
-  { label: '供应商', prop: 'providerName', width: 150 },
-  { label: '收货数量', prop: 'realInQty', minWidth: 120 },
-  { label: '批次', prop: 'batchNo', minWidth: 120 },
-  { label: '打印条数', prop: 'printNum', width: 200, editable: true, editType: 'inputNumber', fixed: 'right', max: 100 },//unconfirm 
-]
-
 export const planChildTableLabelConfig = [// 计划单商品条码打印列表
   { label: '业务行号', prop: 'busiIndex', minWidth: 80 },
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -62,62 +50,6 @@ export const inChildTableConfig = [// 入库子列表
   { label: '入库数量', prop: 'realInQty', minWidth: 120 },
   { label: '批次', prop: 'batchNo', minWidth: 120 },
 
-]
-
-export const arrivalTableConfig = [// 收货单列表 unconfirmed
-  { label: '计划单号', prop: 'planCode' },
-  { label: '供应商', prop: 'providerName' },
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '残次品数量', prop: 'badReceiveQty' },
-  { label: '入库数量', prop: 'badRealInQty' },
-  { label: '发生时间', prop: 'gmtModify', type: 'time' },
-  { label: '状态', prop: 'execStatus', useLocalEnum: true, type: 'badStatuslist' },
-  { label: '操作', useDom: true, width: 100 },
-]
-
-export const arrivalConfig = [// 收货单列表 unconfirmed
-  { label: '收货单号', prop: 'orderCode' },
-  { label: '计划单号', prop: 'planCode' },
-  { label: '上架状态', prop: 'execStatus', useLocalEnum: true, type: 'execStatuslist' },
-  { label: '收货时间', prop: 'gmtCreate', type: 'time' },
-  { label: '单据类型', prop: 'orderType', useLocalEnum: true, type: 'busiBillTypeEnum' },
-  { label: '货主', prop: 'ownerName' },
-  { label: '供应商', prop: 'providerName' },
-  { label: '操作人', prop: 'createrName' },
-]
-
-export const arrivalChildTableConfig = [// 收货单子列表 unconfirmed
-  { label: '业务行号', prop: 'busiIndex', },
-  { label: '商品编码', prop: 'skuCode', },
-  { label: '商品名称', prop: 'skuName', },
-  { label: '规格型号', prop: 'skuFormat', },
-  { label: '单位', prop: 'skuUnitName', },
-  { label: '商品数量', prop: 'planQty', },
-  { label: '批次', prop: 'batchNo', },
-  { label: '收货数量', prop: 'receiveQty' },
-  { label: '已入库数量', prop: 'realInQty', width: 85 },
-]
-
-export const arrivalAlertConfig = [
-  { label: '序号', type: 'index', width: 50 },
-  { label: '商品编号', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '商品规格', prop: 'skuFormat' },
-  { label: '批次', prop: 'batchNo' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '总数量', prop: 'planQty' },
-  { label: '已入库', prop: 'realInQty' },
-  { label: '收货量', prop: 'receiveQty' },
-  { label: '上架量/货位', width: 100, dom: formatWareHousing() },
-  { label: '操作', useLink: true, fixed: 'right', width: 180 },
-]
-
-export const putQtyConfig = [
-  { label: '序号', type: 'index', width: 50 },
-  { label: '批次', prop: 'batchNo', width: 100 },
-  { label: '库位(编码)', prop: 'warehouseSpaceCode' },
-  { label: '上架数量', prop: 'putQty' },
 ]
 
 export const batchNoConfig = [
