@@ -88,7 +88,7 @@ const detailItemConfig = [
   { label: '规格型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '预期收货量', prop: 'planQty' },
-  { label: '包装（字段待定）', prop: 'abc' },
+  { label: '包装', prop: 'packageString' },
 ]
 
 export default {

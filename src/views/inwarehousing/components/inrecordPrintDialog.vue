@@ -32,7 +32,14 @@
               :key="index"
               class="f14 mr25 mt10"
             >
-              <span>{{item.label}}：</span><span>{{detail.receiveOrderDO[item.prop] || ''}}</span>
+              <span>{{item.label}}：</span><span>
+                <template v-if="item.type === 'enum'">
+                  {{item.enum.find(v => v.value == detail.receiveOrderDO[item.prop]) | getName}}
+                </template>
+                <template v-else>
+                  {{detail.receiveOrderDO[item.prop] || ''}}
+                </template>
+              </span>
             </span>
           </div>
           <div>
@@ -103,8 +110,8 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
-  { label: '包装', prop: 'packageDesc' },
-  { label: '是否质检（字段待定）', prop: 'packageDesc', type: 'enum', enum: yesOrNoEnum },
+  { label: '包装', prop: 'packageString' },
+  { label: '是否质检', prop: 'lotAttrCode7', type: 'enum', enum: yesOrNoEnum },
   { label: '预期收货量', prop: 'planQty' },
 ]
 export default {
