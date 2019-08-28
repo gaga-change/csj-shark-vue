@@ -43,7 +43,6 @@
 import { inOrderList, inOrderSelectDetailList } from '@/api'
 import { busiBillTypeEnum, isPushStateEnum } from '@/utils/enum'
 
-
 const detailTableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },

@@ -1,41 +1,28 @@
 <template>
-  <div>
-    <search-deliver
-      @searchTrigger="submitForm"
-      ref="searchWarhouse"
-      :deliver-company="deliverCompanyAll"
-      @resetSearch="resetForm"
-      :search-forms="ruleForm"
+  <div class="DeliverComponent">
+    <base-list
+      ref="baseList"
+      :tableConfig="tableConfig"
+      :searchConfig="searchConfig"
+      :api="listApi"
+      :showControl="true"
+      :controlWidth="160"
     >
-    </search-deliver>
+      <template slot-scope="scope">
+        <el-link
+          type="primary"
+          @click="logisticsRecord(scope.row)"
+        >物流跟踪</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="logisticsHandle(scope.row)"
+        >物流登记</el-link>
+      </template>
+      <template slot="btns">
 
-    <el-button
-      type="primary"
-      size="mini"
-      @click="logisticsHandle"
-      :disabled="selectdisabled"
-      style="margin-bottom:15px"
-    >
-      <span>物流登记</span>
-      <span v-if="!selectdisabled">{{`( 当前选中的单号为 ${selectData.planCode} )`}}</span>
-    </el-button>
-
-    <double-table
-      :loading="loading"
-      :table-data="tableData"
-      :handle-button-map="handleButtonMap"
-      :config="tableConfig"
-      @sizeChange="handleSizeChange"
-      @currentChange="handleCurrentChange"
-      @currentRadioChange="currentRadioChange"
-      :highlight-current-row="highlightCurrentRow"
-      :total="total"
-      :maxTotal="10"
-      :expand-key="expandKey"
-      :pageSize="ruleForm.pageSize"
-      :currentPage="ruleForm.pageNum"
-    >
-    </double-table>
+      </template>
+    </base-list>
 
     <el-dialog
       :title="'新增物流登记'"
@@ -228,79 +215,65 @@
 </template>
 
 <script>
-import DoubleTable from '@/components/Table/doubleTable'
-import moment from 'moment'
-import { tableConfig, baseInfoConfig } from './components/config'
 import { addLogisticsRegister, getLogisticsRegisterInfo, getLogisticsRegisterList, getLogisticsSelectList } from '@/api'
-import { uniqueArray } from '@/utils/arrayHandler'
-import SearchDeliver from './components/search'
-import DeliverDetail from './components/deliverDetailinfo'
-const ruleForm = {
-  pageNum: 1,
-  pageSize: 10,
-  logisticsComCode: '',
-  register: '',
-  planCode: '',
-  placeOrderStartDate: '',
-  placeOrderEndDate: '',
-  logisticsComCode: '',
-  ownerName: '',
-  durationTime: [],
-}
+import { busiBillTypeEnum, registerStatusEnum, logisticsStatusEnum, payTypeEnum } from '@/utils/enum'
+import DeliverDetail from './components/deliverDetailInfo'
+
+const baseInfoConfig = [
+  { title: '计划单号', prop: 'planCode', span: 8 },
+  { title: '下单时间', prop: 'placeOrderTime', type: 'time', span: 8 },
+  { title: '收货人', prop: 'receiver', span: 8 },
+  { title: '收货地址', prop: 'receiveAddress', span: 8 },
+]
+const tableConfig = [
+  { label: '下单时间', prop: 'placeOrderTime', width: 140, type: 'time' },
+  { label: '计划单号', prop: 'planCode', width: 150 },
+  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum, minWidth: 90 },
+  { label: '供应商', prop: 'ownerName', width: 150 },
+  { label: '登记状态', prop: 'register', minWidth: 90, type: 'enum', enum: registerStatusEnum },
+  { label: '收货人', prop: 'receiver', width: 120 },
+  { label: '收获地址', prop: 'receiveAddress', width: 120 },
+  { label: '联系电话', prop: 'linkTel', width: 150 },
+  { label: '物流公司', prop: 'logisticsComName', width: 150 },
+  { label: '物流单号', prop: 'logisticsOrderCode', width: 150 },
+  { label: '件数', prop: 'carrierQty', width: 150 },
+  { label: '运费承担方', prop: 'payType', width: 150, type: 'enum', enum: payTypeEnum },
+  { label: '运费', prop: 'freightAmt', width: 90, type: 'money' },
+  { label: '配送状态', prop: 'logisticsStatus', width: 90, type: 'enum', enum: logisticsStatusEnum },
+  { label: '到达时间', prop: 'deliverTime', width: 120, type: 'time' },
+]
+const searchConfig = [
+  { label: '计划单号', prop: 'planCode', type: 'input' },
+  { label: '物流公司', prop: 'logisticsComCode', type: 'select', enum: [] },
+  { label: '登记状态', prop: 'register', type: 'select', enum: registerStatusEnum },
+  { label: '货主', prop: 'ownerName', type: 'input' },
+  { label: '下单时间', prop: 'createTimeArea', props: ['placeOrderStartDate', 'placeOrderEndDate'], type: 'timeArea' },
+]
 
 export default {
-  components: { DoubleTable, SearchDeliver, DeliverDetail },
+  components: { DeliverDetail },
   data() {
     return {
-      imgs: '',
-      loading: false,
+      tableConfig,
+      searchConfig,
+      listApi: getLogisticsRegisterList,
+
       dialogVisible: false,
       dialogData: {},
       dialogTitle: '',
-      ruleForm,
       logisticsRules: {},
-      selectData: {//x选中的单据
-
-      },
-      // searchForms,
-      tableData: [
-      ],
-      // pageNum:0,
-      // pageSize:10,
-      //子表数据名称 为空时不显示不可展开
-      childDataName: '',
-      //表格配置
-      tableConfig: tableConfig,
-      // currentPage:1,
-      // pageSize:10,
-      total: 0,
-      //主表操作
-      handleButtonMap: [
-        {          title: '物流跟踪', handle: (index, data) => {
-
-            this.logisticsRecord(data)
-            this.logisticsForm = { ...data }
-
-          }        },
-      ],
-      childCanSelect: false,//子表可选择,false不可选，
-      // accordionExpand:true,//手风琴展开
-      multipleSelection: [],//选中的子表数据
-      expandKey: 'id',
       logisticsForm: {},
       detailData: [],
       dialogVisibleDeliver: false,
       deliverCompanyAll: [],
-      highlightCurrentRow: true,
       baseInfoConfig,
-      selectdisabled: true
+      selectData: {}
     }
   },
   computed: {
     skuAmt: function () {
       var a = (this.logisticsForm.freightAmt || 0) - 0 + (this.logisticsForm.otherAmt || 0)
       this.logisticsForm.skuAmt = a
-
       return a
     }
   },
@@ -314,49 +287,16 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.getLogisticsList()
+  },
   methods: {
-
+    /** 刷新列表 */
     getTableData() {
-
-      this.$router.replace({
-        path: '/deliverInfo/deliver',
-        query: { data: JSON.stringify(this.ruleForm) }
-      })
-      this.loading = true;
-      let data = { ...this.ruleForm }
-      getLogisticsRegisterList(data).then(res => {
-        this.loading = false
-        if (res && res.data && res.data.list) {
-          this.tableData = [...res.data.list]
-          this.total = res.data.total
-        }
-      })
+      this.$refs['baseList'].fetchData()
     },
-
-    formatTime(val) {
-      return moment(val).format('YYYY-MM-DD')
-    },
-    handleSizeChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageSize: val, pageNum: 1 }
-      this.getTableData()
-    },
-
-    handleCurrentChange(val) {
-      this.ruleForm = { ...this.ruleForm, pageNum: val }
-      this.getTableData()
-    },
-    submitForm(ruleForm) {
-      var placeOrderStartDate = '', placeOrderEndDate = '';
-      if (ruleForm.durationTime && ruleForm.durationTime[0]) {
-        placeOrderStartDate = +(new Date(ruleForm.durationTime[0]))
-        placeOrderEndDate = +(new Date(ruleForm.durationTime[1]))
-      }
-      this.ruleForm = { ...ruleForm, pageSize: 10, pageNum: 1, placeOrderStartDate, placeOrderEndDate }
-      this.getTableData();
-
-    },
+    /** 新增物流登记 */
     submitDeliver() {
-
       this.$refs['subForm'].validate((valid) => {
         if (valid) {
           addLogisticsRegister({ ...this.logisticsForm, id: this.selectData.id }).then(res => {
@@ -369,27 +309,11 @@ export default {
         } else {
           return false;
         }
-      });
+      })
     },
-    resetForm() {
-      this.ruleForm = { ...ruleForm }
-      this.getTableData()
-
-    },
-    logisticsHandle() {
-      this.logisticsForm = {}
-      this.dialogVisible = true
-      if (this.selectData && this.selectData.planCode && !this.selectData.register) {
-        this.dialogVisible = true
-      } else {
-        this.$message({
-          type: 'info',
-          message: '请选择未登记的单据'
-        })
-      }
-    },
+    /** 物流跟踪 按钮点击 */
     logisticsRecord(data) {
-
+      this.logisticsForm = { ...data }
       if (data.register) {
         getLogisticsRegisterInfo({
           logisticsComCode: data.logisticsComCode,
@@ -408,40 +332,45 @@ export default {
         })
       }
     },
-    currentRadioChange(data) {//选中某行
-      this.selectdisabled = false;
-      this.selectData = { ...data }
+    /** 物流登记 按钮点击 */
+    logisticsHandle(row) {
+      this.selectData = row
+      this.logisticsForm = {}
+      this.dialogVisible = true
     },
+    /** 获取物流列表 */
     getLogisticsList() {
       getLogisticsSelectList().then(res => {
-        if (res && res.data && res.data.length > 0) {
+        if (res) {
+          let item = this.searchConfig.find(v => v.prop === 'logisticsComCode')
+          res.data = res.data || []
+          this.$set(item, 'enum', res.data.map(v => ({
+            name: v.companyName,
+            value: v.companyCode
+          })))
           this.deliverCompanyAll = res.data
         }
       })
     }
-
-
-  },
-  created() {
-    this.getTableData()
-    this.getLogisticsList()
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.formInput {
-  input {
-    width: 220px;
+.DeliverComponent {
+  .formInput {
+    input {
+      width: 220px;
+    }
   }
-}
-.baseInfo {
-  display: flex;
-  line-height: 24px;
-  margin-bottom: 12px;
-}
+  .baseInfo {
+    display: flex;
+    line-height: 24px;
+    margin-bottom: 12px;
+  }
 
-.el-dialog__body {
-  padding-top: 0;
+  .el-dialog__body {
+    padding-top: 0;
+  }
 }
 </style>

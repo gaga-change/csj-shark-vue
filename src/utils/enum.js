@@ -430,3 +430,7 @@ export const takeStockTypeEnum = [
   { name: '定期盘点', value: 0 },
   { name: '动态盘点', value: 1 },
 ]
+export const payTypeEnum = [
+  { name: '我方付', value: 0 },
+  { name: '客户付', value: 1 },
+]
