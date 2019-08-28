@@ -5,6 +5,7 @@
       ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
+      :labelWidth="labelWidth"
       :api="api"
       :showControl="showControl"
       :controlWidth="controlWidth"
@@ -13,6 +14,9 @@
       @expandChange="hanldeExpandChange"
       @updateData="updateData"
       :parseData="middleParseData"
+      :select="select"
+      @selectionChange="(rows) => $emit('selectionChange', rows)"
+      :selectable="selectable"
     >
       <template slot-scope="scope">
         <slot
@@ -32,7 +36,8 @@
           :config="childTableConfig"
           :data="scope.row._childData"
           :loading="scope.row._childLoading"
-          :select="true"
+          :select="childSelect"
+          :showIndex="childShowIndex"
           @selectionChange="rows => childSelectionChange(rows, scope.row, scope.row._key)"
         >
         </base-table2>
@@ -47,6 +52,16 @@ export default {
   props: {
     /** 允许多表勾选 */
     selectTables: {
+      type: Boolean,
+      default: false
+    },
+    /** 子表是否可选 */
+    childSelect: {
+      type: Boolean,
+      default: true
+    },
+    /** 子表 是否显示序号 */
+    childShowIndex: {
       type: Boolean,
       default: false
     },
@@ -113,6 +128,11 @@ export default {
       type: Function,
       default: () => true
     },
+    /** 搜索 label宽度 */
+    labelWidth: {
+      type: Number,
+      default: 80
+    },
   },
   data() {
     return {
@@ -128,6 +148,10 @@ export default {
       if (this.selectTables) {
         this.$emit('childSelectionChange', [])
       }
+    },
+    /** 清除选中 */
+    clearSelection() {
+      this.$refs['baseList'].clearSelection()
     },
     /** 刷新列表 */
     fetchData() {

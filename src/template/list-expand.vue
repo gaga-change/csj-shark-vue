@@ -19,8 +19,7 @@
         <el-divider direction="vertical"></el-divider>
       </template>
       <template slot="btns">
-        <el-link type="primary">添加</el-link>
-        <el-divider direction="vertical"></el-divider>
+        <el-button type="primary">添加</el-button>
       </template>
     </double-list>
   </div>
@@ -28,7 +27,6 @@
 
 <script>
 import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
-import printOutPlanDetailButton from './components/printOutPlanDetailButton'
 import { outboundOrderStatus, isPushStateEnum, busiBillTypeEnum } from '@/utils/enum'
 
 const childTableConfig = [
@@ -60,7 +58,6 @@ const searchConfig = [
 ]
 
 export default {
-  components: { printOutPlanDetailButton },
   data() {
     return {
       tableConfig,
