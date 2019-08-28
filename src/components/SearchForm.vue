@@ -251,7 +251,7 @@ export default {
           }
         })
       }
-      this.$emit('search', { ...searchForms }, () => {
+      this.$emit('search', this.paramsTrim(), () => {
         this.submitLoading = false
       })
     },
@@ -259,10 +259,21 @@ export default {
       this.resetLoading = true
       this.$refs['searchForm'].resetFields()
       this.$nextTick(() => {
-        this.$emit('search', { ...this.searchForms }, () => {
+        this.$emit('search', this.paramsTrim(), () => {
           this.resetLoading = false
         })
       })
+    },
+    /** 对字符串进去 去空格操作 */
+    paramsTrim(form) {
+      let temp = { ...this.searchForms }
+      Object.keys(temp).forEach(key => {
+        let val = temp[key]
+        if (typeof val === 'string') {
+          temp[key] = temp[key].trim()
+        }
+      })
+      return temp
     }
   }
 }
