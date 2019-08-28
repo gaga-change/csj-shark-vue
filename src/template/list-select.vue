@@ -41,7 +41,7 @@
           <el-button
             type="primary"
             size="mini"
-            @click="handleOutput"
+            @click="()=>{}"
           >
             导出
           </el-button>
