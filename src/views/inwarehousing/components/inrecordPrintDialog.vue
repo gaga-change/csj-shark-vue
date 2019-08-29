@@ -110,6 +110,7 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
+  { label: '包装', prop: 'packageString' },
   { label: '是否质检', prop: 'lotAttrCode7', type: 'enum', enum: yesOrNoEnum },
   { label: '预期收货量', prop: 'planQty' },
 ]
