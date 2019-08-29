@@ -5,27 +5,29 @@
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="listApi"
-      :showControl="false"
-      :select="true"
-      @selectionChange="selectionChange"
-      :selectable="() => true"
+      :showControl="true"
     >
-      <template slot="btns">
-        <el-button
+      <template slot-scope="scope">
+        <el-link
           type="primary"
-          @click="handleUp"
-          :disabled="!selectRows.length"
+          @click="handleUp(scope.row)"
         >
           上架
-        </el-button>
+        </el-link>
       </template>
     </base-list>
+    <putaway-dialog
+      :visible.sync="putawayDialogVisible"
+      :row="nowRow"
+    />
   </div>
 </template>
 
 <script>
 import { selectReceiveDetailItem } from '@/api'
 import { execStatuslist } from '@/utils/enum'
+import putawayDialog from './components/putawayDialog'
+
 const tableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName', width: '200' },
@@ -44,13 +46,16 @@ const searchConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
 ]
+
 export default {
+  components: { putawayDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       listApi: selectReceiveDetailItem,
-      selectRows: [],
+      putawayDialogVisible: false,
+      nowRow: {},
     }
   },
   methods: {
@@ -58,13 +63,10 @@ export default {
     getTableData() {
       this.$refs['baseList'].fetchData()
     },
-    /** 主表多选 */
-    selectionChange(selectRows) {
-      this.selectRows = [...selectRows]
-    },
     /** 上架按钮点击 */
-    handleUp() {
-      this.$message('正在开发')
+    handleUp(row) {
+      this.putawayDialogVisible = true
+      this.nowRow = row
     }
   }
 }

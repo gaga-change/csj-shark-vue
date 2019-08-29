@@ -188,3 +188,5 @@ export const receiveOrderDeleteOrInvalid = params => http.post(`/webApi/receive/
 export const receiveConfirm = params => http.post(`/webApi/receive/order/receiveConfirm`, params)
 /** 编辑收货明细 */
 export const editorReceiveItem = params => http.post(`/webApi/receive/order/editorReceiveItem`, params)
+/** 新增上架任务 */
+export const inJobAdd = params => http.post(`/webApi/in/job/add`, params)
