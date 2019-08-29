@@ -6,6 +6,7 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
+      :appendSearchParams="appendSearchParams"
     >
       <template slot-scope="scope">
         <el-link
@@ -19,6 +20,7 @@
     <putaway-dialog
       :visible.sync="putawayDialogVisible"
       :row="nowRow"
+      @submited="getTableData"
     />
   </div>
 </template>
@@ -37,6 +39,7 @@ const tableConfig = [
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
+  { label: '已上架数量', prop: 'realInQty' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
 ]
 const searchConfig = [
@@ -56,6 +59,7 @@ export default {
       listApi: selectReceiveDetailItem,
       putawayDialogVisible: false,
       nowRow: {},
+      appendSearchParams: { receiveExecStatus: 2 },
     }
   },
   methods: {
