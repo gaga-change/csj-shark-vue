@@ -57,7 +57,7 @@
       >
         <template slot-scope="scope">
           <!-- 收货中  未上架 -->
-          <template v-if="detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0">
+          <template v-if="true || detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0">
             <el-link
               type="primary"
               @click="handleDelete(scope.row)"
@@ -68,7 +68,6 @@
               @click="handleModify(scope.row)"
             >编辑</el-link>
           </template>
-
           <!-- 已激活 未上架 -->
           <el-link
             type="primary"
@@ -83,12 +82,18 @@
       :row="nowRow"
       @submited="initData"
     />
+    <receiving-modify-dialog
+      :visible.sync="receivingModifyDialogVisible"
+      :row="modifyRow"
+      @submited="initData"
+    />
   </div>
 </template>
 <script>
 import { receiveOrderQueryDetails, receiveOrderDeleteOrInvalid, receiveConfirm } from '@/api'
 import { busiBillTypeEnum, receiveState, execStatuslist } from '@/utils/enum'
 import receivingRegisterDialog from './components/receivingRegisterDialog'
+import receivingModifyDialog from './components/receivingModifyDialog'
 
 const detailItemConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
@@ -101,7 +106,6 @@ const detailItemConfig = [
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
-
 const detailDOsConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
@@ -110,7 +114,6 @@ const detailDOsConfig = [
   { label: '预期收货量', prop: 'planQty' },
   { label: '实际收货量', prop: 'receiveQty' },
 ]
-
 const detailItemDosConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
@@ -123,7 +126,7 @@ const detailItemDosConfig = [
 ]
 
 export default {
-  components: { receivingRegisterDialog },
+  components: { receivingRegisterDialog, receivingModifyDialog },
   data() {
     return {
       receiveOrderQueryDetailsLoading: true,
@@ -132,12 +135,14 @@ export default {
       detailDOsConfig,
       detailItemDosConfig,
       receivingRegisterDialogVisible: false,
+      receivingModifyDialogVisible: false,
       detail: {
         receiveOrderDO: {},
         detailDOs: [],
         detailItemDos: []
       },
       nowRow: null,
+      modifyRow: null,
     }
   },
   created() {
@@ -173,7 +178,8 @@ export default {
     },
     /** 编辑 按钮点击 */
     handleModify(row) {
-
+      this.receivingModifyDialogVisible = true
+      this.modifyRow = row
     },
     /** 废弃 按钮点击 */
     handleDiscard(row) {
