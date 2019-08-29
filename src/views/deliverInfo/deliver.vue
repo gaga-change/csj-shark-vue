@@ -29,12 +29,10 @@
       :visible.sync="dialogVisible"
     >
       <item-title text="基本信息" />
-      <item-card
+      <detail-item
         :config="baseInfoConfig"
-        :loading="false"
-        boxStyle="padding-bottom: 0;"
-        :cardData="selectData"
-      />
+        :detail="selectData"
+      ></detail-item>
       <div style="padding-top:12px;">
         <item-title text="待填信息" />
       </div>
@@ -219,11 +217,19 @@ import { addLogisticsRegister, getLogisticsRegisterInfo, getLogisticsRegisterLis
 import { busiBillTypeEnum, registerStatusEnum, logisticsStatusEnum, payTypeEnum } from '@/utils/enum'
 import DeliverDetail from './components/deliverDetailInfo'
 
+const detailItemConfig = [
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitCode' },
+  { label: '预期收货量', prop: 'planQty' },
+  { label: '包装', prop: 'packageString' },
+]
 const baseInfoConfig = [
-  { title: '计划单号', prop: 'planCode', span: 8 },
-  { title: '下单时间', prop: 'placeOrderTime', type: 'time', span: 8 },
-  { title: '收货人', prop: 'receiver', span: 8 },
-  { title: '收货地址', prop: 'receiveAddress', span: 8 },
+  { label: '计划单号', prop: 'planCode' },
+  { label: '下单时间', prop: 'placeOrderTime', type: 'time' },
+  { label: '收货人', prop: 'receiver' },
+  { label: '收货地址', prop: 'receiveAddress' },
 ]
 const tableConfig = [
   { label: '下单时间', prop: 'placeOrderTime', width: 140, type: 'time' },
