@@ -101,8 +101,11 @@ export default {
       }))).then(res => {
         this.createReceiveOrderLoading = false
         if (!res) return
-        this.$message.success('操作成功！')
+        this.$message.success('收货单创建完成！3秒后将自动跳转收货单列表页。')
         this.clearSelection()
+        setTimeout(() => {
+          this.$router.push('/inwarehousing/inrecord')
+        }, 3000);
       })
     }
   }
