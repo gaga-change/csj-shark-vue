@@ -25,7 +25,7 @@
 import { selectSumReceiveDetail } from '@/api'
 import { receiveState } from '@/utils/enum'
 const tableConfig = [
-  { label: '收货单号 ', prop: 'orderCode' },
+  { label: '收货单号 ', prop: 'receiveOrderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
@@ -37,7 +37,7 @@ const tableConfig = [
   { label: '实际收货量', prop: 'receiveQty' },
 ]
 const searchConfig = [
-  { label: '收货单号 ', prop: 'orderCode' },
+  { label: '收货单号 ', prop: 'receiveOrderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '供应商', prop: 'providerName' },
   { label: '外部订单号', prop: 'busiBillNo' },

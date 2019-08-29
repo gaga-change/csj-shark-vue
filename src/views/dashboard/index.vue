@@ -9,21 +9,6 @@
       <div class="menudetail">
         <el-row :gutter="20">
           <el-col :span="6">
-            <router-link
-              to="/inwarehousing/planIn"
-              v-if="this.totalmenu.indexOf('planIn')>-1"
-            >
-              <div class="singlecol">
-                <img
-                  :src="printpath"
-                  alt=""
-                  class="singleimg"
-                >
-                <p>打印入库计划单</p>
-              </div>
-            </router-link>
-          </el-col>
-          <el-col :span="6">
             <router-link to="/inwarehousing/inrecord">
               <div
                 class="singlecol"
@@ -34,14 +19,14 @@
                   alt=""
                   class="singleimg"
                 >
-                <p>收货登记</p>
+                <p>收货单</p>
               </div>
             </router-link>
           </el-col>
           <el-col :span="6">
             <router-link
-              to="/inwarehousing/arrival"
-              v-if="this.totalmenu.indexOf('arrival')>-1"
+              to="/inwarehousing/goodsDetailList"
+              v-if="this.totalmenu.indexOf('goodsDetailList')>-1"
             >
               <div class="singlecol">
                 <img
@@ -49,7 +34,7 @@
                   alt=""
                   class="singleimg"
                 >
-                <p>上架</p>
+                <p>收货明细</p>
               </div>
             </router-link>
           </el-col>
@@ -65,21 +50,6 @@
                   class="singleimg"
                 >
                 <p>入库单</p>
-              </div>
-            </router-link>
-          </el-col>
-          <el-col :span="6">
-            <router-link
-              to="/outwarehousing/outboundPlan"
-              v-if="this.totalmenu.indexOf('outboundPlan')>-1"
-            >
-              <div class="singlecol">
-                <img
-                  :src="outpath"
-                  alt=""
-                  class="singleimg"
-                >
-                <p>打印出库计划单123</p>
               </div>
             </router-link>
           </el-col>
@@ -109,7 +79,7 @@
                   alt=""
                   class="singleimg"
                 >
-                <p>拣货</p>
+                <p>拣货任务</p>
               </div>
             </router-link>
           </el-col>
@@ -195,7 +165,13 @@ export default {
       'totalmenu',
     ])
   },
+  watch: {
+    totalmenu() {
+      console.log(this.totalmenu)
+    }
+  },
   created() {
+    console.log(this.totalmenu)
     this.totallist()
   },
   methods: {
