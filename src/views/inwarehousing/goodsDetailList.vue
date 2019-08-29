@@ -41,6 +41,7 @@ const tableConfig = [
   { label: '实际收货量', prop: 'receiveQty' },
   { label: '已上架数量', prop: 'realInQty' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
+  { label: '收货时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },

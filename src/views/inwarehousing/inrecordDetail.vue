@@ -57,7 +57,7 @@
       >
         <template slot-scope="scope">
           <!-- 收货中  未上架 -->
-          <template v-if="true || detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0">
+          <template v-if="detail.receiveOrderDO.execStatus===1 && scope.row.isPut === 0">
             <el-link
               type="primary"
               @click="handleDelete(scope.row)"
