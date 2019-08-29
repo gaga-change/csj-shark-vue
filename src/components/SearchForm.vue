@@ -251,7 +251,7 @@ export default {
           }
         })
       }
-      this.$emit('search', this.paramsTrim(), () => {
+      this.$emit('search', this.paramsTrim(searchForms), () => {
         this.submitLoading = false
       })
     },
@@ -259,14 +259,14 @@ export default {
       this.resetLoading = true
       this.$refs['searchForm'].resetFields()
       this.$nextTick(() => {
-        this.$emit('search', this.paramsTrim(), () => {
+        this.$emit('search', this.paramsTrim(this.searchForms), () => {
           this.resetLoading = false
         })
       })
     },
-    /** 对字符串进去 去空格操作 */
+    /** 对字符串进行 去空格操作 */
     paramsTrim(form) {
-      let temp = { ...this.searchForms }
+      let temp = { ...form }
       Object.keys(temp).forEach(key => {
         let val = temp[key]
         if (typeof val === 'string') {
