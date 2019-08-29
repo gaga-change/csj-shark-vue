@@ -132,10 +132,11 @@ export default {
       this.$apiConfirm(`此操作将${operate ? '终止' : '取消'}该盘点单，是否继续`, () => inventoryRemoveOrStop({
         id: row.id,
         operate
-      })).then(() => {
+      })).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.getTableData()
-      }).catch(() => { })
+      })
     },
     /** 导出 */
     handleOutput() {

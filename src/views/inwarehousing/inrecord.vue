@@ -111,10 +111,11 @@ export default {
     },
     /** 激活 */
     handleActive(row) {
-      this.$apiConfirm('是否确定激活？', () => receiveOrderActivate({ id: row.id })).then(() => {
+      this.$apiConfirm('是否确定激活？', () => receiveOrderActivate({ id: row.id })).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.getTableData()
-      }).catch(() => { })
+      })
     },
     /** 可选 返回列表添加字段 */
     parseData(res) {

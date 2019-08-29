@@ -78,10 +78,11 @@ export default {
         inWarehouseJobList.push(item.id)
         receiveOrderCodeList.push(item.receiveOrderCode)
       })
-      this.$apiConfirm(`确定要为 ${receiveOrderCodeList.join(' , ')} 生成入库单吗?`, () => inOrderAdd(inWarehouseJobList)).then(() => {
+      this.$apiConfirm(`确定要为 ${receiveOrderCodeList.join(' , ')} 生成入库单吗?`, () => inOrderAdd(inWarehouseJobList)).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.getTableData()
-      }).catch(() => { })
+      })
     }
   }
 }

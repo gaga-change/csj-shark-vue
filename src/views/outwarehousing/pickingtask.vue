@@ -114,17 +114,19 @@ export default {
     },
     /** 终止拣货 点击 */
     handlePickStop(row) {
-      this.$apiConfirm('确定要终止操作码？', () => orderPickStop(row.id)).then((action) => {
+      this.$apiConfirm('确定要终止操作码？', () => orderPickStop(row.id)).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.getTableData()
-      }).catch(() => { })
+      })
     },
     /** 删除拣货 点击 */
     handleDelete(row) {
-      this.$apiConfirm('确定要删除吗？', () => orderDelete(row.id)).then(() => {
+      this.$apiConfirm('确定要删除吗？', () => orderDelete(row.id)).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.getTableData()
-      }).catch(() => { })
+      })
     },
   },
 }

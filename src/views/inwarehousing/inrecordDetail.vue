@@ -171,10 +171,11 @@ export default {
     },
     /** 删除 按钮点击 */
     handleDelete(row) {
-      this.$apiConfirm('是否确定删除？', () => receiveOrderDeleteOrInvalid({ status: 0, itemId: row.id })).then(() => {
+      this.$apiConfirm('是否确定删除？', () => receiveOrderDeleteOrInvalid({ status: 0, itemId: row.id })).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.initData()
-      }).catch(() => { })
+      })
     },
     /** 编辑 按钮点击 */
     handleModify(row) {
@@ -183,10 +184,11 @@ export default {
     },
     /** 废弃 按钮点击 */
     handleDiscard(row) {
-      this.$apiConfirm('是否确定作废？', () => receiveOrderDeleteOrInvalid({ status: 1, itemId: row.id })).then(() => {
+      this.$apiConfirm('是否确定作废？', () => receiveOrderDeleteOrInvalid({ status: 1, itemId: row.id })).then(res => {
+        if (!res) return
         this.$message.success('操作成功！')
         this.initData()
-      }).catch(() => { })
+      })
     },
     /** 收货确认 */
     handleConfirm() {
@@ -207,10 +209,11 @@ export default {
         } else {
           msg = `商品【${out[0].skuName}】等【${out.length}】项非全部收货，是否继续收货确认`
         }
-        this.$apiConfirm(msg, () => receiveConfirm(params)).then(() => {
+        this.$apiConfirm(msg, () => receiveConfirm(params)).then(res => {
+          if (!res) return
           this.$message.success('操作成功！')
           this.initData()
-        }).catch(() => { })
+        })
       } else {
         this.receiveConfirmLoading = true
         receiveConfirm(params).then((res) => {

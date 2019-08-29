@@ -92,9 +92,10 @@ export default {
       })
       this.$apiConfirm(`确定要为 ${src} 生成出库单吗?`, () => createOutWareHouseOrder(
         { sortTaskIds: this.selectRows.map(v => v.id) }
-      )).then(() => {
+      )).then(res => {
+        if (!res) return
         this.$message({ type: 'success', message: '操作成功' })
-      }).catch(() => { })
+      })
     },
     /** 刷新左侧列表 */
     getCurrentTableData() {
