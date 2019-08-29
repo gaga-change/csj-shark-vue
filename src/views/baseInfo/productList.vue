@@ -59,9 +59,7 @@ export default {
     /** 扩展配置 按钮点击 */
     handleSet(row) {
       this.selectedRow = row
-      this.$nextTick(() => {
-        this.productSetDialogVisible = true
-      })
+      this.productSetDialogVisible = true
     }
   }
 }

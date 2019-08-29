@@ -41,12 +41,10 @@ const tableConfig = [
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum, width: 90 },
   { label: '货主', prop: 'ownerName', width: 150 },
   { label: '客户/供应商', prop: 'arrivalName', width: 150 },
-  { label: '商品总数', prop: 'outPlanQty', minWidth: 90 },
   { label: '出库状态', prop: 'execStatus', minWidth: 90, type: 'enum', enum: OutExecStatusEnum, },
   { label: '收货人', prop: 'arrivalLinkName', minWidth: 90 },
   { label: '收货地址', prop: 'arrivalAddress', width: 120 },
   { label: '联系电话', prop: 'arrivalLinkTel', width: 150 },
-  { label: '已出库数量', prop: 'outQty', minWidth: 90 },
 ]
 const searchConfig = [
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum },
