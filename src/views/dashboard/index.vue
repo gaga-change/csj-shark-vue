@@ -165,13 +165,7 @@ export default {
       'totalmenu',
     ])
   },
-  watch: {
-    totalmenu() {
-      console.log(this.totalmenu)
-    }
-  },
   created() {
-    console.log(this.totalmenu)
     this.totallist()
   },
   methods: {

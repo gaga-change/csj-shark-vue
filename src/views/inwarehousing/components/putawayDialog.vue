@@ -34,10 +34,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="带容器">
-              <el-switch
-                v-model="hasContainer"
-                @change="handleHasContainerChange"
-              >
+              <el-switch v-model="hasContainer">
               </el-switch>
             </el-form-item>
             <el-form-item
@@ -148,11 +145,6 @@ export default {
     }
   },
   methods: {
-    /** 是否带容器 change事件 */
-    handleHasContainerChange(val) {
-      console.log('change', val)
-      this.tableData = []
-    },
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid) => {
