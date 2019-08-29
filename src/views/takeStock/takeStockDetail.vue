@@ -30,9 +30,21 @@
 
 <script>
 import { planInventoryQueryByOrderId } from '@/api'
-import { takeStockDetailProductTableConfig } from './components/config'
-import { takeStockTypeEnum } from '@/utils/enum'
+import { takeStockTypeEnum, executeStatus2Enum } from '@/utils/enum'
 
+const takeStockDetailProductTableConfig = [
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '容器', prop: 'trayCode' },
+  { label: '规格型号', prop: 'skuFormat' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '库区库位', prop: 'areaSpceCode' },
+  { label: '库存数量', prop: 'stockQty' },
+  { label: '实际盘点数量', prop: 'inventoryQty' },
+  { label: '盈亏数量', prop: 'profitLossQty' },
+  { label: '状态', prop: 'executeStatus', type: 'enum', enum: executeStatus2Enum },
+]
 const takeStockDetailConfig = [
   { label: '盘点单号', prop: 'orderCode' },
   { label: '创建人', prop: 'createrName' },
@@ -43,6 +55,7 @@ const takeStockDetailConfig = [
   { label: '盘点类型', prop: 'orderType', type: 'enum', enum: takeStockTypeEnum },
   { label: '备注', prop: 'remarkInfo' },
 ]
+
 export default {
   data() {
     return {

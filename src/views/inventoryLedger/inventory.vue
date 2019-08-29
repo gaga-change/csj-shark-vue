@@ -190,7 +190,7 @@ const stateTransitionTableConfig = [// 库存列表
   { label: '规格型号', prop: 'skuFormat' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '批次', prop: 'batchNo' },
-  { label: '商品状态', prop: 'checkResult', enum: true, type: checkResultEnum },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: checkResultEnum },
   { label: '收货数量', prop: 'skuQty' },
   { label: '正品数量', prop: 'goodQty', fixed: 'right', edit: true, inputType: 'number', max: 99999999, min: 0, width: '160' },
   { label: '残次品数量', prop: 'badQty', fixed: 'right', edit: true, inputType: 'number', max: 99999999, min: 0, width: '160' },

@@ -325,84 +325,73 @@ export default {
     }
   },
   beforeMount() {
-    let tableConfig = _.cloneDeep(this.config);
-    for (let i in tableConfig) {
-      if (tableConfig[i].type) {
-        if (tableConfig[i].useApi) {
-          tableConfig[i].formatter = (row, column, cellValue, index) => this.mapConfig[tableConfig[i].type] && this.mapConfig[tableConfig[i].type].find(v => v.key == cellValue) && this.mapConfig[tableConfig[i].type].find(v => v.key == cellValue).value || cellValue
-        } else if (tableConfig[i].useLocalEnum) {
-          let item = { ...tableConfig[i] }
-          tableConfig[i].formatter = (row, column, cellValue, index) => {
-            let res = cellValue
-            if (!item.type) {
-              console.error('需要 【type】字段')
-            } else if (!Enum[item.type]) {
-              console.error(`枚举列表中为找到【${item.type}】`)
-            } else {
-              let temp = Enum[item.type].find(v => v.value == cellValue)
-              if (temp) {
-                res = temp.name
-              } else {
-                console.error(`枚举异常, 在【${item.type}】下未找到相应枚举值【${cellValue}】`)
+    let tableConfig = JSON.parse(JSON.stringify(this.config))
+    tableConfig.forEach(configItem => {
+      if (configItem.type) {
+        switch (configItem.type) {
+          case 'enum':
+            {
+              configItem.formatter = (row, column, cellValue, index) => {
+                let res = cellValue
+                if (!configItem.enum) {
+                  console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
+                } else {
+                  let temp = configItem.enum.find(v => v.value == cellValue)
+                  if (temp) {
+                    res = temp.name
+                  } else {
+                    // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                    res = ''
+                  }
+                }
+                return res
               }
             }
-            return res
+            break
+          case 'time':
+            configItem.formatter = (row, column, cellValue, index) => cellValue ? moment(cellValue).format(configItem.format || 'YYYY-MM-DD HH:mm:ss') : '';
+            break
+          case 'Boolean': configItem.formatter = (row, column, cellValue, index) => cellValue ? '是' : '否'
+            break
+          case 'index': configItem.formatter = (row, column, cellValue, index) => (this.selfPageSize) * (this.selfCurrentPage - 1) + index + 1
+            break
+          case 'toFixed': configItem.formatter = (row, column, cellValue, index) => cellValue && Number(Number(cellValue).toFixed(2))
+            break
+          case 'files': configItem.formatter = (row, column, cellValue, index) => {
+            let files = row.files;
+            if (!files || files.length < 1) {
+              return ''
+            }
+            return <el-dropdown>
+              <span class="el-dropdown-link">
+                查看附件<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                {
+                  files.map((v, i) => <el-dropdown-item>
+                    <a class="el-dropdown-link" target="blank" href={v.path}>{v.name || `附件${i + 1}`}</a>
+                  </el-dropdown-item>)
+                }
+              </el-dropdown-menu>
+            </el-dropdown>
           }
-        } else {
-          switch (tableConfig[i].type) {
-            case 'time': tableConfig[i].formatter = (row, column, cellValue, index) => cellValue ? moment(cellValue).format(tableConfig[i].format || 'YYYY-MM-DD HH:mm:ss') : ''; break;
-            case 'Boolean': tableConfig[i].formatter = (row, column, cellValue, index) => cellValue ? '是' : '否'; break;
-            case 'index': tableConfig[i].formatter = (row, column, cellValue, index) => (this.pageSize) * (this.currentPage - 1) + index + 1; break;
-            case 'toFixed': tableConfig[i].formatter = (row, column, cellValue, index) => cellValue && Number(Number(cellValue).toFixed(2)); break;
-            case 'files': tableConfig[i].formatter = (row, column, cellValue, index) => {
-              let files = row.files;
-              if (!files || files.length < 1) {
-                return ''
-              }
-              return <el-dropdown>
-                <span class="el-dropdown-link">
-                  查看附件<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  {
-                    files.map((v, i) => <el-dropdown-item>
-                      <a class="el-dropdown-link" target="blank" href={v.path}>{v.name || `附件${i + 1}`}</a>
-                    </el-dropdown-item>)
-                  }
-                </el-dropdown-menu>
-              </el-dropdown>
-            }; break;
-
-            case 'outgoing+reply': tableConfig[i].formatter = (row, column, cellValue, index) => {
-              if (row.isCreate) {
-                return <div>
-                  <router-link to={{ path: '/outgoing/plan-detail', query: { planCode: row.planCode } }} style={{ color: '#3399ea', margin: '0 10px 0 0' }}>查看</router-link>
-                  <router-link to={{ path: '/reply/newreceiptorder', query: { id: row.id } }} style={{ color: '#3399ea' }}>创建回单</router-link>
-                </div>
-              } else {
-                return <div>
-                  <router-link to={{ path: '/outgoing/plan-detail', query: { planCode: row.planCode } }} style={{ color: '#3399ea', margin: '0 10px 0 0' }}>查看</router-link>
-                </div>
-              }
-            }; break;
-
-          }
+            break
         }
-      } else if (tableConfig[i].dom) {
-        tableConfig[i].formatter = tableConfig[i].dom
-      } else if (tableConfig[i].linkTo) {
-        tableConfig[i].formatter = (row, column, cellValue, index) => {
+      }
+      else if (configItem.dom) {
+        configItem.formatter = configItem.dom
+      } else if (configItem.linkTo) {
+        configItem.formatter = (row, column, cellValue, index) => {
           let json = {};
-          tableConfig[i].query.forEach(item => {
+          configItem.query.forEach(item => {
             json[item.key] = row[item.value]
           })
-          return <router-link to={{ path: tableConfig[i].linkTo, query: json }} style={{ color: '#3399ea' }}>{tableConfig[i].linkText ? tableConfig[i].linkText : cellValue}</router-link>
+          return <router-link to={{ path: configItem.linkTo, query: json }} style={{ color: '#3399ea' }}>{configItem.linkText ? configItem.linkText : cellValue}</router-link>
         }
-
       } else {
-        tableConfig[i].formatter = (row, column, cellValue, index) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''
+        configItem.formatter = (row, column, cellValue, index) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''
       }
-    }
+    })
     this.tableConfig = tableConfig;
   },
   methods: {

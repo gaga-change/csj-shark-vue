@@ -93,9 +93,19 @@
 
 <script>
 import { checkOrderAddCheckOrder, uploadReportFile } from '@/api'
-import { qualityTestingCreateTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
 import { mapGetters } from 'vuex'
+import { checkResult3Enum } from '@/utils/enum'
+
+const qualityTestingCreateTableConfig = [
+  { label: '收货单号', prop: 'orderCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '收货数量', prop: 'receiveQty' },
+  { label: '质检数量', prop: 'receiveQty' },
+  { label: '质检结果', prop: 'checkResult', edit: true, inputType: 'select', enum: checkResult3Enum },
+]
+
 export default {
   components: { selectProduct },
   data() {

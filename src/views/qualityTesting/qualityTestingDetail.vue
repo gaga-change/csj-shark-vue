@@ -50,7 +50,22 @@
 
 <script>
 import { getCheckOrderDetail } from '@/api'
-import { quailtyTestingDetailConfig, qualityTestingDetailTableConfig } from './components/config'
+import { checkResult2Enum } from '@/utils/enum'
+
+const quailtyTestingDetailConfig = [
+  { label: '质检单号', prop: 'orderCode' },
+  { label: '创建人', prop: 'createrName' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+]
+const qualityTestingDetailTableConfig = [
+  { label: '收货单号', prop: 'receiveOrderCode' },
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '收货数量', prop: 'receiveQty' },
+  { label: '质检数量', prop: 'checkQty' },
+  { label: '质检结果', prop: 'checkResult', type: 'enum', enum: checkResult2Enum },
+]
+
 export default {
   data() {
     return {
