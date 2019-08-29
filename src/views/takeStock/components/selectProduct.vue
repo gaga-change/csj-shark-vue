@@ -19,20 +19,6 @@
               {{takeStockTypeEnum.find(v => v.value == orderType).name}}
             </el-form-item>
             <el-form-item
-              label="上次盘点时间"
-              prop="changeBeginDate"
-            >
-              <el-date-picker
-                v-model="formData.changeBeginDate"
-                type="datetime"
-                placeholder="选择日期时间"
-                align="right"
-                :picker-options="pickerOptions"
-                value-format="timestamp"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item
               label="库区"
               prop="warehouseAreaCode"
             >
