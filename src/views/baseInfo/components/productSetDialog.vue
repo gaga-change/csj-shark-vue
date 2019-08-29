@@ -112,10 +112,10 @@ export default {
   },
   watch: {
     /** 监听数据切换，重置表单 */
-    rowData(val) {
-      this.$refs['form'] && this.$refs['form'].resetFields()
+    visible(val) {
+      if (!val) return
       Object.keys(this.formData).forEach(key => {
-        this.$set(this.formData, key, val[key] === null ? undefined : val[key])
+        this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
       })
     }
   },
@@ -157,7 +157,6 @@ export default {
           skuUpdate({ ...this.rowData, ...params }).then(res => {
             this.loading = false
             if (!res) return
-            this.$refs['form'] && this.$refs['form'].resetFields()
             this.$emit('submited')
             this.$message.success('操作成功！')
             this.close()
@@ -167,7 +166,8 @@ export default {
     },
     /** 关闭弹窗 */
     close() {
-      this.visible && this.$emit('update:visible', false)
+      this.$refs['form'] && this.$refs['form'].resetFields()
+      return this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {
       this.$confirm('确认关闭？')

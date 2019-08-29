@@ -127,12 +127,6 @@ export default {
       return this.row || {}
     }
   },
-  watch: {
-    /** 监听数据切换，重置表单 */
-    rowData(val) {
-      this.$refs['form'] && this.$refs['form'].resetFields()
-    }
-  },
   data() {
     return {
       detailItemConfig,
@@ -167,7 +161,6 @@ export default {
           inJobAdd({ putSpaceInfoList: [{ ...this.formData }], orderDetailItemId: this.rowData.id }).then(res => {
             this.loading = false
             if (!res) return
-            this.$refs['form'] && this.$refs['form'].resetFields()
             this.$message.success('操作成功！')
             this.$emit('submited')
             this.close()
@@ -177,6 +170,7 @@ export default {
     },
     /** 关闭弹窗 */
     close() {
+      this.$refs['form'] && this.$refs['form'].resetFields()
       this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {
