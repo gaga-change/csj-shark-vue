@@ -16,7 +16,7 @@
           v-for="(detail, index) in detailArr"
           :key="index"
           :class="{hidden: index > 0}"
-          style="margin-bottom: 40px"
+          :style="{marginTop: index> 0 ? '40px' : '0'}"
         >
           <div class="text-right">
             <div style="width:200px;display:inline-block;">
@@ -149,7 +149,7 @@ export default {
   methods: {
     /** 初始化数据 */
     async initData() {
-      this.detailRows = []
+      this.detailArr = []
       this.loading = true
       let apis = []
       for (let i = 0; i < this.rows.length; i++) {
