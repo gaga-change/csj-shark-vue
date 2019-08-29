@@ -131,7 +131,7 @@ export default {
     return {
       detailItemConfig,
       loading: false,
-      hasContainer: true,
+      hasContainer: false,
       formData: {
         //  ... 表单字段
         warehouseSpaceCode: undefined,
