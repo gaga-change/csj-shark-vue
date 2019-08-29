@@ -13,7 +13,7 @@
         <el-input
           type="text"
           size="mini"
-          placeholder="请输入计划单号"
+          placeholder="请输入拣货单号"
           v-model.trim="selectForm.outOrderCode"
           @input="handelCodeInputChange"
           clearable
@@ -32,9 +32,9 @@
 <script>
 import { pickOrderNotCreateOrder } from '@/api'
 
-const tableConfig = [// 计划单号列表
+const tableConfig = [// 拣货单号列表
   { label: '序号', prop: 'index' },
-  { label: '计划单号', prop: 'value', width: 150 },
+  { label: '拣货单号', prop: 'value', width: 150 },
 ]
 
 export default {
