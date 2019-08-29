@@ -104,6 +104,7 @@ const detailItemConfig = [
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },
   { label: '数量', prop: 'receiveQty' },
+  { label: '上架数量', prop: 'realInQty' },
 ]
 
 export default {
