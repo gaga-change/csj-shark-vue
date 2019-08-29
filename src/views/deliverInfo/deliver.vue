@@ -217,14 +217,6 @@ import { addLogisticsRegister, getLogisticsRegisterInfo, getLogisticsRegisterLis
 import { busiBillTypeEnum, registerStatusEnum, logisticsStatusEnum, payTypeEnum } from '@/utils/enum'
 import DeliverDetail from './components/deliverDetailInfo'
 
-const detailItemConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '预期收货量', prop: 'planQty' },
-  { label: '包装', prop: 'packageString' },
-]
 const baseInfoConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '下单时间', prop: 'placeOrderTime', type: 'time' },
