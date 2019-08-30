@@ -14,7 +14,7 @@ const path = require('path')
 // const ip = 'http://192.168.2.126:8787';// 雷亚峰
 const ip = 'http://192.168.1.37:8787'; // 测试环境
 
-const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api'];
+const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api', '/app'];
 let proxyTable = {};
 
 proxyTableArr.forEach(item => {

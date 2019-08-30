@@ -2,6 +2,7 @@ import http from './http'
 import download from './download'
 
 export * from './config'
+export * from './app'
 
 /** 导出库位库存 */
 export const exportLedger = (params, fileName) => download(`/webApi/sku/stock/exportLedger`, params, fileName)

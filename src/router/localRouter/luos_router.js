@@ -242,6 +242,36 @@ export default [
     ]
   },
   {
+    path: '/appManage',
+    component: Layout,
+    redirect: 'appEditionList',
+    meta: { title: 'APP管理', noCache: true, icon: 'info' },
+    hidden: false,
+    children: [
+      {
+        name: 'appEditionList',
+        path: 'appEditionList',
+        meta: { title: 'APP版本信息管理', noCache: true },
+        component: _import('appManage/appEditionList'),
+        hidden: false,
+      },
+      {
+        name: 'modifyAppEdition',
+        path: 'modifyAppEdition',
+        meta: { title: 'APP版本信息修改', noCache: true },
+        component: _import('appManage/modifyAppEdition'),
+        hidden: true,
+      },
+      {
+        name: 'newAppEdition',
+        path: 'newAppEdition',
+        meta: { title: 'APP版本信息新增', noCache: true },
+        component: _import('appManage/newAppEdition'),
+        hidden: true,
+      },
+    ]
+  },
+  {
     path: '/deliverInfo',
     component: Layout,
     redirect: 'deliverInfo/deliver',
