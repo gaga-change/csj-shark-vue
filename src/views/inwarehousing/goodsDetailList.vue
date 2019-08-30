@@ -12,6 +12,7 @@
         <el-link
           type="primary"
           @click="handleUp(scope.row)"
+          :disabled="scope.row.isPut == 9"
         >
           上架
         </el-link>
