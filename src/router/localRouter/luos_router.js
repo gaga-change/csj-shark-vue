@@ -27,7 +27,7 @@ export default [
       {
         name: 'inrecordDetail',
         path: 'inrecordDetail',
-        meta: { title: '收货单详情', noCache: true },
+        meta: { title: '收货单详情', noCache: false },
         component: _import('inwarehousing/inrecordDetail'),
         hidden: false,
       },
