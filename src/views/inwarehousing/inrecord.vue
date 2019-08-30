@@ -81,7 +81,7 @@ const searchConfig = [
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
   { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 
 export default {

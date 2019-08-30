@@ -48,7 +48,7 @@ const tableConfig = [
 ]
 const searchConfig = [
   { label: '质检单号', prop: 'orderCode' },
-  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 export default {
   data() {

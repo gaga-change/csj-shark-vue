@@ -54,7 +54,7 @@ const searchConfig = [
   { label: '出库单号', prop: 'orderCode' },
   { label: '客户/供应商', prop: 'ownerName' },
   { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: outboundOrderStatus },
-  { label: '出库时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+  { label: '出库时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 
 export default {

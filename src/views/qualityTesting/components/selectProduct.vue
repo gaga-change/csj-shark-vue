@@ -68,7 +68,7 @@ const tableConfig = [
 ]
 const searchConfig = [
   { label: '收货单号', prop: 'orderCode' },
-  { label: '收货时间', prop: 'createTimeArea', props: ['startDate', 'endtDate'], type: 'timeArea' },
+  { label: '收货时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 
 export default {

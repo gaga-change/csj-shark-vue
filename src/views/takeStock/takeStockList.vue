@@ -104,7 +104,7 @@ const tableConfig = [
 const searchConfig = [
   { label: '盘点单号', prop: 'orderCode' },
   { label: '状态', prop: 'executeStatus', type: 'enum', enum: executeStatusEnum },
-  { label: '创建时间', prop: 'createTimeArea', type: 'timeArea', props: ['startDate', 'endtDate'] },
+  { label: '创建时间', prop: 'createTimeArea', type: 'timeArea', props: ['startDate', 'endDate'] },
 ]
 export default {
   components: { printBills },
