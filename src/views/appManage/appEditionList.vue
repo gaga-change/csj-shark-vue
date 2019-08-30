@@ -175,6 +175,15 @@ export default {
   created() {
     this.getlist()
   },
+  filters: {
+    isReleaseFilter(val) {
+      switch (parseInt(val)) {
+        case 0: return '否'
+        case 1: return '是'
+        default: return ''
+      }
+    }
+  },
   methods: {
     getlist() {
       applist({ pageNum: this.current, pageSize: this.pageSize, ...this.planform.ownproduct }).then(
@@ -213,7 +222,7 @@ export default {
     toDetail(id) {
       this.$router.push({
         name: 'modifyAppEdition',
-        params: {
+        query: {
           id
         }
       })

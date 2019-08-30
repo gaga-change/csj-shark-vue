@@ -235,9 +235,9 @@ export default {
       this.planform.updateSize = null
     },
     getdetail() {
-      appDetail(this.$route.params.id).then(res => {
+      appDetail(this.$route.query.id).then(res => {
         if (!res) return
-        this.planform = res.data.data
+        this.planform = res.data
       })
     }
   }
