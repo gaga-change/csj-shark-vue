@@ -12,7 +12,7 @@
         <el-link
           type="primary"
           @click="handleUp(scope.row)"
-          :disabled="scope.row.isPut == 9"
+          :disabled="scope.row.isPut != 0 && scope.row.isPut != 1 "
         >
           上架
         </el-link>
@@ -32,6 +32,7 @@ import { execStatuslist } from '@/utils/enum'
 import putawayDialog from './components/putawayDialog'
 
 const tableConfig = [
+  { label: '收货单号', prop: 'receiveOrderCode' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName', width: '200' },
   { label: '规格型号', prop: 'skuFormat' },
