@@ -12,7 +12,7 @@ let newAxios = axios.create({
 newAxios.interceptors.response.use(function (response) {
   let data = response.data
   // 系统异常提示（返回的数据为 null）
-  if (data.code === 'user-not-login') {
+  if (data.code === 'user-not-login' || data.code === 'shark-512') {
     Message({
       type: 'error',
       message: '登录失效，请重新登录',
