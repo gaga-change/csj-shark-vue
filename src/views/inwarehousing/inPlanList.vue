@@ -40,7 +40,7 @@ const childTableConfig = [
   { label: '单位', prop: 'skuUnitCode' },
   { label: '计划量', prop: 'planInQty' },
   { label: '收货待确认量', prop: 'unconfirmReceiveQty' },
-  { label: '已收货量', prop: 'receiveQty' },
+  { label: '已收货量', prop: 'confirmedReceiveQty' },
 ]
 const tableConfig = [
   { label: '入库计划单号 ', prop: 'planCode' },
