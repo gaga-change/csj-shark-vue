@@ -37,7 +37,6 @@
 <script>
 import confirmSearch from './components/confirmSearch'
 import { selectNotCreateOrderList, createOutWareHouseOrder } from '@/api'
-import { jobStatusList } from '@/utils/enum'
 
 const tableConfig = [
   { label: '拣货单号', prop: 'pickOrderCode' },
@@ -51,7 +50,7 @@ const tableConfig = [
   { label: '通知拣货数', prop: 'sortQty' },
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '是否已生成出库单', prop: 'isCreateOrder', type: 'Boolean', width: 120 },
-  { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: jobStatusList },
+  { label: '执行状态', prop: 'sortStatusStr' },
   { label: '库位', prop: 'warehouseSpaceCode' },
 ]
 

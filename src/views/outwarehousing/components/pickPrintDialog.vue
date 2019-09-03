@@ -52,7 +52,6 @@
 <script>
 import { MakePrint } from '@/utils'
 import { mapGetters } from 'vuex'
-import { jobStatusList } from '@/utils/enum'
 import { pickOrderDetail } from '@/api'
 
 const printConfig = [
@@ -115,11 +114,6 @@ export default {
       pickOrderDetail(this.rowData.id).then(res => {
         this.pickOrderDetailLoading = false;
         if (res) {
-          res.data.forEach(item => {
-            item.sum = item.warehouseSpaceCode + ':' + item.jobQty
-            item.realSortQty = item.realSortQty || 0
-            item.status = jobStatusList.find(v => v.value === item.jobStatus).name
-          })
           this.pickingtaskdetailTableData = res.data || [];
         }
       })
