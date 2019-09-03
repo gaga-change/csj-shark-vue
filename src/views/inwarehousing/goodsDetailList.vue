@@ -50,6 +50,7 @@ const searchConfig = [
   { label: '规格型号', prop: 'skuFormat' },
   { label: '容器', prop: 'trayCode' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
+  { label: '收货单号', prop: 'receiveOrderCode' },
 ]
 
 export default {

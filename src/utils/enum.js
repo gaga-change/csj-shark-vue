@@ -175,7 +175,7 @@ export const orderStatus = [
     value: 0
   },
   {
-    name: '部分执行',
+    name: '执行中',
     value: 1
   },
   {
@@ -183,7 +183,7 @@ export const orderStatus = [
     value: 2
   },
   {
-    name: '终止',
+    name: '已终止',
     value: 3
   },
 ]
