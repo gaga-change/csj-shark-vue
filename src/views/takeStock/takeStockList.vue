@@ -140,7 +140,7 @@ export default {
     },
     /** 导出 */
     handleOutput() {
-      inventoryRecordExport(this.$refs['baseList'].searchParams, '盘点明细.xls')
+      inventoryRecordExport(this.$refs['baseList'].searchParams)
     },
     /** 打印 */
     handlePrint() {

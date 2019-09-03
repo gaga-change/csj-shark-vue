@@ -59,7 +59,7 @@ export default {
     },
     /** 导出 */
     handleOutput() {
-      receiveOrderExportLedger(this.$refs['baseList'].searchParams, '收货汇总.xls')
+      receiveOrderExportLedger(this.$refs['baseList'].searchParams)
     }
   }
 }

@@ -369,7 +369,7 @@ export default {
     },
     /** 导出 */
     getExport() {
-      exportLedger(this.searchParams, '库存台账.xls')
+      exportLedger(this.searchParams)
     }
   }
 }

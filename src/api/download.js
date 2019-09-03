@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 
 
-export default (url, params, fileName) => axios({
+export default (url, params) => axios({
   method: 'get',
   url,
   params,
@@ -16,15 +16,19 @@ export default (url, params, fileName) => axios({
     })
     reader.readAsText(res.data)
   } else {
+    let filename = decodeURIComponent(res.headers['content-disposition'].split('filename=')[1])
+    if (!~filename.indexOf('.xls')) {
+      filename += '.xls'
+    }
     let blob = new Blob([res.data])
     if (window.navigator.msSaveOrOpenBlob) {
-      navigator.msSaveBlob(blob, fileName)
+      navigator.msSaveBlob(blob, filename)
     } else {
       let link = document.createElement("a")
       let evt = document.createEvent("HTMLEvents")
       evt.initEvent("click", false, false)
       link.href = URL.createObjectURL(blob)
-      link.download = fileName
+      link.download = filename
       link.style.display = "none"
       document.body.appendChild(link)
       link.click()
