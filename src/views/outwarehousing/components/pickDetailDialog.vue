@@ -126,7 +126,7 @@ export default {
       json.pickOrderId = this.rowData.id;
       this.selectRows.forEach(v => {
         v.realSortStocks = {}
-        v.realSortStocks[v.stockId] = v.jobQty
+        v.realSortStocks[v.stockId] = v.number
       })
       this.loading = true
       orderPickConfirm(json).then(res => {
