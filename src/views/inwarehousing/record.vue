@@ -29,6 +29,7 @@ import { yesOrNoEnum } from '@/utils/enum'
 
 const tableConfig = [
   { label: '入库计划单号', prop: 'planCode', width: 140 },
+  { label: '收货单号', prop: 'receiveOrderCode' },
   { label: '外部订单号', prop: 'busiBillNo', width: 90 },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
@@ -43,6 +44,7 @@ const tableConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 const searchConfig = [
+  { label: '收货单号', prop: 'receiveOrderCode' },
   { label: '容器', prop: 'trayCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: yesOrNoEnum, default: 0 },
