@@ -94,6 +94,7 @@ export default {
       )).then(res => {
         if (!res) return
         this.$message({ type: 'success', message: '操作成功' })
+        this.getCurrentTableData()
       })
     },
     /** 刷新左侧列表 */
