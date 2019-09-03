@@ -86,11 +86,11 @@ export default {
     },
     /** 复核（生成出库单） 按钮点击 */
     handleCreateOutOrder() {
-      let src = '';
+      let pickOrderCodeSet = new Set()
       this.selectRows.forEach(v => {
-        src += ` ${v.pickOrderCode} , `
+        pickOrderCodeSet.add(v.pickOrderCode)
       })
-      this.$apiConfirm(`确定要为 ${src} 生成出库单吗?`, () => createOutWareHouseOrder(
+      this.$apiConfirm(`确定要为 ${[...pickOrderCodeSet].join('，')} 生成出库单吗?`, () => createOutWareHouseOrder(
         { sortTaskIds: this.selectRows.map(v => v.id) }
       )).then(res => {
         if (!res) return
