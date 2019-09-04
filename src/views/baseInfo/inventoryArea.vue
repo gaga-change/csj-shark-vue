@@ -171,7 +171,7 @@ import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { SimpleMsg } from '@/utils/luoFun'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea } from '@/api'
-import { AtoZ, WarehouseAreaNatureEnum, inLockEnum, outLockEnum, yesOrNoEnum } from '@/utils/enum'
+import { WarehouseAreaNatureEnum, inLockEnum, outLockEnum, yesOrNoEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode' },
   { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
@@ -183,7 +183,7 @@ const tableConfig = [
   { label: '描述', prop: 'warehouseAreaDesc' },
 ]
 const searchConfig = [
-  { label: '库区编码', prop: 'warehouseAreaCode', type: 'enum', enum: AtoZ },
+  { label: '库区编码', prop: 'warehouseAreaCode' },
   { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
   { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
 ]
