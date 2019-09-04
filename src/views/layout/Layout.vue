@@ -101,6 +101,11 @@ export default {
 }
 
 .main-container-nav {
+  margin: 0 !important;
+  position: sticky;
+  top: 65px;
+  background-color: #fff;
+  z-index: 9999;
   border-bottom: 1px solid #d8dce5;
 }
 .el-message-box--center .el-message-box__btns {
