@@ -272,6 +272,22 @@ export default [
     ]
   },
   {
+    path: '/configManage',
+    component: Layout,
+    redirect: 'enumList',
+    meta: { title: '系统配置中心', noCache: true, icon: 'info' },
+    hidden: false,
+    children: [
+      {
+        name: 'enumList',
+        path: 'enumList',
+        meta: { title: '枚举配置', noCache: true },
+        component: _import('configManage/enumList'),
+        hidden: false,
+      }
+    ]
+  },
+  {
     path: '/deliverInfo',
     component: Layout,
     redirect: 'deliverInfo/deliver',

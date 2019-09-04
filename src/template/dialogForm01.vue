@@ -33,6 +33,21 @@
               placeholder="数字，不超过20个字符"
             ></el-input>
           </el-form-item>
+          <!-- 多行文本框 -->
+          <el-form-item
+            label="包装描述"
+            prop="packageDesc2"
+          >
+            <el-input
+              style="width:200px;"
+              v-model="formData.packageDesc2"
+              type="textarea"
+              placeholder="请输入内容"
+              maxlength="30"
+              show-word-limit
+            >
+            </el-input>
+          </el-form-item>
           <!-- 数字框 -->
           <el-form-item
             label="最小单位"

@@ -64,6 +64,12 @@
               :min="item.min || 0"
               :max="item.max || 99999999"
             ></el-input-number>
+            <el-input
+              v-if="item.inputType==='input'"
+              v-model="scope.row[item.prop]"
+              :maxlength="item.max || 50"
+            >
+            </el-input>
             <el-select
               v-if="item.inputType==='select'"
               v-model="scope.row[item.prop]"
