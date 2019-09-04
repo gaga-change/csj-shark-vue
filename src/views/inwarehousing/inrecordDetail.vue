@@ -37,6 +37,7 @@
         <template slot-scope="scope">
           <el-link
             type="primary"
+            :disabled="scope.row.planQty == scope.row.receiveQty"
             @click="handleReceivingRegister(scope.row)"
           >收货登记</el-link>
         </template>
