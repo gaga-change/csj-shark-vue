@@ -34,14 +34,22 @@ newAxios.interceptors.response.use(function (response) {
   }
   return data
 }, function (error) {
-  let message = error.message || ''
-  if (message === 'timeout of 1500ms exceeded') message = '请求超时，请稍后再试！'
-  Notification({
-    title: '错误信息',
-    message: message,
-    type: 'error',
-    duration: 5000,
-  })
+  if (error.message === 'timeout of 1500ms exceeded') {
+    Notification({
+      title: '错误信息',
+      message: '请求超时，请稍后再试！',
+      type: 'error',
+      duration: 5000,
+    })
+  } else {
+    let data = error.response.data
+    let message = data.message || data.errorMsg || ''
+    Message({
+      type: 'error',
+      message: message || '系统异常',
+      duration: 3000
+    })
+  }
   return Promise.reject(error)
 })
 
