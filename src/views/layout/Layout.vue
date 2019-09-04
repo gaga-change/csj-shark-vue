@@ -105,7 +105,7 @@ export default {
   position: sticky;
   top: 65px;
   background-color: #fff;
-  z-index: 9999;
+  z-index: 1000;
   border-bottom: 1px solid #d8dce5;
 }
 .el-message-box--center .el-message-box__btns {
