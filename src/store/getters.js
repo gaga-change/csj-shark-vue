@@ -1,26 +1,21 @@
 const _import = require('@/router/_import_' + process.env.NODE_ENV)
 import Layout from '@/views/layout/Layout'
 import { reportCenterUrl } from '@/utils'
-import { deepExistMenu }  from '@/utils/deepSortMenu'
+import { deepExistMenu } from '@/utils/deepSortMenu'
 
-import { asyncRouterMap }  from '@/router'
+import { asyncRouterMap } from '@/router'
 
 const getters = {
   sidebar: state => state.app.sidebar,
   userInfo: state => state.user.userInfo,
-  chooseWarehouse: state => state.user.chooseWarehouse||sessionStorage.getItem('warehouse'),
+  chooseWarehouse: state => state.user.chooseWarehouse || sessionStorage.getItem('warehouse'),
   warehouseMap: state => state.user.warehouseMap,
   visitedViews: state => state.tagsView.visitedViews,
-  mapConfig:state=>state.map.mapConfig,
+  mapConfig: state => state.map.mapConfig,
   arrivalBill: state => state.tempData.arrivalBill,
-
-  // menu: state => {
-  //   return asyncRouterMap
-  // }
-  
   menu: state => {
-    let bakmenus = state.user.userInfo&&state.user.userInfo.menus&&JSON.parse(state.user.userInfo.menus)||[]
-    let bakmenu = deepExistMenu(bakmenus,asyncRouterMap)
+    let bakmenus = state.user.userInfo && state.user.userInfo.menus && JSON.parse(state.user.userInfo.menus) || []
+    let bakmenu = deepExistMenu(bakmenus, asyncRouterMap)
     const menutemp = []
     bakmenu.forEach(item => {
       const subchildren = []
@@ -49,22 +44,22 @@ const getters = {
       })
     })
     menutemp.push({
-      path: '*', redirect: '/404', hidden: true 
+      path: '*', redirect: '/404', hidden: true
     })
     return menutemp
   },
   totalmenu: state => {
-    let bakmenus = state.user.userInfo&&state.user.userInfo.menus&&JSON.parse(state.user.userInfo.menus)||[]
-    let totalmenu = deepExistMenu(bakmenus,asyncRouterMap)
+    let bakmenus = state.user.userInfo && state.user.userInfo.menus && JSON.parse(state.user.userInfo.menus) || []
+    let totalmenu = deepExistMenu(bakmenus, asyncRouterMap)
     const nameArray = []
     if (!totalmenu) {
       return []
     }
-    function getnameArray(totalmenu){
-      totalmenu.map(item=>{
-        if(item.children && item.children.length>0){
+    function getnameArray(totalmenu) {
+      totalmenu.map(item => {
+        if (item.children && item.children.length > 0) {
           getnameArray(item.children)
-        }else{
+        } else {
           nameArray.push(item.name)
         }
       })

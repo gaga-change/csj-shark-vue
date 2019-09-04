@@ -278,20 +278,42 @@ export default {
         switch (configItem.type) {
           case 'enum':
             {
-              configItem.formatter = (row, column, cellValue, index) => {
-                let res = cellValue
-                if (!configItem.enum) {
-                  console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
-                } else {
-                  let temp = configItem.enum.find(v => v.value == cellValue)
-                  if (temp) {
-                    res = temp.name
+              if (typeof configItem.enum === 'string') {
+                configItem.formatter = (row, column, cellValue, index) => {
+                  let res = cellValue
+                  if (!configItem.enum) {
+                    console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
                   } else {
-                    // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
-                    res = ''
+                    const enumArr = this.mapConfig[configItem.enum] || []
+                    if (!enumArr.length) {
+                      console.error(`枚举异常, 【${configItem.enum}】未配置`)
+                    }
+                    let temp = enumArr.find(v => v.value == cellValue)
+                    if (temp) {
+                      res = temp.name
+                    } else {
+                      // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                      res = ''
+                    }
                   }
+                  return res
                 }
-                return res
+              } else {
+                configItem.formatter = (row, column, cellValue, index) => {
+                  let res = cellValue
+                  if (!configItem.enum) {
+                    console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
+                  } else {
+                    let temp = configItem.enum.find(v => v.value == cellValue)
+                    if (temp) {
+                      res = temp.name
+                    } else {
+                      // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                      res = ''
+                    }
+                  }
+                  return res
+                }
               }
             }
             break

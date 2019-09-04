@@ -1,4 +1,4 @@
-import * as apiMap from '@/api/map'
+import { enumsTotal } from '@/api'
 const map = {
   state: {
     mapConfig: {},
@@ -21,24 +21,10 @@ const map = {
 
 async function config() {
   let config = {};
-  for (let i in apiMap) {
-    await apiMap[i]().then(res => {
-      if (res.success) {
-        if (Array.isArray(res.data)) {
-          config[i] = res.data
-        } else {
-          let arr = [];
-          for (let prop in res.data) {
-            arr.push({
-              key: prop,
-              value: res.data[prop]
-            })
-          }
-          config[i] = arr
-        }
-      }
-    })
-  }
+  const data = await enumsTotal()
+  data.forEach(v => {
+    config[v.name] = v.keyValue
+  })
   return config
 }
 

@@ -46,7 +46,7 @@ const tableConfig = [
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '收货状态', prop: 'receiveStatus', type: 'enum', enum: receiveState2 },
-  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '下单时间', prop: 'gmtCreate', type: 'time' },
