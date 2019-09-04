@@ -202,6 +202,7 @@
           <bar-code
             :code="item.warehouseSpaceCode"
             fontSize="5mm"
+            mw="0.3"
           ></bar-code>
         </div>
       </div>

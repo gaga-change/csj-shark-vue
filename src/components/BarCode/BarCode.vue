@@ -1,6 +1,6 @@
 <template>
   <img
-    :src="`/webApi/barcode?msg=${code}&type=${codeType}&&fmt=${fmt}${fontSize? ('&&hrsize=' +  fontSize): ''}`"
+    :src="`/webApi/barcode?msg=${code}&type=${codeType}&&fmt=${fmt}${fontSize? ('&hrsize=' +  fontSize): ''}${mw? ('&mw=' +  mw): ''}`"
     :alt="imgAlt"
     :style="imgStyle"
   >
@@ -23,6 +23,10 @@ export default {
       required: true
     },
     imgStyle: {
+      type: String,
+      default: ""
+    },
+    mw: {
       type: String,
       default: ""
     },
