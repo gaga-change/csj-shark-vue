@@ -23,7 +23,7 @@
             <span style="padding-right:12px">打印时间 :</span>
             <span>{{Date.now() | date}}</span>
           </div>
-          <base-table
+          <base-print-table
             :config="printConfig"
             :data="pickingtaskdetailTableData"
           />

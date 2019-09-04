@@ -10,6 +10,7 @@ import SearchForm from '@/components/SearchForm'
 import BaseList from '@/components/BaseList'
 import DoubleList from '@/components/DoubleList'
 import PrintTableDialog from '@/components/PrintTableDialog'
+import BasePrintTable from '@/components/BasePrintTable'
 import DetailItem from '@/components/DetailItem'
 
 import 'normalize.css/normalize.css'
@@ -30,6 +31,7 @@ Vue.component('SearchForm', SearchForm);
 Vue.component('BaseList', BaseList);
 Vue.component('DoubleList', DoubleList);
 Vue.component('PrintTableDialog', PrintTableDialog);
+Vue.component('BasePrintTable', BasePrintTable);
 Vue.component('DetailItem', DetailItem);
 Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve, reject) => {
   MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {
