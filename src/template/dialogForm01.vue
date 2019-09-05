@@ -210,7 +210,10 @@ export default {
     },
     /** 关闭弹窗 */
     close() {
+      // 初始化表单
       // this.$refs['form'] && this.$refs['form'].resetFields()
+      // 初始化没有挂载到表单的数据
+      // ...
       this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {
