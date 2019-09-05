@@ -34,6 +34,8 @@ newAxios.interceptors.response.use(function (response) {
   }
   return data
 }, function (error) {
+  let data = error.response.data
+  let message = data.message || data.errorMsg || ''
   if (error.message === 'timeout of 1500ms exceeded') {
     Notification({
       title: '错误信息',
@@ -41,9 +43,18 @@ newAxios.interceptors.response.use(function (response) {
       type: 'error',
       duration: 5000,
     })
+  } if (error.response.status === 401) {
+    Message({
+      type: 'error',
+      message: message || '登录失效，请重新登录',
+      onClose: () => {
+        sessionStorage.setItem('warehouse', '')
+        location.href = `/csj_login`
+      },
+      duration: 1500
+    })
+    data = null
   } else {
-    let data = error.response.data
-    let message = data.message || data.errorMsg || ''
     Message({
       type: 'error',
       message: message || '系统异常',
