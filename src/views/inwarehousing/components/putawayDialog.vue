@@ -164,6 +164,7 @@ export default {
     /** 关闭弹窗 */
     close() {
       this.$refs['form'] && this.$refs['form'].resetFields()
+      this.hasContainer = false
       this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {
