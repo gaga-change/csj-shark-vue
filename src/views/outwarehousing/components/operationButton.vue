@@ -191,6 +191,7 @@ export default {
       this.newgridData = []
       this.errarrry = []
       this.PickingOrderData.forEach(v => v.sum = '')
+      this.pickOperatorName = ''
       this.getbtn = false
     },
     /** popover 隐藏事件 */
@@ -430,23 +431,10 @@ export default {
       pickOrderAdd(json).then(res => {
         if (res) {
           this.$message({ type: 'success', message: '操作成功!' });
-          this.dialogVisible = false;
+          this.dialogVisible = false
+          this.$emit('submited')
         }
       })
-    },
-    printLabel() {
-      var childData = [...this.childData]
-      this.childData = childData.map(v => {
-        v.editable = false;
-        return v
-      })
-
-      setTimeout(() => {
-        let label = document.getElementById('print').innerHTML
-        //样式暂时不可配，需优化
-        let style = "<style type='text/css'>.border{border:1px solid #666;width:530px;display:inline-block;padding:10px;} .marginRight5{margin-right:5px;} table {font-family: verdana,arial,sans-serif;font-size:11px;color:#333333;border-width: 1px;border-color: #666666;border-collapse: collapse;}table th {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #dedede;}table td {border-width: 1px;padding: 8px;border-style: solid;border-color: #666666;background-color: #ffffff;} img{max-width:130px;} .card-list{margin-bottom: 6px;width:25%;display:inline-block} .el-dropdown{display:inline-block} </style>"
-        MakePrint(label, style)
-      }, 500)
     },
     pickingOrder() {
       this.PickingOrderData = [...this.childSelectRows]
@@ -459,7 +447,7 @@ export default {
     printPlanOrder() {
       var printPlanContainer = document.getElementById('printPlanContainer').innerHTML
       MakePrint(printPlanContainer)
-    },
+    }
   }
 }
 </script>

@@ -12,7 +12,10 @@
       :selectTables="true"
     >
       <template slot="btns">
-        <operation-button :childSelectRows="childSelectRows" />
+        <operation-button
+          :childSelectRows="childSelectRows"
+          @submited="getTableData"
+        />
       </template>
     </double-list>
 
