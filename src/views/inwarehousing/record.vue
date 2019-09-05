@@ -25,7 +25,6 @@
 
 <script>
 import { jobList, inOrderAdd } from '@/api'
-import { yesOrNoEnum } from '@/utils/enum'
 
 const tableConfig = [
   { label: '入库计划单号', prop: 'planCode', width: 140 },
@@ -47,7 +46,7 @@ const searchConfig = [
   { label: '收货单号', prop: 'receiveOrderCode' },
   { label: '容器', prop: 'trayCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
-  { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: yesOrNoEnum, default: 0 },
+  { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: 'yesOrNoEnum', default: 0 },
 ]
 
 export default {

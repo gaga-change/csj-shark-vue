@@ -40,7 +40,6 @@
 
 <script>
 import { enumsList, enumsDel } from '@/api'
-import * as Enums from '@/utils/enum'
 import enumCreateFormDialog from './components/enumCreateFormDialog'
 
 const tableConfig = [

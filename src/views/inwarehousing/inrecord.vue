@@ -59,15 +59,14 @@
 
 <script>
 import { receiveOrderList, receiveOrderActivate } from '@/api'
-import { busiBillTypeEnum, receiveState } from '@/utils/enum'
 import inrecordPrintDialog from './components/inrecordPrintDialog'
 
 const tableConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
-  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '创建人', prop: 'createrName' },
@@ -78,8 +77,8 @@ const searchConfig = [
   { label: '入库计划单', prop: 'planCode' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
-  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]

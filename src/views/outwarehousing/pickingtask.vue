@@ -68,19 +68,18 @@ import moment from 'moment';
 import { pickOrderList, orderDelete, orderPickStop } from '@/api'
 import pickDetailDialog from './components/pickDetailDialog'
 import pickPrintDialog from './components/pickPrintDialog'
-import { orderStatus } from '@/utils/enum'
 
 const tableConfig = [
   { label: '拣货单号', prop: 'orderCode' },
   { label: '应拣货总量', prop: 'pickQty' },
   { label: '已拣货总数', prop: 'realPickQty' },
-  { label: '状态', prop: 'orderStatus', type: 'enum', enum: orderStatus },
+  { label: '状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
   { label: '拣货单号', prop: 'orderCode' },
   { label: '计划单号', prop: 'outOrderCode' },
-  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: orderStatus },
+  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
 ]
 
 export default {

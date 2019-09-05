@@ -34,7 +34,7 @@
             >
               <span>{{item.label}}：</span><span>
                 <template v-if="item.type === 'enum'">
-                  {{item.enum.find(v => v.value == detail.receiveOrderDO[item.prop]) | getName}}
+                  {{mapConfig[item.enum].find(v => v.value == detail.receiveOrderDO[item.prop]) | getName}}
                 </template>
                 <template v-else>
                   {{detail.receiveOrderDO[item.prop] || ''}}
@@ -59,7 +59,7 @@
                   :key="index"
                 >
                   <template v-if="item.type === 'enum'">
-                    {{item.enum.find(v => v.value == row[item.prop]) | getName}}
+                    {{mapConfig[item.enum].find(v => v.value == row[item.prop]) | getName}}
                   </template>
                   <template v-else-if="item.type === 'barCode'">
                     <div style="width:100px;">
@@ -95,12 +95,13 @@
 <script>
 import { receiveOrderQueryDetails } from '@/api'
 import { MakePrint } from '@/utils'
-import { busiBillTypeEnum, yesOrNoEnum } from '@/utils/enum'
+import { mapGetters } from 'vuex'
+
 const topConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '供应商', prop: 'providerName' },
   { label: '货主', prop: 'ownerName' },
 ]
@@ -132,6 +133,11 @@ export default {
       tableConfig,
       detailArr: [], // 内容，带详情
     }
+  },
+  computed: {
+    ...mapGetters([
+      'mapConfig',
+    ])
   },
   watch: {
     visible(val) {

@@ -128,7 +128,7 @@
             size="mini"
           >
             <el-option
-              v-for="item in WarehouseAreaNatureEnum"
+              v-for="item in mapConfig['warehouseAreaNatureEnum']"
               :key="item.name"
               :label="item.name"
               :value="item.value"
@@ -171,21 +171,20 @@ import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { SimpleMsg } from '@/utils/luoFun'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea } from '@/api'
-import { WarehouseAreaNatureEnum, inLockEnum, outLockEnum, yesOrNoEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode' },
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
-  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: inLockEnum },
-  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: outLockEnum },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
+  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: 'lockEnum' },
+  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: 'lockEnum' },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: 'yesOrNoEnum' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
   { label: '描述', prop: 'warehouseAreaDesc' },
 ]
 const searchConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode' },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: yesOrNoEnum },
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: WarehouseAreaNatureEnum },
+  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: 'yesOrNoEnum' },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
 ]
 
 export default {
@@ -197,8 +196,6 @@ export default {
       appendSearchParams: { warehouseCode: undefined },
       dialogVisible: false,
       dialogTitle: '',
-      yesOrNoEnum,
-      WarehouseAreaNatureEnum,
       formParams: {
         isVirtual: 0
       },
@@ -210,6 +207,7 @@ export default {
     ...mapGetters([
       'warehouseMap',
       'chooseWarehouse',
+      'mapConfig'
     ]),
   },
   created() {

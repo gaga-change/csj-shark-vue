@@ -41,7 +41,6 @@
 
 <script>
 import { inOrderList, inOrderSelectDetailList } from '@/api'
-import { busiBillTypeEnum, isPushStateEnum } from '@/utils/enum'
 
 const detailTableConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -55,9 +54,9 @@ const detailTableConfig = [
 const tableConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '入库单号', prop: 'orderCode' },
-  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '入库日期', prop: 'gmtCreate', type: 'time' },
-  { label: '推送状态', prop: 'isPush', type: 'enum', enum: isPushStateEnum },
+  { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '操作人', prop: 'createrName' },

@@ -28,7 +28,6 @@
 
 <script>
 import { selectReceiveDetailItem } from '@/api'
-import { execStatuslist } from '@/utils/enum'
 import putawayDialog from './components/putawayDialog'
 
 const tableConfig = [
@@ -41,7 +40,7 @@ const tableConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
   { label: '已上架数量', prop: 'realInQty' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
+  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
@@ -49,7 +48,7 @@ const searchConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuFormat' },
   { label: '容器', prop: 'trayCode' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
+  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
   { label: '收货单号', prop: 'receiveOrderCode' },
 ]
 

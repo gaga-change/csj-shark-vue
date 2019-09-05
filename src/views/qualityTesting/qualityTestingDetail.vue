@@ -50,7 +50,6 @@
 
 <script>
 import { getCheckOrderDetail } from '@/api'
-import { checkResult2Enum } from '@/utils/enum'
 
 const quailtyTestingDetailConfig = [
   { label: '质检单号', prop: 'orderCode' },
@@ -63,7 +62,7 @@ const qualityTestingDetailTableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '收货数量', prop: 'receiveQty' },
   { label: '质检数量', prop: 'checkQty' },
-  { label: '质检结果', prop: 'checkResult', type: 'enum', enum: checkResult2Enum },
+  { label: '质检结果', prop: 'checkResult', type: 'enum', enum: 'checkResult2Enum' },
 ]
 
 export default {

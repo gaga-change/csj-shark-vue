@@ -214,7 +214,6 @@
 
 <script>
 import { addLogisticsRegister, getLogisticsRegisterInfo, getLogisticsRegisterList, getLogisticsSelectList } from '@/api'
-import { busiBillTypeEnum, registerStatusEnum, logisticsStatusEnum, payTypeEnum } from '@/utils/enum'
 import DeliverDetail from './components/deliverDetailInfo'
 
 const baseInfoConfig = [
@@ -226,24 +225,24 @@ const baseInfoConfig = [
 const tableConfig = [
   { label: '下单时间', prop: 'placeOrderTime', width: 140, type: 'time' },
   { label: '计划单号', prop: 'planCode', width: 150 },
-  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum, minWidth: 90 },
+  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum', minWidth: 90 },
   { label: '供应商', prop: 'ownerName', width: 150 },
-  { label: '登记状态', prop: 'register', minWidth: 90, type: 'enum', enum: registerStatusEnum },
+  { label: '登记状态', prop: 'register', minWidth: 90, type: 'enum', enum: 'registerStatusEnum' },
   { label: '收货人', prop: 'receiver', width: 120 },
   { label: '收获地址', prop: 'receiveAddress', width: 120 },
   { label: '联系电话', prop: 'linkTel', width: 150 },
   { label: '物流公司', prop: 'logisticsComName', width: 150 },
   { label: '物流单号', prop: 'logisticsOrderCode', width: 150 },
   { label: '件数', prop: 'carrierQty', width: 150 },
-  { label: '运费承担方', prop: 'payType', width: 150, type: 'enum', enum: payTypeEnum },
+  { label: '运费承担方', prop: 'payType', width: 150, type: 'enum', enum: 'payTypeEnum' },
   { label: '运费', prop: 'freightAmt', width: 90, type: 'money' },
-  { label: '配送状态', prop: 'logisticsStatus', width: 90, type: 'enum', enum: logisticsStatusEnum },
+  { label: '配送状态', prop: 'logisticsStatus', width: 90, type: 'enum', enum: 'logisticsStatusEnum' },
   { label: '到达时间', prop: 'deliverTime', width: 120, type: 'time' },
 ]
 const searchConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '物流公司', prop: 'logisticsComCode', type: 'enum', enum: [] },
-  { label: '登记状态', prop: 'register', type: 'enum', enum: registerStatusEnum },
+  { label: '登记状态', prop: 'register', type: 'enum', enum: 'registerStatusEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '下单时间', prop: 'createTimeArea', props: ['placeOrderStartDate', 'placeOrderEndDate'], type: 'timeArea' },
 ]

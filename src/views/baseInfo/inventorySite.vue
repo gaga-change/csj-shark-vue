@@ -235,12 +235,11 @@ import { SimpleMsg } from '@/utils/luoFun'
 import { addInventorySite, warehouseSpaceSelect, warehouseSpaceUpdateLockStatus, deleteInventorySite, getSelectInventoryAreaList } from '@/api'
 import { MakePrint } from '@/utils/luoFun'
 import setStorage from './components/setStorage'
-import { inLockEnum, outLockEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode', minWidth: 120 },
   { label: '库位编码', prop: 'warehouseSpaceCode', minWidth: 120 },
-  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: inLockEnum },
-  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: outLockEnum },
+  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: 'lockEnum' },
+  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: 'lockEnum' },
   { label: '创建人', prop: 'createrName', minWidth: 90 },
   { label: '创建时间', prop: 'gmtCreate', minWdth: 120, type: 'time' },
 ]

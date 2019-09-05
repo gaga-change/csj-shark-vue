@@ -181,7 +181,6 @@
 <script>
 
 import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQty, warehouseSpaceList, skuStockMove } from '@/api'
-import { checkResultEnum } from '@/utils/enum'
 
 const stateTransitionTableConfig = [// 库存列表
   { label: '库位', prop: 'warehouseSpaceCode' },
@@ -190,7 +189,7 @@ const stateTransitionTableConfig = [// 库存列表
   { label: '规格型号', prop: 'skuFormat' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '批次', prop: 'batchNo' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: checkResultEnum },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '收货数量', prop: 'skuQty' },
   { label: '正品数量', prop: 'goodQty', fixed: 'right', edit: true, inputType: 'number', max: 99999999, min: 0, width: '160' },
   { label: '残次品数量', prop: 'badQty', fixed: 'right', edit: true, inputType: 'number', max: 99999999, min: 0, width: '160' },
@@ -205,7 +204,7 @@ const tableConfig = [
   { label: '单位', prop: 'skuUnitName' },
   { label: '单价', prop: 'inPrice' },
   { label: '批次', prop: 'batchNo' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: checkResultEnum },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '冻结数量', prop: 'blockQty' },
   { label: '库存', prop: 'skuQty' },
   { label: '最近入库时间', prop: 'lastInTime', type: 'time', width: '135' },
@@ -216,7 +215,7 @@ const searchConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '货主名称', prop: 'ownerName' },
   { label: '库位编码', prop: 'warehouseSpaceCode' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: checkResultEnum },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
 ]
 
 export default {

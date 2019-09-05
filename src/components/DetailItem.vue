@@ -14,7 +14,9 @@
         <span class="value-content">{{detail[item.prop] | timeFormat}}</span>
       </template>
       <template v-else-if="item.type === 'enum'">
-        <span class="value-content">{{detail[item.prop] | parseEnum(item)}}</span>
+        <span class="value-content">
+          {{detail[item.prop] | parseEnum(item)}}
+        </span>
       </template>
       <template v-else>
         <span class="value-content">{{detail[item.prop]}}</span>
@@ -25,7 +27,8 @@
 
 <script>
 import moment from 'moment'
-// moment(cellValue).format(tableConfig[i].format || 'YYYY-MM-DD HH:mm:ss')
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     detail: {
@@ -46,6 +49,11 @@ export default {
 
     }
   },
+  computed: {
+    ...mapGetters([
+      'mapConfig',
+    ])
+  },
   filters: {
     timeFormat(val) {
       if (!val) return ''
@@ -59,7 +67,7 @@ export default {
         console.error(`列【${item.label} : ${item.prop}】,需要 【enum】字段`)
         return ''
       }
-      let temp = item.enum.find(v => v.value == val)
+      let temp = this.mapConfig[item.enum].find(v => v.value == val)
       if (!temp) {
         console.error(`列【${item.label} : ${item.prop}】,没有对应枚举值（${val}）`)
         return ''

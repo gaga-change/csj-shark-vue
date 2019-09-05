@@ -16,7 +16,7 @@
             class="demo-form-inline"
           >
             <el-form-item label="类型">
-              {{takeStockTypeEnum.find(v => v.value == orderType).name}}
+              {{mapConfig['takeStockTypeEnum'].find(v => v.value == orderType).name}}
             </el-form-item>
             <el-form-item
               label="库区"
@@ -132,7 +132,6 @@
 import { mapGetters } from 'vuex'
 import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
 import { takeStockSelectProductTableConfig } from './config'
-import { takeStockTypeEnum } from '@/utils/enum'
 import SelectTable from './selectTable'
 export default {
   components: { SelectTable },
@@ -158,7 +157,6 @@ export default {
         skuName: '',
         skuCode: ''
       },
-      takeStockTypeEnum,
       takeStockSelectProductTableConfig,
       selectRows: [],
       tableData: [],
@@ -194,6 +192,7 @@ export default {
   computed: {
     ...mapGetters([
       'chooseWarehouse',
+      'mapConfig'
     ]),
   },
   watch: {

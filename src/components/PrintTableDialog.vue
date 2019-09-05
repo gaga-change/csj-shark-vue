@@ -35,7 +35,7 @@
                 :key="index"
               >
                 <template v-if="item.type === 'enum'">
-                  {{item.enum.find(v => v.value == row[item.prop]) | getName}}
+                  {{mapConfig[item.enum].find(v => v.value == row[item.prop]) | getName}}
                 </template>
                 <template v-else>
                   {{row[item.prop] || ''}}
@@ -64,6 +64,7 @@
 </template>
 <script>
 import { MakePrint } from '@/utils'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -96,6 +97,11 @@ export default {
     return {
 
     }
+  },
+  computed: {
+    ...mapGetters([
+      'mapConfig',
+    ])
   },
   filters: {
     getName(v) {

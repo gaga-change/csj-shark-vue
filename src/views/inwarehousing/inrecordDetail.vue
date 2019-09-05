@@ -92,7 +92,6 @@
 </template>
 <script>
 import { receiveOrderQueryDetails, receiveOrderDeleteOrInvalid, receiveConfirm } from '@/api'
-import { busiBillTypeEnum, receiveState, execStatuslist } from '@/utils/enum'
 import receivingRegisterDialog from './components/receivingRegisterDialog'
 import receivingModifyDialog from './components/receivingModifyDialog'
 
@@ -100,8 +99,8 @@ const detailItemConfig = [
   { label: '收货单号 ', prop: 'orderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
-  { label: '收货状态', prop: 'execStatus', type: 'enum', enum: receiveState },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
+  { label: '收货状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
   { label: '供应商', prop: 'providerName' },
   { label: '货主', prop: 'ownerName' },
   { label: '创建人', prop: 'createrName' },
@@ -123,7 +122,7 @@ const detailItemDosConfig = [
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: execStatuslist },
+  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
 ]
 
 export default {

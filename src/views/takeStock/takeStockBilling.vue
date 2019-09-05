@@ -17,7 +17,7 @@
           @change="handleOrderTypeChange"
         >
           <el-option
-            v-for="item in takeStockTypeEnum"
+            v-for="item in mapConfig['takeStockTypeEnum']"
             :key="item.name"
             :label="item.name"
             :value="item.value"
@@ -98,10 +98,10 @@
 
 <script>
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 import { insertInventoryOrder, queryDynamicSkuStockList } from '@/api'
 import { takeStockSelectProductTableConfig } from './components/config'
 import selectProduct from './components/selectProduct'
-import { takeStockTypeEnum } from '@/utils/enum'
 
 export default {
   components: { selectProduct },
@@ -111,7 +111,6 @@ export default {
       insertInventoryOrderLoading: false,
       queryDynamicSkuStockListLoading: false,
       selectProductVisible: false,
-      takeStockTypeEnum,
       tableData: [],
       formData: {
         //  ... 表单字段
@@ -131,7 +130,10 @@ export default {
   computed: {
     orderType() {
       return this.formData.orderType
-    }
+    },
+    ...mapGetters([
+      'mapConfig',
+    ])
   },
   created() {
 

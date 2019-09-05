@@ -65,7 +65,6 @@
 <script>
 import { planInventoryQueryByOrderId, inventoryInbentoryRecord } from '@/api'
 import { mapGetters } from 'vuex'
-import { takeStockTypeEnum, executeStatus2Enum } from '@/utils/enum'
 
 const takeStockRecordProductTableConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -78,14 +77,14 @@ const takeStockRecordProductTableConfig = [
   { label: '库存数量', prop: 'stockQty' },
   { label: '实际盘点数量', prop: 'inventoryQty', edit: true, inputType: "number", width: 160 },
   { label: '盈亏数量（自动计算）', prop: 'profitLossQty', width: 150 },
-  { label: '状态', prop: 'executeStatus', type: 'enum', enum: executeStatus2Enum },
+  { label: '状态', prop: 'executeStatus', type: 'enum', enum: 'executeStatus2Enum' },
 ]
 const takeStockRecordConfig = [
   { label: '盘点单号', prop: 'orderCode' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
   { label: '仓库名称', prop: 'warehouseName' },
-  { label: '盘点类型', prop: 'orderType', type: 'enum', enum: takeStockTypeEnum },
+  { label: '盘点类型', prop: 'orderType', type: 'enum', enum: 'takeStockTypeEnum' },
   { label: '备注', prop: 'remarkInfo' },
 ]
 

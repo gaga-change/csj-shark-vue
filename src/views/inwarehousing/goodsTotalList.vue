@@ -23,13 +23,12 @@
 
 <script>
 import { selectSumReceiveDetail, receiveOrderExportLedger } from '@/api'
-import { receiveState } from '@/utils/enum'
 const tableConfig = [
   { label: '收货单号 ', prop: 'receiveOrderCode' },
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '供应商', prop: 'providerName' },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuModel' },
@@ -42,7 +41,7 @@ const searchConfig = [
   { label: '入库计划单号 ', prop: 'planCode' },
   { label: '供应商', prop: 'providerName' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: receiveState },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
 ]
 export default {
   data() {

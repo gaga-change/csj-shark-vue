@@ -13,7 +13,6 @@
 <script>
 import { querySkuStockRecord } from '@/api'
 
-import { busiBillTypeEnum } from '@/utils/enum'
 const tableConfig = [
   { label: '库位', prop: 'warehouseSpaceCode', width: 80 },
   { label: '业务单号', prop: 'planCode', width: 150 },
@@ -23,7 +22,7 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号  ', prop: 'skuFormat' },
   { label: '单位', prop: 'skuUnitName' },
-  { label: '变动类型  ', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '变动类型  ', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '变动前数量', prop: 'beforeQty', width: 100 },
   { label: '变动数量', prop: 'changeQty' },
   { label: '变动后数量', prop: 'afterQty', width: 100 },
@@ -35,7 +34,7 @@ const searchConfig = [
   { label: '货主名称', prop: 'ownerName' },
   { label: '库位编码', prop: 'warehouseSpaceCode' },
   { label: '变动时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
-  { label: '变动类型', prop: 'busiBillType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '变动类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
 ]
 
 

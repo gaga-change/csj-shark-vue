@@ -15,7 +15,7 @@
         :key="index"
       >
         <template v-if="item.type === 'enum'">
-          {{item.enum.find(v => v.value == row[item.prop]) | getName}}
+          {{mapConfig[item.enum].find(v => v.value == row[item.prop]) | getName}}
         </template>
         <template v-else-if="item.type === 'barCode'">
           <div style="width:100px;">
@@ -30,6 +30,8 @@
   </table>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     config: {
@@ -40,6 +42,11 @@ export default {
       type: Array,
       default: () => { }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'mapConfig',
+    ])
   },
   filters: {
     getName(v) {

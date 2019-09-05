@@ -27,7 +27,7 @@
               size="mini"
             >
               <el-option
-                v-for="item in item.enum"
+                v-for="item in mapConfig[item.enum]"
                 :key="item.name"
                 :label="item.name"
                 :value="item.value"
@@ -39,7 +39,7 @@
             <el-radio-group v-model="searchForms[item.prop]">
               <el-radio
                 :label="v.value"
-                v-for="v in item.radio"
+                v-for="v in mapConfig[item.radio]"
                 :key="v.value"
               >{{v.name}}</el-radio>
             </el-radio-group>
@@ -195,6 +195,7 @@ export default {
     },
     ...mapGetters([
       'chooseWarehouse',
+      'mapConfig'
     ]),
   },
   created() {

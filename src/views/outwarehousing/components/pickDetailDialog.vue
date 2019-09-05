@@ -63,7 +63,6 @@
 
 <script>
 import { pickOrderDetail, orderPickConfirm } from '@/api'
-import { jobStatusList } from '@/utils/enum'
 const tableConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo', width: 90 },
@@ -72,7 +71,7 @@ const tableConfig = [
   { label: '规格型号', prop: 'skuFormat' },
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },
-  { label: '任务状态', prop: 'jobStatus', type: 'enum', enum: jobStatusList },
+  { label: '任务状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
   { label: '通知拣货数', prop: 'jobQty', width: 90 },
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '货位', prop: 'sum' },

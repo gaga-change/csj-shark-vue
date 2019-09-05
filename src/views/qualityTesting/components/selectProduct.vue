@@ -43,7 +43,6 @@
 <script>
 import _ from 'lodash';
 import { queryReceiverOrder, orderDetailList } from '@/api'
-import { execStatuslist, busiBillTypeEnum } from '@/utils/enum'
 
 const childTableConfig = [
   { label: '业务行号', prop: 'busiIndex', },
@@ -59,9 +58,9 @@ const childTableConfig = [
 const tableConfig = [
   { label: '收货单号', prop: 'orderCode' },
   { label: '计划单号', prop: 'planCode' },
-  { label: '上架状态', prop: 'execStatus', type: 'enum', enum: execStatuslist },
+  { label: '上架状态', prop: 'execStatus', type: 'enum', enum: 'execStatuslist' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time' },
-  { label: '单据类型', prop: 'orderType', type: 'enum', enum: busiBillTypeEnum },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '操作人', prop: 'createrName' },
