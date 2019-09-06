@@ -15,7 +15,7 @@
       </template>
       <template v-else-if="item.type === 'enum'">
         <span class="value-content">
-          {{detail[item.prop] | parseEnum(item)}}
+          {{detail[item.prop] | parseEnum(mapConfig, item)}}
         </span>
       </template>
       <template v-else>
@@ -59,7 +59,7 @@ export default {
       if (!val) return ''
       return moment(val).format('YYYY-MM-DD HH:mm:ss')
     },
-    parseEnum(val, item) {
+    parseEnum(val, mapConfig, item) {
       if (val === '' || val === undefined || val === null) {
         return ''
       }
@@ -67,7 +67,7 @@ export default {
         console.error(`列【${item.label} : ${item.prop}】,需要 【enum】字段`)
         return ''
       }
-      let temp = this.mapConfig[item.enum].find(v => v.value == val)
+      let temp = mapConfig[item.enum].find(v => v.value == val)
       if (!temp) {
         console.error(`列【${item.label} : ${item.prop}】,没有对应枚举值（${val}）`)
         return ''
