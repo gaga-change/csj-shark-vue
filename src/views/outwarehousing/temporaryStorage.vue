@@ -6,9 +6,9 @@
       class="confirmstyle"
     >
       <confirm-search
+        ref='confirmSearch'
         @submit="submit"
         :searchForm="searchForm"
-        ref="arrivalDom"
       />
     </el-card>
     <div class="right-area">
@@ -94,7 +94,7 @@ export default {
       )).then(res => {
         if (!res) return
         this.$message({ type: 'success', message: '操作成功' })
-        this.getCurrentTableData()
+        this.$refs['confirmSearch'].initData()
       })
     },
     /** 刷新左侧列表 */

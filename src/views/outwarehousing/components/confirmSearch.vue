@@ -43,11 +43,10 @@ export default {
       tableConfig,
       pickOrderNotCreateOrderLoading: true,
       selectForm: {
-        outOrderCode: null
+        outOrderCode: undefined
       },
       totalCode: [],
       selectCode: [],
-      activeOrder: null
     }
   },
   created() {
@@ -55,6 +54,11 @@ export default {
   },
   methods: {
     initData() {
+      this.selectForm.outOrderCode = undefined
+      this.totalCode = []
+      this.selectCode = []
+      this.pickOrderNotCreateOrderLoading = true
+      this.currentChange()
       pickOrderNotCreateOrder().then(res => {
         this.pickOrderNotCreateOrderLoading = false
         if (!res) return
