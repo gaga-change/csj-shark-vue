@@ -24,9 +24,13 @@ proxyTableArr.forEach(item => {
   }
 })
 
+// proxyTable['/config'] = {
+//   target: 'http://localhost:7002',
+//   pathRewrite: { '^/config': '/' },
+//   changeOrigin: true
+// }
 proxyTable['/config'] = {
-  target: 'http://localhost:7002',
-  pathRewrite: { '^/config': '/' },
+  target: 'http://csj-shark-vue-test.dev.csj361.com',
   changeOrigin: true
 }
 
