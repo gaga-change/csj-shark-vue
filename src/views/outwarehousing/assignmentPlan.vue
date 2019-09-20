@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { getInfoPlanOutWarehousing } from '@/api'
+import { getInfoPlanOutWarehousing, planOutDetail } from '@/api'
 import operationButton from './components/operationButton'
 
 const childTableConfig = [
@@ -70,7 +70,10 @@ export default {
   methods: {
     /** 子表内容获取 */
     childApi(row) {
-      return Promise.resolve(row.outWarehousePlanDetailRespList)
+      return planOutDetail({ planCode: row.planCode }).then(res => {
+        if (!res) return []
+        return res.data || []
+      })
     },
     /** 刷新列表 */
     getTableData() {

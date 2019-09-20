@@ -81,6 +81,8 @@ export const planInventoryQueryByOrderId = params => http.get(`/webApi/plan/inve
 export const planInventoryList = params => http.get(`/webApi/plan/inventory/list`, { params })
 /** 质检记录 */
 export const checkOrderList = params => http.get(`/webApi/plan/checkOrder/list`, { params })
+/** 波次分配子表 */
+export const planOutDetail = params => http.get(`/webApi/plan/out/detail`, { params })
 /** 通过质检单号查询质检报告记录 */
 export const getCheckReportByOrderCode = params => http.get(`/webApi/plan/checkOrder/getCheckReportByOrderCode`, { params })
 /** 通过id获取质检单详情 */
