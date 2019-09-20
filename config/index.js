@@ -12,7 +12,7 @@ const path = require('path')
 // const ip = 'http://192.168.2.126:8787';//修浩
 // const ip = 'http://172.16.81.26:8787';//苗
 // const ip = 'http://192.168.2.126:8787';// 雷亚峰
-const ip = 'http://192.168.1.37:8787'; // 测试环境
+const ip = 'http://192.168.1.37:8787'; // 测试环境。  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
 
 const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api', '/app'];
 let proxyTable = {};
