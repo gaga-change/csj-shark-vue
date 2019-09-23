@@ -242,6 +242,29 @@ export default [
     ]
   },
   {
+    path: '/inventoryManage',
+    component: Layout,
+    redirect: 'inventoryManage/moveLibraryList',
+    meta: { title: '库存管理', noCache: true, icon: 'info' },
+    hidden: false,
+    children: [
+      {
+        name: 'moveLibraryList',
+        path: 'moveLibraryList',
+        meta: { title: '移库', noCache: true },
+        component: _import('inventoryManage/moveLibraryList'),
+        hidden: false,
+      },
+      {
+        name: 'moveLibraryRecordList',
+        path: 'moveLibraryRecordList',
+        meta: { title: '移库记录', noCache: true },
+        component: _import('inventoryManage/moveLibraryRecordList'),
+        hidden: false,
+      },
+    ]
+  },
+  {
     path: '/appManage',
     component: Layout,
     redirect: 'appEditionList',
@@ -302,5 +325,5 @@ export default [
         hidden: false,
       },
     ]
-  }
+  },
 ]

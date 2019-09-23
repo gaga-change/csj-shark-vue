@@ -89,6 +89,8 @@ export const getCheckReportByOrderCode = params => http.get(`/webApi/plan/checkO
 export const getCheckOrderDetail = params => http.get(`/webApi/plan/checkOrder/getCheckOrderDetail`, { params })
 /** 引入收货单查询收货单记录 */
 export const queryReceiverOrder = params => http.get(`/webApi/plan/checkOrder/queryReceiverOrder`, { params })
+/** 分页查询移库记录 */
+export const queryStockMoveList = params => http.get(`/webApi/sku/stock/queryStockMoveList`, { params })
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)
 /** 新增库位 */
