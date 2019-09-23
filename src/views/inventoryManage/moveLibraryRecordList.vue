@@ -22,7 +22,7 @@ const tableConfig = [
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '移出库位', prop: 'sWarehouseSpaceCode' },
   { label: '移入库位', prop: 'tWarehouseSpaceCode' },
-  { label: '移库数量【字段待定】', prop: 'aaa' },
+  { label: '移库数量', prop: 'moveQty' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'createTimeArea', type: 'time' },
 ]
