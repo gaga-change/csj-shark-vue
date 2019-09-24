@@ -13,7 +13,7 @@ before_script:
 pack:
   stage: pack
   script:
-    - docker build --pull -t "$IMAGE" .
+    - docker build -build-arg IMAGE_TAG=$IMAGE_TAG --pull -t "$IMAGE" .
     - docker push "$IMAGE"
   only:
     - tags
