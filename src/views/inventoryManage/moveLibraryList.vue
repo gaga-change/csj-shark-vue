@@ -5,49 +5,48 @@
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="listApi"
+      :parseData="parseData"
       :showControl="true"
-      :controlWidth="160"
+      :controlWidth="80"
     >
       <template slot-scope="scope">
         <el-link
+          v-show="scope.row.showMoveBtn"
           type="primary"
           @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
-        >详情</el-link>
-        <el-divider direction="vertical"></el-divider>
-      </template>
-      <template slot="btns">
-        <el-button
-          type="primary"
-          size="mini"
-          @click="handleCreate"
-        >
-          新建质检记录
-        </el-button>
+        >移库</el-link>
       </template>
     </base-list>
   </div>
 </template>
 
 <script>
-import { checkOrderList } from '@/api'
+import { getInfoInventory } from '@/api'
 const tableConfig = [
-  { label: '质检单号 ', prop: 'orderCode' },
-  { label: '收货单号 ', prop: 'receiveOrderCode' },
-  { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: 'yesOrNoEnum' },
+  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '商品编码 ', prop: 'skuCode' },
+  { label: '商品名称 ', prop: 'skuName' },
+  { label: '规格型号', prop: 'lotAttrCode1' },
+  { label: '单位', prop: 'lotAttrCode3' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '容器', prop: 'trayCode' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
+  { label: '货主', prop: 'ownerName' },
+  { label: '库存量', prop: 'skuQty' },
+  { label: '已分配量', prop: 'blockQty' },
 ]
 const searchConfig = [
-  { label: '质检单号', prop: 'orderCode' },
-  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
   { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '商品名称', prop: 'skuName' },
 ]
 export default {
   data() {
     return {
       tableConfig,
       searchConfig,
-      listApi: checkOrderList,
+      listApi: getInfoInventory,
       // 可选 附加查询条件
       appendSearchParams: {},
     }
@@ -62,15 +61,11 @@ export default {
       let data = res.data.list || []
       let total = res.data.total
       data.forEach(v => {
-        v.updateLockStatusOutLoading = false
-        v.updateLockStatusInLoading = false
+        // 库存量 = 已分配量时，移库不可见
+        v.showMoveBtn = Number(v.skuQty) !== Number(v.blockQty)
       })
       return { data, total }
     },
-    /** 新建 */
-    handleCreate() {
-      this.$router.push({ path: '/qualityTesting/create' })
-    }
   }
 }
 </script>

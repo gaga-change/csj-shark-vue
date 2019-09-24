@@ -33,6 +33,7 @@ export const getInfo = params => http.get(`/webApi/base/user/info`, { params })
 export const setWarehouseCode = params => http.get(`/webApi/base/user/setWarehouseCode`, { params })
 /** 获取代办 */
 export const todolist = params => http.get(`/webApi/front/index/statistics`, { params })
+/** 库存台账 */
 export const getInfoInventory = params => http.get(`/webApi/sku/stock/querySkuStock`, { params })
 export const getInfoOnPageInventory = params => http.get(`/webApi/sku/stock/querySkuStockList`, { params })
 export const querySkuStockRecord = params => http.get(`/webApi/sku/stock/querySkuStockRecord`, { params })
