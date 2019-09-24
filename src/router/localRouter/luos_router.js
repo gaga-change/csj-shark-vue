@@ -83,6 +83,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'pickingTaskDetail',
+        path: 'pickingTaskDetail',
+        meta: { title: '拣货任务详情', noCache: true },
+        component: _import('outwarehousing/pickingTaskDetail'),
+        hidden: true,
+      },
+      {
         name: 'temporaryStorage',
         path: 'temporaryStorage',
         meta: { title: '出库暂存', noCache: true },

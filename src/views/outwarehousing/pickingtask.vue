@@ -11,7 +11,7 @@
       <template slot-scope="scope">
         <el-link
           type="primary"
-          @click="handleDetail(scope.row)"
+          @click="$router.push({path:`/outwarehousing/pickingTaskDetail`,query:{id: scope.row.id}})"
         >详情</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link
