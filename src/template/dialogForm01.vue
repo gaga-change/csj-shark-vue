@@ -68,7 +68,7 @@
             prop="warehouseAreaNature"
           >
             <el-select
-              v-model="formParams.warehouseAreaNature"
+              v-model="formData.warehouseAreaNature"
               placeholder="请选择库区性质"
               clearable
             >

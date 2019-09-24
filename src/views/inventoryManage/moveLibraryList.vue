@@ -13,17 +13,23 @@
         <el-link
           v-show="scope.row.showMoveBtn"
           type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+          @click="selectedRow=scope.row; moveLibraryDialogFormVisible=true"
         >移库</el-link>
       </template>
     </base-list>
+    <move-library-dialog-form
+      :visible.sync="moveLibraryDialogFormVisible"
+      :row="selectedRow"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
 import { getInfoInventory } from '@/api'
+import moveLibraryDialogForm from './components/moveLibraryDialogForm'
 const tableConfig = [
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
+  { label: '库区', prop: 'warehouseAreaCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '商品名称 ', prop: 'skuName' },
@@ -37,16 +43,19 @@ const tableConfig = [
   { label: '已分配量', prop: 'blockQty' },
 ]
 const searchConfig = [
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
+  { label: '库区', prop: 'warehouseAreaCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '商品名称', prop: 'skuName' },
 ]
 export default {
+  components: { moveLibraryDialogForm },
   data() {
     return {
       tableConfig,
       searchConfig,
       listApi: getInfoInventory,
+      moveLibraryDialogFormVisible: false,
+      selectedRow: null,
       // 可选 附加查询条件
       appendSearchParams: {},
     }
@@ -63,6 +72,8 @@ export default {
       data.forEach(v => {
         // 库存量 = 已分配量时，移库不可见
         v.showMoveBtn = Number(v.skuQty) !== Number(v.blockQty)
+        // 数量 = 库存量-已分配量
+        v.number = Number(Number(v.skuQty) - Number(v.blockQty)) || 0
       })
       return { data, total }
     },
