@@ -8,25 +8,29 @@
       @close="close"
     >
       <div v-loading="pickOrderDetailLoading">
-        <div id="pickingOrder">
+        <div ref="print">
           <div style="display: flex;">
-            <div style="margin-right: 50px;line-height: 26px;">
+            <div style="margin-right: 50px;line-height: 26px;flex: 1">
               <span>拣货单号:</span> <span>{{rowData.orderCode}}</span><br>
-              <span>拣货人:</span> <span>{{rowData.pickOperatorName}}</span><br>
-              <span>仓库:</span> <span>{{warehouseName}}</span>
+              <span>计划单号:</span> <span>{{rowData.planCode}}</span><br>
+              <span>外部订单号:</span> <span>{{rowData.busiBillNo}}</span><br>
+              <span>仓库:</span> <span>{{warehouseName}}</span><br>
+              <span>打印时间:</span> <span>{{Date.now() | date}}</span>
             </div>
             <div style="width:200px;padding-top:5px">
               <bar-code :code="rowData.orderCode" />
             </div>
           </div>
-          <div style=" display: flex;justify-content: flex-end;margin-bottom:12px">
+          <!-- <div style=" display: flex;justify-content: flex-end;margin-bottom:12px">
             <span style="padding-right:12px">打印时间 :</span>
             <span>{{Date.now() | date}}</span>
+          </div> -->
+          <div class="mt15">
+            <base-print-table
+              :config="printConfig"
+              :data="pickingtaskdetailTableData"
+            />
           </div>
-          <base-print-table
-            :config="printConfig"
-            :data="pickingtaskdetailTableData"
-          />
         </div>
       </div>
       <span
@@ -55,12 +59,12 @@ import { mapGetters } from 'vuex'
 import { pickOrderDetail } from '@/api'
 
 const printConfig = [
-  { label: '序号', type: 'index', width: 50 },
-  { label: '计划单号', prop: 'planCode' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuFormat' },
-  { label: '商品数量', prop: 'jobQty' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '通知拣货数', prop: 'sortQty' },
+  { label: '容器', prop: 'trayCode' },
   { label: '货位', prop: 'warehouseSpaceCode' },
 ]
 
@@ -120,7 +124,7 @@ export default {
     },
     /** 确定 */
     confirm() {
-      let printPlanContainer = document.getElementById('pickingOrder').innerHTML
+      let printPlanContainer = this.$refs['print'].innerHTML
       MakePrint(printPlanContainer)
     },
     /** 关闭弹窗 */
