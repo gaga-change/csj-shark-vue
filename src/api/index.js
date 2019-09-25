@@ -140,10 +140,10 @@ export const inOrderList = params => http.post(`/webApi/in/order/list`, params)
 export const pickOrderAdd = params => http.post(`/webApi/pick/order/add`, params)
 /** 拣货确认 */
 export const orderPickConfirm = params => http.post(`/webApi/pick/order/pickConfirm`, params)
-/** 删除拣货单 */
-export const orderDelete = id => http.delete(`/webApi/pick/order/delete/${id}`)
-/** 拣货终止 */
-export const orderPickStop = id => http.post(`/webApi/pick/order/pickStop/${id}`)
+// /** 删除拣货单 */
+// export const orderDelete = id => http.delete(`/webApi/pick/order/delete/${id}`)
+// /** 拣货终止 */
+// export const orderPickStop = id => http.post(`/webApi/pick/order/pickStop/${id}`)
 /** 根据拣货任务生成出库单 */
 export const createOutWareHouseOrder = params => http.post(`/webApi/outWarehouse/order/createOutWareHouseOrder`, params)
 /** 库存移库 */

@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <el-dialog
-      :title="`拣货单详情 ( 拣货单号:${rowData.orderCode} ) `"
+      :title="`拣货单详情 ( 拣货单号:${rowData._detail_orderCode} ) `"
       :visible="visible"
       width="1000px"
       :before-close="handleClose"
@@ -55,14 +55,14 @@
           :loading="loading"
           :disabled="pickOrderDetailLoading"
           @click="confirm()"
-        >确 定</el-button>
+        >确认拣货</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { pickOrderDetail, orderPickConfirm } from '@/api'
+import { orderPickConfirm } from '@/api'
 const tableConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo', width: 90 },
@@ -70,10 +70,10 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuFormat' },
   { label: '批次', prop: 'batchNo' },
-  { label: '容器', prop: 'trayCode' },
-  { label: '任务状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
   { label: '通知拣货数', prop: 'jobQty', width: 90 },
   { label: '已拣货数', prop: 'realSortQty' },
+  { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
+  { label: '容器', prop: 'trayCode' },
   { label: '货位', prop: 'sum' },
 ]
 export default {
@@ -122,7 +122,7 @@ export default {
       let json = {};
       json.pickConfirmItemReqList = this.selectRows
       json.planCode = this.selectRows[0].planCode;
-      json.pickOrderId = this.rowData.id;
+      json.pickOrderId = this.rowData._detail_id;
       this.selectRows.forEach(v => {
         v.realSortStocks = {}
         v.realSortStocks[v.stockId] = v.number
@@ -146,16 +146,11 @@ export default {
     },
     /** 获取详情 */
     initDetail() {
-      this.pickOrderDetailLoading = true;
-      pickOrderDetail(this.rowData.id).then(res => {
-        this.pickOrderDetailLoading = false
-        if (!res) return
-        res.data.pickOrderDetailVOList.forEach(item => {
-          item.sum = item.warehouseSpaceCode + ':' + item.jobQty
-          item.realSortQty = item.realSortQty || 0
-          item.number = item.jobQty || 0
-        })
-        this.tableData = res.data.pickOrderDetailVOList || [];
+      this.tableData = [this.rowData].map(item => {
+        item.sum = item.warehouseSpaceCode + ':' + item.jobQty
+        item.realSortQty = item.realSortQty || 0
+        item.number = item.jobQty || 0
+        return item
       })
     },
     /** 关闭弹窗 */

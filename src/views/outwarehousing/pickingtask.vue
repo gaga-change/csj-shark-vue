@@ -6,7 +6,7 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
-      :controlWidth="360"
+      :controlWidth="200"
     >
       <template slot-scope="scope">
         <el-link
@@ -22,39 +22,10 @@
           v-if="[0, 1].includes(scope.row.orderStatus)"
           direction="vertical"
         ></el-divider>
-        <el-link
-          v-if="[0, 1].includes(scope.row.orderStatus)"
-          type="primary"
-          @click="handleDetail(scope.row)"
-        >拣货</el-link>
-        <el-divider
-          v-if="[0, 1].includes(scope.row.orderStatus)"
-          direction="vertical"
-        ></el-divider>
-        <el-link
-          v-if="[0, 1].includes(scope.row.orderStatus)"
-          type="primary"
-          @click="handlePickStop(scope.row)"
-        >终止拣货</el-link>
-        <el-divider
-          v-if="[0].includes(scope.row.orderStatus)"
-          direction="vertical"
-        ></el-divider>
-        <el-link
-          v-if="[0].includes(scope.row.orderStatus)"
-          type="primary"
-          @click="handleDelete(scope.row)"
-        >删除拣货</el-link>
       </template>
       <template slot="btns">
       </template>
     </base-list>
-    <!-- 拣货 & 详情 -->
-    <pick-detail-dialog
-      :visible.sync="pickDetailDialogVisible"
-      :row="detailSelectedRow"
-      @submited="getTableData()"
-    />
     <!-- 打印 -->
     <pick-print-dialog
       :visible.sync="pickPrintDialogVisible"
@@ -65,8 +36,7 @@
 
 <script>
 import moment from 'moment';
-import { pickOrderList, orderDelete, orderPickStop } from '@/api'
-import pickDetailDialog from './components/pickDetailDialog'
+import { pickOrderList } from '@/api'
 import pickPrintDialog from './components/pickPrintDialog'
 
 const tableConfig = [
@@ -83,15 +53,13 @@ const searchConfig = [
 ]
 
 export default {
-  components: { pickDetailDialog, pickPrintDialog },
+  components: { pickPrintDialog },
   data() {
     return {
       pickPrintDialogVisible: false,
-      pickDetailDialogVisible: false,
       tableConfig,
       searchConfig,
       listApi: pickOrderList,
-      detailSelectedRow: {},
       printSelectedRow: {},
     }
   },
@@ -101,31 +69,10 @@ export default {
     getTableData() {
       this.$refs['baseList'].fetchData()
     },
-    /** 详情 按钮点击 */
-    handleDetail(row) {
-      this.detailSelectedRow = row;
-      this.pickDetailDialogVisible = true
-    },
     /** 打印拣货单 按钮点击 */
     handePrint(row) {
       this.printSelectedRow = row;
       this.pickPrintDialogVisible = true
-    },
-    /** 终止拣货 点击 */
-    handlePickStop(row) {
-      this.$apiConfirm('确定要终止操作码？', () => orderPickStop(row.id)).then(res => {
-        if (!res) return
-        this.$message.success('操作成功！')
-        this.getTableData()
-      })
-    },
-    /** 删除拣货 点击 */
-    handleDelete(row) {
-      this.$apiConfirm('确定要删除吗？', () => orderDelete(row.id)).then(res => {
-        if (!res) return
-        this.$message.success('操作成功！')
-        this.getTableData()
-      })
     },
   },
 }

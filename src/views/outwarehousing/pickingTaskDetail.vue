@@ -3,7 +3,7 @@
     class=""
     v-loading="pickOrderDetailLoading"
   >
-    <div v-loading="pickOrderDetailLoading">
+    <div>
       <el-card shadow="never">
         <div slot="header">
           基本信息
@@ -34,10 +34,10 @@
             <!-- orderStatus:  未执行 - 0,执行中 - 1,全部执行 - 2,已终止 - 3 -->
             <!-- jobStatus:   未执行 - 0,未执行 - 1,未执行 - 2,未执行 - 3,已完成 - 4,已作废 - 5,异常作业 - 6,暂停作业 - 8 -->
             <!-- 单据（未执行、执行中） 明细（未执行） -->
-            <template v-if=" (detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4">
+            <template v-if="(detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4">
               <el-link
                 type="primary"
-                @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+                @click="handleDetail(scope.row)"
               >拣货</el-link>
               <el-divider direction="vertical"></el-divider>
             </template>
@@ -55,10 +55,17 @@
         </base-table>
       </el-card>
     </div>
+    <!-- 拣货 & 详情 -->
+    <pick-detail-dialog
+      :visible.sync="pickDetailDialogVisible"
+      :row="detailSelectedRow"
+      @submited="initDetail()"
+    />
   </div>
 </template>
 
 <script>
+import pickDetailDialog from './components/pickDetailDialog'
 import { pickOrderDetail, orderPickConfirm, outWarehouseJobDel } from '@/api'
 const detailItemConfig = [
   { label: '拣货单号', prop: 'orderCode' },
@@ -79,16 +86,17 @@ const tableConfig = [
   { label: '货位', prop: 'sum' },
 ]
 export default {
+  components: { pickDetailDialog },
   data() {
     return {
       id: this.$route.query.id,
+      pickDetailDialogVisible: false,
+      pickOrderDetailLoading: false,
       tableConfig,
       detailItemConfig,
-      pickOrderDetailLoading: false,
       tableData: [],
-      loading: false,
-      selectRows: [],
-      detail: {}
+      detail: {},
+      detailSelectedRow: {},
     }
   },
   created() {
@@ -111,28 +119,12 @@ export default {
         this.tableData = res.data.pickOrderDetailVOList || [];
       })
     },
-    /** 确定 */
-    confirm() {
-      if (this.selectRows.length === 0) {
-        return this.$message.error('请先选择商品！')
-      }
-      if (this.selectRows.find(v => !v.number)) {
-        return this.$message.error('数量不能为0！')
-      }
-      let json = {};
-      json.pickConfirmItemReqList = this.selectRows
-      json.planCode = this.selectRows[0].planCode;
-      json.pickOrderId = this.id;
-      this.selectRows.forEach(v => {
-        v.realSortStocks = {}
-        v.realSortStocks[v.stockId] = v.number
-      })
-      this.loading = true
-      orderPickConfirm(json).then(res => {
-        this.loading = false
-        if (!res) return
-        this.$message({ type: 'success', message: '操作成功，可以去出库暂存页面查看' })
-      })
+    /** 子详情 按钮点击 */
+    handleDetail(row) {
+      row._detail_orderCode = this.detail.orderCode
+      row._detail_id = this.detail.id
+      this.detailSelectedRow = row;
+      this.pickDetailDialogVisible = true
     },
     /** 终止拣货 点击 */
     handlePickStop(row) {
