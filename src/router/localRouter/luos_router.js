@@ -64,10 +64,24 @@ export default [
   {
     path: '/outwarehousing',
     component: Layout,
-    redirect: 'outwarehousing/assignmentPlan',
+    redirect: 'outwarehousing/outPlanList',
     meta: { title: '出库管理', noCache: true, icon: 'out' },
     hidden: false,
     children: [
+      {
+        name: 'outPlanList',
+        path: 'outPlanList',
+        meta: { title: '出库计划', noCache: true },
+        component: _import('outwarehousing/outPlanList'),
+        hidden: false,
+      },
+      {
+        name: 'assignPickingTasks',
+        path: 'assignPickingTasks',
+        meta: { title: '分配拣货任务', noCache: true },
+        component: _import('outwarehousing/assignPickingTasks'),
+        hidden: true,
+      },
       {
         name: 'assignmentPlan',
         path: 'assignmentPlan',

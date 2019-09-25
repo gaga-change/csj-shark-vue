@@ -198,3 +198,5 @@ export const receiveConfirm = params => http.post(`/webApi/receive/order/receive
 export const editorReceiveItem = params => http.post(`/webApi/receive/order/editorReceiveItem`, params)
 /** 新增上架任务 */
 export const inJobAdd = params => http.post(`/webApi/in/job/add`, params)
+/** 自动新增拣货单 */
+export const pickOrderAddByAuto = params => http.post(`/webApi/pick/order/addByAuto`, params)
