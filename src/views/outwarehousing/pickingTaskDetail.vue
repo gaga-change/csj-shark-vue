@@ -1,5 +1,8 @@
 <template>
-  <div class="">
+  <div
+    class=""
+    v-loading="pickOrderDetailLoading"
+  >
     <div v-loading="pickOrderDetailLoading">
       <el-card shadow="never">
         <div slot="header">
@@ -46,7 +49,7 @@
               || ( (detail.orderStatus == 1 || detail.orderStatus == 2) && scope.row.jobStatus == 4)
               "
               type="primary"
-              @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+              @click="handlePickStop(scope.row)"
             >终止拣货</el-link>
           </template>
         </base-table>
@@ -56,7 +59,7 @@
 </template>
 
 <script>
-import { pickOrderDetail, orderPickConfirm } from '@/api'
+import { pickOrderDetail, orderPickConfirm, outWarehouseJobDel } from '@/api'
 const detailItemConfig = [
   { label: '拣货单号', prop: 'orderCode' },
   { label: '出库计划单号', prop: 'outOrderCode' },
@@ -129,6 +132,14 @@ export default {
         this.loading = false
         if (!res) return
         this.$message({ type: 'success', message: '操作成功，可以去出库暂存页面查看' })
+      })
+    },
+    /** 终止拣货 点击 */
+    handlePickStop(row) {
+      this.$apiConfirm('确定要终止操作码？', () => outWarehouseJobDel({ jobId: row.outJobId })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.initDetail()
       })
     },
   }
