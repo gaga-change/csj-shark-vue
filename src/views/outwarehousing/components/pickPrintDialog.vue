@@ -117,8 +117,8 @@ export default {
       this.pickOrderDetailLoading = true;
       pickOrderDetail(this.rowData.id).then(res => {
         this.pickOrderDetailLoading = false;
-        if (res) {
-          this.pickingtaskdetailTableData = res.data || [];
+        if (res && res.data) {
+          this.pickingtaskdetailTableData = res.data.pickOrderDetailVOList || [];
         }
       })
     },

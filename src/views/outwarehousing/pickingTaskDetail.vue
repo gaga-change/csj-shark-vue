@@ -98,12 +98,13 @@ export default {
       pickOrderDetail(id).then(res => {
         this.pickOrderDetailLoading = false
         if (!res) return
-        res.data.forEach(item => {
-          item.sum = item.warehouseSpaceCode + ':' + item.jobQty
+        res.data.pickOrderDetailVOList.forEach(item => {
+          item.sum = item.warehouseSpaceCode + ':' + (item.jobQty || 0)
           item.realSortQty = item.realSortQty || 0
           item.number = item.jobQty || 0
         })
-        this.tableData = res.data || [];
+        this.detail = res.data
+        this.tableData = res.data.pickOrderDetailVOList || [];
       })
     },
     /** 确定 */
