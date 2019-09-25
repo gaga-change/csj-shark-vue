@@ -28,21 +28,22 @@
           :select="false"
         >
           <template slot-scope="scope">
+            <!-- orderStatus:  未执行 - 0,执行中 - 1,全部执行 - 2,已终止 - 3 -->
+            <!-- jobStatus:   未执行 - 0,未执行 - 1,未执行 - 2,未执行 - 3,已完成 - 4,已作废 - 5,异常作业 - 6,暂停作业 - 8 -->
             <!-- 单据（未执行、执行中） 明细（未执行） -->
-            <el-link
-              v-if=" (detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4"
-              type="primary"
-              @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
-            >拣货</el-link>
-            <!-- <el-divider
-              direction="vertical"
-            ></el-divider> -->
+            <template v-if=" (detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4">
+              <el-link
+                type="primary"
+                @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+              >拣货</el-link>
+              <el-divider direction="vertical"></el-divider>
+            </template>
             <!-- 单据（未执行、执行中） 明细（未执行）
-            单据（执行中） 明细（已完成）
+            单据（执行中, 全部指向） 明细（已完成）
              -->
             <el-link
               v-if=" ((detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4)
-              || ( (detail.orderStatus == 1) && scope.row.jobStatus == 4)
+              || ( (detail.orderStatus == 1 || detail.orderStatus == 2) && scope.row.jobStatus == 4)
               "
               type="primary"
               @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
