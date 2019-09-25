@@ -11,6 +11,7 @@
       :childApi="childApi"
       :childTableConfig="childTableConfig"
       :selectTables="true"
+      :childSelectable="childSelectable"
     >
       <template slot="btns">
         <operation-button
@@ -82,6 +83,10 @@ export default {
     }
   },
   methods: {
+    /** 子表可选条件 */
+    childSelectable(row) {
+      return row.planOutQty !== row.sortQty
+    },
     /** 子表内容获取 */
     childApi(row) {
       return planOutDetail({ planCode: row.planCode }).then(res => {

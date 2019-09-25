@@ -39,6 +39,7 @@
           :select="childSelect"
           :showIndex="childShowIndex"
           @selectionChange="rows => childSelectionChange(rows, scope.row, scope.row._key)"
+          :selectable="childSelectable"
         >
         </base-table>
       </template>
@@ -59,6 +60,11 @@ export default {
     childSelect: {
       type: Boolean,
       default: true
+    },
+    /** 子表可选条件 */
+    childSelectable: {
+      type: Function,
+      default: () => true
     },
     /** 子表 是否显示序号 */
     childShowIndex: {
