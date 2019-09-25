@@ -95,6 +95,8 @@ export default {
         return temp.map((v, index) => {
           v.index = index + 1
           v._planCode = row.planCode
+          v._gmtCreate = row.gmtCreate
+          v._busiBillNo = row.busiBillNo
           return v
         })
       })
@@ -124,6 +126,7 @@ export default {
       }
       let planCodes = []
       this.childSelectRows.forEach(v => planCodes.push(v._planCode))
+      planCodes = [...new Set(planCodes)]
       if (planCodes.length > 1) {
         return this.$message.error('手动分配，计划单不可多选')
       }
@@ -132,13 +135,14 @@ export default {
         query: {
           ids: this.childSelectRows.map(v => v.id).join(','),
           billNos: this.childSelectRows.map(v => v.billNo).join(','),
-          planCodes: planCodes[0],
+          gmtCreate: this.childSelectRows[0]._gmtCreate,
+          busiBillNo: this.childSelectRows[0]._busiBillNo,
+          planCode: planCodes[0],
         }
       })
     },
     /** 自动分配拣货任务 按钮点击 */
     handleAutoAssignPicking() {
-      console.log(this.childSelectRows)
       if (!this.childSelectRows.length) {
         return this.$message.warning('请勾选计划单下的商品！')
       }

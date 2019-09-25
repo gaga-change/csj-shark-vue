@@ -137,7 +137,7 @@ export default {
   },
   watch: {
     tableData(val) {
-      this.$emit('updateData')
+      this.$emit('updateData', val)
     }
   },
   created() {

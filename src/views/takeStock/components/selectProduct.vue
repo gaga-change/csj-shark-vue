@@ -16,7 +16,7 @@
             class="demo-form-inline"
           >
             <el-form-item label="类型">
-              {{mapConfig['takeStockTypeEnum'].find(v => v.value == orderType).name}}
+              {{mapConfig['takeStockTypeEnum'] && mapConfig['takeStockTypeEnum'].find(v => v.value == orderType).name}}
             </el-form-item>
             <el-form-item
               label="库区"

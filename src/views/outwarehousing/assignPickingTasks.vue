@@ -1,7 +1,7 @@
 <template>
   <div
     class=""
-    v-loading="pickOrderDetailLoading"
+    v-loading="planOutDetailLoading"
   >
     <div>
       <el-card shadow="never">
@@ -19,119 +19,110 @@
         class="mt20"
       >
         <div slot="header">
-          拣货明细任务
+          商品明细
         </div>
         <base-table
           :config="tableConfig"
-          :data="tableData"
+          :data="productList"
           :showControl="true"
-          controlName="操作"
-          :controlWidth="160"
-          inrecordDetail
           :select="false"
         >
           <template slot-scope="scope">
-            <!-- orderStatus:  未执行 - 0,执行中 - 1,全部执行 - 2,已终止 - 3 -->
-            <!-- jobStatus:   未执行 - 0,未执行 - 1,未执行 - 2,未执行 - 3,已完成 - 4,已作废 - 5,异常作业 - 6,暂停作业 - 8 -->
-            <!-- 单据（未执行、执行中） 明细（未执行） -->
-            <template v-if="(detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4">
-              <el-link
-                type="primary"
-                @click="handleDetail(scope.row)"
-              >拣货</el-link>
-              <el-divider direction="vertical"></el-divider>
-            </template>
-            <!-- 单据（未执行、执行中） 明细（未执行）
-            单据（执行中, 全部指向） 明细（已完成）
-             -->
             <el-link
-              v-if=" ((detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4)
-              || ( (detail.orderStatus == 1 || detail.orderStatus == 2) && scope.row.jobStatus == 4)
-              "
               type="primary"
-              @click="handlePickStop(scope.row)"
-            >终止拣货</el-link>
+              @click="selectedRow=scope.row;dialogVisible=true"
+            >选择</el-link>
           </template>
         </base-table>
       </el-card>
+      <el-card
+        shadow="never"
+        class="mt20"
+      >
+        <div slot="header">
+          拣货任务明细（点击商品行进行展示或切换）
+        </div>
+        <base-table
+          :config="planTableConfig"
+          :data="planTableData"
+          :showControl="true"
+          :select="false"
+        >
+        </base-table>
+      </el-card>
     </div>
-    <!-- 拣货 & 详情 -->
-    <pick-detail-dialog
-      :visible.sync="pickDetailDialogVisible"
-      :row="detailSelectedRow"
-      @submited="initDetail()"
+    <choose-dialog
+      :visible.sync="dialogVisible"
+      :row="selectedRow"
+      @submited="submited()"
     />
   </div>
 </template>
 
 <script>
-import pickDetailDialog from './components/pickDetailDialog'
-import { pickOrderDetail, orderPickConfirm, outWarehouseJobDel } from '@/api'
+import chooseSpaceCodeTableDialog from './components/chooseSpaceCodeTableDialog'
+import { planOutDetail } from '@/api'
 const detailItemConfig = [
-  { label: '拣货单号', prop: 'orderCode' },
-  { label: '出库计划单号', prop: 'outOrderCode' },
+  { label: '出库计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum', width: 90 },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const tableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuFormat' },
+  { label: '规格型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '计划量', prop: 'planOutQty' },
+  { label: '已通知拣货量', prop: 'sortQty' },
+  { label: '本次拣货量', prop: 'sum' },
+]
+const planTableConfig = [
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitName' },
   { label: '批次', prop: 'batchNo' },
-  { label: '通知拣货数', prop: 'jobQty', width: 90 },
-  { label: '已拣货数', prop: 'realSortQty' },
-  { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
-  { label: '容器', prop: 'trayCode' },
-  { label: '货位', prop: 'sum' },
+  { label: '本次拣货量', prop: 'num' },
+  { label: '本次拣货库位', prop: 'warehouseSpaceCode' },
 ]
 export default {
-  components: { pickDetailDialog },
+  components: { 'chooseDialog': chooseSpaceCodeTableDialog },
   data() {
     return {
+      dialogVisible: false,
+      selectedRow: null,
       id: this.$route.query.id,
-      pickDetailDialogVisible: false,
-      pickOrderDetailLoading: false,
+      planOutDetailLoading: false,
       tableConfig,
       detailItemConfig,
-      tableData: [],
+      planTableConfig,
       detail: {},
-      detailSelectedRow: {},
+      productList: [],
+      planTableData: [],
     }
   },
   created() {
     this.initDetail()
   },
   methods: {
+    /** 选择结束 */
+    submited(tableData) {
+      console.log('...', tableData)
+      this.selectedRow._child = tableData
+    },
     /** 获取详情 */
     initDetail() {
-      this.pickOrderDetailLoading = true;
-      const id = this.$route.query.id
-      pickOrderDetail(id).then(res => {
-        this.pickOrderDetailLoading = false
-        if (!res) return
-        res.data.pickOrderDetailVOList.forEach(item => {
-          item.sum = item.warehouseSpaceCode + ':' + (item.jobQty || 0)
-          item.realSortQty = item.realSortQty || 0
-          item.number = item.jobQty || 0
+      const query = this.$route.query
+      this.detail = query
+      this.planOutDetailLoading = true;
+      planOutDetail({ planCode: query.planCode }).then(res => {
+        this.planOutDetailLoading = false
+        if (!res) return []
+        let temp = res.data || []
+        this.productList = temp.filter(v => ~query.billNos.indexOf(v.billNo)).map(v => {
+          v.sum = undefined
+          return v
         })
-        this.detail = res.data
-        this.tableData = res.data.pickOrderDetailVOList || [];
-      })
-    },
-    /** 子详情 按钮点击 */
-    handleDetail(row) {
-      row._detail_orderCode = this.detail.orderCode
-      row._detail_id = this.detail.id
-      this.detailSelectedRow = row;
-      this.pickDetailDialogVisible = true
-    },
-    /** 终止拣货 点击 */
-    handlePickStop(row) {
-      this.$apiConfirm('确定要终止操作码？', () => outWarehouseJobDel({ jobId: row.outJobId })).then(res => {
-        if (!res) return
-        this.$message.success('操作成功！')
-        this.initDetail()
       })
     },
   }

@@ -64,6 +64,17 @@
               :min="item.min || 0"
               :max="item.max || 99999999"
             ></el-input-number>
+            <el-input-number
+              v-if="item.inputType==='number2'"
+              size="mini"
+              v-model="scope.row[item.prop]"
+              controls-position="right"
+              :disabled="scope.row['inputTypeNumberDisabled']"
+              :precision="item.precision || 0"
+              @change="val => handleInputNumberChange(scope.row, scope.$index, item, val)"
+              :min="item.min || 0"
+              :max="Number(scope.row[item.maxKey])"
+            ></el-input-number>
             <el-input
               v-if="item.inputType==='input'"
               v-model="scope.row[item.prop]"

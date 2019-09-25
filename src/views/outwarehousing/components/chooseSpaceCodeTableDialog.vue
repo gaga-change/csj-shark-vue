@@ -1,0 +1,125 @@
+<template>
+  <div class="">
+    <!-- 600px【小型，单列】 70% 【中型，双列】-->
+    <el-dialog
+      title="选择库存"
+      :visible="visible"
+      width="80%"
+      :before-close="handleClose"
+      @close="close"
+    >
+      <div v-if="appendSearchParams.skuCode">
+        <base-list
+          ref="baseList"
+          :tableConfig="tableConfig"
+          :searchConfig="searchConfig"
+          :appendSearchParams="appendSearchParams"
+          :api="listApi"
+          :showControl="false"
+        >
+        </base-list>
+      </div>
+      <!-- <el-alert
+        class="mt15"
+        title="温馨提示："
+        type="info"
+        :closable="false"
+      >
+        <p>举例，商品最小单位默认为1,4个最小单位为一个内包装【一个内包装数量为4】，
+          2个内包装为1箱【一箱数量8】，10箱为一个容器【一容器数量为80】</p>
+      </el-alert> -->
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="close()">取 消</el-button>
+        <el-button
+          type="primary"
+          :loading="loading"
+          @click="confirm()"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { planInventoryQuerysSkuStockList } from '@/api'
+const tableConfig = [
+  { label: '商品编码', prop: 'skuCode' },
+  { label: '商品名称', prop: 'skuName' },
+  { label: '规格型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '批次', prop: 'batchNo' },
+  { label: '容器', prop: 'trayCode' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '可用库存', prop: 'skuQty' },
+  { label: '入库时间', prop: 'lastInTime', type: 'time', width: 150 },
+  { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
+]
+const searchConfig = [
+  { label: '批次', prop: 'batchNo' },
+]
+export default {
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+    /** 数据初始 */
+    row: {
+      type: Object,
+      default: {}
+    }
+  },
+  computed: {
+    /** 防止父级传递 null */
+    rowData() {
+      return this.row || {}
+    }
+  },
+  watch: {
+    /** 监听数据切换 */
+    visible(val) {
+      if (!val) return
+      this.appendSearchParams.skuCode = this.rowData.skuCode
+    }
+  },
+  data() {
+    return {
+      tableConfig,
+      searchConfig,
+      listApi: planInventoryQuerysSkuStockList,
+      // 可选 附加查询条件
+      appendSearchParams: { skuCode: undefined },
+      loading: false,
+    }
+  },
+  methods: {
+    /** 确定 */
+    confirm() {
+      let tableData = this.$refs['baseList'].tableData
+      this.$emit('submited', JSON.parse(JSON.stringify(tableData)))
+    },
+    /** 刷新列表 */
+    getTableData() {
+      this.$refs['baseList'].fetchData()
+    },
+    /** 关闭弹窗 */
+    close() {
+      // 初始化表单
+      // this.$refs['form'] && this.$refs['form'].resetFields()
+      // 初始化没有挂载到表单的数据
+      // ...
+      this.visible && this.$emit('update:visible', false)
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => { })
+    }
+  }
+}
+</script>
