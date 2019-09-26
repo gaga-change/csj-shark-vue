@@ -33,6 +33,7 @@ Vue.component('DoubleList', DoubleList);
 Vue.component('PrintTableDialog', PrintTableDialog);
 Vue.component('BasePrintTable', BasePrintTable);
 Vue.component('DetailItem', DetailItem);
+Vue.prototype.$copy = obj => JSON.parse(JSON.stringify(obj))
 Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve, reject) => {
   MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {
     confirmButtonText: '确定',

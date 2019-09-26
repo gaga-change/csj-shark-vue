@@ -8,7 +8,7 @@
       :before-close="handleClose"
       @close="close"
     >
-      <div v-if="appendSearchParams.skuCode">
+      <div v-if="visible && appendSearchParams.skuCode">
         <base-list
           ref="baseList"
           :tableConfig="tableConfig"
@@ -100,6 +100,7 @@ export default {
     confirm() {
       let tableData = this.$refs['baseList'].tableData
       this.$emit('submited', JSON.parse(JSON.stringify(tableData)))
+      this.close()
     },
     /** 刷新列表 */
     getTableData() {
