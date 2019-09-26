@@ -69,7 +69,7 @@ import pickDetailDialog from './components/pickDetailDialog'
 import { pickOrderDetail, orderPickConfirm, outWarehouseJobDel } from '@/api'
 const detailItemConfig = [
   { label: '拣货单号', prop: 'orderCode' },
-  { label: '出库计划单号', prop: 'outOrderCode' },
+  { label: '出库计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum', width: 90 },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
@@ -79,7 +79,7 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuFormat' },
   { label: '批次', prop: 'batchNo' },
-  { label: '通知拣货数', prop: 'jobQty', width: 90 },
+  { label: '通知拣货数', prop: 'sortQty', width: 90 },
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
   { label: '容器', prop: 'trayCode' },
