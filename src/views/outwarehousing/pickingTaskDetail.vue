@@ -122,7 +122,7 @@ export default {
     /** 子详情 按钮点击 */
     handleDetail(row) {
       row._detail_orderCode = this.detail.orderCode
-      row._detail_id = this.detail.id
+      row._detail_id = this.detail.pickOrderId
       this.detailSelectedRow = row;
       this.pickDetailDialogVisible = true
     },
