@@ -41,9 +41,11 @@ import pickPrintDialog from './components/pickPrintDialog'
 
 const tableConfig = [
   { label: '拣货单号', prop: 'orderCode' },
-  { label: '应拣货总量', prop: 'pickQty' },
-  { label: '已拣货总数', prop: 'realPickQty' },
-  { label: '状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
+  { label: '计划单号 ', prop: 'planCode' },
+  { label: '外部订单号', prop: 'busiBillNo' },
+  { label: '通知拣货数', prop: 'pickQty' },
+  { label: '已拣货数', prop: 'realPickQty' },
+  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const searchConfig = [
