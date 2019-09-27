@@ -25,7 +25,7 @@
                 v-model="scope.row.number"
                 :precision="0"
                 :min="1"
-                :max="Number(scope.row.jobQty) || 0"
+                :max="Number(scope.row.sortQty) || 0"
                 controls-position="right"
               ></el-input-number>
             </div>
@@ -70,7 +70,7 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格型号', prop: 'skuFormat' },
   { label: '批次', prop: 'batchNo' },
-  { label: '通知拣货数', prop: 'jobQty', width: 90 },
+  { label: '通知拣货数', prop: 'sortQty', width: 90 },
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
   { label: '容器', prop: 'trayCode' },
@@ -147,9 +147,9 @@ export default {
     /** 获取详情 */
     initDetail() {
       this.tableData = [this.rowData].map(item => {
-        item.sum = item.warehouseSpaceCode + ':' + item.jobQty
+        item.sum = item.warehouseSpaceCode + ':' + item.sortQty
         item.realSortQty = item.realSortQty || 0
-        item.number = item.jobQty || 0
+        item.number = item.sortQty || 0
         return item
       })
     },
