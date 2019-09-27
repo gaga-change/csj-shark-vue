@@ -13,34 +13,36 @@
       @selectionChange="dataSelect"
     >
       <template slot-scope="scope">
-        <el-button
-          class=" ml5 mr5"
-          size="mini"
-          :type="scope.row.inLock ? 'primary': 'warning'"
-          plain
-          :loading="scope.row.updateLockStatusInLoading"
-          @click="handleLock(scope.row, scope.index, 'in')"
-        >
-          {{scope.row.inLock ? '解锁入库' : '入库锁定'}}
-        </el-button>
-        <el-button
-          class=" ml5 mr5"
-          size="mini"
-          :type="scope.row.outLock ? 'primary': 'warning'"
-          plain
-          :loading="scope.row.updateLockStatusOutLoading"
-          @click="handleLock(scope.row, scope.index, 'out')"
-        >
-          {{scope.row.outLock ? '解锁出库' : '出库锁定'}}
-        </el-button>
-        <button
-          class="btn-link ml5 mr5 mt10"
-          type="button"
-          :disabled="scope.row.inLock === 1 || scope.row.outLock === 1"
-          @click="handleSetStorage(scope.row)"
-        >
-          库位设置
-        </button>
+        <template v-if="scope.row.warehouseAreaCode !== 'Z'">
+          <el-button
+            class=" ml5 mr5"
+            size="mini"
+            :type="scope.row.inLock ? 'primary': 'warning'"
+            plain
+            :loading="scope.row.updateLockStatusInLoading"
+            @click="handleLock(scope.row, scope.index, 'in')"
+          >
+            {{scope.row.inLock ? '解锁入库' : '入库锁定'}}
+          </el-button>
+          <el-button
+            class=" ml5 mr5"
+            size="mini"
+            :type="scope.row.outLock ? 'primary': 'warning'"
+            plain
+            :loading="scope.row.updateLockStatusOutLoading"
+            @click="handleLock(scope.row, scope.index, 'out')"
+          >
+            {{scope.row.outLock ? '解锁出库' : '出库锁定'}}
+          </el-button>
+          <button
+            class="btn-link ml5 mr5 mt10"
+            type="button"
+            :disabled="scope.row.inLock === 1 || scope.row.outLock === 1"
+            @click="handleSetStorage(scope.row)"
+          >
+            库位设置
+          </button>
+        </template>
       </template>
       <template slot="btns">
         <el-button
