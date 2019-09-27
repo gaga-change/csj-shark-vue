@@ -91,7 +91,7 @@ export default {
       searchConfig,
       listApi: planInventoryQuerysSkuStockList,
       // 可选 附加查询条件
-      appendSearchParams: { skuCode: undefined },
+      appendSearchParams: { skuCode: undefined, queryTempArea: 0 },
       loading: false,
     }
   },
