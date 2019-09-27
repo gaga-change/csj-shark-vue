@@ -53,7 +53,7 @@ const childTableConfig = [
 const tableConfig = [
   { label: '出库计划单号', prop: 'planCode', width: 150 },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'outExecStatusEnum_v2', },
+  { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum_v2', },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '客户', prop: 'arrivalName' },
@@ -65,7 +65,7 @@ const tableConfig = [
 const searchConfig = [
   { label: '出库计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'outExecStatusEnum_v2' },
+  { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum_v2' },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '下单时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
