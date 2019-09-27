@@ -200,6 +200,7 @@ export default {
             stockId: this.rowData.id,
             warehouseSpaceCode: code,
             moveQty: newSkuQty,
+            trayCode: (params.trayCode && this.hasContainer) ? params.trayCode : undefined,
             warehouseAreaCode: this.warehouseSpaceCodeConfig.find(v => v.warehouseSpaceCode === code).warehouseAreaCode,
           }).then(res => {
             this.loading = false
