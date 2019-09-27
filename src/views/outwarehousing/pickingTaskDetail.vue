@@ -83,7 +83,7 @@ const tableConfig = [
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },
   { label: '容器', prop: 'trayCode' },
-  { label: '货位', prop: 'sum' },
+  { label: '货位', prop: 'warehouseSpaceCode' },
 ]
 export default {
   components: { pickDetailDialog },
