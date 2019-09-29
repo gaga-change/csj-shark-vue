@@ -6,7 +6,7 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
-      :controlWidth="200"
+      :controlWidth="150"
     >
       <template slot-scope="scope">
         <el-link
@@ -18,10 +18,6 @@
           type="primary"
           @click="handePrint(scope.row, 'Printing')"
         >打印拣货单</el-link>
-        <el-divider
-          v-if="[0, 1].includes(scope.row.orderStatus)"
-          direction="vertical"
-        ></el-divider>
       </template>
       <template slot="btns">
       </template>
