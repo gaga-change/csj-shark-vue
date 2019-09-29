@@ -12,28 +12,28 @@
         <el-link
           type="primary"
           @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
-        >审核</el-link>
-        <el-divider direction="vertical"></el-divider>
-        <el-link
-          type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
         >拣货任务</el-link>
-      </template>
-      <template slot="btns">
-        <el-button
-          type="primary"
-          size="mini"
-          @click="handleCreate"
-        >
-          新建质检记录
-        </el-button>
+        <template v-if="scope.row.opStatus == 0">
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="selectedRow=scope.row;auditDialogFormVisible=true"
+          >审核</el-link>
+        </template>
+
       </template>
     </base-list>
+    <audit-dialog-form
+      :visible.sync="auditDialogFormVisible"
+      :row="selectedRow"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
 import { inOutStopList } from '@/api'
+import auditDialogForm from './components/auditDialogForm'
 const tableConfig = [
   { label: '任务ID ', prop: 'taskCode' },
   { label: '审核类型 ', prop: 'inOutType', type: 'enum', enum: 'inOutTypeEnum' },
@@ -52,13 +52,14 @@ const searchConfig = [
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 export default {
+  components: { auditDialogForm },
   data() {
     return {
+      auditDialogFormVisible: false,
       tableConfig,
       searchConfig,
       listApi: inOutStopList,
-      // 可选 附加查询条件
-      appendSearchParams: {},
+      selectedRow: null,
     }
   },
   methods: {
@@ -66,20 +67,6 @@ export default {
     getTableData() {
       this.$refs['baseList'].fetchData()
     },
-    /** 可选 返回列表添加字段 */
-    parseData(res) {
-      let data = res.data.list || []
-      let total = res.data.total
-      data.forEach(v => {
-        v.updateLockStatusOutLoading = false
-        v.updateLockStatusInLoading = false
-      })
-      return { data, total }
-    },
-    /** 新建 */
-    handleCreate() {
-      this.$router.push({ path: '/qualityTesting/create' })
-    }
   }
 }
 </script>

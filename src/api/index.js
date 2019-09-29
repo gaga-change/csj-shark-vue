@@ -202,3 +202,5 @@ export const editorReceiveItem = params => http.post(`/webApi/receive/order/edit
 export const inJobAdd = params => http.post(`/webApi/in/job/add`, params)
 /** 自动新增拣货单 */
 export const pickOrderAddByAuto = params => http.post(`/webApi/pick/order/addByAuto`, params)
+/** 待办任务 - 审核 - 审核接口 */
+export const inOutStopCheckTaskOrder = params => http.post(`/webApi/plan/inOutStop/checkTaskOrder`, params)
