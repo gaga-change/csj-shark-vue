@@ -4,6 +4,22 @@ import Layout from '../../views/layout/Layout'
 
 export default [
   {
+    path: '/toDoTask',
+    component: Layout,
+    redirect: 'toDoTask/toDoTaskAuditList',
+    meta: { title: '待办任务', noCache: true, icon: 'deliver' },
+    hidden: false,
+    children: [
+      {
+        name: 'toDoTaskAuditList',
+        path: 'toDoTaskAuditList',
+        meta: { title: '审核', noCache: true },
+        component: _import('toDoTask/toDoTaskAuditList'),
+        hidden: false,
+      },
+    ]
+  },
+  {
     path: '/inwarehousing',
     component: Layout,
     redirect: 'inwarehousing/arrival',

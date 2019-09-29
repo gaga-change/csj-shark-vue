@@ -94,6 +94,8 @@ export const queryReceiverOrder = params => http.get(`/webApi/plan/checkOrder/qu
 export const queryStockMoveList = params => http.get(`/webApi/sku/stock/queryStockMoveList`, { params })
 /** 根据作业id删除出库作业 */
 export const outWarehouseJobDel = params => http.get(`/webApi/outWarehouse/job/deleteById`, { params })
+/** 查询待办任务列表 - 审核 */
+export const inOutStopList = params => http.get(`/webApi/plan/inOutStop/list`, { params })
 /** 获取入库计划列表 */
 export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, params)
 /** 新增库位 */
