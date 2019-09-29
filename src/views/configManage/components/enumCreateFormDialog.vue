@@ -2,7 +2,7 @@
   <div class="">
     <!-- 600px【小型，单列】 70% 【中型，双列】-->
     <el-dialog
-      :title="row ? `编辑` : '新建枚举'"
+      :title="(row && row._id) ? `编辑` : '新建枚举'"
       :visible="visible"
       width="70%"
       :before-close="handleClose"
@@ -164,19 +164,16 @@ export default {
     handleDelete(row) {
       this.keyValueData.splice(this.keyValueData.findIndex(v => v._id === row._id), 1)
     },
-    /** 修改 */
-    handleModify() {
-
-    },
     /** 确定 */
     confirm() {
-      const api = this.row ? enumsModify : enumsAdd
+      const isModify = this.row && this.row._id
+      const api = isModify ? enumsModify : enumsAdd
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
           let params = { ...this.formData }
           params.keyValue = this.keyValueData.filter(v => v.name || v.value !== undefined)
-          let temp = this.row ? [this.row._id, params] : [params]
+          let temp = isModify ? [this.row._id, params] : [params]
           api(...temp).then(res => {
             this.loading = false
             if (!res) return

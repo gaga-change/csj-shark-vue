@@ -17,6 +17,11 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
+          @click="handleCopy(scope.row)"
+        >复制</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
           @click="handleDelete(scope.row)"
         >删除</el-link>
       </template>
@@ -27,6 +32,13 @@
           @click="handleCreate"
         >
           新建
+        </el-button>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="handleOutput"
+        >
+          导出
         </el-button>
       </template>
     </base-list>
@@ -91,10 +103,21 @@ export default {
       this.nowRow = row
       this.createDialogVisible = true
     },
+    /** 复制 */
+    handleCopy(row) {
+      let temp = { ...row }
+      delete temp._id
+      this.nowRow = temp
+      this.createDialogVisible = true
+    },
     /** 新建 */
     handleCreate() {
       this.nowRow = null
       this.createDialogVisible = true
+    },
+    /** 导出 */
+    handleOutput() {
+      window.open('/config/enums.json')
     }
   }
 }
