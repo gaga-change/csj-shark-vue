@@ -149,7 +149,6 @@
 
 <script>
 
-import _ from 'lodash';
 import moment from 'moment';
 import { mapGetters } from 'vuex'
 
@@ -283,7 +282,7 @@ export default {
     }
   },
   beforeMount() {
-    let tableConfig = JSON.parse(JSON.stringify(this.config))
+    let tableConfig = this.$copy(this.config)
     tableConfig.forEach(configItem => {
       if (configItem.type) {
         switch (configItem.type) {
@@ -360,13 +359,17 @@ export default {
       }
       else if (configItem.dom) {
         configItem.formatter = configItem.dom
-      } else if (configItem.linkTo) {
+      } else if (!!configItem.linkTo) {
         configItem.formatter = (row, column, cellValue, index) => {
           let json = {};
-          configItem.query.forEach(item => {
+          configItem.query && configItem.query.forEach(item => {
             json[item.key] = row[item.value]
           })
-          return <router-link to={{ path: configItem.linkTo, query: json }} style={{ color: '#3399ea' }}>{configItem.linkText ? configItem.linkText : cellValue}</router-link>
+          let linkTo = configItem.linkTo
+          if (configItem.linkTo.constructor === Function) {
+            linkTo = configItem.linkTo(row)
+          }
+          return <router-link to={{ path: linkTo, query: json }} style={{ color: '#3399ea' }}>{configItem.linkText ? configItem.linkText : cellValue}</router-link>
         }
       } else {
         configItem.formatter = (row, column, cellValue, index) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''

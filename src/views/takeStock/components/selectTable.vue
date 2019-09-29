@@ -133,7 +133,6 @@
 
 <script>
 
-import _ from 'lodash';
 import moment from 'moment';
 import { mapGetters } from 'vuex'
 import * as Enum from "@/utils/enum.js";

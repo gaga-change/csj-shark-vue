@@ -37,7 +37,13 @@ import auditDialogForm from './components/auditDialogForm'
 const tableConfig = [
   { label: '任务ID ', prop: 'taskCode' },
   { label: '审核类型 ', prop: 'inOutType', type: 'enum', enum: 'inOutTypeEnum' },
-  { label: '计划单号', prop: 'planCode' },
+  {
+    label: '计划单号',
+    prop: 'planCode',
+    linkTo: (row) => {
+      return row.inOutType == 1 ? `/inwarehousing/inPlanList?planCode=${row.planCode}` : `/outwarehousing/outPlanList?planCode=${row.planCode}`
+    }
+  },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '审核状态', prop: 'opStatus', type: 'enum', enum: 'opStatusEnum' },

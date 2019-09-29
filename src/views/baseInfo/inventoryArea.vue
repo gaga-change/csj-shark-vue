@@ -169,7 +169,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import { SimpleMsg } from '@/utils/luoFun'
 import { getInventoryArea, addInventoryArea, updateInventoryArea, warehouseAreaUpdateLockStatus, deleteInventoryArea } from '@/api'

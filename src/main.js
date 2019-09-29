@@ -4,7 +4,7 @@ import moment from 'moment'
 import ItemTitle from '@/components/ItemTitle/index'
 import BarCode from '@/components/BarCode/index'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
-
+import { cloneDeep } from 'lodash';
 import BaseTable from '@/components/BaseTable'
 import SearchForm from '@/components/SearchForm'
 import BaseList from '@/components/BaseList'
@@ -33,7 +33,7 @@ Vue.component('DoubleList', DoubleList);
 Vue.component('PrintTableDialog', PrintTableDialog);
 Vue.component('BasePrintTable', BasePrintTable);
 Vue.component('DetailItem', DetailItem);
-Vue.prototype.$copy = obj => JSON.parse(JSON.stringify(obj))
+Vue.prototype.$copy = obj => cloneDeep(obj)
 Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve, reject) => {
   MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {
     confirmButtonText: '确定',

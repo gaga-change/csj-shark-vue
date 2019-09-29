@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import { queryReceiverOrder, orderDetailList } from '@/api'
 
 const childTableConfig = [
