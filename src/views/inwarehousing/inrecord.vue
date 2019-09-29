@@ -62,15 +62,15 @@ import { receiveOrderList, receiveOrderActivate } from '@/api'
 import inrecordPrintDialog from './components/inrecordPrintDialog'
 
 const tableConfig = [
-  { label: '收货单号 ', prop: 'orderCode' },
-  { label: '入库计划单号 ', prop: 'planCode' },
+  { label: '收货单号 ', prop: 'orderCode', width: 140 },
+  { label: '入库计划单号 ', prop: 'planCode', width: 140 },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '收货单号', prop: 'orderCode' },

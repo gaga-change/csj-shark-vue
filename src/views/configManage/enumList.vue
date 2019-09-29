@@ -57,8 +57,8 @@ import enumCreateFormDialog from './components/enumCreateFormDialog'
 const tableConfig = [
   { label: '名称', prop: 'name' },
   { label: '键值', prop: 'keyValueStr' },
-  { label: '创建时间', prop: 'createdAt', type: 'time' },
-  { label: '修改时间', prop: 'updatedAt', type: 'time' },
+  { label: '创建时间', prop: 'createdAt', type: 'time', width: 140 },
+  { label: '修改时间', prop: 'updatedAt', type: 'time', width: 140 },
   { label: '备注', prop: 'remark' },
 ]
 const searchConfig = [

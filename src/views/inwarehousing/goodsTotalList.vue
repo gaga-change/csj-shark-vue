@@ -24,8 +24,8 @@
 <script>
 import { selectSumReceiveDetail, receiveOrderExportLedger } from '@/api'
 const tableConfig = [
-  { label: '收货单号 ', prop: 'receiveOrderCode' },
-  { label: '入库计划单号 ', prop: 'planCode' },
+  { label: '收货单号 ', prop: 'receiveOrderCode', width: 140 },
+  { label: '入库计划单号 ', prop: 'planCode', width: 140 },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '供应商', prop: 'providerName' },
   { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },

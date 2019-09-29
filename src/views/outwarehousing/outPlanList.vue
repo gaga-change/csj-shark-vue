@@ -60,7 +60,7 @@ const tableConfig = [
   { label: '收货人', prop: 'arrivalLinkName' },
   { label: '联系电话', prop: 'arrivalLinkTel' },
   { label: '收货地址', prop: 'arrivalAddress' },
-  { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time' },
+  { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '出库计划单号', prop: 'planCode' },

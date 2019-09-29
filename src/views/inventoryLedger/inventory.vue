@@ -57,8 +57,8 @@ const tableConfig = [
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '冻结数量', prop: 'blockQty' },
   { label: '库存', prop: 'skuQty' },
-  { label: '最近入库时间', prop: 'lastInTime', type: 'time', width: '135' },
-  { label: '最近出库时间', prop: 'lastOutTime', type: 'time', width: '135' },
+  { label: '最近入库时间', prop: 'lastInTime', type: 'time', width: 140 },
+  { label: '最近出库时间', prop: 'lastOutTime', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },

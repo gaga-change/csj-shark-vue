@@ -28,7 +28,7 @@ import { jobList, inOrderAdd } from '@/api'
 
 const tableConfig = [
   { label: '入库计划单号', prop: 'planCode', width: 140 },
-  { label: '收货单号', prop: 'receiveOrderCode' },
+  { label: '收货单号', prop: 'receiveOrderCode', width: 140 },
   { label: '外部订单号', prop: 'busiBillNo', width: 90 },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },

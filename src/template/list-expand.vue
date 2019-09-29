@@ -39,9 +39,9 @@ const childTableConfig = [
   { label: '备注', prop: 'remarkInfo' },
 ]
 const tableConfig = [
-  { label: '出库时间', prop: 'gmtCreate', type: 'time' },
+  { label: '出库时间', prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '出库单号', prop: 'orderCode' },
-  { label: '计划单号', prop: 'planCode' },
+  { label: '计划单号', prop: 'planCode', width: 140 },
   { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: 'outboundOrderStatus' },

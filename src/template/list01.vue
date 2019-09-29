@@ -41,10 +41,10 @@
 <script>
 import { checkOrderList } from '@/api'
 const tableConfig = [
-  { label: '质检单号 ', prop: 'orderCode' },
-  { label: '收货单号 ', prop: 'receiveOrderCode' },
+  { label: '质检单号 ', prop: 'orderCode', width: 140 },
+  { label: '收货单号 ', prop: 'receiveOrderCode', width: 140 },
   { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '质检单号', prop: 'orderCode' },

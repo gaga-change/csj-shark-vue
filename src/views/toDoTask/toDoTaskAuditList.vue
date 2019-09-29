@@ -35,20 +35,21 @@
 import { inOutStopList } from '@/api'
 import auditDialogForm from './components/auditDialogForm'
 const tableConfig = [
-  { label: '任务ID ', prop: 'taskCode' },
+  { label: '任务ID ', prop: 'taskCode', width: 140 },
   { label: '审核类型 ', prop: 'inOutType', type: 'enum', enum: 'inOutTypeEnum' },
   {
     label: '计划单号',
     prop: 'planCode',
     linkTo: (row) => {
       return row.inOutType == 1 ? `/inwarehousing/inPlanList?planCode=${row.planCode}` : `/outwarehousing/outPlanList?planCode=${row.planCode}`
-    }
+    },
+    width: 140
   },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '审核状态', prop: 'opStatus', type: 'enum', enum: 'opStatusEnum' },
   { label: '审核备注', prop: 'remark' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '审核类型 ', prop: 'inOutType', type: 'enum', enum: 'inOutTypeEnum' },

@@ -24,7 +24,7 @@ const tableConfig = [
   { label: '移入库位', prop: 'twarehouseSpaceCode' },
   { label: '移库数量', prop: 'moveQty' },
   { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '商品编码 ', prop: 'skuCode' },

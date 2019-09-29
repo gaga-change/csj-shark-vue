@@ -26,7 +26,7 @@ const tableConfig = [
   { label: '变动前数量', prop: 'beforeQty', width: 100 },
   { label: '变动数量', prop: 'changeQty' },
   { label: '变动后数量', prop: 'afterQty', width: 100 },
-  { label: '变动时间', prop: 'gmtModify', type: 'time' },
+  { label: '变动时间', prop: 'gmtModify', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },

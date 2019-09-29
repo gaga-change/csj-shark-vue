@@ -91,14 +91,14 @@
 import printBills from './components/printBills'
 import { planInventoryList, inventoryRemoveOrStop, inventoryRecordExport } from '@/api'
 const tableConfig = [
-  { label: '盘点单号', prop: 'orderCode' },
+  { label: '盘点单号', prop: 'orderCode', width: 140 },
   { label: '盘点类型', prop: 'orderType', type: 'enum', enum: 'takeStockTypeEnum' },
   { label: '状态', prop: 'executeStatus', type: 'enum', enum: 'executeStatusEnum' },
   { label: '仓库名称', prop: 'warehouseName' },
   { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '盘点人', prop: 'inventoryName' },
-  { label: '盘点时间', prop: 'inventoryTime', type: 'time' },
+  { label: '盘点时间', prop: 'inventoryTime', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '盘点单号', prop: 'orderCode' },

@@ -37,7 +37,7 @@ const childTableConfig = [
   { label: '已拣货数量', prop: 'realSortQty', minWidth: 120 },
 ]
 const tableConfig = [
-  { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time' },
+  { label: '下单时间', width: 140, prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '拣货状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum_v2', width: 90 },
   { label: '计划单号', prop: 'planCode', width: 150 },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum', width: 90 },

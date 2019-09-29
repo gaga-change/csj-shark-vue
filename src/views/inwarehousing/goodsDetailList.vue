@@ -31,7 +31,7 @@ import { selectReceiveDetailItem } from '@/api'
 import putawayDialog from './components/putawayDialog'
 
 const tableConfig = [
-  { label: '收货单号', prop: 'receiveOrderCode' },
+  { label: '收货单号', prop: 'receiveOrderCode', width: 140 },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName', width: '200' },
   { label: '规格型号', prop: 'skuFormat' },
@@ -41,7 +41,7 @@ const tableConfig = [
   { label: '实际收货量', prop: 'receiveQty' },
   { label: '已上架数量', prop: 'realInQty' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
-  { label: '收货时间', prop: 'gmtCreate', type: 'time' },
+  { label: '收货时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },

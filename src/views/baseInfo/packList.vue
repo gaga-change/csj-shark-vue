@@ -41,7 +41,7 @@ const tableConfig = [
   { label: '内包装', prop: 'innerPackage' },
   { label: '箱', prop: 'box' },
   { label: '容器', prop: 'palet' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '包装编码', prop: 'packageCode' },

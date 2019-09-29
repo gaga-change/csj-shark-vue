@@ -243,7 +243,7 @@ const tableConfig = [
   { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: 'lockEnum' },
   { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: 'lockEnum' },
   { label: '创建人', prop: 'createrName', minWidth: 90 },
-  { label: '创建时间', prop: 'gmtCreate', minWdth: 120, type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '库区编码', prop: 'warehouseAreaCode' },

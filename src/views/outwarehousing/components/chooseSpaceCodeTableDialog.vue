@@ -54,7 +54,7 @@ const tableConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '可用库存', prop: 'skuQty' },
-  { label: '入库时间', prop: 'lastInTime', type: 'time', width: 150 },
+  { label: '入库时间', prop: 'lastInTime', type: 'time', width: 140 },
   { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
 ]
 const searchConfig = [

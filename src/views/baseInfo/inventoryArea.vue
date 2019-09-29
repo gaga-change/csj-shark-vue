@@ -179,7 +179,7 @@ const tableConfig = [
   { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: 'lockEnum' },
   { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: 'yesOrNoEnum' },
   { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '描述', prop: 'warehouseAreaDesc' },
 ]
 const searchConfig = [
