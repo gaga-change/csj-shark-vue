@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import moment from 'moment'
+import { cloneDeep } from 'lodash';
+import locale from 'element-ui/lib/locale/lang/zh-CN'
 import ItemTitle from '@/components/ItemTitle/index'
 import BarCode from '@/components/BarCode/index'
-import locale from 'element-ui/lib/locale/lang/zh-CN'
-import { cloneDeep } from 'lodash';
 import BaseTable from '@/components/BaseTable'
 import SearchForm from '@/components/SearchForm'
 import BaseList from '@/components/BaseList'
