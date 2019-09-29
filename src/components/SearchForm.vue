@@ -229,12 +229,15 @@ export default {
       })
     },
     bindKeys() {
+      const query = this.$route.query
       this.config.forEach(v => {
         if (v.default !== undefined && v.default !== null) {
           this.$set(this.searchForms, v.prop, v.default)
         } else {
           this.$set(this.searchForms, v.prop, undefined)
-
+        }
+        if (query[v.prop]) {
+          this.$set(this.searchForms, v.prop, query[v.prop])
         }
       })
     },
@@ -259,6 +262,9 @@ export default {
     hanldeResetForm() {
       this.resetLoading = true
       this.$refs['searchForm'].resetFields()
+      this.config.forEach(v => {
+        this.$set(this.searchForms, v.prop, undefined)
+      })
       this.$nextTick(() => {
         this.$emit('search', this.paramsTrim(this.searchForms), () => {
           this.resetLoading = false

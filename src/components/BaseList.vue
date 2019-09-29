@@ -122,9 +122,13 @@ export default {
   },
   data() {
     let initSearchParams = {}
+    let query = this.$route.query
     this.searchConfig.forEach(v => {
       if (v.default !== undefined && v.default !== null) {
         initSearchParams[v.prop] = v.default
+      }
+      if (query[v.prop]) {
+        initSearchParams[v.prop] = query[v.prop]
       }
     })
     return {
