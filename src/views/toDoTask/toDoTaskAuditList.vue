@@ -11,7 +11,7 @@
       <template slot-scope="scope">
         <el-link
           type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+          @click="$router.push({path:`/outwarehousing/pickingtask`,query:{outOrderCode: scope.row.planCode}})"
         >拣货任务</el-link>
         <template v-if="scope.row.opStatus == 0">
           <el-divider direction="vertical"></el-divider>
