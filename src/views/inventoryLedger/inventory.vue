@@ -6,9 +6,9 @@
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="listApi"
-      :showControl="true"
+      :showControl="false"
       :controlWidth="160"
-      :select="true"
+      :select="false"
       @selectionChange="selectionChange"
       :selectable="selectable"
       @search="handleSearch"
@@ -26,21 +26,6 @@
           v-if="sumSkuQty"
         >
           <div>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="状态转移表格中勾选的内容"
-              placement="top"
-            >
-              <el-button
-                @click="showStateTransition"
-                type="primary"
-                size="mini"
-                :disabled="!selectRows.length"
-              >
-                状态转移
-              </el-button>
-            </el-tooltip>
             <el-tooltip
               class="item"
               effect="dark"
@@ -215,7 +200,7 @@ const searchConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '货主名称', prop: 'ownerName' },
   { label: '库位编码', prop: 'warehouseSpaceCode' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
 ]
 
 export default {
