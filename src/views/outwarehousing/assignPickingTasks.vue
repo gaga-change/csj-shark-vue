@@ -246,7 +246,7 @@ export default {
         this.planOutDetailLoading = false
         if (!res) return []
         let temp = res.data || []
-        this.productList = temp.filter(v => ~query.billNos.indexOf(v.billNo)).map(v => {
+        this.productList = temp.filter(v => ~(query.ids + ',').indexOf(v.id + ',')).map(v => {
           v.sum = undefined
           v._child = []
           v.planOutQty = Number(v.planOutQty) || 0
