@@ -37,7 +37,7 @@ const tableConfig = [
   { label: '单位', prop: 'skuUnitName' },
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
   { label: '货主', prop: 'ownerName' },
   { label: '库存量', prop: 'skuQty' },
   { label: '已分配量', prop: 'blockQty' },
