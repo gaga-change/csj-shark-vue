@@ -57,7 +57,7 @@ export default {
   filters: {
     timeFormat(val) {
       if (!val) return ''
-      return moment(val).format('YYYY-MM-DD HH:mm:ss')
+      return moment(Number(val)).format('YYYY-MM-DD HH:mm:ss')
     },
     parseEnum(val, mapConfig, item) {
       if (val === '' || val === undefined || val === null) {
