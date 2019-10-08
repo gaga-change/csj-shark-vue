@@ -42,13 +42,13 @@ const tableConfig = [
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '通知拣货数', prop: 'pickQty' },
   { label: '已拣货数', prop: 'realPickQty' },
-  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
+  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum_v2' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '拣货单号', prop: 'orderCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
+  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum_v2' },
   { label: '出库计划单号', prop: 'outOrderCode' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
