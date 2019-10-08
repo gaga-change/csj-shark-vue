@@ -151,7 +151,11 @@ export default {
             trigger: 'blur'
           }
         ],
-        warehouseSpaceCode: [{ required: true, message: '必填项', trigger: 'blur' },]
+        warehouseSpaceCode: [{ required: true, message: '必填项', trigger: 'blur' },],
+        trayCode: [
+          { required: true, message: '必填项', trigger: 'blur' },
+          { min: 0, max: 30, message: '不能超过30个字符', trigger: 'blur' }
+        ]
       },
       warehouseSpaceCodeConfig: [],
     }
