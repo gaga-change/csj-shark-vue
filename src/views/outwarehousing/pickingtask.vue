@@ -7,6 +7,7 @@
       :api="listApi"
       :showControl="true"
       :controlWidth="150"
+      :labelWidth="100"
     >
       <template slot-scope="scope">
         <el-link
@@ -46,8 +47,10 @@ const tableConfig = [
 ]
 const searchConfig = [
   { label: '拣货单号', prop: 'orderCode' },
-  { label: '计划单号', prop: 'outOrderCode' },
+  { label: '外部订单号', prop: 'busiBillNo' },
   { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum' },
+  { label: '出库计划单号', prop: 'outOrderCode' },
+  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 
 export default {
