@@ -65,7 +65,7 @@
               v-model="formData.remark"
               type="textarea"
               placeholder="请输入备注"
-              maxlength="30"
+              maxlength="200"
               show-word-limit
             >
             </el-input>
