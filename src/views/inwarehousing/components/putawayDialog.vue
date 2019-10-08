@@ -139,9 +139,9 @@ export default {
         checkResult: undefined,
       },
       rules: {
-        warehouseSpaceCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不超过20个字符', trigger: 'blur' },],
+        warehouseSpaceCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },],
         putQty: [{ required: true, message: '必填项', trigger: 'blur' },],
-        trayCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不超过20个字符', trigger: 'blur' },],
+        trayCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },],
         checkResult: [{ required: true, message: '必填项', trigger: 'blur' },]
       }
     }

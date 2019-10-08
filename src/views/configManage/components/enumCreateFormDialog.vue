@@ -144,7 +144,7 @@ export default {
         //  ... 表单校验
         name: [
           { required: true, message: '必填项', trigger: 'blur' },
-          { min: 0, max: 50, message: '不超过50个字符', trigger: 'blur' },
+          { min: 0, max: 50, message: '不能超过50个字符', trigger: 'blur' },
         ]
       }
     }

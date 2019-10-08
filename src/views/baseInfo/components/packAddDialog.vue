@@ -22,7 +22,7 @@
             <el-input
               style="width:200px;"
               v-model="formData.packageDesc"
-              placeholder="中文/字母/数字，不超过20个字符"
+              placeholder="中文/字母/数字，不能超过20个字符"
             ></el-input>
           </el-form-item>
           <el-form-item

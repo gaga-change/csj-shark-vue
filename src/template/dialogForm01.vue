@@ -30,7 +30,7 @@
             <el-input
               style="width:200px;"
               v-model="formData.packageDesc"
-              placeholder="数字，不超过20个字符"
+              placeholder="数字，不能超过20个字符"
             ></el-input>
           </el-form-item>
           <!-- 多行文本框 -->
@@ -175,7 +175,7 @@ export default {
         //  ... 表单校验
         packageDesc: [
           { required: true, message: '必填项', trigger: 'blur' },
-          { min: 0, max: 20, message: '不超过20个字符', trigger: 'blur' },
+          { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },
           {
             validator(rule, value, callback) {
               value > 0 ? callback() : callback('数值必须大于0')

@@ -121,8 +121,8 @@ export default {
         receiveQty: undefined,
       },
       rules: {
-        batchNo: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不超过20个字符', trigger: 'blur' },],
-        trayCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不超过20个字符', trigger: 'blur' },],
+        batchNo: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },],
+        trayCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },],
         receiveQty: [{ required: true, message: '必填项', trigger: 'blur' },]
       }
     }
