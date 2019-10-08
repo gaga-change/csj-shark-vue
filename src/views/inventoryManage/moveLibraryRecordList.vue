@@ -35,6 +35,7 @@ const searchConfig = [
   { label: '移出库位', prop: 'sWarehouseSpaceCode' },
   { label: '移入库位', prop: 'tWarehouseSpaceCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
+  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 export default {
   data() {
