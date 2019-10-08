@@ -14,15 +14,8 @@ const path = require('path')
 // let ip = 'http://192.168.2.126:8787';// 雷亚峰
 let ip = 'http://192.168.1.37:8787'; // 测试环境。  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
 
-try {
-  let defaultConfig = require('./default')
-  ip = defaultConfig.ip
-} catch (error) {
-  console.log('请新建 confg/default.js  并输出要代理的IP地址和端口')
-}
-
-const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api', '/app'];
-let proxyTable = {};
+const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api', '/app']
+let proxyTable = {}
 
 proxyTableArr.forEach(item => {
   proxyTable[item] = {
