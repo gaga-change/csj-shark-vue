@@ -30,8 +30,8 @@ const tableConfig = [
 const searchConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '商品名称 ', prop: 'skuName' },
-  { label: '规格', prop: 'lotAttrCode1' },
-  { label: '型号', prop: 'lotAttrCode2' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '移出库位', prop: 'sWarehouseSpaceCode' },
   { label: '移入库位', prop: 'tWarehouseSpaceCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
