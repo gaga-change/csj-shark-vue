@@ -101,7 +101,8 @@ const detailItemConfig = [
 const tableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '计划量', prop: 'planOutQty' },
   { label: '已通知拣货量', prop: 'sortQty' },
@@ -110,7 +111,8 @@ const tableConfig = [
 const planTableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '批次', prop: 'batchNo' },
   { label: '本次拣货量', prop: 'number' },

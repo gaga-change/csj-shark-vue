@@ -31,14 +31,16 @@ import { skuSelect } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '商品名称 ', prop: 'skuName' },
-  { label: '规格型号', prop: 'lotAttrCode1' },
+  { label: '规格', prop: 'lotAttrCode1' },
+  { label: '型号', prop: 'lotAttrCode2' },
   { label: '单位', prop: 'lotAttrCode3' },
   { label: '商品分类', prop: 'lotAttrCode6' },
 ]
 const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'lotAttrCode1' },
+  { label: '规格', prop: 'lotAttrCode1' },
+  { label: '型号', prop: 'lotAttrCode2' },
 ]
 export default {
   components: { ProductSetDialog },

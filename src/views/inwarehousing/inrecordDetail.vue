@@ -109,7 +109,8 @@ const detailItemConfig = [
 const detailDOsConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '预期收货量', prop: 'planQty' },
   { label: '实际收货量', prop: 'receiveQty' },
@@ -117,7 +118,8 @@ const detailDOsConfig = [
 const detailItemDosConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },

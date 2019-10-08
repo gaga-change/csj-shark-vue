@@ -31,7 +31,8 @@ import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '商品数量', prop: 'numberOfProducts' },
   { label: '出库数量', prop: 'realOutQty' },

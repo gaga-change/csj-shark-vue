@@ -16,7 +16,8 @@ import { queryStockMoveList } from '@/api'
 const tableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
@@ -29,7 +30,8 @@ const tableConfig = [
 const searchConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '商品名称 ', prop: 'skuName' },
-  { label: '规格型号', prop: 'lotAttrCode1' },
+  { label: '规格', prop: 'lotAttrCode1' },
+  { label: '型号', prop: 'lotAttrCode2' },
   { label: '移出库位', prop: 'swarehouseSpaceCode' },
   { label: '移入库位', prop: 'twarehouseSpaceCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },

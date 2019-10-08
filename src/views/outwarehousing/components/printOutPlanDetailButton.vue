@@ -30,7 +30,8 @@ const printTableConfig = [// 计划单打印列表
   { label: '计划单号', prop: 'planCode' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '数量', prop: 'realOutQty' },
   { label: '单位', prop: 'skuUnitCode' },
 ]

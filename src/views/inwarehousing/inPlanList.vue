@@ -35,7 +35,8 @@ import { getInfoWarehousing, getInfoDetailWarehousing, createReceiveOrder } from
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
-  { label: '规格型号', prop: 'skuModel' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '计划量', prop: 'planInQty' },
   { label: '收货待确认量', prop: 'unconfirmReceiveQty' },
