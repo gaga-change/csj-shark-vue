@@ -15,6 +15,7 @@
           :searchConfig="searchConfig"
           :appendSearchParams="appendSearchParams"
           :api="listApi"
+          :parseData="parseData"
           :showControl="false"
         >
         </base-list>
@@ -92,11 +93,23 @@ export default {
       searchConfig,
       listApi: planInventoryQuerysSkuStockList,
       // 可选 附加查询条件
-      appendSearchParams: { skuCode: undefined, queryTempArea: 0 },
+      appendSearchParams: { skuCode: undefined, queryTempArea: 0, fileCanQtyZero: 1 },
       loading: false,
     }
   },
   methods: {
+    /** 可选 返回列表添加字段 */
+    parseData(res) {
+      let data = res.data.list || []
+      let total = res.data.total
+      data.forEach(v => {
+        v.skuQty = Number(v.skuQty) || 0
+        v.blockQty = Number(v.blockQty) || 0
+        v.skuQty = v.skuQty - v.blockQty
+        v.inputTypeNumberDisabled = !v.skuQty
+      })
+      return { data, total }
+    },
     /** 确定 */
     confirm() {
       let tableData = this.$refs['baseList'].tableData
