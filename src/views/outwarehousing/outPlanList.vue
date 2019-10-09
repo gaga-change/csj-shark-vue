@@ -86,7 +86,7 @@ export default {
   methods: {
     /** 子表可选条件 */
     childSelectable(row) {
-      return row.planOutQty !== row.sortQty
+      return row.planOutQty !== row.sortQty && row._sortStatus != 9
     },
     /** 子表内容获取 */
     childApi(row) {
@@ -98,6 +98,7 @@ export default {
           v._planCode = row.planCode
           v._gmtCreate = row.gmtCreate
           v._busiBillNo = row.busiBillNo
+          v._sortStatus = row.sortStatus
           return v
         })
       })
