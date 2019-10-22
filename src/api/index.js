@@ -190,3 +190,5 @@ export const pickOrderAddByAuto = params => http.post(`/webApi/pick/order/addByA
 export const inOutStopCheckTaskOrder = params => http.post(`/webApi/plan/inOutStop/checkTaskOrder`, params)
 /** 仓库列表 */
 export const warehouseSelect = params => http.post(`/webApi/basic/warehouse/select`, params)
+/** 新增仓库 */
+export const warehouseAdd = params => http.post(`/webApi/basic/warehouse/add`, params)

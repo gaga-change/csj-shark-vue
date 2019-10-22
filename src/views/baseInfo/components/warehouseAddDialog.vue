@@ -61,15 +61,7 @@ const rules = {
   warehouseAddress: [{ min: 0, max: 100, message: '不能超过100个字符', trigger: 'blur' }],
   status: [{ required: true, message: '必填项', trigger: 'blur' }],
 }
-/**
- * 父级设置
- * <dialog
-      :visible.sync="dialogVisible"
-      :row="selectedRow"
-      @submited="getTableData()"
-    />
- */
-// import { saveApi } from '@/api'
+import { warehouseAdd } from '@/api'
 export default {
   props: {
     visible: {
@@ -112,15 +104,14 @@ export default {
     confirm() {
       this.$refs['form'].validate((valid, params) => {
         if (valid, params) {
-          console.log(params)
-          // this.loading = true
-          // saveApi(params).then(res => {
-          //   this.loading = false
-          //   if (!res) return
-          //   this.$message.success('操作成功！')
-          //   this.$emit('submited')
-          //   this.close()
-          // })
+          this.loading = true
+          warehouseAdd(params).then(res => {
+            this.loading = false
+            if (!res) return
+            this.$message.success('操作成功！')
+            this.$emit('submited')
+            this.close()
+          })
         }
       })
     },

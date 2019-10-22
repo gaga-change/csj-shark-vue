@@ -28,17 +28,22 @@
         <el-button
           type="primary"
           size="mini"
-          @click="handleCreate"
+          @click="warehouseAddDialogVisible=true"
         >
           新增仓库
         </el-button>
       </template>
     </base-list>
+    <warehouseAddDialog
+      :visible.sync="warehouseAddDialogVisible"
+      @submited="getTableData"
+    />
   </div>
 </template>
 
 <script>
 import { warehouseSelect } from '@/api'
+import warehouseAddDialog from './components/warehouseAddDialog'
 const tableConfig = [
   { label: '仓库编码', prop: 'warehouseCode', width: 120 },
   { label: '仓库名称', prop: 'warehouseName' },
@@ -53,8 +58,10 @@ const searchConfig = [
   { label: '仓库名称', prop: 'warehouseName' },
 ]
 export default {
+  components: { warehouseAddDialog },
   data() {
     return {
+      warehouseAddDialogVisible: false,
       tableConfig,
       searchConfig,
       listApi: warehouseSelect,
