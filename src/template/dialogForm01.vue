@@ -147,7 +147,7 @@ export default {
     /** 数据初始 */
     row: {
       type: Object,
-      default: {}
+      default: () => null
     }
   },
   computed: {
