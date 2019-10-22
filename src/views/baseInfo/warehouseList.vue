@@ -16,7 +16,7 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+          @click="$router.push({ path: `/baseInfo/warehouseUserList`, query:{warehouseCode: scope.row.warehouseCode}})"
         >仓库用户</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link

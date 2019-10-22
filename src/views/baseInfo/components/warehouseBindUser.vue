@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { warehouseUserList, warehouseUserAdd } from '@/api'
+import { warehouseUserAll, warehouseUserAdd } from '@/api'
 export default {
   props: {
     visible: {
@@ -113,7 +113,7 @@ export default {
   },
   created() {
     this.warehouseUserListLoading = true
-    warehouseUserList().then(res => {
+    warehouseUserAll().then(res => {
       this.warehouseUserListLoading = false
       if (!res) return
       this.userList = res.data || []

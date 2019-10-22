@@ -192,7 +192,11 @@ export const inOutStopCheckTaskOrder = params => http.post(`/webApi/plan/inOutSt
 export const warehouseSelect = params => http.post(`/webApi/basic/warehouse/select`, params)
 /** 新增仓库 */
 export const warehouseAdd = params => http.post(`/webApi/basic/warehouse/add`, params)
-/** 用户列表 */
-export const warehouseUserList = params => http.post(`/webApi/basic/warehouse/user/userList`, params)
+/** 用户列表 不分页 */
+export const warehouseUserAll = params => http.post(`/webApi/basic/warehouse/user/userList`, params)
 /** 新增用户仓库关系 */
-export const warehouseUserAdd = params => http.post(` /webApi/basic/warehouse/user/add`, params)
+export const warehouseUserAdd = params => http.post(`/webApi/basic/warehouse/user/add`, params)
+/** 用户列表 分页 */
+export const warehouseUserList = params => http.post(`/webApi/basic/warehouse/user/list`, params)
+/** 仓库用户 删除 */
+export const warehouseUserDelete = id => http.get(`webApi/basic/warehouse/user/delete/${id}`)

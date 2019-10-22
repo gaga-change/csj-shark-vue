@@ -269,6 +269,13 @@ export default [
         component: _import('baseInfo/warehouseList'),
         hidden: false,
       },
+      {
+        name: 'warehouseUserList',
+        path: 'warehouseUserList',
+        meta: { title: '仓库用户', noCache: true },
+        component: _import('baseInfo/warehouseUserList'),
+        hidden: false,
+      },
     ]
   },
   {
