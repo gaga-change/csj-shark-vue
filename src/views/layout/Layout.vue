@@ -119,7 +119,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 9999;
+  z-index: 1001;
   .warehouseBox_alert {
     background: #fff;
     position: absolute;

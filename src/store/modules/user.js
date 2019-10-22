@@ -1,4 +1,5 @@
 import { getInfo } from '@/api'
+import { MessageBox } from 'element-ui';
 
 const user = {
   state: {
@@ -32,6 +33,16 @@ const user = {
     SET_WAREHOUSEENUM: (state, info) => {
       state.roles = info.roles
       state.warehouseMap = info.warehouses
+      if (info && info.warehouses.length === 0) {
+        MessageBox.alert('当前用户未配置仓库，请联系管理员配置后再进行登录。点击确定退出到登录页面。', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            if (action === 'confirm') {
+              location.href = `/csj_logout`
+            }
+          }
+        });
+      }
     },
     SET_TODOLIST: (state, todolist) => {
       sessionStorage.setItem('todolist', todolist)
