@@ -188,3 +188,5 @@ export const inJobAdd = params => http.post(`/webApi/in/job/add`, params)
 export const pickOrderAddByAuto = params => http.post(`/webApi/pick/order/addByAuto`, params)
 /** 待办任务 - 审核 - 审核接口 */
 export const inOutStopCheckTaskOrder = params => http.post(`/webApi/plan/inOutStop/checkTaskOrder`, params)
+/** 仓库列表 */
+export const warehouseSelect = params => http.post(`/webApi/basic/warehouse/select`, params)

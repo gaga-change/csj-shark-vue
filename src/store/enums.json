@@ -596,5 +596,31 @@
         "value": 2
       }
     ]
+  },
+  {
+    "name": "warehouseTypeEnum",
+    "keyValue": [
+      {
+        "name": "虚拟仓库",
+        "value": 0
+      },
+      {
+        "name": "普通实仓",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "warehouseStatusEnum",
+    "keyValue": [
+      {
+        "name": "启用",
+        "value": 0
+      },
+      {
+        "name": "禁用",
+        "value": 1
+      }
+    ]
   }
 ]
