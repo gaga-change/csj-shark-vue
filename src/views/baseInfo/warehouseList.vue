@@ -21,8 +21,8 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
-        >禁用</el-link>
+          @click="handleChangeStatus(scope.row)"
+        >{{scope.row.status === 0 ? '禁用' : '启用'}}</el-link>
       </template>
       <template slot="btns">
         <el-button
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { warehouseSelect } from '@/api'
+import { warehouseSelect, updateWarehouseStatus } from '@/api'
 import warehouseAddDialog from './components/warehouseAddDialog'
 import warehouseBindUser from './components/warehouseBindUser'
 const tableConfig = [
@@ -92,9 +92,16 @@ export default {
       })
       return { data, total }
     },
-    /** 新建 */
-    handleCreate() {
-      this.$router.push({ path: '/qualityTesting/create' })
+    /** 修改状态 */
+    handleChangeStatus(row) {
+      this.$apiConfirm(`确定要${row.status === 0 ? '禁用' : '启用'}该仓库【${row.warehouseCode}-${row.warehouseName}】吗？`, () => updateWarehouseStatus(row.id, {
+        id: row.id,
+        flag: row.status === 0 ? 1 : 0
+      })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.getTableData()
+      })
     }
   }
 }

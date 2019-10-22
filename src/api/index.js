@@ -200,3 +200,5 @@ export const warehouseUserAdd = params => http.post(`/webApi/basic/warehouse/use
 export const warehouseUserList = params => http.post(`/webApi/basic/warehouse/user/list`, params)
 /** 仓库用户 删除 */
 export const warehouseUserDelete = id => http.get(`webApi/basic/warehouse/user/delete/${id}`)
+/** 修改仓库状态 */
+export const updateWarehouseStatus = (id, params) => http.post(`/webApi/basic/warehouse/updateWarehouseStatus/${id}`, params)
