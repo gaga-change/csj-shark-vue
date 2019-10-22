@@ -11,7 +11,7 @@
       <template slot-scope="scope">
         <el-link
           type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
+          @click="selectRow=scope.row;warehouseBindUserVisible=true"
         >绑定用户</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link
@@ -38,12 +38,18 @@
       :visible.sync="warehouseAddDialogVisible"
       @submited="getTableData"
     />
+    <warehouseBindUser
+      :row="selectRow"
+      :visible.sync="warehouseBindUserVisible"
+      @submited="selectRow=null;getTableData()"
+    />
   </div>
 </template>
 
 <script>
 import { warehouseSelect } from '@/api'
 import warehouseAddDialog from './components/warehouseAddDialog'
+import warehouseBindUser from './components/warehouseBindUser'
 const tableConfig = [
   { label: '仓库编码', prop: 'warehouseCode', width: 120 },
   { label: '仓库名称', prop: 'warehouseName' },
@@ -58,10 +64,12 @@ const searchConfig = [
   { label: '仓库名称', prop: 'warehouseName' },
 ]
 export default {
-  components: { warehouseAddDialog },
+  components: { warehouseAddDialog, warehouseBindUser },
   data() {
     return {
       warehouseAddDialogVisible: false,
+      warehouseBindUserVisible: false,
+      selectRow: null,
       tableConfig,
       searchConfig,
       listApi: warehouseSelect,

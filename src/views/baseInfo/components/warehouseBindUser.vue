@@ -2,19 +2,44 @@
   <div class="">
     <!-- 600px【小型，单列】 70% 【中型，双列】-->
     <el-dialog
-      title="新建仓库"
+      title="绑定用户"
       :visible="visible"
       width="400px"
       :before-close="handleClose"
       @close="close"
     >
       <div>
-        <base-form
-          :config="formConfig"
+        <el-form
+          :inline="false"
+          :model="formData"
           :rules="rules"
+          label-width="100px"
           ref="form"
         >
-        </base-form>
+          <el-form-item label="仓库名称">
+            {{rowData.warehouseName}}
+          </el-form-item>
+          <!-- 下拉框 -->
+          <el-form-item
+            label="用户"
+            prop="userId"
+          >
+            <el-select
+              v-model="formData.userId"
+              :loading="warehouseUserListLoading"
+              placeholder="请选择用户"
+              clearable
+              filterable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </div>
       <!-- <el-alert
         class="mt15"
@@ -41,35 +66,7 @@
 </template>
 
 <script>
-const formConfig = [
-  { label: '仓库编码', prop: 'warehouseCode', width: 120 },
-  { label: '仓库名称', prop: 'warehouseName' },
-  { label: '类型', prop: 'type', type: 'enum', enum: 'warehouseTypeEnum' },
-  { label: '联系人', prop: 'linkName' },
-  { label: '详细地址', prop: 'warehouseAddress' },
-  { label: '状态', prop: 'status', type: 'radio', enum: 'warehouseStatusEnum', default: 0 },
-]
-const rules = {
-  warehouseCode: [
-    { required: true, message: '必填项', trigger: 'blur' },
-    { pattern: /^[0-9a-zA-Z]*$/, message: '只能输入数字或字母' },
-    { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' }
-  ],
-  warehouseName: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 50, message: '不能超过50个字符', trigger: 'blur' }],
-  type: [{ required: true, message: '必填项', trigger: 'blur' }],
-  linkName: [{ min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' }],
-  warehouseAddress: [{ min: 0, max: 100, message: '不能超过100个字符', trigger: 'blur' }],
-  status: [{ required: true, message: '必填项', trigger: 'blur' }],
-}
-/**
- * 父级设置
- * <dialog
-      :visible.sync="dialogVisible"
-      :row="selectedRow"
-      @submited="getTableData()"
-    />
- */
-// import { saveApi } from '@/api'
+import { warehouseUserList, warehouseUserAdd } from '@/api'
 export default {
   props: {
     visible: {
@@ -99,27 +96,49 @@ export default {
   },
   data() {
     return {
-      formConfig,
-      rules,
+      warehouseUserListLoading: false,
       loading: false,
       formData: {
         //  ... 表单字段
-      }
+        userId: undefined
+      },
+      rules: {
+        //  ... 表单校验
+        userId: [
+          { required: true, message: '必填项', trigger: 'change' },
+        ]
+      },
+      userList: [],
     }
+  },
+  created() {
+    this.warehouseUserListLoading = true
+    warehouseUserList().then(res => {
+      this.warehouseUserListLoading = false
+      if (!res) return
+      this.userList = res.data || []
+    })
   },
   methods: {
     /** 确定 */
     confirm() {
-      this.$refs['form'].validate((valid, params) => {
-        if (valid, params) {
-          // this.loading = true
-          // saveApi(params).then(res => {
-          //   this.loading = false
-          //   if (!res) return
-          //   this.$message.success('操作成功！')
-          //   this.$emit('submited')
-          //   this.close()
-          // })
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          let params = { ...this.formData }
+          let user = this.userList.find(v => v.userId === params.userId)
+          this.loading = true
+          warehouseUserAdd({
+            warehouseCode: this.rowData.warehouseCode,
+            userAccount: user.userAccount,
+            userName: user.userName,
+            userTel: user.userTel,
+          }).then(res => {
+            this.loading = false
+            if (!res) return
+            this.$message.success('操作成功！')
+            this.$emit('submited')
+            this.close()
+          })
         }
       })
     },
