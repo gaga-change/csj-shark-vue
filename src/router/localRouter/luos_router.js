@@ -99,13 +99,6 @@ export default [
         hidden: true,
       },
       {
-        name: 'assignmentPlan',
-        path: 'assignmentPlan',
-        meta: { title: '波次分配', noCache: true },
-        component: _import('outwarehousing/assignmentPlan'),
-        hidden: false,
-      },
-      {
         name: 'pickingtask',
         path: 'pickingtask',
         meta: { title: '拣货任务', noCache: true },
@@ -230,17 +223,10 @@ export default [
   {
     path: '/baseInfo',
     component: Layout,
-    redirect: 'baseInfo/logistics',
+    redirect: 'baseInfo/inventoryArea',
     meta: { title: '基础资料', noCache: true, icon: 'info' },
     hidden: false,
     children: [
-      {
-        name: 'logistics',
-        path: 'logistics',
-        meta: { title: '物流公司管理', noCache: true },
-        component: _import('baseInfo/logistics'),
-        hidden: false,
-      },
       {
         name: 'inventoryArea',
         path: 'inventoryArea',
@@ -347,20 +333,4 @@ export default [
   //     }
   //   ]
   // },
-  {
-    path: '/deliverInfo',
-    component: Layout,
-    redirect: 'deliverInfo/deliver',
-    meta: { title: '配送管理', noCache: true, icon: 'deliver' },
-    hidden: false,
-    children: [
-      {
-        name: 'deliver',
-        path: 'deliver',
-        meta: { title: '物流登记', noCache: true },
-        component: _import('deliverInfo/deliver'),
-        hidden: false,
-      },
-    ]
-  },
 ]

@@ -17,16 +17,6 @@ export const uploadReportFile = (formData, options = {}) => http.post('/webApi/p
   },
   ...options
 })
-/** 物流公司列表 */
-export const getLogisticsList = params => http.get(`/webApi/logistics/basic/list`, { params })
-/** 物流公司下拉列表 */
-export const getLogisticsSelectList = params => http.get(`/webApi/logistics/basic/select/list`, { params })
-/** 物流公司下拉列表 */
-export const getLogisticsSearch = params => http.get(`/webApi/logistics/company/search/${params.companyName}`)
-/** 物流登记列表 */
-export const getLogisticsRegisterList = params => http.get(`/webApi/logistics/register/list`, { params })
-/** 获取物流信息 */
-export const getLogisticsRegisterInfo = params => http.get(`/webApi/logistics/register/getLogisticsInfo`, { params })
 /** 获取用户信息 */
 export const getInfo = params => http.get(`/webApi/base/user/info`, { params })
 /** 用户登录选择仓库后绑定选择的仓库 */
@@ -102,12 +92,6 @@ export const getInfoWarehousing = params => http.post(`/webApi/plan/in/list`, pa
 export const addInventorySite = params => http.post(`/webApi/basic/warehouseSpace/addByBatch`, params)
 /** 库位列表 */
 export const warehouseSpaceSelect = params => http.post(`/webApi/basic/warehouseSpace/select`, params)
-/** 增加物流公司 */
-export const addLogistics = params => http.post(`/webApi/logistics/add`, params)
-/** 修改物流公司 */
-export const updateLogistics = params => http.put(`/webApi/logistics/update`, params)
-/** 删除物流公司 */
-export const deleteLogistics = params => http.delete(`/webApi/logistics/delete/${params.id}`)
 /** 物流登记信息新增 */
 export const addLogisticsRegister = params => http.put(`/webApi/logistics/register/register`, params)
 /** 修改密码接口 */
