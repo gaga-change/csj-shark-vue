@@ -13,48 +13,9 @@
             ref="form"
             :inline="true"
             :model="formData"
-            class="demo-form-inline"
           >
             <el-form-item label="类型">
               {{mapConfig['takeStockTypeEnum'] && mapConfig['takeStockTypeEnum'].find(v => v.value == orderType).name}}
-            </el-form-item>
-            <el-form-item
-              label="库区"
-              prop="warehouseAreaCode"
-            >
-              <el-select
-                size="mini"
-                v-model="formData.warehouseAreaCode"
-                placeholder="请选择库区"
-                @change="warehouseAreaCodeChange"
-                :loading="getSelectInventoryAreaListLoading"
-              >
-                <el-option
-                  v-for="(item, index) in warehouseArea"
-                  :key="index"
-                  :label="item.warehouseAreaName"
-                  :value="item.warehouseAreaCode"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              label="库位"
-              v-if="formData.warehouseAreaCode"
-              prop="warehouseSpaceCode"
-            >
-              <el-select
-                size="mini"
-                v-model="formData.warehouseSpaceCode"
-                placeholder="请选择库位"
-                :loading="getInventorySiteLoading"
-              >
-                <el-option
-                  v-for="(item, index) in warehouseSpace"
-                  :key="index"
-                  :label="item.warehouseSpaceCode"
-                  :value="item.warehouseSpaceCode"
-                ></el-option>
-              </el-select>
             </el-form-item>
             <el-form-item
               label="商品编码"
@@ -75,6 +36,19 @@
                 v-model="formData.skuName"
                 placeholder="请输入商品名称"
               ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="库区库位"
+              class="form-item-block"
+              prop="warehouseAreaSpace"
+            >
+              <el-cascader
+                style="width: 100%"
+                :props="cascaderProps"
+                @change="handleCascaderChange"
+                v-model="formData.warehouseAreaSpace"
+                placeholder="请选择库区库位"
+              ></el-cascader>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -130,7 +104,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { planInventoryQuerysSkuStockList, getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
+import { planInventoryQuerysSkuStockList, warehouseAreaList, warehouseSpaceSelectByAreaCode } from '@/api'
 import { takeStockSelectProductTableConfig } from './config'
 import SelectTable from './selectTable'
 export default {
@@ -150,48 +124,67 @@ export default {
     }
   },
   data() {
+    let vm = this
     return {
       formData: {
-        warehouseAreaCode: '',
-        warehouseSpaceCode: '',
         skuName: '',
-        skuCode: ''
+        skuCode: '',
+        warehouseAreaSpace: undefined
       },
       takeStockSelectProductTableConfig,
       selectRows: [],
       tableData: [],
-      warehouseArea: [],
-      warehouseSpace: [],
-      getInventorySiteLoading: false,
-      getSelectInventoryAreaListLoading: false,
       planInventoryQuerysSkuStockList,
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date());
+      cascaderProps: {
+        lazy: true,
+        multiple: true,
+        expandTrigger: 'hover',
+        lazyLoad(node, resolve) {
+          console.log('--', vm.$copy(node))
+          const { level } = node;
+          if (level === 0) {
+            warehouseAreaList().then(res => {
+              if (res) {
+                let codes = res.data.map(v => v.warehouseAreaCode)
+                codes = [...new Set(codes)]
+                const nodes = codes.map(code => {
+                  return {
+                    value: code,
+                    label: `库区${code}`,
+                    leaf: level >= 1
+                  }
+                })
+                resolve(nodes)
+              } else {
+                resolve([])
+              }
+            })
           }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', date);
+          if (level === 1) {
+            warehouseSpaceSelectByAreaCode({ warehouseAreaCode: node.data.value }).then(res => {
+              if (res) {
+                const nodes = res.data.map(v => {
+                  return {
+                    value: v.warehouseSpaceCode,
+                    label: `库位${v.warehouseSpaceCode}`,
+                    leaf: true
+                  }
+                })
+                resolve(nodes)
+              } else {
+                resolve([])
+              }
+            })
           }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', date);
+          if (level === 2) {
+            resolve([])
           }
-        }]
-      }
+        },
+      },
     }
   },
   computed: {
     ...mapGetters([
-      'chooseWarehouse',
       'mapConfig'
     ]),
   },
@@ -204,9 +197,14 @@ export default {
     }
   },
   created() {
-    this.initData()
   },
   methods: {
+    /** 级联选择change 事件 */
+    handleCascaderChange(val) {
+      this.formData.warehouseSpaceCodeList = val.map(v => {
+        return v[1]
+      })
+    },
     parseData(res) {
       return {
         data: res.data.list.map(v => {
@@ -215,29 +213,6 @@ export default {
         }),
         total: res.data.total
       }
-    },
-    initData() {
-      this.getSelectInventoryAreaListLoading = true
-      getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
-        if (!res) return
-        this.getSelectInventoryAreaListLoading = false
-        this.warehouseArea = res.data
-      })
-    },
-    /** 库区修改 */
-    warehouseAreaCodeChange(val) {
-      this.formData.warehouseSpaceCode = ''
-      this.getInventorySiteLoading = true
-      warehouseSpaceSelect({
-        pageNum: 1,
-        pageSize: 9999,
-        warehouseAreaCode: val,
-        warehouseCode: this.chooseWarehouse
-      }).then(res => {
-        this.getInventorySiteLoading = false
-        if (!res) return
-        this.warehouseSpace = res.data.list || []
-      })
     },
     /** 查询 */
     submitForm() {
@@ -254,6 +229,7 @@ export default {
     },
     /** 确认 */
     confrim() {
+      // 根据库区库位进行排序
       this.$emit('update:selectData', [...this.selectRows].sort((a, b) => {
         if (a.warehouseAreaCode === b.warehouseAreaCode) {
           return b.warehouseSpaceCode > a.warehouseSpaceCode ? -1 : 1
@@ -288,6 +264,12 @@ export default {
   }
   .el-form-item {
     margin-bottom: 10px;
+  }
+  .form-item-block {
+    display: flex;
+    .el-form-item__content {
+      flex: 1;
+    }
   }
 }
 </style>

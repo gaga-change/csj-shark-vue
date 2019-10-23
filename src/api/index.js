@@ -202,3 +202,7 @@ export const warehouseUserList = params => http.post(`/webApi/basic/warehouse/us
 export const warehouseUserDelete = id => http.get(`webApi/basic/warehouse/user/delete/${id}`)
 /** 修改仓库状态 */
 export const updateWarehouseStatus = (id, params) => http.get(`/webApi/basic/warehouse/updateWarehouseStatus/${id}`, { params })
+/** 根据仓库编码查询库区列表 */
+export const warehouseAreaList = params => http.get(`/webApi/basic/warehouseArea/list`, { params })
+/** 通过库区查询库位列表 */
+export const warehouseSpaceSelectByAreaCode = params => http.get(`/webApi/basic/warehouseSpace/selectByAreaCode`, { params })
