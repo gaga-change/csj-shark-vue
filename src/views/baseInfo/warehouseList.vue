@@ -95,7 +95,6 @@ export default {
     /** 修改状态 */
     handleChangeStatus(row) {
       this.$apiConfirm(`确定要${row.status === 0 ? '禁用' : '启用'}该仓库【${row.warehouseCode}-${row.warehouseName}】吗？`, () => updateWarehouseStatus(row.id, {
-        id: row.id,
         flag: row.status === 0 ? 1 : 0
       })).then(res => {
         if (!res) return
