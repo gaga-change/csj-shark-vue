@@ -38,6 +38,7 @@
                     <th>规格型号</th>
                     <th>单位</th>
                     <th>库区库位</th>
+                    <th>实盘数量</th>
                   </tr>
                   <tr
                     v-for="(son, i) in item.children"
@@ -50,6 +51,7 @@
                     <td>{{son.skuFormat}}</td>
                     <td>{{son.skuUnitCode}}</td>
                     <td>{{son.areaSpceCode}}</td>
+                    <td></td>
                   </tr>
                 </table>
               </div>
