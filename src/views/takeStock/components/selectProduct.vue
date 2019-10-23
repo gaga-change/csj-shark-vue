@@ -73,7 +73,7 @@
           :select="true"
           :selectTotal="true"
           :selectRows.sync="selectRows"
-          :searchParams="formData"
+          :searchParams="searchParams"
           :tableData.sync="tableData"
         />
       </div>
@@ -129,7 +129,8 @@ export default {
       formData: {
         skuName: '',
         skuCode: '',
-        warehouseAreaSpace: undefined
+        warehouseAreaSpace: undefined,
+        isDynamicCheck: 1,
       },
       takeStockSelectProductTableConfig,
       selectRows: [],
@@ -140,7 +141,6 @@ export default {
         multiple: true,
         expandTrigger: 'hover',
         lazyLoad(node, resolve) {
-          console.log('--', vm.$copy(node))
           const { level } = node;
           if (level === 0) {
             warehouseAreaList().then(res => {
@@ -187,6 +187,11 @@ export default {
     ...mapGetters([
       'mapConfig'
     ]),
+    searchParams() {
+      let data = { ...this.formData }
+      delete data.warehouseAreaSpace
+      return data
+    }
   },
   watch: {
     visible(val) {
