@@ -147,8 +147,8 @@ export default {
     /** 导出 */
     handleOutput() {
       inventoryRecordExport({
-        ids: this.selectRows.map(v => {
-          return v.id
+        orderCodeList: this.selectRows.map(v => {
+          return v.orderCode
         })
       })
     },
