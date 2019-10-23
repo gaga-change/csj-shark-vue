@@ -130,6 +130,7 @@ export default {
         skuName: '',
         skuCode: '',
         warehouseAreaSpace: undefined,
+        warehouseSpaceCodeList: [],
       },
       takeStockSelectProductTableConfig,
       selectRows: [],
@@ -232,7 +233,10 @@ export default {
     /** 重置 */
     resetForm() {
       this.$refs['form'].resetFields()
-      this.$refs['baseTable'].fetchData()
+      this.formData.warehouseSpaceCodeList = []
+      this.$nextTick(() => {
+        this.$refs['baseTable'].fetchData()
+      })
     },
     /** 确认 */
     confrim() {
