@@ -67,12 +67,13 @@
         <el-tooltip
           class="item"
           effect="dark"
-          content="导出当前查询的所有记录"
+          content="打印表格中勾选的内容"
           placement="top"
         >
           <el-button
             type="primary"
             size="mini"
+            :disabled="!selectRows.length"
             @click="handleOutput"
           >
             导出
@@ -145,7 +146,11 @@ export default {
     },
     /** 导出 */
     handleOutput() {
-      inventoryRecordExport(this.$refs['baseList'].searchParams)
+      inventoryRecordExport({
+        ids: this.selectRows.map(v => {
+          return v.id
+        })
+      })
     },
     /** 打印 */
     handlePrint() {
