@@ -64,7 +64,7 @@
           </el-form>
         </el-card>
       </div>
-      <div>
+      <div v-if="visible">
         <select-table
           ref='baseTable'
           :config="takeStockSelectProductTableConfig"
@@ -130,7 +130,6 @@ export default {
         skuName: '',
         skuCode: '',
         warehouseAreaSpace: undefined,
-        isDynamicCheck: 1,
       },
       takeStockSelectProductTableConfig,
       selectRows: [],
@@ -190,6 +189,9 @@ export default {
     searchParams() {
       let data = { ...this.formData }
       delete data.warehouseAreaSpace
+      if (this.orderType === 1) {
+        data.isDynamicCheck = 1
+      }
       return data
     }
   },

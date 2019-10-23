@@ -24,18 +24,17 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item
+      <!-- <el-form-item
         label="上次盘点时间"
         v-if="orderType === 1"
       >
         {{lastInventoryDate}}
-      </el-form-item>
+      </el-form-item> -->
       <div>
         <el-button
           type="primary"
           size="mini"
           @click="showChooseProdDialog"
-          v-if="orderType === 0"
         >
           获取盘点商品
         </el-button>
@@ -142,22 +141,22 @@ export default {
     /** 盘点类型切换 */
     handleOrderTypeChange(v) {
       this.tableData = []
-      if (v === 0) return
-      if (this.skuStockList) {
-        this.tableData = [...this.skuStockList]
-      } else {
-        this.queryDynamicSkuStockListLoading = true
-        queryDynamicSkuStockList().then(res => {
-          this.queryDynamicSkuStockListLoading = false
-          if (!res) return
-          this.lastInventoryDate = res.data.lastInventoryDate ? moment(res.data.lastInventoryDate).format('YYYY-MM-DD HH:mm:ss') : ''
-          this.skuStockList = res.data.skuStockList.map(v => {
-            v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
-            return v
-          })
-          this.tableData = [...this.skuStockList]
-        })
-      }
+      // if (v === 0) return
+      // if (this.skuStockList) {
+      //   this.tableData = [...this.skuStockList]
+      // } else {
+      //   this.queryDynamicSkuStockListLoading = true
+      //   queryDynamicSkuStockList().then(res => {
+      //     this.queryDynamicSkuStockListLoading = false
+      //     if (!res) return
+      //     this.lastInventoryDate = res.data.lastInventoryDate ? moment(res.data.lastInventoryDate).format('YYYY-MM-DD HH:mm:ss') : ''
+      //     this.skuStockList = res.data.skuStockList.map(v => {
+      //       v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+      //       return v
+      //     })
+      //     this.tableData = [...this.skuStockList]
+      //   })
+      // }
     },
     /** 提交 */
     handleSubmitForm() {
