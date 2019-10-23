@@ -78,6 +78,12 @@
             导出
           </el-button>
         </el-tooltip>
+        <el-button
+          type="primary"
+          @click="$router.push({path: '/takeStock/billing'})"
+        >
+          盘点开单
+        </el-button>
       </template>
     </base-list>
     <print-bills
@@ -97,8 +103,8 @@ const tableConfig = [
   { label: '仓库名称', prop: 'warehouseName' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
-  { label: '盘点人', prop: 'inventoryName' },
-  { label: '盘点时间', prop: 'inventoryTime', type: 'time', width: 140 },
+  // { label: '盘点人', prop: 'inventoryName' },
+  // { label: '盘点时间', prop: 'inventoryTime', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '盘点单号', prop: 'orderCode' },
