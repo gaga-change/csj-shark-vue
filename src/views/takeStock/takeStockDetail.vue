@@ -44,14 +44,14 @@ const takeStockDetailProductTableConfig = [
   { label: '实际盘点数量', prop: 'inventoryQty' },
   { label: '盈亏数量', prop: 'profitLossQty' },
   { label: '状态', prop: 'executeStatus', type: 'enum', enum: 'executeStatus2Enum' },
+  { label: '盘点人', prop: 'inventoryName' },
+  { label: '盘点时间', prop: 'gmtModify', type: 'time', width: 140 },
 ]
 const takeStockDetailConfig = [
   { label: '盘点单号', prop: 'orderCode' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
   { label: '仓库名称', prop: 'warehouseName' },
-  { label: '盘点人', prop: 'inventoryName' },
-  { label: '盘点时间', prop: 'inventoryTime', type: 'time' },
   { label: '盘点类型', prop: 'orderType', type: 'enum', enum: 'takeStockTypeEnum' },
   { label: '备注', prop: 'remarkInfo' },
 ]
@@ -77,6 +77,9 @@ export default {
       this.prodList = res.data.orderDetailDOS.map(v => {
         if (v.inventoryQty !== null) v.profitLossQty = v.inventoryQty - v.stockQty
         v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+        if (v.executeStatus !== 1) {
+          v.gmtModify = null
+        }
         return v
       })
     })
