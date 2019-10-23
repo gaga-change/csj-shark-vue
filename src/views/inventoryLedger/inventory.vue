@@ -47,6 +47,7 @@ import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQ
 
 const tableConfig = [
   { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '容器', prop: 'trayCode' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName', width: '200' },
   { label: '货主', prop: 'ownerName' },
@@ -56,7 +57,7 @@ const tableConfig = [
   { label: '单价', prop: 'inPrice' },
   { label: '批次', prop: 'batchNo' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
-  { label: '冻结数量', prop: 'blockQty' },
+  { label: '已分配量', prop: 'blockQty' },
   { label: '库存', prop: 'skuQty' },
   { label: '最近入库时间', prop: 'lastInTime', type: 'time', width: 140 },
   { label: '最近出库时间', prop: 'lastOutTime', type: 'time', width: 140 },
