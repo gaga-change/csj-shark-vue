@@ -71,7 +71,7 @@ const detailItemConfig = [
   { label: '拣货单号', prop: 'orderCode' },
   { label: '出库计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum_v2', width: 90 },
+  { label: '拣货状态', prop: 'orderStatus', type: 'enum', enum: 'orderStatusEnum', width: 90 },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
 const tableConfig = [

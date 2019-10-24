@@ -104,28 +104,6 @@
     ]
   },
   {
-    "name": "orderStatusEnum",
-    "_id": "5d6f823e55c8dc2f0026da1c",
-    "keyValue": [
-      {
-        "name": "未执行",
-        "value": 0
-      },
-      {
-        "name": "执行中",
-        "value": 1
-      },
-      {
-        "name": "全部执行",
-        "value": 2
-      },
-      {
-        "name": "已终止",
-        "value": 3
-      }
-    ]
-  },
-  {
     "name": "isPushStateEnum",
     "_id": "5d6f823e55c8dc2f0026da24",
     "keyValue": [
@@ -562,19 +540,19 @@
     ]
   },
   {
-    "name": "orderStatusEnum_v2",
+    "name": "orderStatusEnum",
     "_id": "5d9bf7753da60e002c470a86",
     "keyValue": [
       {
-        "name": "未执行",
+        "name": "未拣货",
         "value": 0
       },
       {
-        "name": "执行中",
+        "name": "拣货中",
         "value": 1
       },
       {
-        "name": "全部执行",
+        "name": "拣货完成",
         "value": 2
       }
     ]
