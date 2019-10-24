@@ -6,13 +6,21 @@
       :searchConfig="searchConfig"
       :labelWidth="100"
       :api="listApi"
-      :showControl="false"
+      :showControl="true"
+      :controlWidth="80"
       @childSelectionChange="childSelectionChange"
       :childApi="childApi"
       :childTableConfig="childTableConfig"
       :selectTables="true"
       :childSelectable="childSelectable"
     >
+      <template slot-scope="scope">
+        <el-link
+          :disabled="scope.row.sortStatus != 1"
+          type="primary"
+          @click="handleClose(scope.row)"
+        >完结</el-link>
+      </template>
       <template slot="btns">
         <operation-button
           v-if="false"
@@ -34,7 +42,7 @@
 </template>
 
 <script>
-import { getInfoPlanOutWarehousing, planOutDetail, pickOrderAddByAuto } from '@/api'
+import { getInfoPlanOutWarehousing, planOutDetail, pickOrderAddByAuto, panOutEnd } from '@/api'
 import operationButton from './components/operationButton'
 
 const childTableConfig = [
@@ -49,12 +57,11 @@ const childTableConfig = [
   { label: '已出库量', prop: 'realOutQty' },
   { label: '出库状态', prop: 'outStatusStr' },
   { label: '备注', prop: 'remarkInfo' },
-  // { label: '已拣货数量', prop: 'realSortQty' },
 ]
 const tableConfig = [
   { label: '出库计划单号', prop: 'planCode', width: 150 },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum_v2', },
+  { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum', },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '客户', prop: 'arrivalName' },
@@ -66,7 +73,7 @@ const tableConfig = [
 const searchConfig = [
   { label: '出库计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
-  { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum_v2' },
+  { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum' },
   { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
   { label: '下单时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
@@ -84,6 +91,14 @@ export default {
     }
   },
   methods: {
+    /** 完结 按钮点击事件 */
+    handleClose(row) {
+      this.$apiConfirm('确认完结该计划单', () => panOutEnd({ planId: row.id })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.getTableData()
+      })
+    },
     /** 子表可选条件 */
     childSelectable(row) {
       return row.planOutQty !== row.sortQty && row._sortStatus != 9

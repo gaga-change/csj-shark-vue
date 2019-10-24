@@ -206,3 +206,5 @@ export const updateWarehouseStatus = (id, params) => http.get(`/webApi/basic/war
 export const warehouseAreaList = params => http.get(`/webApi/basic/warehouseArea/list`, { params })
 /** 通过库区查询库位列表 */
 export const warehouseSpaceSelectByAreaCode = params => http.get(`/webApi/basic/warehouseSpace/selectByAreaCode`, { params })
+/** 出库计划单完结 */
+export const panOutEnd = params => http.get(`/webApi/plan/out/end`, { params })

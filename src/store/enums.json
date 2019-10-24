@@ -1,23 +1,5 @@
 [
   {
-    "name": "sortStatusEnum",
-    "_id": "5d6f823e55c8dc2f0026d9f4",
-    "keyValue": [
-      {
-        "name": "未拣货",
-        "value": 0
-      },
-      {
-        "name": "拣货中",
-        "value": 1
-      },
-      {
-        "name": "拣货完成",
-        "value": 2
-      }
-    ]
-  },
-  {
     "name": "outExecStatusEnum",
     "_id": "5d6f823e55c8dc2f0026d9fc",
     "keyValue": [
@@ -452,7 +434,7 @@
     ]
   },
   {
-    "name": "sortStatusEnum_v2",
+    "name": "sortStatusEnum",
     "_id": "5d8b1b1ec1bb12002b8d3e6d",
     "keyValue": [
       {
@@ -460,11 +442,11 @@
         "value": 0
       },
       {
-        "name": "进行中",
+        "name": "已分配",
         "value": 1
       },
       {
-        "name": "已完成",
+        "name": "已完结",
         "value": 2
       },
       {
