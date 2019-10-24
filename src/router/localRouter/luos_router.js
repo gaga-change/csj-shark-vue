@@ -126,6 +126,13 @@ export default [
         component: _import('outwarehousing/outboundOrder'),
         hidden: false,
       },
+      {
+        name: 'outboundOrderDetail',
+        path: 'outboundOrderDetail',
+        meta: { title: '出库单详情', noCache: true },
+        component: _import('outwarehousing/outboundOrderDetail'),
+        hidden: true,
+      },
     ]
   },
   {

@@ -13,11 +13,16 @@
       :childApi="childApi"
       :childTableConfig="childTableConfig"
     >
+      outwarehousing/outboundOrderDetail
       <template slot-scope="scope">
         <el-link
           type="primary"
           @click="printMark(scope.row)"
         >打印装箱唛头</el-link>
+        <el-link
+          type="primary"
+          @click="$router.push({path:'/outwarehousing/outboundOrderDetail', query: {id: scope.row.id}})"
+        >详情</el-link>
       </template>
       <template slot="btns">
         <print-out-plan-detail-button
