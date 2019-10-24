@@ -42,7 +42,7 @@
               <el-divider direction="vertical"></el-divider>
             </template>
             <!-- 单据（未执行、执行中） 明细（未执行）
-            单据（执行中, 全部指向） 明细（已完成）
+            单据（执行中, 全部执行） 明细（已完成）
              -->
             <el-link
               v-if=" ((detail.orderStatus == 0 || detail.orderStatus == 1) && scope.row.jobStatus < 4)
