@@ -66,6 +66,18 @@ Vue.filter('date', function (value, format) {
   return moment(value).format(format || "YYYY-MM-DD HH:mm:ss")
 })
 
+// 列表多选按钮 扩大点击有效范围
+document.body.addEventListener('click', function (e) {
+  let parentNode = e.target.parentNode
+  if (e.target.className && ~e.target.className.indexOf('el-table-column--selection')) {
+    let label = e.target.children[0].children
+    label && label[0] && label[0].click && label[0].click()
+  } else if (parentNode.className && ~parentNode.className.indexOf('el-table-column--selection')) {
+    let label = parentNode.children[0].children
+    label && label[0] && label[0].click && label[0].click()
+  }
+})
+
 Vue.use(ElementUI, { locale, size: 'mini' })
 Vue.use(EXTENDS)
 Vue.use(ItemTitle);

@@ -38,6 +38,10 @@ export default {
   }
 }
 
+.el-table-column--selection {
+  cursor: pointer;
+}
+
 .simpleCard {
   padding-bottom: 0;
   margin-bottom: 20px;
