@@ -18,7 +18,6 @@
       >
         <el-button
           type="primary"
-          :disabled="!selectRows.length>0"
           size="mini"
           @click="handleCreateOutOrder"
         >复核(生成出库单)</el-button>
@@ -27,8 +26,6 @@
         :loading="loading"
         :config="tableConfig"
         :data="tableData"
-        :select="true"
-        @selectionChange="selectionChange"
       />
     </div>
   </div>
@@ -67,7 +64,6 @@ export default {
       tableConfig,
       tableData: [],
       total: 0,
-      selectRows: [],
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
@@ -80,18 +76,15 @@ export default {
       this.searchForm.pickOrderCode = value
       this.getCurrentTableData()
     },
-    /** 多选 */
-    selectionChange(selectRows) {
-      this.selectRows = [...selectRows]
-    },
     /** 复核（生成出库单） 按钮点击 */
     handleCreateOutOrder() {
       let pickOrderCodeSet = new Set()
-      this.selectRows.forEach(v => {
+      let selectRows = [...this.tableData]
+      selectRows.forEach(v => {
         pickOrderCodeSet.add(v.pickOrderCode)
       })
       this.$apiConfirm(`确定要为 ${[...pickOrderCodeSet].join('，')} 生成出库单吗?`, () => createOutWareHouseOrder(
-        { sortTaskIds: this.selectRows.map(v => v.id) }
+        { sortTaskIds: selectRows.map(v => v.id) }
       )).then(res => {
         if (!res) return
         this.$message({ type: 'success', message: '操作成功' })
