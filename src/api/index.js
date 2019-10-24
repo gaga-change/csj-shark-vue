@@ -5,11 +5,11 @@ export * from './config'
 export * from './app'
 
 /** 导出库位库存 */
-export const exportLedger = (params, fileName) => download(`/webApi/sku/stock/exportLedger`, params, fileName)
+export const exportLedger = params => download({ url: `/webApi/sku/stock/exportLedger`, params })
 /** 盘点管理导出 */
-export const inventoryRecordExport = (params, fileName) => download(`/webApi/plan/inventory/recordExport`, params, fileName)
+export const inventoryRecordExport = data => download({ method: 'post', url: `/webApi/plan/inventory/recordExport`, data })
 /** 收货汇总导出 */
-export const receiveOrderExportLedger = (params, fileName) => download(`/webApi/receive/order/exportLedger`, params, fileName)
+export const receiveOrderExportLedger = params => download({ url: `/webApi/receive/order/exportLedger`, params })
 /** 上传文件 */
 export const uploadReportFile = (formData, options = {}) => http.post('/webApi/plan/checkOrder/uploadReportFile', formData, {
   headers: {
@@ -65,7 +65,7 @@ export const warehouseSpaceUpdateLockStatus = (id, params) => http.get(`/webApi/
 /** 修改库区状态接口 */
 export const warehouseAreaUpdateLockStatus = (id, params) => http.get(`/webApi/basic/warehouseArea/updateLockStatus/${id}`, { params })
 /** 开单获取商品 */
-export const planInventoryQuerysSkuStockList = params => http.get(`/webApi/plan/inventory/querysSkuStockList`, { params })
+export const planInventoryQuerysSkuStockList = params => http.post(`/webApi/plan/inventory/querysSkuStockList`, params)
 /** 盘点录入查询 */
 export const planInventoryQueryByOrderId = params => http.get(`/webApi/plan/inventory/queryByOrderId`, { params })
 /** 分页查询盘点单列表 */
