@@ -25,6 +25,7 @@
               clearable
               :placeholder="`请选择${item.label}`"
               size="mini"
+              @change="hanldeSubmit"
             >
               <el-option
                 v-for="item in mapConfig[item.enum]"
