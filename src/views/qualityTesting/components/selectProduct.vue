@@ -50,14 +50,12 @@ const childTableConfig = [
   { label: '规格型号', prop: 'skuFormat', },
   { label: '单位', prop: 'skuUnitName', },
   { label: '商品数量', prop: 'planQty', },
-  { label: '批次', prop: 'batchNo', },
   { label: '收货数量', prop: 'receiveQty', width: 100 },
-  { label: '已入库数量', prop: 'realInQty', width: 85 },
 ]
 const tableConfig = [
   { label: '收货单号', prop: 'orderCode', width: 140 },
   { label: '计划单号', prop: 'planCode', width: 140 },
-  { label: '上架状态', prop: 'execStatus', type: 'enum', enum: 'execStatuslist' },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'execStatuslist' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
