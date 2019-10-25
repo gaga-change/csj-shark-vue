@@ -1,10 +1,9 @@
 FROM node:8-alpine as shark-vue-build
 WORKDIR /usr/src/app
-ARG IMAGE_TAG1234=123
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm --registry https://registry.npm.taobao.org install
 COPY . .
-ARG IMAGE_TAG123=123
+ARG IMAGE_TAG=0.0.0
 RUN npm run build
 FROM nginx:1.15-alpine
 COPY --from=shark-vue-build /usr/src/app/dist /usr/share/nginx/html
