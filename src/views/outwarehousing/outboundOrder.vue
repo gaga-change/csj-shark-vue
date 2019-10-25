@@ -6,19 +6,14 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
-      :controlWidth="160"
+      :controlWidth="80"
       :showControlFixed="false"
       :expand="true"
       @childSelectionChange="childSelectionChange"
       :childApi="childApi"
       :childTableConfig="childTableConfig"
     >
-      outwarehousing/outboundOrderDetail
       <template slot-scope="scope">
-        <el-link
-          type="primary"
-          @click="printMark(scope.row)"
-        >打印装箱唛头</el-link>
         <el-link
           type="primary"
           @click="$router.push({path:'/outwarehousing/outboundOrderDetail', query: {id: scope.row.id}})"
@@ -31,17 +26,12 @@
         />
       </template>
     </double-list>
-    <print-mark-dialog
-      :visible.sync="printMarkDialogVisible"
-      :row="nowRow"
-    ></print-mark-dialog>
   </div>
 </template>
 
 <script>
 import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
 import printOutPlanDetailButton from './components/printOutPlanDetailButton'
-import printMarkDialog from './components/printMarkDialog'
 
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -71,17 +61,17 @@ const searchConfig = [
   { label: '客户/供应商', prop: 'ownerName' },
   { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: 'outboundOrderStatus' },
   { label: '出库时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
+  { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
 ]
 
 export default {
-  components: { printOutPlanDetailButton, printMarkDialog },
+  components: { printOutPlanDetailButton },
   data() {
     return {
       tableConfig,
       searchConfig,
       childTableConfig,
       listApi: getInfoOutWarehousing,
-      printMarkDialogVisible: false,
       childSelectRows: [],
       mainRow: {},
       nowRow: {}
@@ -104,11 +94,6 @@ export default {
       this.childSelectRows = selectRows
       this.mainRow = mainRow
     },
-    /** 打印麦头 */
-    printMark(row) {
-      this.nowRow = row
-      this.printMarkDialogVisible = true
-    }
   }
 }
 </script>

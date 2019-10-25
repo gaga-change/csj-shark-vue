@@ -4,9 +4,17 @@
       <!-- 收货中 & 已激活 可见 -->
       <el-button
         type="primary"
+        @click="printMark()"
         :loading="receiveConfirmLoading"
       >
-        收货确认
+        打印装箱唛头
+      </el-button>
+      <el-button
+        type="primary"
+        :loading="receiveConfirmLoading"
+        v-if="detail.isPushStateEnum == 2"
+      >
+        手动推送
       </el-button>
     </div>
     <el-card shadow="never">
@@ -15,7 +23,7 @@
       </div>
       <detail-item
         :config="detailItemConfig"
-        :detail="detail.receiveOrderDO"
+        :detail="detail"
         :labelWidth="100"
       />
     </el-card>
@@ -28,7 +36,7 @@
       </div>
       <base-table
         :config="detailDOsConfig"
-        :data="detail.detailDOs"
+        :data="detail.outWarehouseOrderDetailVoList"
         :showControl="true"
         :controlWidth="160"
       >
@@ -50,7 +58,7 @@
       </div>
       <base-table
         :config="detailItemDosConfig"
-        :data="detail.detailItemDos"
+        :data="detail.outWarehouseJobVOList"
         :showControl="true"
         :controlWidth="160"
       >
@@ -75,21 +83,27 @@
         </template>
       </base-table>
     </el-card>
+    <print-mark-dialog
+      :visible.sync="printMarkDialogVisible"
+      :row="nowRow"
+      title="打印装箱唛头"
+    ></print-mark-dialog>
   </div>
 </template>
 <script>
+import printMarkDialog from './components/printMarkDialog'
 import { outWarehouseOrderDetail } from '@/api'
 
 const detailItemConfig = [
-  { label: '收货单号 ', prop: 'orderCode' },
-  { label: '入库计划单号 ', prop: 'planCode' },
-  { label: '外部订单号', prop: 'busiBillNo' },
-  // { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
-  // { label: '收货状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
-  { label: '供应商', prop: 'providerName' },
-  { label: '货主', prop: 'ownerName' },
+  { label: '出库单号', prop: 'orderCode', width: 140 },
+  { label: '出库计划单号', prop: 'planCode', width: 140 },
+  { label: '外部订单号', prop: 'busiBillNo', width: 90 },
+  { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
+  { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
+  { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: 'outboundOrderStatus' },
+  { label: '货主', prop: 'ownerName', },
   { label: '创建人', prop: 'createrName' },
-  { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const detailDOsConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -97,8 +111,7 @@ const detailDOsConfig = [
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
-  { label: '预期收货量', prop: 'planQty' },
-  { label: '实际收货量', prop: 'receiveQty' },
+  { label: '数量', prop: 'outQty' },
 ]
 const detailItemDosConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -107,23 +120,24 @@ const detailItemDosConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo' },
+  { label: '出库数量', prop: 'realSortQty' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '容器', prop: 'trayCode' },
-  { label: '实际收货量', prop: 'receiveQty' },
-  // { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
 ]
 
 export default {
+  components: { printMarkDialog },
   data() {
     return {
+      printMarkDialogVisible: false,
       outWarehouseOrderDetailLoading: true,
       receiveConfirmLoading: false,
       detailItemConfig,
       detailDOsConfig,
       detailItemDosConfig,
       detail: {
-        receiveOrderDO: {},
-        detailDOs: [],
-        detailItemDos: []
+        outWarehouseJobVOList: [],
+        outWarehouseOrderDetailVoList: []
       },
       nowRow: null,
       modifyRow: null,
@@ -138,7 +152,6 @@ export default {
       outWarehouseOrderDetail(this.$route.query.id).then(res => {
         this.outWarehouseOrderDetailLoading = false
         if (!res) return
-        console.log(res.data)
         res.data.outWarehouseJobVOList = res.data.outWarehouseJobVOList || []
         res.data.outWarehouseOrderDetailVoList = res.data.outWarehouseOrderDetailVoList || []
         this.detail = res.data
@@ -149,6 +162,11 @@ export default {
       this.receivingModifyDialogVisible = true
       this.modifyRow = row
     },
+    /** 打印麦头 */
+    printMark(row) {
+      this.nowRow = { ...this.detail }
+      this.printMarkDialogVisible = true
+    }
   },
 }
 </script>
