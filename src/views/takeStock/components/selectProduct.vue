@@ -143,10 +143,11 @@ export default {
         lazyLoad(node, resolve) {
           const { level } = node;
           if (level === 0) {
-            warehouseAreaList().then(res => {
+            warehouseAreaList({
+              warehouseCode: vm.$store.getters.chooseWarehouse
+            }).then(res => {
               if (res) {
                 let codes = res.data.map(v => v.warehouseAreaCode)
-                codes = [...new Set(codes)]
                 const nodes = codes.map(code => {
                   return {
                     value: code,
