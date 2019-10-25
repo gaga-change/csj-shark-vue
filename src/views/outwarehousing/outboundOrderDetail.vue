@@ -32,21 +32,23 @@
       class="mt20"
     >
       <div slot="header">
-        商品明细
+        <div style="display:flex;align-items: center;">
+          <span>商品明细</span>
+          <print-out-plan-detail-button
+            class="ml15"
+            :childSelectRows="childSelectRows"
+            :mainRow="detail"
+          />
+        </div>
       </div>
       <base-table
         :config="detailDOsConfig"
         :data="detail.outWarehouseOrderDetailVoList"
-        :showControl="true"
+        :showControl="false"
         :controlWidth="160"
+        :select="true"
+        @selectionChange="selectionChange"
       >
-        <template slot-scope="scope">
-          <el-link
-            type="primary"
-            :disabled="scope.row.planQty == scope.row.receiveQty"
-            @click="handleReceivingRegister(scope.row)"
-          >收货登记</el-link>
-        </template>
       </base-table>
     </el-card>
     <el-card
@@ -59,28 +61,8 @@
       <base-table
         :config="detailItemDosConfig"
         :data="detail.outWarehouseJobVOList"
-        :showControl="true"
-        :controlWidth="160"
+        :showControl="false"
       >
-        <template slot-scope="scope">
-          <!-- 收货中  未上架 -->
-          <template>
-            <el-link
-              type="primary"
-              @click="handleDelete(scope.row)"
-            >删除</el-link>
-            <el-divider direction="vertical"></el-divider>
-            <el-link
-              type="primary"
-              @click="handleModify(scope.row)"
-            >编辑</el-link>
-          </template>
-          <!-- 已激活 未上架 -->
-          <el-link
-            type="primary"
-            @click="handleDiscard(scope.row)"
-          >作废</el-link>
-        </template>
       </base-table>
     </el-card>
     <print-mark-dialog
@@ -92,6 +74,7 @@
 </template>
 <script>
 import printMarkDialog from './components/printMarkDialog'
+import printOutPlanDetailButton from './components/printOutPlanDetailButton'
 import { outWarehouseOrderDetail } from '@/api'
 
 const detailItemConfig = [
@@ -126,7 +109,7 @@ const detailItemDosConfig = [
 ]
 
 export default {
-  components: { printMarkDialog },
+  components: { printMarkDialog, printOutPlanDetailButton },
   data() {
     return {
       printMarkDialogVisible: false,
@@ -141,6 +124,7 @@ export default {
       },
       nowRow: null,
       modifyRow: null,
+      childSelectRows: [],
     }
   },
   created() {
@@ -166,7 +150,11 @@ export default {
     printMark(row) {
       this.nowRow = { ...this.detail }
       this.printMarkDialogVisible = true
-    }
+    },
+    /** 子表多选 */
+    selectionChange(selectRows) {
+      this.childSelectRows = selectRows
+    },
   },
 }
 </script>

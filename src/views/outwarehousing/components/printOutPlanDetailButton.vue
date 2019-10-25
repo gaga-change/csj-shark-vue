@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom:10px">
+  <div>
     <el-button
       size="mini"
       type="primary"
@@ -32,7 +32,7 @@ const printTableConfig = [// 计划单打印列表
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
-  { label: '数量', prop: 'realOutQty' },
+  { label: '数量', prop: 'outQty' },
   { label: '单位', prop: 'skuUnitCode' },
 ]
 

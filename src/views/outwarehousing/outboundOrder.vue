@@ -9,9 +9,9 @@
       :controlWidth="80"
       :showControlFixed="false"
       :expand="true"
-      @childSelectionChange="childSelectionChange"
       :childApi="childApi"
       :childTableConfig="childTableConfig"
+      :childSelect="false"
     >
       <template slot-scope="scope">
         <el-link
@@ -20,10 +20,6 @@
         >详情</el-link>
       </template>
       <template slot="btns">
-        <print-out-plan-detail-button
-          :childSelectRows="childSelectRows"
-          :mainRow="mainRow"
-        />
       </template>
     </double-list>
   </div>
@@ -31,7 +27,6 @@
 
 <script>
 import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
-import printOutPlanDetailButton from './components/printOutPlanDetailButton'
 
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -65,14 +60,12 @@ const searchConfig = [
 ]
 
 export default {
-  components: { printOutPlanDetailButton },
   data() {
     return {
       tableConfig,
       searchConfig,
       childTableConfig,
       listApi: getInfoOutWarehousing,
-      childSelectRows: [],
       mainRow: {},
       nowRow: {}
     }
@@ -88,11 +81,6 @@ export default {
     /** 刷新列表 */
     getTableData() {
       this.$refs['doubleList'].fetchData()
-    },
-    /** 子表多选 */
-    childSelectionChange(selectRows, mainRow) {
-      this.childSelectRows = selectRows
-      this.mainRow = mainRow
     },
   }
 }
