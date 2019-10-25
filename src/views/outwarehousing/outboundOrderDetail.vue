@@ -11,8 +11,8 @@
       </el-button>
       <el-button
         type="primary"
-        :loading="receiveConfirmLoading"
         v-if="detail.isPushStateEnum == 2"
+        @click="handleTryPush"
       >
         手动推送
       </el-button>
@@ -75,7 +75,7 @@
 <script>
 import printMarkDialog from './components/printMarkDialog'
 import printOutPlanDetailButton from './components/printOutPlanDetailButton'
-import { outWarehouseOrderDetail } from '@/api'
+import { outWarehouseOrderDetail, outWarehouseOrderTryPush } from '@/api'
 
 const detailItemConfig = [
   { label: '出库单号', prop: 'orderCode', width: 140 },
@@ -131,8 +131,17 @@ export default {
     this.initData()
   },
   methods: {
+    /** 手动推送点击事件 */
+    handleTryPush() {
+      this.$apiConfirm('是否确定要进行手动推送？', () => outWarehouseOrderTryPush(this.detail.id)).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.initData()
+      })
+    },
     /** 获取详情内容 */
     initData() {
+      this.outWarehouseOrderDetailLoading = true
       outWarehouseOrderDetail(this.$route.query.id).then(res => {
         this.outWarehouseOrderDetailLoading = false
         if (!res) return

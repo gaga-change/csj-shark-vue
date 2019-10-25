@@ -210,3 +210,5 @@ export const warehouseSpaceSelectByAreaCode = params => http.get(`/webApi/basic/
 export const panOutEnd = params => http.get(`/webApi/plan/out/end`, { params })
 /** 出库单详情 */
 export const outWarehouseOrderDetail = id => http.get(`/webApi/outWarehouse/order/detail/${id}`)
+/** 出库单手动推送 */
+export const outWarehouseOrderTryPush = id => http.get(`/webApi/outWarehouse/order/tryPush/${id}`)
