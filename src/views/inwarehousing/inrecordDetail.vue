@@ -124,7 +124,7 @@ const detailItemDosConfig = [
   { label: '批次', prop: 'batchNo' },
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
+  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
 ]
 
 export default {

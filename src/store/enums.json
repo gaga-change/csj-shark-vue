@@ -1,23 +1,5 @@
 [
   {
-    "name": "outExecStatusEnum",
-    "_id": "5d6f823e55c8dc2f0026d9fc",
-    "keyValue": [
-      {
-        "name": "未出库",
-        "value": 0
-      },
-      {
-        "name": "部分出库",
-        "value": 5
-      },
-      {
-        "name": "全部出库",
-        "value": 8
-      }
-    ]
-  },
-  {
     "name": "outboundOrderStatus",
     "_id": "5d6f823e55c8dc2f0026da0a",
     "keyValue": [
@@ -158,25 +140,7 @@
     ]
   },
   {
-    "name": "receiveState2",
-    "_id": "5d6f823f55c8dc2f0026da51",
-    "keyValue": [
-      {
-        "name": "未收货",
-        "value": 0
-      },
-      {
-        "name": "部分收货",
-        "value": 1
-      },
-      {
-        "name": "全部收货",
-        "value": 2
-      }
-    ]
-  },
-  {
-    "name": "execStatuslist",
+    "name": "isPutEnum",
     "_id": "5d6f823f55c8dc2f0026da55",
     "keyValue": [
       {
@@ -286,24 +250,6 @@
       {
         "name": "移库入库",
         "value": 51
-      }
-    ]
-  },
-  {
-    "name": "checkResultEnum",
-    "_id": "5d6f823f55c8dc2f0026da74",
-    "keyValue": [
-      {
-        "name": "待检品",
-        "value": 0
-      },
-      {
-        "name": "残次品",
-        "value": 1
-      },
-      {
-        "name": "正品",
-        "value": 2
       }
     ]
   },
@@ -434,7 +380,7 @@
     ]
   },
   {
-    "name": "checkResultEnum_v2",
+    "name": "checkResultEnum",
     "_id": "5d902888c1bb12002b8d3e7a",
     "keyValue": [
       {

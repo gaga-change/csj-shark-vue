@@ -20,7 +20,7 @@ const tableConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '移出库位', prop: 'swarehouseSpaceCode' },
   { label: '移入库位', prop: 'twarehouseSpaceCode' },
   { label: '移库数量', prop: 'moveQty' },
@@ -34,7 +34,7 @@ const searchConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '移出库位', prop: 'swarehouseSpaceCode' },
   { label: '移入库位', prop: 'twarehouseSpaceCode' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum_v2' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
 ]
 export default {

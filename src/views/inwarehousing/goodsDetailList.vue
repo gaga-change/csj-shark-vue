@@ -41,7 +41,7 @@ const tableConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
   { label: '已上架数量', prop: 'realInQty' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
+  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
@@ -50,7 +50,7 @@ const searchConfig = [
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
   { label: '容器', prop: 'trayCode' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'execStatuslist' },
+  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
   { label: '收货单号', prop: 'receiveOrderCode' },
 ]
 
