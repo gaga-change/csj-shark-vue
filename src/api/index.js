@@ -10,6 +10,8 @@ export const exportLedger = params => download({ url: `/webApi/sku/stock/exportL
 export const inventoryRecordExport = data => download({ method: 'post', url: `/webApi/plan/inventory/recordExport`, data })
 /** 收货汇总导出 */
 export const receiveOrderExportLedger = params => download({ url: `/webApi/receive/order/exportLedger`, params })
+/** 订正记录导出 */
+export const stockCorrectionRecordExport = data => download({ method: 'post', url: `/webApi/stock/correction/recordExport`, data })
 /** 上传文件 */
 export const uploadReportFile = (formData, options = {}) => http.post('/webApi/plan/checkOrder/uploadReportFile', formData, {
   headers: {
@@ -212,3 +214,5 @@ export const panOutEnd = params => http.get(`/webApi/plan/out/end`, { params })
 export const outWarehouseOrderDetail = id => http.get(`/webApi/outWarehouse/order/detail/${id}`)
 /** 出库单手动推送 */
 export const outWarehouseOrderTryPush = id => http.get(`/webApi/outWarehouse/order/tryPush/${id}`)
+/** 分页查询库存订正记录 */
+export const stockCorrectionList = params => http.get(`/webApi/stock/correction/list`, { params })

@@ -306,6 +306,13 @@ export default [
         component: _import('inventoryManage/moveLibraryRecordList'),
         hidden: false,
       },
+      {
+        name: 'correctRecordList',
+        path: 'correctRecordList',
+        meta: { title: '订正记录', noCache: true },
+        component: _import('inventoryManage/correctRecordList'),
+        hidden: false,
+      },
     ]
   },
   {
