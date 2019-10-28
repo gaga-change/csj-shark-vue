@@ -88,6 +88,7 @@
       </div>
     </el-form>
     <select-product
+      ref="selctProduct"
       :visible.sync="selectProductVisible"
       :selectData.sync="tableData"
       :orderType="orderType"
@@ -177,6 +178,7 @@ export default {
     /** 重置 */
     handleResetForm() {
       this.$refs['form'] && this.$refs['form'].resetFields()
+      this.$refs['selctProduct'].resetForm()
       this.tableData = []
     },
     /** 删除行 */

@@ -233,10 +233,10 @@ export default {
     },
     /** 重置 */
     resetForm() {
-      this.$refs['form'].resetFields()
+      this.$refs['form'] && this.$refs['form'].resetFields()
       this.formData.warehouseSpaceCodeList = []
       this.$nextTick(() => {
-        this.$refs['baseTable'].fetchData()
+        this.$refs['baseTable'] && this.$refs['baseTable'].fetchData()
       })
     },
     /** 确认 */
