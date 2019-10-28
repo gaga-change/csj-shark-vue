@@ -11,8 +11,14 @@
       <template slot-scope="scope">
         <el-link
           type="primary"
+          v-if="scope.row.inOutType == 2"
           @click="$router.push({path:`/outwarehousing/pickingtask`,query:{outOrderCode: scope.row.planCode}})"
         >拣货任务</el-link>
+        <el-link
+          type="primary"
+          v-if="scope.row.inOutType == 1"
+          @click="$router.push({path:`/inwarehousing/inrecord`,query:{planCode: scope.row.planCode}})"
+        >收货单</el-link>
         <template v-if="scope.row.opStatus == 0">
           <el-divider direction="vertical"></el-divider>
           <el-link
@@ -20,7 +26,6 @@
             @click="selectedRow=scope.row;auditDialogFormVisible=true"
           >审核</el-link>
         </template>
-
       </template>
     </base-list>
     <audit-dialog-form
