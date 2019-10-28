@@ -1,17 +1,12 @@
 <template>
   <div>
-    <double-list
-      ref="doubleList"
+    <base-list
+      ref="baseList"
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
       :controlWidth="80"
-      :showControlFixed="false"
-      :expand="true"
-      :childApi="childApi"
-      :childTableConfig="childTableConfig"
-      :childSelect="false"
     >
       <template slot-scope="scope">
         <el-link
@@ -21,24 +16,13 @@
       </template>
       <template slot="btns">
       </template>
-    </double-list>
+    </base-list>
   </div>
 </template>
 
 <script>
-import { getInfoOutWarehousing, getInfoDetailOutWarehousing } from '@/api'
+import { getInfoOutWarehousing } from '@/api'
 
-const childTableConfig = [
-  { label: '商品编码', prop: 'skuCode', width: 150 },
-  { label: '商品名称', prop: 'skuName', width: 150 },
-  { label: '规格', prop: 'skuFormat' },
-  { label: '型号', prop: 'skuModel' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '商品数量', prop: 'numberOfProducts' },
-  { label: '出库数量', prop: 'realOutQty' },
-  { label: '出库批次', prop: 'batchNo' },
-  { label: '备注', prop: 'remarkInfo' },
-]
 const tableConfig = [
   { label: '出库时间', prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '出库单号', prop: 'orderCode', width: 140 },
@@ -64,23 +48,15 @@ export default {
     return {
       tableConfig,
       searchConfig,
-      childTableConfig,
       listApi: getInfoOutWarehousing,
       mainRow: {},
       nowRow: {}
     }
   },
   methods: {
-    /** 子表内容获取 */
-    childApi(row) {
-      return getInfoDetailOutWarehousing({ orderCode: row.orderCode }).then(res => {
-        if (!res || !res.data || !res.data[0]) return
-        return res.data[0].queryOutWarehouseOrderDetailVOSList || []
-      })
-    },
     /** 刷新列表 */
     getTableData() {
-      this.$refs['doubleList'].fetchData()
+      this.$refs['baseList'].fetchData()
     },
   }
 }
