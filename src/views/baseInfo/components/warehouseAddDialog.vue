@@ -103,7 +103,7 @@ export default {
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid, params) => {
-        if (valid, params) {
+        if (valid) {
           this.loading = true
           warehouseAdd(params).then(res => {
             this.loading = false
