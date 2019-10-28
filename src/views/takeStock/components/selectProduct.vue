@@ -20,6 +20,7 @@
             <el-form-item
               label="商品编码"
               prop="skuCode"
+              v-show="orderType === 0"
             >
               <el-input
                 size="mini"
@@ -30,6 +31,7 @@
             <el-form-item
               label="商品名称"
               prop="skuName"
+              v-show="orderType === 0"
             >
               <el-input
                 size="mini"
@@ -70,7 +72,7 @@
           :config="takeStockSelectProductTableConfig"
           :parseData="parseData"
           :api="planInventoryQuerysSkuStockList"
-          :select="true"
+          :select="orderType === 0"
           :selectTotal="true"
           :selectRows.sync="selectRows"
           :searchParams="searchParams"
@@ -78,6 +80,7 @@
         />
       </div>
       <el-alert
+        v-if="orderType === 0"
         class="mt15"
         title="注：最多选取50条，如需盘点更多商品，请分批处理！"
         type="info"
@@ -95,6 +98,7 @@
         <el-button
           size="mini"
           type="primary"
+          :loading="confrimLoading"
           @click="confrim"
         >确 定</el-button>
       </span>
@@ -126,6 +130,7 @@ export default {
   data() {
     let vm = this
     return {
+      confrimLoading: false,
       formData: {
         skuName: '',
         skuCode: '',
@@ -136,6 +141,7 @@ export default {
       selectRows: [],
       tableData: [],
       planInventoryQuerysSkuStockList,
+      nowSearchParams: {},
       cascaderProps: {
         lazy: true,
         multiple: true,
@@ -213,6 +219,9 @@ export default {
       this.formData.warehouseSpaceCodeList = val.map(v => {
         return v[1]
       })
+      this.$nextTick(() => {
+        this.submitForm()
+      })
     },
     parseData(res) {
       return {
@@ -227,6 +236,7 @@ export default {
     submitForm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          this.nowSearchParams = this.searchParams
           this.$refs['baseTable'].fetchData()
         }
       })
@@ -241,16 +251,33 @@ export default {
     },
     /** 确认 */
     confrim() {
-      // 根据库区库位进行排序
-      this.$emit('update:selectData', [...this.selectRows].sort((a, b) => {
-        if (a.warehouseAreaCode === b.warehouseAreaCode) {
-          return b.warehouseSpaceCode > a.warehouseSpaceCode ? -1 : 1
-        } else {
-          return b.warehouseAreaCode > a.warehouseAreaCode ? 1 : -1
-        }
-      }))
-      this.selectRows = []
-      this.close()
+      const end = () => {
+        // 根据库区库位进行排序
+        this.$emit('update:selectData', [...this.selectRows].sort((a, b) => {
+          if (a.warehouseAreaCode === b.warehouseAreaCode) {
+            return b.warehouseSpaceCode > a.warehouseSpaceCode ? -1 : 1
+          } else {
+            return b.warehouseAreaCode > a.warehouseAreaCode ? 1 : -1
+          }
+        }))
+        this.selectRows = []
+        this.close()
+      }
+      if (this.orderType === 1) { // 动态盘点
+        this.confrimLoading = true
+        planInventoryQuerysSkuStockList({
+          pageNum: 1,
+          pageSize: 9999,
+          ...this.nowSearchParams
+        }).then(res => {
+          this.confrimLoading = false
+          if (!res) return
+          this.selectRows = res.data.list || []
+          end()
+        })
+      } else {
+        end()
+      }
     },
     /** 关闭 */
     close() {

@@ -142,22 +142,7 @@ export default {
     /** 盘点类型切换 */
     handleOrderTypeChange(v) {
       this.tableData = []
-      // if (v === 0) return
-      // if (this.skuStockList) {
-      //   this.tableData = [...this.skuStockList]
-      // } else {
-      //   this.queryDynamicSkuStockListLoading = true
-      //   queryDynamicSkuStockList().then(res => {
-      //     this.queryDynamicSkuStockListLoading = false
-      //     if (!res) return
-      //     this.lastInventoryDate = res.data.lastInventoryDate ? moment(res.data.lastInventoryDate).format('YYYY-MM-DD HH:mm:ss') : ''
-      //     this.skuStockList = res.data.skuStockList.map(v => {
-      //       v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
-      //       return v
-      //     })
-      //     this.tableData = [...this.skuStockList]
-      //   })
-      // }
+      this.$refs['selctProduct'].resetForm()
     },
     /** 提交 */
     handleSubmitForm() {
