@@ -55,7 +55,7 @@ const childTableConfig = [
 const tableConfig = [
   { label: '收货单号', prop: 'orderCode', width: 140 },
   { label: '计划单号', prop: 'planCode', width: 140 },
-  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveState' },
+  { label: '状态', prop: 'execStatus', type: 'enum', enum: 'receiveStateEnum' },
   { label: '收货时间', prop: 'gmtCreate', type: 'time', width: 140 },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '货主', prop: 'ownerName' },
