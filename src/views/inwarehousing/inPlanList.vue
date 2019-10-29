@@ -5,7 +5,7 @@
       :tableConfig="tableConfig"
       :searchConfig="searchConfig"
       :api="listApi"
-      :showControl="false"
+      :showControl="true"
       :childApi="childApi"
       :childTableConfig="childTableConfig"
       :childSelect="false"
@@ -15,6 +15,13 @@
       :selectable="selectable"
       :labelWidth="100"
     >
+      <template slot-scope="scope">
+        <el-link
+          :disabled="scope.row.receiveStatus != 1"
+          type="primary"
+          @click="handleClose(scope.row)"
+        >完结</el-link>
+      </template>
       <template slot="btns">
         <el-button
           type="primary"
@@ -30,7 +37,7 @@
 </template>
 
 <script>
-import { getInfoWarehousing, getInfoDetailWarehousing, createReceiveOrder } from '@/api'
+import { getInfoWarehousing, getInfoDetailWarehousing, createReceiveOrder, planInEnd } from '@/api'
 
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
@@ -73,6 +80,16 @@ export default {
     }
   },
   methods: {
+    /** 完结按钮点击事件 */
+    handleClose(row) {
+      this.$apiConfirm('确认完结该计划单', () => planInEnd({
+        planId: row.id
+      })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.getTableData()
+      })
+    },
     /** 子表内容获取 */
     childApi(row) {
       return getInfoDetailWarehousing({ planCode: row.planCode }).then(res => {

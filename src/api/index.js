@@ -220,3 +220,5 @@ export const stockCorrectionList = params => http.get(`/webApi/stock/correction/
 export const correctionQueryStockList = params => http.get(`/webApi/stock/correction/queryStockList`, { params })
 /** 库存订正 */
 export const addStockCorrection = params => http.post(`/webApi/stock/correction/addStockCorrection`, params)
+/** 入库计划单完结 */
+export const planInEnd = params => http.get(`/webApi/plan/in/end`, { params })
