@@ -122,19 +122,19 @@
     "_id": "5d6f823f55c8dc2f0026da4c",
     "keyValue": [
       {
-        "name": "未收货",
+        "name": "新建",
         "value": 0
       },
       {
-        "name": "收货中",
+        "name": "进行中",
         "value": 1
       },
       {
-        "name": "全部收货",
+        "name": "已完结",
         "value": 2
       },
       {
-        "name": "已激活",
+        "name": "已终止",
         "value": 3
       }
     ]
