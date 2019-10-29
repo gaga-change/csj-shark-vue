@@ -42,7 +42,7 @@
         class="mt20"
       >
         <div slot="header">
-          拣货任务明细
+          {{productNow ? `${productNow.skuName} - 拣货任务明细 (点击商品行切换)`  : '拣货任务明细' }}
         </div>
         <template>
           <div v-if="productNow">
