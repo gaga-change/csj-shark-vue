@@ -200,6 +200,7 @@ export default {
       if (this.orderType === 1) {
         data.isDynamicCheck = 1
       }
+      data.queryTempArea = 0
       return data
     }
   },
