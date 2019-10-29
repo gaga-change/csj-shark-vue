@@ -12,7 +12,7 @@
       :childShowIndex="true"
       :select="true"
       @selectionChange="selectionChange"
-      :selectable="() => true"
+      :selectable="selectable"
       :labelWidth="100"
     >
       <template slot="btns">
@@ -79,6 +79,10 @@ export default {
         if (!res || !res.data) return
         return res.data.inWarehousePlanDetailRespList || []
       })
+    },
+    /** 可选条件 */
+    selectable(row) {
+      return row.receiveStatus == 0 || row.receiveStatus == 1
     },
     /** 清除选中 */
     clearSelection() {
