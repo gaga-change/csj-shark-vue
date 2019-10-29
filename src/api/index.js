@@ -214,5 +214,9 @@ export const panOutEnd = params => http.get(`/webApi/plan/out/end`, { params })
 export const outWarehouseOrderDetail = id => http.get(`/webApi/outWarehouse/order/detail/${id}`)
 /** 出库单手动推送 */
 export const outWarehouseOrderTryPush = id => http.get(`/webApi/outWarehouse/order/tryPush/${id}`)
-/** 分页查询库存订正记录 */
+/** 订正记录列表 */
 export const stockCorrectionList = params => http.get(`/webApi/stock/correction/list`, { params })
+/** 库存订正列表 */
+export const correctionQueryStockList = params => http.get(`/webApi/stock/correction/queryStockList`, { params })
+/** 库存订正 */
+export const addStockCorrection = params => http.post(`/webApi/stock/correction/addStockCorrection`, params)

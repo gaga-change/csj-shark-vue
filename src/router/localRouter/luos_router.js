@@ -307,6 +307,13 @@ export default [
         hidden: false,
       },
       {
+        name: 'stockCorrectList',
+        path: 'stockCorrectList',
+        meta: { title: '库存订正', noCache: true },
+        component: _import('inventoryManage/stockCorrectList'),
+        hidden: false,
+      },
+      {
         name: 'correctRecordList',
         path: 'correctRecordList',
         meta: { title: '订正记录', noCache: true },
