@@ -68,6 +68,7 @@ const searchConfig = [
   { label: '货主', prop: 'ownerName' },
   { label: '收货单号', prop: 'orderCode' },
   { label: '入库日期', prop: 'createTimeArea', props: ['orderStartDate', 'orderEndDate'], type: 'timeArea' },
+  { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
 ]
 
 export default {

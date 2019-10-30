@@ -90,10 +90,6 @@
     "_id": "5d6f823e55c8dc2f0026da24",
     "keyValue": [
       {
-        "name": "未推送",
-        "value": 0
-      },
-      {
         "name": "已推送",
         "value": 1
       },
