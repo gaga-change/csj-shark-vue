@@ -7,6 +7,7 @@
       :api="listApi"
       :showControl="false"
       :controlWidth="160"
+      :parseData="parseData"
     >
       <template slot="btns">
         <el-button
@@ -69,8 +70,9 @@ export default {
       let data = res.data.list || []
       let total = res.data.total
       data.forEach(v => {
-        v.updateLockStatusOutLoading = false
-        v.updateLockStatusInLoading = false
+        v.afterQty = Number(v.afterQty) || 0
+        v.beforeQty = Number(v.beforeQty) || 0
+        v.revisalQty = v.afterQty - v.beforeQty
       })
       return { data, total }
     },
