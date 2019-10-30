@@ -9,13 +9,11 @@
       @close="close"
     >
       <div>
-        <detail-item
+        <!-- <detail-item
           :config="detailConfig"
           :detail="detail"
           :labelWidth="100"
-        >
-
-        </detail-item>
+        ></detail-item> -->
         <div class="mt20">
           <base-table
             :config="tableConfig"
@@ -52,7 +50,6 @@ const tableConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo' },
-  { label: '实际收货量', prop: 'receiveQty' },
   { label: '上架数量', prop: 'jobQty' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '容器', prop: 'trayCode' },
