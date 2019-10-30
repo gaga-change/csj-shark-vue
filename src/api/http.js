@@ -80,23 +80,23 @@ const http = {
   }
 }
 
-console.log('NODE_ENV：', process.env.NODE_ENV)
 if (process.env.NODE_ENV !== "development") {
   let tick = setInterval(() => {
     axios.get('/version.txt').then(res => {
-      console.log(res.data)
-      console.log(`当前版本：${process.env.IMAGE_TAG}，最新版本：${res.data}`, process.env.IMAGE_TAG !== res.data)
-      console.log(process.env.IMAGE_TAG === res.data)
-      console.log(process.env.IMAGE_TAG == res.data)
-      console.log(process.env.IMAGE_TAG + '' == res.data + '')
-      if (process.env.IMAGE_TAG !== res.data) {
-        update(res.data)
+      let newVersion = res.data.toString().trim()
+      if (process.env.IMAGE_TAG !== newVersion) {
+        update(newVersion)
       }
     })
-  }, 500)
+  }, 5000)
   function update(v) {
     clearInterval(tick)
     console.log(`版本更新，当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`)
+    Notification({
+      title: '提示',
+      message: '当前系统版本更新，刷新页面获取最新内容！',
+      duration: 0
+    });
   }
 }
 
