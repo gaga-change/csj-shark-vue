@@ -33,11 +33,11 @@ export default {
   props: {
     detail: {
       type: Object,
-      default: () => { }
+      default: () => ({})
     },
     config: {
       type: Array,
-      default: () => { }
+      default: () => []
     },
     labelWidth: {
       type: Number,

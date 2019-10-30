@@ -12,9 +12,20 @@
         <el-link
           type="primary"
           @click="handleUp(scope.row)"
-          :disabled="scope.row.isPut != 0 && scope.row.isPut != 1 "
+          v-if="scope.row.isPut == 0 || scope.row.isPut == 1"
         >
           上架
+        </el-link>
+        <el-divider
+          direction="vertical"
+          v-if="scope.row.isPut == 1"
+        ></el-divider>
+        <el-link
+          type="primary"
+          @click="nowRow=scope.row;recordListDialogVisible=true;"
+          v-if="scope.row.isPut == 1 || scope.row.isPut == 2"
+        >
+          上架记录
         </el-link>
       </template>
     </base-list>
@@ -23,12 +34,18 @@
       :row="nowRow"
       @submited="getTableData"
     />
+    <recordListDialog
+      :visible.sync="recordListDialogVisible"
+      :row="nowRow"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
 import { selectReceiveDetailItem } from '@/api'
 import putawayDialog from './components/putawayDialog'
+import recordListDialog from './components/recordListDialog'
 
 const tableConfig = [
   { label: '收货单号', prop: 'receiveOrderCode', width: 140 },
@@ -55,12 +72,13 @@ const searchConfig = [
 ]
 
 export default {
-  components: { putawayDialog },
+  components: { putawayDialog, recordListDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       listApi: selectReceiveDetailItem,
+      recordListDialogVisible: false,
       putawayDialogVisible: false,
       nowRow: {},
       appendSearchParams: { receiveExecStatus: 2 },

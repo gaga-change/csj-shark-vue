@@ -157,7 +157,7 @@ export default {
     }
   },
   watch: {
-    /** 监听数据切换，重置表单 */
+    /** 监听数据切换，重置表单。为何不监听rowData?因为主组件visible一一对应，但选中数据不是，selectRow 是多个弹窗共享的 */
     visible(val) {
       if (!val) return
       Object.keys(this.formData).forEach(key => {
