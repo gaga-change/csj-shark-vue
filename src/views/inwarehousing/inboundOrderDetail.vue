@@ -48,7 +48,7 @@
       </div>
       <base-table
         :config="detailItemDosConfig"
-        :data="detail.detailVOList"
+        :data="detail.jobDOList"
         :showControl="false"
       >
       </base-table>
@@ -72,10 +72,10 @@ const detailItemConfig = [
 const detailDOsConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '规格', prop: 'lotAttrCode1' },
-  { label: '型号', prop: 'lotAttrCode2' },
-  { label: '单位', prop: 'lotAttrCode3' },
-  { label: '数量', prop: 'aaa' },
+  { label: '规格', prop: 'skuFormat' },
+  { label: '型号', prop: 'skuModel' },
+  { label: '单位', prop: 'skuUnitName' },
+  { label: '数量', prop: 'inQty' },
 ]
 const detailItemDosConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -98,7 +98,7 @@ export default {
       detailDOsConfig,
       detailItemDosConfig,
       detail: {
-        detailVOList: [],
+        jobDOList: [],
         skuDoList: []
       },
     }
@@ -123,7 +123,7 @@ export default {
       queryInOrderDetail({ orderId: this.$route.query.id }).then(res => {
         this.queryInOrderDetailLoading = false
         if (!res) return
-        res.data.detailVOList = res.data.detailVOList || []
+        res.data.jobDOList = res.data.jobDOList || []
         res.data.skuDoList = res.data.skuDoList || []
         this.detail = res.data
       })
