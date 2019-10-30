@@ -85,7 +85,7 @@ if (process.env.NODE_ENV !== "development") {
   let tick = setInterval(() => {
     axios.get('/version.txt').then(res => {
       console.log(res.data)
-      console.log(`当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`, process.env.IMAGE_TAG !== res.data)
+      console.log(`当前版本：${process.env.IMAGE_TAG}，最新版本：${res.data}`, process.env.IMAGE_TAG !== res.data)
       console.log(process.env.IMAGE_TAG === res.data)
       console.log(process.env.IMAGE_TAG == res.data)
       console.log(process.env.IMAGE_TAG + '' == res.data + '')
