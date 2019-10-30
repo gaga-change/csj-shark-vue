@@ -80,21 +80,25 @@ const http = {
   }
 }
 
+/** 发布环境 - 监听版本更新 */
 if (process.env.NODE_ENV !== "development") {
-  let tick = setInterval(() => {
-    axios.get('/version.txt', {
-      headers: {
-        'Cache-Control': 'public,max-age=0'
-      }
-    }).then(res => {
-      let newVersion = res.data.toString().trim()
-      if (process.env.IMAGE_TAG !== newVersion) {
-        update(newVersion)
-      }
-    })
-  }, 5000)
+  let tick = () => {
+    setTimeout(() => {
+      axios.get('/version.txt', {
+        headers: {
+          'Cache-Control': 'public,max-age=0'
+        }
+      }).then(res => {
+        let newVersion = res.data.toString().trim()
+        if (process.env.IMAGE_TAG !== newVersion) {
+          update(newVersion)
+        } else {
+          tick()
+        }
+      })
+    }, 5000)
+  }
   function update(v) {
-    clearInterval(tick)
     console.log(`版本更新，当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`)
     Notification({
       title: '提示',
@@ -102,6 +106,7 @@ if (process.env.NODE_ENV !== "development") {
       duration: 0
     });
   }
+  tick()
 }
 
 export default http
