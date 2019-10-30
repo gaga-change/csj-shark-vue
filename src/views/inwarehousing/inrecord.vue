@@ -17,6 +17,13 @@
           type="primary"
           @click="$router.push({path:`/inwarehousing/inrecordDetail`,query:{id: scope.row.id}})"
         >详情</el-link>
+        <template v-if="scope.row.execStatus === 0">
+          <el-divider direction="vertical"></el-divider>
+          <el-link
+            type="primary"
+            @click="handleClose(scope.row)"
+          >终止</el-link>
+        </template>
         <template v-if="scope.row.execStatus === 2">
           <el-divider direction="vertical"></el-divider>
           <el-link
@@ -58,7 +65,7 @@
 </template>
 
 <script>
-import { receiveOrderList, receiveOrderActivate } from '@/api'
+import { receiveOrderList, receiveOrderActivate, stopReceiveOrder } from '@/api'
 import inrecordPrintDialog from './components/inrecordPrintDialog'
 
 const tableConfig = [
@@ -96,6 +103,14 @@ export default {
     }
   },
   methods: {
+    /** 终止按钮点击事件 */
+    handleClose(row) {
+      this.$apiConfirm('确认终止该收货单', () => stopReceiveOrder({ id: row.id })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.getTableData()
+      })
+    },
     /** 打印单据 */
     printOrder() {
       this.inrecordPrintDialogVisible = true

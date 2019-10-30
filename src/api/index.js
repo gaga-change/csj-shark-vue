@@ -166,6 +166,8 @@ export const skuUpdate = params => http.post(`/webApi/basic/sku/update`, params)
 export const receiveOrderList = params => http.get(`/webApi/receive/order/list`, { params })
 /** 收货单 激活 */
 export const receiveOrderActivate = params => http.post(`/webApi/receive/order/activate`, params)
+/** 收货单 终止 */
+export const stopReceiveOrder = params => http.post(`/webApi/receive/order/stopReceiveOrder`, params)
 /** 收货单详情 */
 export const receiveOrderQueryDetails = params => http.get(`/webApi/receive/order/queryDetails`, { params })
 /** 收货登记 */
