@@ -21,6 +21,7 @@
 import moment from 'moment'
 
 const printTopConfig = [
+  { label: '外部订单号', prop: 'busiBillNo' },
   { label: '客户编码', prop: 'customerCode' },
   { label: '客户名称', prop: 'customerName' },
   { label: '客户地址', prop: 'arrivalAddress' },
