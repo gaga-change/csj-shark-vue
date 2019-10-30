@@ -82,7 +82,11 @@ const http = {
 
 if (process.env.NODE_ENV !== "development") {
   let tick = setInterval(() => {
-    axios.get('/version.txt').then(res => {
+    axios.get('/version.txt', {
+      headers: {
+        'Cache-Control': 'public,max-age=0'
+      }
+    }).then(res => {
       let newVersion = res.data.toString().trim()
       if (process.env.IMAGE_TAG !== newVersion) {
         update(newVersion)
