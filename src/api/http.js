@@ -80,4 +80,20 @@ const http = {
   }
 }
 
+console.log('NODE_ENV：', process.env.NODE_ENV)
+if (process.env.NODE_ENV !== "development") {
+  let tick = setInterval(() => {
+    axios.get('/version.txt').then(res => {
+      console.log(res.data)
+      if (process.env.IMAGE_TAG !== res.data) {
+        update(res.data)
+      }
+    })
+  }, 500)
+  function update(v) {
+    clearInterval(tick)
+    console.log(`版本更新，当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`)
+  }
+}
+
 export default http
