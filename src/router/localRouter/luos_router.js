@@ -75,6 +75,13 @@ export default [
         component: _import('inwarehousing/inboundOrder'),
         hidden: false,
       },
+      {
+        name: 'inboundOrderDetail',
+        path: 'inboundOrderDetail',
+        meta: { title: '入库单详情', noCache: true },
+        component: _import('inwarehousing/inboundOrderDetail'),
+        hidden: true,
+      },
     ]
   },
   {

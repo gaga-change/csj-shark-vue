@@ -6,51 +6,22 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
-      :controlWidth="160"
+      :controlWidth="80"
     >
       <template slot-scope="scope">
         <el-link
           type="primary"
-          @click="shouDetail(scope.row)"
+          @click="$router.push({path: '/inwarehousing/inboundOrderDetail', query: {id: scope.row.id}})"
         >详情</el-link>
       </template>
       <template slot="btns">
       </template>
     </base-list>
-    <el-dialog
-      style="z-index:900"
-      title="详情"
-      :visible.sync="dialogVisible"
-      width="70%"
-    >
-      <div v-loading="inOrderSelectDetailListLoading">
-        <div class="alertInfo">
-          <span>入库计划单 : {{activeOrder.planCode}}</span>
-          <span>供应商 : {{activeOrder.providerName}}</span>
-          <span>收货时间 : {{ activeOrder.gmtCreate | date('YYYY-MM-DD') }}</span>
-        </div>
-        <base-table
-          :config="detailTableConfig"
-          :data="inPushOrderDetailTable"
-        >
-        </base-table>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { inOrderList, inOrderSelectDetailList } from '@/api'
-
-const detailTableConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格', prop: 'skuFormat' },
-  { label: '型号', prop: 'skuModel' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '入库数量', prop: 'inQty' },
-  { label: '库位', prop: 'warehouseSpaceCodes' },
-]
+import { inOrderList } from '@/api'
 
 const tableConfig = [
   { label: '计划单号', prop: 'planCode', width: 140 },
@@ -76,31 +47,11 @@ export default {
     return {
       tableConfig,
       searchConfig,
-      detailTableConfig,
       listApi: inOrderList,
-      inOrderSelectDetailListLoading: false,
-      inPushOrderDetailTable: [],
-      dialogVisible: false,
-      activeOrder: {}
     }
   },
   methods: {
-    shouDetail(row) {
-      this.dialogVisible = true;
-      this.activeOrder = row;
-      this.inOrderSelectDetailListLoading = true
-      inOrderSelectDetailList(row.id).then(res => {
-        this.inOrderSelectDetailListLoading = false
-        if (res) {
-          res.data = res.data || []
-          this.inPushOrderDetailTable = res.data.map(v => {
-            v.putSpaceInfoVOList = v.putSpaceInfoVOList || []
-            v.warehouseSpaceCodes = v.putSpaceInfoVOList.map(i => i.warehouseSpaceCode).join(',')
-            return v
-          })
-        }
-      })
-    },
+
   }
 }
 </script>

@@ -11,7 +11,7 @@
       </el-button>
       <el-button
         type="primary"
-        v-if="detail.isPushStateEnum == 2"
+        v-if="detail.isPush == 2"
         @click="handleTryPush"
       >
         手动推送

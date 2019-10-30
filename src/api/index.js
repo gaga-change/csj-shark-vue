@@ -52,8 +52,6 @@ export const getBatchNo = params => http.get(`/webApi/basic/batch/getBatchNo`, {
 export const orderDetailList = id => http.get(`/webApi/receive/order/detailList/${id}`)
 /** 根据条件查询库位 */
 export const warehouseSpaceList = params => http.get(`/webApi/basic/warehouseSpace/list`, { params })
-/** 根据入库单号查询详情列表 */
-export const inOrderSelectDetailList = id => http.get(`/webApi/in/order/selectDetailList/${id}`)
 /** 查询拣货单列表 */
 export const pickOrderList = params => http.get(`/webApi/pick/order/list`, { params })
 /** 查询出库暂存列表 */
@@ -224,3 +222,7 @@ export const correctionQueryStockList = params => http.get(`/webApi/stock/correc
 export const addStockCorrection = params => http.post(`/webApi/stock/correction/addStockCorrection`, params)
 /** 入库计划单完结 */
 export const planInEnd = params => http.get(`/webApi/plan/in/end`, { params })
+/** 查询入库单详情 */
+export const queryInOrderDetail = params => http.get(`/webApi/in/order/queryInOrderDetail`, { params })
+/** 手动推送入库单 */
+export const pushInOrder = params => http.get(`/webApi/in/order/pushInOrder`, { params })
