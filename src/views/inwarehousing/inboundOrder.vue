@@ -25,6 +25,7 @@ import { inOrderList } from '@/api'
 
 const tableConfig = [
   { label: '计划单号', prop: 'planCode', width: 140 },
+  { label: '外部订单号', prop: 'busiBillNo' },
   { label: '入库单号', prop: 'orderCode', width: 140 },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '入库日期', prop: 'gmtCreate', type: 'time', width: 140 },
