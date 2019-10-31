@@ -4,23 +4,16 @@
     v-loading="planOutDetailLoading"
   >
     <div>
-      <el-card shadow="never">
-        <div slot="header">
-          基本信息
-        </div>
+      <div>
+        <item-title text="基本信息"></item-title>
         <detail-item
           :config="detailItemConfig"
           :detail="detail"
           :labelWidth="100"
         />
-      </el-card>
-      <el-card
-        shadow="never"
-        class="mt20"
-      >
-        <div slot="header">
-          商品明细
-        </div>
+      </div>
+      <div class="mt25">
+        <item-title text="商品明细"></item-title>
         <base-table
           :highlightCurrentRow="true"
           @currentChange="currentChange"
@@ -36,42 +29,35 @@
             >选择</el-link>
           </template>
         </base-table>
-      </el-card>
-      <el-card
-        shadow="never"
-        class="mt20"
-      >
-        <div slot="header">
-          {{productNow ? `${productNow.skuName} - 拣货任务明细 (点击商品行切换)`  : '拣货任务明细' }}
+      </div>
+      <div class="mt25">
+        <item-title :text="productNow ? `${productNow.skuName} - 拣货任务明细 (点击商品行切换)`  : '拣货任务明细'"></item-title>
+        <div v-if="productNow">
+          <base-table
+            :config="planTableConfig"
+            :data="productNow._child"
+            :showControl="true"
+            :select="false"
+          >
+            <template slot-scope="scope">
+              <el-link
+                type="primary"
+                @click="delRow(scope.row, scope.index)"
+              >删除</el-link>
+            </template>
+          </base-table>
         </div>
-        <template>
-          <div v-if="productNow">
-            <base-table
-              :config="planTableConfig"
-              :data="productNow._child"
-              :showControl="true"
-              :select="false"
-            >
-              <template slot-scope="scope">
-                <el-link
-                  type="primary"
-                  @click="delRow(scope.row, scope.index)"
-                >删除</el-link>
-              </template>
-            </base-table>
-          </div>
-          <div v-else>
-            <el-alert
-              class="mt15"
-              title="点击商品行进行展示或切换！"
-              type="info"
-              :closable="false"
-            >
-            </el-alert>
-          </div>
-        </template>
-      </el-card>
-      <div class="mt20">
+        <div v-else>
+          <el-alert
+            class="mt15"
+            title="点击商品行进行展示或切换！"
+            type="info"
+            :closable="false"
+          >
+          </el-alert>
+        </div>
+      </div>
+      <div class="mt25">
         <el-button @click="close()">取 消</el-button>
         <el-button
           type="primary"
