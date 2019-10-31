@@ -45,7 +45,6 @@ const user = {
       }
     },
     SET_TODOLIST: (state, todolist) => {
-      sessionStorage.setItem('todolist', todolist)
       state.todolist = todolist
     },
   },

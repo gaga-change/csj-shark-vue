@@ -65,8 +65,7 @@ export default {
     totallist() {
       todolist().then(res => {
         if (res) {
-          this.$store.dispatch('setTodolist', JSON.stringify(res.data))
-          window.location.reload()
+          this.$store.dispatch('setTodolist', res.data)
         }
       })
     },
@@ -77,8 +76,8 @@ export default {
       }).then(res => {
         if (res) {
           this.showWarehouse = false;
-          this.totallist()
           this.$store.dispatch('SetWarehouse', value.warehouseNo)
+          this.totallist()
         }
       })
     },

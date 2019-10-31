@@ -153,6 +153,9 @@ export default {
     }
     this.preWarehouse = this.chooseWarehouse
     this.warehouse = this.chooseWarehouse || sessionStorage.getItem('warehouse')
+    if (this.warehouse) {
+      this.totallist()
+    }
   },
   methods: {
     handleCommand(command) {
@@ -162,8 +165,7 @@ export default {
     totallist() {
       todolist().then(res => {
         if (res && res.data) {
-          this.$store.dispatch('setTodolist', JSON.stringify(res.data))
-          window.location.reload()
+          this.$store.dispatch('setTodolist', res.data)
         }
       })
     },

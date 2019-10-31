@@ -105,22 +105,22 @@
       <h4 class="textTitle"><i>我的待办</i></h4>
       <el-row class="tododetail">
         <el-col>
-          <span><i>待收货:<u>{{receive}}</u>/条</i></span>
+          <span><i>待收货:<u>{{todolist.receive || 0}}</u>/条</i></span>
         </el-col>
       </el-row>
       <el-row class="tododetail">
         <el-col>
-          <span class="onsale"><i>待上架:<u>{{put}}</u>/条</i></span>
+          <span class="onsale"><i>待上架:<u>{{todolist.put || 0}}</u>/条</i></span>
         </el-col>
       </el-row>
       <el-row class="tododetail">
         <el-col>
-          <span class="picking"><i>待捡货:<u>{{sort}}</u>/条</i></span>
+          <span class="picking"><i>待捡货:<u>{{todolist.sort || 0}}</u>/条</i></span>
         </el-col>
       </el-row>
       <el-row class="tododetail">
         <el-col>
-          <span class="confirm"><i>待复核:<u>{{review}}</u>/条</i></span>
+          <span class="confirm"><i>待复核:<u>{{todolist.review}}</u>/条</i></span>
         </el-col>
       </el-row>
     </div>
@@ -138,7 +138,6 @@ import outpath from '@/assets/images/outwarehousing.png'
 import assignmentpath from '@/assets/images/assignment.png'
 import pickpath from '@/assets/images/pickingtask.png'
 import confirmpath from '@/assets/images/confirm.png'
-import { todolist } from '@/api'
 
 let count = 0
 export default {
@@ -154,28 +153,16 @@ export default {
       assignmentpath,
       pickpath,
       confirmpath,
-      receive: 0,
-      put: 0,
-      sort: 0,
-      review: 0
     }
   },
   computed: {
     ...mapGetters([
       'totalmenu',
+      'todolist',
     ])
   },
-  created() {
-    this.totallist()
-  },
   methods: {
-    totallist() {
-      let totallist = sessionStorage.getItem('todolist') ? JSON.parse(sessionStorage.getItem('todolist')) : null
-      this.receive = totallist ? totallist.receive : 0
-      this.put = totallist ? totallist.put : 0
-      this.sort = totallist ? totallist.sort : 0
-      this.review = totallist ? totallist.review : 0
-    }
+
   }
 }
 
