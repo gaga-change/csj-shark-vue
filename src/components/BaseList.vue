@@ -8,6 +8,7 @@
         :config="searchConfig"
         @search="handleSearch"
         :labelWidth="labelWidth"
+        :btnInline="btnInline"
       >
       </search-form>
     </div>
@@ -119,6 +120,11 @@ export default {
       type: Function,
       default: () => true
     },
+    /** 搜索按钮 是否和输入框在同一行 */
+    btnInline: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     let initSearchParams = {}

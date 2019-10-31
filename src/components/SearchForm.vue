@@ -99,26 +99,22 @@
             ></el-input>
           </template>
         </el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-form-item label-width="0">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="hanldeSubmit"
-                :disabled="resetLoading"
-                :loading="submitLoading"
-              >查询</el-button>
-              <el-button
-                size="mini"
-                type="primary"
-                @click="hanldeResetForm"
-                :disabled="submitLoading"
-                :loading="resetLoading"
-              >重置</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item :style="btnInline ? '' : 'display: block'">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="hanldeSubmit"
+            :disabled="resetLoading"
+            :loading="submitLoading"
+          >查询</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            @click="hanldeResetForm"
+            :disabled="submitLoading"
+            :loading="resetLoading"
+          >重置</el-button>
+        </el-form-item>
       </el-form>
     </el-card>
   </div>
@@ -136,6 +132,11 @@ export default {
     labelWidth: {
       type: Number,
       default: 80
+    },
+    /** 搜索按钮 是否和输入框在同一行 */
+    btnInline: {
+      type: Boolean,
+      default: false,
     }
   },
   computed: {

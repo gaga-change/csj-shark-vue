@@ -17,7 +17,9 @@ export default {
 .el-card__body {
   padding: 10px;
 }
-
+.el-dialog__body {
+  padding: 15px 20px;
+}
 .el-button {
   font-size: 12px;
 }

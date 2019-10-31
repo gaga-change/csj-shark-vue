@@ -17,6 +17,7 @@
           :api="listApi"
           :parseData="parseData"
           :showControl="false"
+          :btnInline="true"
         >
         </base-list>
       </div>
