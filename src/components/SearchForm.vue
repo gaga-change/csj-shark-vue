@@ -2,7 +2,7 @@
   <div>
     <el-card
       class="simpleCard"
-      shadow="never"
+      shadow="hover"
       body-style="padding:12px"
     >
       <el-form
