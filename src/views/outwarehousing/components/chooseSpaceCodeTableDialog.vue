@@ -19,6 +19,9 @@
           :showControl="false"
           :btnInline="true"
         >
+          <template slot="btns">
+            <div class="text-right mr20">应出库数量：{{showNum}}</div>
+          </template>
         </base-list>
       </div>
       <!-- <el-alert
@@ -79,6 +82,16 @@ export default {
     /** 防止父级传递 null */
     rowData() {
       return this.row || {}
+    },
+    /** 应出库数量 */
+    showNum() {
+      if (this.row) {
+        let planOutQty = Number(this.row.planOutQty) || 0
+        let sortQty = Number(this.row.sortQty) || 0
+        return planOutQty - sortQty
+      } else {
+        return 0
+      }
     }
   },
   watch: {
