@@ -183,6 +183,7 @@ export default {
       }
       data.forEach((v, index) => {
         v._childData = []
+        v._loaded = false
         v._childLoading = false
         v._key = Date.now() + '-' + index
       })
@@ -225,16 +226,15 @@ export default {
     },
     /** 子列表展开 */
     hanldeExpandChange(row) {
+      if (row._loaded) {
+        return
+      }
       row._childLoading = true
+      row._loaded = true
       return this.childApi(row).then(data => {
         row._childLoading = false
         row._childData = data || []
       })
-      // childApi({ orderCode: row.orderCode }).then(res => {
-      //   row._childLoading = false
-      //   if (!res || !res.data || !res.data[0]) return
-      //   row._childData = res.data[0].queryOutWarehouseOrderDetailVOSList || []
-      // })
     },
   }
 }
