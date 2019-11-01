@@ -30,6 +30,7 @@
         :select="select"
         @selectionChange="selectionChange"
         @expandChange="row => $emit('expandChange', row)"
+        @updateList="() => $emit('updateList')"
         :selectable="selectable"
         :expand="expand"
       >
@@ -156,6 +157,10 @@ export default {
     }
   },
   methods: {
+    /** 展开或收拢 所有子表 */
+    toggleRowExpansionAll(...args) {
+      this.$refs['baseTable'].toggleRowExpansionAll(...args)
+    },
     /** 清除选中 */
     clearSelection() {
       this.$refs['baseTable'].clearSelection()

@@ -378,6 +378,12 @@ export default {
     this.tableConfig = tableConfig;
   },
   methods: {
+    /** 展开或收拢 所有子表 */
+    toggleRowExpansionAll(expanded) {
+      this.data.forEach(item => {
+        this.$refs['table'].toggleRowExpansion(item, expanded)
+      })
+    },
     /** 清除选中 */
     clearSelection() {
       this.$refs.table.clearSelection()
@@ -410,6 +416,7 @@ export default {
           total = res.data.total
         }
         this.$emit('update:data', data)
+        this.$emit('updateList')
         this.selfTotal = total
       })
     },

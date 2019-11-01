@@ -13,6 +13,7 @@
       :childTableConfig="childTableConfig"
       :selectTables="true"
       :childSelectable="childSelectable"
+      @updateList="toggleRowExpansion=false"
     >
       <template slot-scope="scope">
         <el-link
@@ -22,6 +23,7 @@
         >完结</el-link>
       </template>
       <template slot="btns">
+        <el-button @click="handleToggleRowExpansion">{{toggleRowExpansion ? '收起': '展开'}}所有计划单</el-button>
         <operation-button
           v-if="false"
           :childSelectRows="childSelectRows"
@@ -88,9 +90,15 @@ export default {
       childTableConfig,
       listApi: getInfoPlanOutWarehousing,
       childSelectRows: [],
+      toggleRowExpansion: false,
     }
   },
   methods: {
+    // 展开或收起 点击事件
+    handleToggleRowExpansion() {
+      this.toggleRowExpansion = !this.toggleRowExpansion
+      this.$refs['doubleList'].toggleRowExpansionAll(this.toggleRowExpansion)
+    },
     /** 完结 按钮点击事件 */
     handleClose(row) {
       this.$apiConfirm('确认完结该计划单', () => panOutEnd({ planId: row.id })).then(res => {

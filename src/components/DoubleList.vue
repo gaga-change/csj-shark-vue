@@ -16,6 +16,7 @@
       :parseData="middleParseData"
       :select="select"
       @selectionChange="(rows) => $emit('selectionChange', rows)"
+      @updateList="() => $emit('updateList')"
       :selectable="selectable"
     >
       <template slot-scope="scope">
@@ -162,6 +163,10 @@ export default {
     /** 刷新列表 */
     fetchData() {
       this.$refs['baseList'].fetchData()
+    },
+    /** 展开或收拢 所有子表 */
+    toggleRowExpansionAll(...args) {
+      this.$refs['baseList'].toggleRowExpansionAll(...args)
     },
     /** 返回列表添加字段 */
     middleParseData(res) {

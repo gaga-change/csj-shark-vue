@@ -10,6 +10,7 @@
       @childSelectionChange="childSelectionChange"
       :childApi="childApi"
       :childTableConfig="childTableConfig"
+      @updateList="toggleRowExpansion=false"
     >
       <template slot-scope="scope">
         <el-link
@@ -19,6 +20,7 @@
         <el-divider direction="vertical"></el-divider>
       </template>
       <template slot="btns">
+        <el-button @click="handleToggleRowExpansion">{{toggleRowExpansion ? '收起': '展开'}}所有计划单</el-button>
         <el-button type="primary">添加</el-button>
       </template>
     </double-list>
@@ -66,9 +68,15 @@ export default {
       listApi: getInfoOutWarehousing,
       childSelectRows: [],
       mainRow: {},
+      toggleRowExpansion: false,
     }
   },
   methods: {
+    // 展开或收起 点击事件
+    handleToggleRowExpansion() {
+      this.toggleRowExpansion = !this.toggleRowExpansion
+      this.$refs['doubleList'].toggleRowExpansionAll(this.toggleRowExpansion)
+    },
     /** 子表内容获取 */
     childApi(row) {
       return getInfoDetailOutWarehousing({ orderCode: row.orderCode }).then(res => {
