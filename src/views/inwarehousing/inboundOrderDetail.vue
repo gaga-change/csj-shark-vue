@@ -87,6 +87,7 @@ const detailItemDosConfig = [
   { label: '上架数量', prop: 'jobQty' },
   { label: '上架库位', prop: 'warehouseSpaceCode' },
   { label: '容器', prop: 'trayCode' },
+  { label: '上架时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 
 export default {
