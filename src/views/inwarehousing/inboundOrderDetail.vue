@@ -111,7 +111,7 @@ export default {
     /** 手动推送点击事件 */
     handleTryPush() {
       this.$apiConfirm('是否确定要进行手动推送？', () => pushInOrder({
-        id: this.$router.id
+        id: this.$route.query.id
       })).then(res => {
         if (!res) return
         this.$message.success('操作成功！')
