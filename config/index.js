@@ -13,6 +13,7 @@ const path = require('path')
 // let ip = 'http://172.16.81.26:8787';//苗
 // let ip = 'http://192.168.2.126:8787';// 雷亚峰
 let ip = 'http://192.168.1.37:8787'; // 测试环境。  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
+// let ip = 'http://192.168.1.204:8787'; // 正式环境  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
 
 const proxyTableArr = ['/csj_login', '/csj_logout', '/webApi', '/api', '/app']
 let proxyTable = {}
@@ -42,7 +43,8 @@ module.exports = {
     proxyTable: proxyTable,
 
     // Various Dev Server settings
-    host: 'testshark.csjmro.com', // can be overwritten by process.env.HOST
+    host: 'testshark.csjmro.com', // 测试环境 调试
+    // host: 'shark.csjmro.com', // 正式环境 调试
     port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
