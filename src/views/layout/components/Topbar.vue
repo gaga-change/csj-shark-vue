@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div class="top-container">
     <div class="logo">
       <img :src="logoPath" />
@@ -6,39 +6,71 @@
     <div class="plant-text">
       供应链云仓库管理系统WMS{{development ? '【开发环境】': ''}}
     </div>
-     <el-dropdown class="avatar-container warehouse" @command="handleCommand">
+    <ul class="top-nav">
+      <li>
+        <a
+          :href="dataUrl"
+          @click="dataRoute"
+          target="_blank"
+        >报表</a>
+      </li>
+    </ul>
+    <el-dropdown
+      class="avatar-container warehouse"
+      @command="handleCommand"
+    >
       <div class="avatar-wrapper">
         <span class="welcome">
-            {{warehouseName}}<i class="el-icon-caret-bottom"></i>
-          </span>
+          {{warehouseName}}<i class="el-icon-caret-bottom"></i>
+        </span>
       </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
-            <el-dropdown-item :command="item.warehouseNo" divided
-              v-for="item in warehouseMap" :disabled="warehouse==item.warehouseNo"
-              :key="item.warehouseNo"
-            >
-              {{item.warehouseName}}
-            </el-dropdown-item>
-         
+      <el-dropdown-menu
+        class="user-dropdown"
+        slot="dropdown"
+      >
+        <el-dropdown-item
+          :command="item.warehouseNo"
+          divided
+          v-for="item in warehouseMap"
+          :disabled="warehouse==item.warehouseNo"
+          :key="item.warehouseNo"
+        >
+          {{item.warehouseName}}
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <el-dropdown class="avatar-container" trigger="click">
+    <el-dropdown
+      class="avatar-container"
+      trigger="click"
+    >
       <div class="avatar-wrapper">
         <span class="welcome">欢迎，{{userInfo.truename}}</span>
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <router-link class="inlineBlock" to="/">
+      <el-dropdown-menu
+        class="user-dropdown"
+        slot="dropdown"
+      >
+        <router-link
+          class="inlineBlock"
+          to="/"
+        >
           <el-dropdown-item>
             主页
           </el-dropdown-item>
         </router-link>
 
         <el-dropdown-item divided>
-          <span @click="modifyPasswordShow = true" style="display:block;">修改密码</span>
+          <span
+            @click="modifyPasswordShow = true"
+            style="display:block;"
+          >修改密码</span>
         </el-dropdown-item>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">退出登录</span>
+          <span
+            @click="logout"
+            style="display:block;"
+          >退出登录</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -47,21 +79,63 @@
       :visible.sync="modifyPasswordShow"
       append-to-body
       center
-      width="450px">
-      <el-form :model="form" :rules="formrule" ref="ruleForm2">
-        <el-form-item label="原密码" label-width="120px" prop="oldpassword">
-          <el-input type="password" v-model="form.oldpassword" auto-complete="off" style="width:180px"></el-input>
+      width="450px"
+    >
+      <el-form
+        :model="form"
+        :rules="formrule"
+        ref="ruleForm2"
+      >
+        <el-form-item
+          label="原密码"
+          label-width="120px"
+          prop="oldpassword"
+        >
+          <el-input
+            type="password"
+            v-model="form.oldpassword"
+            auto-complete="off"
+            style="width:180px"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="新密码" label-width="120px" prop="newpassword">
-          <el-input type="password" v-model="form.newpassword" auto-complete="off" style="width:180px"></el-input>
+        <el-form-item
+          label="新密码"
+          label-width="120px"
+          prop="newpassword"
+        >
+          <el-input
+            type="password"
+            v-model="form.newpassword"
+            auto-complete="off"
+            style="width:180px"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="原密码" label-width="120px" prop="renewpassword">
-          <el-input type="password" v-model="form.renewpassword" auto-complete="off" style="width:180px"></el-input>
+        <el-form-item
+          label="原密码"
+          label-width="120px"
+          prop="renewpassword"
+        >
+          <el-input
+            type="password"
+            v-model="form.renewpassword"
+            auto-complete="off"
+            style="width:180px"
+          ></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="modifyPasswordShow = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="modifyPassword">确 定</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          size="mini"
+          @click="modifyPasswordShow = false"
+        >取 消</el-button>
+        <el-button
+          size="mini"
+          type="primary"
+          @click="modifyPassword"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -98,6 +172,7 @@ export default {
       }
     }
     return {
+      dataUrl: null,
       development: false,
       logoPath,
       TiggerUrl,
@@ -157,7 +232,29 @@ export default {
       this.totallist()
     }
   },
+  mounted() {
+    const that = this
+    var script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.id = 'otherdatascript'
+    script.src = `http://bi.csjmro.com/WebReport/ReportServer?op=fs_load&cmd=sso&fr_username=${this.userInfo.email}&fr_password=${this.userInfo.password}&validity=-1&callback=fwie`
+    document.body.appendChild(script)
+    window.fwie = function (data) {
+      if (data.url) {
+        that.dataUrl = data.url
+      }
+      // 成功后删除script及回调方法
+      const script = document.getElementById('otherdatascript')
+      document.body.removeChild(script)
+      delete window['fwie']
+    }
+  },
   methods: {
+    dataRoute() {
+      if (!this.dataUrl) {
+        this.$message('同步登录BI失败，无法跳转，请刷新页面重试')
+      }
+    },
     handleCommand(command) {
       this.warehouse = command
       this.setWarehouse()
@@ -295,8 +392,8 @@ export default {
   li {
     float: left;
     a {
-      line-height: 65px;
-      height: 65px;
+      line-height: 62px;
+      height: 62px;
       padding: 0 20px;
       color: #b5c6d9;
       font-size: 16px;
@@ -305,6 +402,7 @@ export default {
     }
     a:hover {
       background: #263445;
+      color: #fff;
       padding: 0 25px;
       transition: all 0.3s;
     }
