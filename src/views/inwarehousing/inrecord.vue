@@ -81,7 +81,7 @@ const tableConfig = [
 ]
 const searchConfig = [
   { label: '收货单号', prop: 'orderCode' },
-  { label: '入库计划单', prop: 'planCode' },
+  { label: '入库计划单号', prop: 'planCode' },
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
