@@ -9,6 +9,10 @@
       @close="close"
     >
       <div ref="print">
+        <h2
+          v-if="printTitle"
+          class="text-center"
+        >{{printTitle}}</h2>
         <div class="mb15">
           <span
             v-for="(item, index) in topConfig"
@@ -44,8 +48,10 @@
             </tr>
           </table>
         </div>
+        <div class="mt25">
+          <slot></slot>
+        </div>
       </div>
-
       <span
         slot="footer"
         class="dialog-footer"
@@ -71,6 +77,10 @@ export default {
     title: {
       type: String,
       default: '打印'
+    },
+    printTitle: {
+      type: String,
+      default: ''
     },
     visible: {
       type: Boolean,

@@ -9,12 +9,21 @@
     </el-button>
     <print-table-dialog
       :visible.sync="printTableDialogVisible"
+      printTitle="出库明细"
       title="打印出库明细"
       :topConfig="printTopConfig"
       :tableConfig="printTableConfig"
       :detail="detail"
       :tableData="childData"
-    ></print-table-dialog>
+    >
+      <div style="display:flex">
+        <div> <span>出库人：___________</span> </div>
+        <div
+          class="text-right"
+          style="flex: 1"
+        > <span>签收人：___________</span> </div>
+      </div>
+    </print-table-dialog>
   </div>
 </template>
 <script>
