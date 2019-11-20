@@ -226,3 +226,7 @@ export const planInEnd = params => http.get(`/webApi/plan/in/end`, { params })
 export const queryInOrderDetail = params => http.get(`/webApi/in/order/queryInOrderDetail`, { params })
 /** 手动推送入库单 */
 export const pushInOrder = params => http.get(`/webApi/in/order/pushInOrder`, { params })
+/** 批次列表查询 */
+export const lotList = params => http.get(`/webApi/basic/lot/list`, { params })
+/** 批次状态修改 */
+export const lotUpdateStatus = (id, params) => http.get(`/webApi/basic/lot/updateStatus/${id}`, { params })

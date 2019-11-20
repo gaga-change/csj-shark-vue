@@ -11,9 +11,18 @@
       <template slot-scope="scope">
         <el-link
           type="primary"
-          @click="$router.push({path:`/qualityTesting/detail`,query:{id: scope.row.id}})"
-        >详情</el-link>
+          @click="$router.push({path:`/businessRule/batchForm`,query:{id: scope.row.id}})"
+        >查看</el-link>
         <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="handleChangeStatus(scope.row.id)"
+        >{{scope.row.status === 0 ? '禁用' : '启用'}}</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/baseInfo/productList`,query:{lotId: scope.row.id}})"
+        >关联商品</el-link>
       </template>
       <template slot="btns">
         <el-button
@@ -21,7 +30,7 @@
           size="mini"
           @click="handleCreate"
         >
-          新建质检记录
+          新增
         </el-button>
       </template>
     </base-list>
@@ -29,30 +38,37 @@
 </template>
 
 <script>
-import { checkOrderList } from '@/api'
+import { lotList, lotUpdateStatus } from '@/api'
 const tableConfig = [
-  { label: '质检单号 ', prop: 'orderCode', width: 140 },
-  { label: '收货单号 ', prop: 'receiveOrderCode', width: 140 },
+  { label: '批次描述', prop: 'lotName' },
+  { label: '状态', prop: 'lotStatus', type: 'enum', enum: 'lotStatusEnum' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
-  { label: '是否虚拟区', prop: 'isVirtual', type: 'enum', enum: 'yesOrNoEnum' },
 ]
 const searchConfig = [
-  { label: '质检单号', prop: 'orderCode' },
-  { label: '创建时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
-  { label: '库区性质', prop: 'warehouseAreaNature', type: 'enum', enum: 'warehouseAreaNatureEnum' },
+  { label: '批次描述', prop: 'createrName' },
 ]
 export default {
   data() {
     return {
       tableConfig,
       searchConfig,
-      listApi: checkOrderList,
+      listApi: lotList,
       // 可选 附加查询条件
       appendSearchParams: {},
     }
   },
   methods: {
+    /** 更改状态 */
+    handleChangeStatus(row) {
+      this.$apiConfirm(`此操作将${row.status === 0 ? '禁用' : '启用'}该批次，是否继续`, () => inventoryRemoveOrStop(row.id, {
+        status: row.status === 0 ? 1 : 0
+      })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.getTableData()
+      })
+    },
     /** 刷新列表 */
     getTableData() {
       this.$refs['baseList'].fetchData()
