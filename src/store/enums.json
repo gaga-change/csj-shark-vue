@@ -86,6 +86,20 @@
     ]
   },
   {
+    "name": "noRrYesEnum",
+    "_id": "5d6f823e55c8dc2f0026da19",
+    "keyValue": [
+      {
+        "name": "是",
+        "value": 0
+      },
+      {
+        "name": "否",
+        "value": 1
+      }
+    ]
+  },
+  {
     "name": "isPushStateEnum",
     "_id": "5d6f823e55c8dc2f0026da24",
     "keyValue": [
@@ -563,6 +577,40 @@
       },
       {
         "name": "禁用",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "lotAttrTypeEnum",
+    "keyValue": [
+      {
+        "name": "文本",
+        "value": 1
+      },
+      {
+        "name": "数字",
+        "value": 2
+      },
+      {
+        "name": "下拉框",
+        "value": 3
+      },
+      {
+        "name": "日期",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "name": "inputTypeEnum",
+    "keyValue": [
+      {
+        "name": "可选",
+        "value": 0
+      },
+      {
+        "name": "必输",
         "value": 1
       }
     ]
