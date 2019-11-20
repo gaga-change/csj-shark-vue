@@ -366,6 +366,20 @@ export default [
         component: _import('businessRule/batchList'),
         hidden: false,
       },
+      {
+        name: 'batchForm',
+        path: 'batchForm',
+        meta: { title: '批次创建', noCache: true },
+        component: _import('businessRule/batchForm'),
+        hidden: false,
+      },
+      {
+        name: 'batchDetail',
+        path: 'batchDetail',
+        meta: { title: '批次详情', noCache: true },
+        component: _import('businessRule/batchDetail'),
+        hidden: false,
+      },
     ]
   },
   // {

@@ -11,7 +11,7 @@
       <template slot-scope="scope">
         <el-link
           type="primary"
-          @click="$router.push({path:`/businessRule/batchForm`,query:{id: scope.row.id}})"
+          @click="$router.push({path:`/businessRule/batchDetail`,query:{id: scope.row.id}})"
         >查看</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link
@@ -85,7 +85,7 @@ export default {
     },
     /** 新建 */
     handleCreate() {
-      this.$router.push({ path: '/qualityTesting/create' })
+      this.$router.push({ path: '/businessRule/batchForm' })
     }
   }
 }
