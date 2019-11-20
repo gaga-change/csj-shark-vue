@@ -352,6 +352,22 @@ export default [
       },
     ]
   },
+  {
+    path: '/businessRule',
+    component: Layout,
+    redirect: 'batchList',
+    meta: { title: '业务规则', noCache: true, icon: 'info' },
+    hidden: false,
+    children: [
+      {
+        name: 'batchList',
+        path: 'batchList',
+        meta: { title: '批次管理', noCache: true },
+        component: _import('businessRule/batchList'),
+        hidden: false,
+      },
+    ]
+  },
   // {
   //   path: '/configManage',
   //   component: Layout,
