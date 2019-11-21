@@ -279,7 +279,7 @@ export default {
       addLotLoading: false,
       dynamicValidateForm: {
         propItems: [{
-          lotAttrName: undefined,
+          lotAttrName: '',
           lotAttrType: 1,
           status: 1,
           dataSource: 1,
@@ -298,6 +298,7 @@ export default {
   computed: {
     ...mapGetters([
       'mapConfig',
+      'visitedViews'
     ])
   },
   created() {
@@ -327,7 +328,7 @@ export default {
       }
     },
     submitForm(formName) {
-      const _ = num => num > 9 ? num : '0' + num
+      const view = this.visitedViews.filter(v => v.path === this.$route.path)
       this.$refs[formName].validate((valid) => {
         if (!valid) return
         let data = cloneDeep(this.dynamicValidateForm)
@@ -342,10 +343,9 @@ export default {
           return {
             ...omit(v, ['length', 'min', 'max', 'precision', 'enum', 'format']),
             lotAttrValue: JSON.stringify(temp),
-            lotAttrCode: 'lotAttr' + _(index + 1)
+            lotAttrCode: 'lotAttrCode' + (index + 1)
           }
         })
-        console.log(cloneDeep(params))
         this.addLotLoading = true
         addLot(params).then(res => {
           if (!res) {
