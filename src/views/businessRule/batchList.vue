@@ -41,7 +41,7 @@
 import { lotList, lotUpdateStatus } from '@/api'
 const tableConfig = [
   { label: '批次描述', prop: 'lotName' },
-  { label: '状态', prop: 'lotStatus', type: 'enum', enum: 'lotStatusEnum' },
+  { label: '状态', prop: 'status', type: 'enum', enum: 'lotStatusEnum' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
