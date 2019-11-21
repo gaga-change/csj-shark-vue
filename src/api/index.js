@@ -232,3 +232,5 @@ export const lotList = params => http.post(`/webApi/basic/lot/list`, params)
 export const lotUpdateStatus = (id, params) => http.get(`/webApi/basic/lot/updateStatus/${id}`, { params })
 /** 批次新增 */
 export const addLot = params => http.post(`/webApi/basic/lot/addLot`, params)
+/** 批次详情 */
+export const lotDetail = id => http.get(`/webApi/basic/lot/detail/${id}`)

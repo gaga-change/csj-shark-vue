@@ -94,6 +94,14 @@
               >
               </el-option>
             </el-select>
+            <el-switch
+              v-if="item.inputType==='switch'"
+              v-model="scope.row[item.prop]"
+              :active-value='item.activeValue'
+              :inactive-value='item.inactiveValue'
+              :disabled='item.disabled'
+            >
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column

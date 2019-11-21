@@ -17,6 +17,7 @@
         <el-input
           style="width:200px"
           placeholder="请输入批次描述"
+          maxlength="30"
           v-model="dynamicValidateForm.lotName"
         ></el-input>
       </el-form-item>
@@ -62,7 +63,7 @@
                 :disabled="index < 2"
                 v-model="item.lotAttrType"
                 placeholder="请选择输入类型"
-                style="width:90px"
+                style="width:110px"
               >
                 <el-option
                   v-for="item in mapConfig.lotAttrTypeEnum || []"
@@ -148,7 +149,7 @@
                 <el-input
                   style="width:200px;"
                   v-model="item.enum"
-                  maxlength="20"
+                  maxlength="200"
                   placeholder="例如：值1、值2"
                 ></el-input>
               </el-form-item>
@@ -163,7 +164,7 @@
                   placeholder="请选择日期格式"
                 >
                   <el-option
-                    v-for="item in ['yyyy', 'yyyy-MM', 'yyyy-MM-dd']"
+                    v-for="item in ['YYYY', 'YYYY-MM', 'YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss']"
                     :key="item"
                     :label="item"
                     :value="item"
@@ -227,18 +228,14 @@
           </td>
         </tr>
       </table>
-      <!-- <el-form-item
-        v-for="(domain, index) in dynamicValidateForm.domains"
-        :label="'域名' + index"
-        :key="domain.key"
-        :prop="'domains.' + index + '.value'"
-        :rules="{
-      required: true, message: '域名不能为空', trigger: 'blur'
-    }"
+      <el-alert
+        class="mt15"
+        title="温馨提示："
+        type="info"
+        :closable="false"
       >
-        <el-input v-model="domain.value"></el-input>
-        <el-button @click.prevent="removeDomain(domain)">删除</el-button>
-      </el-form-item> -->
+        <p>1. 需收货节点人工补录的信息系统采集选否</p>
+      </el-alert>
       <div class="mt20">
         <el-form-item>
           <el-button
@@ -272,7 +269,6 @@ import { mapGetters } from 'vuex'
 //       "remark": "string //备注"
 import { cloneDeep, omit, pick } from 'lodash';
 import { addLot } from '@/api'
-
 export default {
   data() {
     return {
@@ -289,7 +285,7 @@ export default {
           max: 99999999, // 最大值
           precision: 0, // 精度
           enum: undefined, // 枚举值
-          format: 'yyyy-MM-dd', // 日期格式
+          format: 'YYYY-MM-DD', // 日期格式
         }],
         lotName: undefined
       }
@@ -335,7 +331,9 @@ export default {
         let params = {
           lotName: data.lotName
         }
+        let useNum = 0
         params.lotDetailReqList = data.propItems.map((v, index) => {
+          if (v.status === 0) useNum++
           let temp = pick(v, ['length', 'min', 'max', 'precision', 'enum', 'format'])
           if (temp.enum) {
             temp.enum = temp.enum.split('、')
@@ -346,6 +344,9 @@ export default {
             lotAttrCode: 'lotAttrCode' + (index + 1)
           }
         })
+        if (!useNum) {
+          return this.$message.error('至少一个启用的批次属性')
+        }
         this.addLotLoading = true
         addLot(params).then(res => {
           if (!res) {

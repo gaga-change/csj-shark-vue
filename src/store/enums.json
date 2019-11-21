@@ -585,11 +585,11 @@
     "name": "lotAttrTypeEnum",
     "keyValue": [
       {
-        "name": "文本",
+        "name": "字符文本框",
         "value": 1
       },
       {
-        "name": "数字",
+        "name": "数字文本框",
         "value": 2
       },
       {
