@@ -46,7 +46,7 @@ const tableConfig = [
   { label: '创建时间', prop: 'gmtCreate', type: 'time', width: 140 },
 ]
 const searchConfig = [
-  { label: '批次描述', prop: 'createrName' },
+  { label: '批次描述', prop: 'lotName' },
 ]
 export default {
   data() {
