@@ -8,15 +8,16 @@
       :inline="true"
     >
       <el-form-item
-        prop="email"
+        prop="lotName"
         label="批次描述"
         :rules="[
-      { required: true, message: '请输入批次描述', trigger: 'blur' },
+      { required: true, message: '请输入批次描述', trigger: ['blur', 'change'] },
     ]"
       >
         <el-input
           style="width:200px"
-          v-model="dynamicValidateForm.email"
+          placeholder="请输入批次描述"
+          v-model="dynamicValidateForm.lotName"
         ></el-input>
       </el-form-item>
       <table class="input-table">
@@ -37,12 +38,17 @@
           <td>
             <el-form-item
               label=""
+              :class="{error:  item.status === 0}"
               :prop="'propItems.' + index + '.lotAttrName'"
+              :rules="[
+      { required: item.status === 0, message: '已启用，请输入批次属性', trigger: ['blur', 'change']  },
+    ]"
             >
               <el-input
                 style="width:200px;"
                 v-model="item.lotAttrName"
                 maxlength="20"
+                :disabled="index < 2"
                 placeholder="批次属性"
               ></el-input>
             </el-form-item>
@@ -53,8 +59,10 @@
               :prop="'propItems.' + index + '.lotAttrType'"
             >
               <el-select
+                :disabled="index < 2"
                 v-model="item.lotAttrType"
                 placeholder="请选择输入类型"
+                style="width:90px"
               >
                 <el-option
                   v-for="item in mapConfig.lotAttrTypeEnum || []"
@@ -75,8 +83,9 @@
                   placeholder="最大长度"
                   v-model="item.length"
                   :precision="0"
-                  :min="0"
+                  :min="1"
                   :max="999999"
+                  :disabled="index < 2"
                   controls-position="right"
                 ></el-input-number>
               </el-form-item>
@@ -95,6 +104,7 @@
                   :max="999999"
                   controls-position="right"
                   style="width:120px"
+                  :disabled="index < 2"
                 ></el-input-number>
               </el-form-item>
               <el-form-item
@@ -110,6 +120,7 @@
                   :max="999999"
                   controls-position="right"
                   style="width:120px"
+                  :disabled="index < 2"
                 ></el-input-number>
               </el-form-item>
               <el-form-item
@@ -125,6 +136,7 @@
                   :max="5"
                   controls-position="right"
                   style="width:100px"
+                  :disabled="index < 2"
                 ></el-input-number>
               </el-form-item>
             </template>
@@ -149,7 +161,6 @@
                 <el-select
                   v-model="item.format"
                   placeholder="请选择日期格式"
-                  clearable
                 >
                   <el-option
                     v-for="item in ['yyyy', 'yyyy-MM', 'yyyy-MM-dd']"
@@ -170,6 +181,7 @@
                 v-model="item.status"
                 :active-value='0'
                 :inactive-value='1'
+                @change="val => handleStatusChange(val, item, index)"
               >
               </el-switch>
             </el-form-item>
@@ -182,6 +194,8 @@
               <el-select
                 v-model="item.dataSource"
                 placeholder=""
+                :disabled="index < 2"
+                style="width:80px"
               >
                 <el-option
                   v-for="item in mapConfig.noRrYesEnum || []"
@@ -200,6 +214,7 @@
               <el-select
                 v-model="item.inputType"
                 placeholder=""
+                style="width:80px"
               >
                 <el-option
                   v-for="item in mapConfig.inputTypeEnum || []"
@@ -224,14 +239,17 @@
         <el-input v-model="domain.value"></el-input>
         <el-button @click.prevent="removeDomain(domain)">删除</el-button>
       </el-form-item> -->
-      <div>
+      <div class="mt20">
         <el-form-item>
           <el-button
+            :loading="addLotLoading"
             type="primary"
             @click="submitForm('dynamicValidateForm')"
           >提交</el-button>
-          <el-button @click="addDomain">新增域名</el-button>
-          <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
+          <el-button
+            :disabled="addLotLoading"
+            @click="resetForm('dynamicValidateForm')"
+          >重置</el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -252,11 +270,13 @@ import { mapGetters } from 'vuex'
 //       "receiveOrderAttr": "string //关联的收货单中对应的属性，如果data_source\u003d0则该值必输",
 //       "receiveOrderDetailAttr": "string //关关联的收货单中对应的属性，如果data_source\u003d0则该值必输",
 //       "remark": "string //备注"
-import { cloneDeep } from 'lodash';
+import { cloneDeep, omit, pick } from 'lodash';
+import { addLot } from '@/api'
 
 export default {
   data() {
     return {
+      addLotLoading: false,
       dynamicValidateForm: {
         propItems: [{
           lotAttrName: undefined,
@@ -270,9 +290,8 @@ export default {
           precision: 0, // 精度
           enum: undefined, // 枚举值
           format: 'yyyy-MM-dd', // 日期格式
-          key: Date.now()
         }],
-        email: ''
+        lotName: undefined
       }
     };
   },
@@ -284,19 +303,66 @@ export default {
   created() {
     let item = this.dynamicValidateForm.propItems[0]
     this.dynamicValidateForm.propItems = []
-    for (let i = 0; i < 11; i++) {
-      this.dynamicValidateForm.propItems.push(cloneDeep(item))
+    for (let i = 0; i < 12; i++) {
+      let temp = cloneDeep(item)
+      temp.key = Date.now().toString(16) + i
+      if (i === 0) {
+        temp.lotAttrName = '供应商'
+        temp.dataSource = 0
+      }
+      if (i === 1) {
+        temp.lotAttrName = '保质天数'
+        temp.lotAttrType = 2
+      }
+      this.dynamicValidateForm.propItems.push(temp)
     }
   },
   methods: {
+    // 监听状态改变，重新校验 属性名称规则是否必输
+    handleStatusChange(val, item, index) {
+      if (val === 1) { // 不启用，取消必填提示
+        this.$nextTick(() => {
+          this.$refs['dynamicValidateForm'].validateField('propItems.' + index + '.lotAttrName')
+        })
+      }
+    },
     submitForm(formName) {
+      const _ = num => num > 9 ? num : '0' + num
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
+        if (!valid) return
+        let data = cloneDeep(this.dynamicValidateForm)
+        let params = {
+          lotName: data.lotName
         }
+        params.lotDetailReqList = data.propItems.map((v, index) => {
+          let temp = pick(v, ['length', 'min', 'max', 'precision', 'enum', 'format'])
+          if (temp.enum) {
+            temp.enum = temp.enum.split('、')
+          }
+          return {
+            ...omit(v, ['length', 'min', 'max', 'precision', 'enum', 'format']),
+            lotAttrValue: JSON.stringify(temp),
+            lotAttrCode: 'lotAttr' + _(index + 1)
+          }
+        })
+        console.log(cloneDeep(params))
+        this.addLotLoading = true
+        addLot(params).then(res => {
+          if (!res) {
+            this.addLotLoading = false
+            return
+          }
+          this.$message.success('批次创建成功，即将跳转到批次列表！')
+          setTimeout(() => {
+            this.$store.dispatch('delVisitedViews', view[0]).then(() => {
+              this.$router.push({
+                path: `/businessRule/batchList`
+              })
+            }).catch(err => {
+            })
+          }, 3000)
+        })
+
       });
     },
     resetForm(formName) {
@@ -337,6 +403,9 @@ export default {
       text-align: center;
       .el-form-item {
         margin: 0;
+        &.is-error {
+          margin-bottom: 18px;
+        }
       }
     }
     th {

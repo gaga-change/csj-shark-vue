@@ -6,7 +6,7 @@
       :searchConfig="searchConfig"
       :api="listApi"
       :showControl="true"
-      :controlWidth="160"
+      :controlWidth="180"
     >
       <template slot-scope="scope">
         <el-link
@@ -16,7 +16,7 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="handleChangeStatus(scope.row.id)"
+          @click="handleChangeStatus(scope.row)"
         >{{scope.row.status === 0 ? '禁用' : '启用'}}</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link
@@ -61,7 +61,7 @@ export default {
   methods: {
     /** 更改状态 */
     handleChangeStatus(row) {
-      this.$apiConfirm(`此操作将${row.status === 0 ? '禁用' : '启用'}该批次，是否继续`, () => inventoryRemoveOrStop(row.id, {
+      this.$apiConfirm(`此操作将${row.status === 0 ? '禁用' : '启用'}该批次，是否继续`, () => lotUpdateStatus(row.id, {
         status: row.status === 0 ? 1 : 0
       })).then(res => {
         if (!res) return
