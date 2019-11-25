@@ -29,6 +29,7 @@
           <th>属性选项</th>
           <th>启用</th>
           <th>系统采集</th>
+          <th>映射属性</th>
           <th>输入控制</th>
         </tr>
         <tr
@@ -85,7 +86,7 @@
                   v-model="item.length"
                   :precision="0"
                   :min="1"
-                  :max="999999"
+                  :max="50"
                   :disabled="index < 2"
                   controls-position="right"
                 ></el-input-number>
@@ -164,7 +165,7 @@
                   placeholder="请选择日期格式"
                 >
                   <el-option
-                    v-for="item in ['YYYY', 'YYYY-MM', 'YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss']"
+                    v-for="item in formatArr"
                     :key="item"
                     :label="item"
                     :value="item"
@@ -203,6 +204,25 @@
                   :key="item.name"
                   :label="item.name"
                   :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </td>
+          <td>
+            <el-form-item
+              v-show="item.dataSource === 0"
+              label=""
+              :prop="'propItems.' + index + '.receiveOrderAttr'"
+            >
+              <el-select
+                v-model="item.receiveOrderAttr"
+                :disabled="index < 2"
+              >
+                <el-option
+                  v-for="item in mapConfig.receiveOrderAttrEnum || []"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -286,9 +306,12 @@ export default {
           precision: 0, // 精度
           enum: undefined, // 枚举值
           format: 'YYYY-MM-DD', // 日期格式
+          receiveOrderAttr: '', // 映射属性
         }],
         lotName: undefined
-      }
+      },
+      // formatArr: ['YYYY', 'YYYY-MM', 'YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss'],
+      formatArr: ['YYYY', 'YYYY-MM', 'YYYY-MM-DD'],
     };
   },
   computed: {
@@ -306,6 +329,7 @@ export default {
       if (i === 0) {
         temp.lotAttrName = '供应商'
         temp.dataSource = 0
+        temp.receiveOrderAttr = 'providerCode'
       }
       if (i === 1) {
         temp.lotAttrName = '保质天数'

@@ -25,6 +25,7 @@ const tableConfig = [
   // { label: '启用', prop: 'status', type: 'enum', enum: 'lotStatusEnum' },
   { label: '启用', prop: 'status', edit: true, inputType: 'switch', activeValue: 0, inactiveValue: 1, disabled: true },
   { label: '系统采集', prop: 'dataSource', type: 'enum', enum: 'noRrYesEnum' },
+  { label: '映射属性', prop: 'receiveOrderAttr', type: 'enum', enum: 'receiveOrderAttrEnum' },
   { label: '输入控制', prop: 'inputType', type: 'enum', enum: 'inputTypeEnum' },
 ]
 export default {

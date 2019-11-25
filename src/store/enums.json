@@ -614,5 +614,30 @@
         "value": 1
       }
     ]
+  },
+  {
+    "name": "receiveOrderAttrEnum",
+    "keyValue": [
+      {
+        "name": "收货单号",
+        "value": "orderCode"
+      },
+      {
+        "name": "单据类型",
+        "value": "orderType"
+      },
+      {
+        "name": "计划单号",
+        "value": "planCode"
+      },
+      {
+        "name": "外部订单单号",
+        "value": "busiBillNo"
+      },
+      {
+        "name": "供应商",
+        "value": "providerCode"
+      }
+    ]
   }
 ]
