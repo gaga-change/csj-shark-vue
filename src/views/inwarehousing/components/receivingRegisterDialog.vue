@@ -186,7 +186,7 @@ export default {
   },
   data() {
     return {
-      lotDetailLoading: true,
+      lotDetailLoading: false,
       detailItemConfig,
       loading: false,
       formData: {
