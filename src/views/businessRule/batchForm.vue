@@ -361,6 +361,9 @@ export default {
           let temp = pick(v, ['length', 'min', 'max', 'precision', 'enum', 'format'])
           if (temp.enum) {
             temp.enum = temp.enum.split('、')
+            // 去重 去空
+            temp.enum = temp.enum.filter(v => v)
+            temp.enum = [...new Set(temp.enum)]
           }
           return {
             ...omit(v, ['length', 'min', 'max', 'precision', 'enum', 'format']),
