@@ -43,6 +43,7 @@
           <el-form-item label="商品分类">
             {{rowData.lotAttrCode6}}
           </el-form-item>
+          <item-title>包装 <span class="c-red f12">（选填）</span></item-title>
           <el-form-item
             label="关联包装"
             prop="packageCode"
@@ -61,6 +62,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
+          <item-title>质检 <span class="c-red f12">（选填）</span></item-title>
           <el-form-item
             label="质检"
             prop="isLot"
@@ -71,6 +73,25 @@
               inactive-value='否'
             >
             </el-switch>
+          </el-form-item>
+          <item-title>批次规则 <span class="c-red f12">（必填）</span></item-title>
+          <el-form-item
+            label="批次规则"
+            prop="lotId"
+          >
+            <el-select
+              :loading="lotListLoading"
+              v-model="formData.lotId"
+              placeholder="请选择批次规则"
+              no-data-text='??'
+            >
+              <el-option
+                v-for="item in batchList"
+                :key="item.id"
+                :label="item.lotName"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -91,7 +112,7 @@
 
 <script>
 
-import { skuUpdate, packageSelect } from '@/api'
+import { skuUpdate, packageSelect, lotList } from '@/api'
 export default {
   props: {
     visible: {
@@ -122,14 +143,17 @@ export default {
   data() {
     return {
       packageSelectLoading: true,
+      lotListLoading: true,
       loading: false,
       packageList: [],
+      batchList: [],
       formData: {
         lotAttrCode7: undefined, // 是否质检
         packageCode: undefined, // 包装编码
+        lotId: undefined,
       },
       rules: {
-        packageCode: [
+        lotId: [
           { required: true, message: '必填项', trigger: 'blur' }
         ],
       }
@@ -141,8 +165,17 @@ export default {
       if (!res) return
       this.packageList = res.data.list || []
     })
+    this.initBatch()
   },
   methods: {
+    initBatch() {
+      this.lotListLoading = true
+      lotList({ pageSize: 999, status: 0 }).then(res => {
+        this.lotListLoading = false
+        if (!res) return
+        this.batchList = (res.data.list || []).filter(v => v.status === 0)
+      })
+    },
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid) => {

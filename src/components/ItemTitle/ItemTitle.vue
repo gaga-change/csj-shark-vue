@@ -4,7 +4,8 @@
     :style="boxStyle"
   >
     <div class="icon"></div>
-    <div class="text">{{text}}</div>
+    <div class="text">{{text}}<slot></slot>
+    </div>
   </div>
 </template>
 
@@ -14,7 +15,7 @@ export default {
   props: {
     text: {
       type: String,
-      required: true
+      default: ''
     },
     boxStyle: {
       type: String,
