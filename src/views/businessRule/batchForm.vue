@@ -151,7 +151,7 @@
                   style="width:200px;"
                   v-model="item.enum"
                   maxlength="200"
-                  placeholder="例如：值1、值2"
+                  placeholder="例如：值1/值2"
                 ></el-input>
               </el-form-item>
             </template>
@@ -360,7 +360,7 @@ export default {
           if (v.status === 0) useNum++
           let temp = pick(v, ['length', 'min', 'max', 'precision', 'enum', 'format'])
           if (temp.enum) {
-            temp.enum = temp.enum.split('、')
+            temp.enum = temp.enum.split('/')
             // 去重 去空
             temp.enum = temp.enum.filter(v => v)
             temp.enum = [...new Set(temp.enum)]
