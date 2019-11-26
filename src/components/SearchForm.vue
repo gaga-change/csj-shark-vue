@@ -28,10 +28,10 @@
               @change="hanldeSubmit"
             >
               <el-option
-                v-for="item in mapConfig[item.enum]"
-                :key="item.name"
+                v-for="(item, index) in mapConfig[item.enum]"
+                :key="index"
                 :label="item.name"
-                :value="item.value"
+                :value="item.value + ''"
               >
               </el-option>
             </el-select>
@@ -238,8 +238,8 @@ export default {
         } else {
           this.$set(this.searchForms, v.prop, undefined)
         }
-        if (query[v.prop]) {
-          this.$set(this.searchForms, v.prop, query[v.prop])
+        if (query[v.prop] !== undefined && query[v.prop] !== null) {
+          this.$set(this.searchForms, v.prop, query[v.prop] + '')
         }
       })
     },

@@ -27,7 +27,7 @@
 
 <script>
 import ProductSetDialog from './components/productSetDialog'
-import { skuSelect } from '@/api'
+import { skuSelect, lotList } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '商品名称 ', prop: 'skuName' },
@@ -41,7 +41,7 @@ const searchConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '型号', prop: 'lotAttrCode2' },
-  { label: '批次ID', prop: 'lotId' },
+  { label: '批次', prop: 'lotId', type: 'enum', enum: '_lotEnum' },
 ]
 export default {
   components: { ProductSetDialog },
@@ -54,7 +54,24 @@ export default {
       productSetDialogVisible: false,
     }
   },
+  created() {
+    this.initLot()
+  },
   methods: {
+    initLot() {
+      lotList({ pageSize: 9999 }).then(res => {
+        if (!res) return
+        this.$store.commit('ADD_MAP', {
+          name: '_lotEnum',
+          keyValue: (res.data.list || []).map(v => {
+            return {
+              name: v.lotName,
+              value: v.id,
+            }
+          })
+        })
+      })
+    },
     /** 刷新列表 */
     getTableData() {
       this.$refs['baseList'].fetchData()

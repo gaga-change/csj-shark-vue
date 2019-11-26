@@ -9,6 +9,11 @@ const map = {
     SET_MAP: (state, config) => {
       state.mapConfig = config
     },
+    ADD_MAP: (state, item) => {
+      let temp = { ...state.mapConfig }
+      temp[item.name] = item.keyValue
+      state.mapConfig = temp
+    }
   },
 
   actions: {
