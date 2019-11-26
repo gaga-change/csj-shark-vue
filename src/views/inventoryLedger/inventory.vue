@@ -47,6 +47,8 @@ import { getInfoInventory, exportLedger, skuStockWriteCheckResult, selectSumSkuQ
 
 const tableConfig = [
   { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '出库锁', prop: 'outLock', width: 80, type: 'enum', enum: 'lockEnum' },
+  { label: '入库锁', prop: 'inLock', width: 80, type: 'enum', enum: 'lockEnum' },
   { label: '容器', prop: 'trayCode' },
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName', width: '200' },
