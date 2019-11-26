@@ -8,6 +8,7 @@
       @close="close"
     >
       <div class="mb10">
+        <div class="c-red f12 mb5">提示：排、列、层用于缩小已选的库区库位范围，输入方式为排或排+列或排+层。如库位为A010903，01为排，09为列，03为层</div>
         <el-card shadow="never">
           <el-form
             ref="form"
@@ -51,6 +52,36 @@
                 v-model="formData.warehouseAreaSpace"
                 placeholder="请选择库区库位"
               ></el-cascader>
+            </el-form-item>
+            <el-form-item
+              label="排"
+              prop="row"
+            >
+              <el-input
+                size="mini"
+                v-model="formData.row"
+                placeholder="请输入排"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="列"
+              prop="column"
+            >
+              <el-input
+                size="mini"
+                v-model="formData.column"
+                placeholder="请输入列"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="层"
+              prop="layer"
+            >
+              <el-input
+                size="mini"
+                v-model="formData.layer"
+                placeholder="请输入层"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
@@ -134,6 +165,9 @@ export default {
       formData: {
         skuName: '',
         skuCode: '',
+        row: '',
+        column: '',
+        layer: '',
         warehouseAreaSpace: undefined,
         warehouseSpaceCodeList: [],
       },
