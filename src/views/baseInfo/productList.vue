@@ -41,6 +41,7 @@ const searchConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '型号', prop: 'lotAttrCode2' },
+  { label: '批次ID', prop: 'lotId' },
 ]
 export default {
   components: { ProductSetDialog },
