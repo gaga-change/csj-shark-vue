@@ -213,16 +213,21 @@
               v-show="item.dataSource === 0"
               label=""
               :prop="'propItems.' + index + '.receiveOrderAttr'"
+              :rules="[
+      { required: item.dataSource === 0, message: '必填项', trigger: ['blur', 'change']  },
+    ]"
             >
               <el-select
                 v-model="item.receiveOrderAttr"
                 :disabled="index < 2"
+                clearable
               >
                 <el-option
                   v-for="item in mapConfig.receiveOrderAttrEnum || []"
-                  :key="item.code"
+                  :key="item.value"
+                  :disabled="!!~receiveOrderAttrSelectedArr.indexOf(item.value)"
                   :label="item.name"
-                  :value="item.code"
+                  :value="item.value"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -318,7 +323,11 @@ export default {
     ...mapGetters([
       'mapConfig',
       'visitedViews'
-    ])
+    ]),
+    receiveOrderAttrSelectedArr() {
+      return this.dynamicValidateForm.propItems.map(v => v.receiveOrderAttr).filter(v => v)
+    }
+
   },
   created() {
     let item = this.dynamicValidateForm.propItems[0]
