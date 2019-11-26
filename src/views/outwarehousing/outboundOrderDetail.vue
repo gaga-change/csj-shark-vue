@@ -103,6 +103,7 @@ const detailItemDosConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResult2Enum' },
   { label: '出库数量', prop: 'realSortQty' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '容器', prop: 'trayCode' },
