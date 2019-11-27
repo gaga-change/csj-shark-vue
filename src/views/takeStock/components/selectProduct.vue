@@ -8,7 +8,7 @@
       @close="close"
     >
       <div class="mb10">
-        <div class="c-red f12 mb5">提示：排、列、层用于缩小已选的库区库位范围，输入方式为排或排+列或排+层。如库位为A010903，01为排，09为列，03为层</div>
+        <div class="c-red f12 mb5">提示：排、列、层用于缩小已选的库区库位数据范围，如库位为A010903，01为排，09为列，03为层</div>
         <el-card shadow="never">
           <el-form
             ref="form"

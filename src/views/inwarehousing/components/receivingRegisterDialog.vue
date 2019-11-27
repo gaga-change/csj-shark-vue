@@ -79,7 +79,7 @@
                 <el-select
                   style="width:200px;"
                   v-model="formData[item.lotAttrCode]"
-                  :placeholder="'请选择' + item.lotAttrName"
+                  :placeholder="'请选择'"
                   clearable
                 >
                   <el-option
