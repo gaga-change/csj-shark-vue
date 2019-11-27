@@ -142,10 +142,14 @@
                 ></el-input-number>
               </el-form-item>
             </template>
-            <template v-else-if="item.lotAttrType === 3">
+            <template>
               <el-form-item
+                v-show="item.lotAttrType === 3"
                 label="枚举值"
                 :prop="'propItems.' + index + '.enum'"
+                :rules="[
+      { required: item.status === 0, message: '必填项', trigger: ['blur', 'change']  },
+    ]"
               >
                 <el-input
                   style="width:200px;"
@@ -155,8 +159,9 @@
                 ></el-input>
               </el-form-item>
             </template>
-            <template v-else-if="item.lotAttrType === 4">
+            <template>
               <el-form-item
+                v-show="item.lotAttrType === 4"
                 label="日期格式"
                 :prop="'propItems.' + index + '.format'"
               >
