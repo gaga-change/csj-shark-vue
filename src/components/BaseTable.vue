@@ -87,7 +87,7 @@
               placeholder="请选择"
             >
               <el-option
-                v-for="(v, i) in item.enum"
+                v-for="(v, i) in mapConfig[item.enum] || []"
                 :key="i"
                 :label="v.name"
                 :value="v.value"
