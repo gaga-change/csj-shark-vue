@@ -398,6 +398,10 @@
     "_id": "5d902888c1bb12002b8d3e7a",
     "keyValue": [
       {
+        "name": "待检",
+        "value": 0
+      },
+      {
         "name": "残次品",
         "value": 1
       },
