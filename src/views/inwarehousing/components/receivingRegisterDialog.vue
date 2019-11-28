@@ -214,10 +214,14 @@ export default {
         let temp = lotDetailList.filter(v => {
           return v.dataSource === 1 && v.status === 0
         }).map(v => {
-          try {
-            v.lotAttrValue = JSON.parse(v.lotAttrValue)
-          } catch (error) {
-            console.error('解析异常：', v.lotAttrValue)
+          if (v.lotAttrValue) {
+            try {
+              v.lotAttrValue = JSON.parse(v.lotAttrValue)
+            } catch (error) {
+              console.error('解析异常：', v.lotAttrValue)
+              v.lotAttrValue = {}
+            }
+          } else {
             v.lotAttrValue = {}
           }
           this.$set(this.formData, v.lotAttrCode, undefined)
