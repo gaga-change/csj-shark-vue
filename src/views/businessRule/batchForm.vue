@@ -148,7 +148,7 @@
                 label="枚举值"
                 :prop="'propItems.' + index + '.enum'"
                 :rules="[
-      { required: item.status === 0, message: '必填项', trigger: ['blur', 'change']  },
+      { required: item.lotAttrType === 3 && item.status === 0, message: '必填项', trigger: ['blur', 'change']  },
     ]"
               >
                 <el-input
