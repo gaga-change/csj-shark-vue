@@ -107,14 +107,14 @@
           :tableData.sync="tableData"
         />
       </div>
-      <el-alert
+      <!-- <el-alert
         v-if="orderType === 0"
         class="mt15"
         title="注：最多选取50条，如需盘点更多商品，请分批处理！"
         type="info"
         :closable="false"
       >
-      </el-alert>
+      </el-alert> -->
       <span
         slot="footer"
         class="dialog-footer"
