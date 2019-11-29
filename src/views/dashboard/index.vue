@@ -123,6 +123,16 @@
           <span class="confirm"><i>待复核:<u>{{todolist.review}}</u>/条</i></span>
         </el-col>
       </el-row>
+      <h4
+        class="textTitle"
+        style="margin-top: 20px"
+      ><i>手持端二维码</i></h4>
+      <div>
+        <img
+          src="/app/api/appVersion/getQRCode"
+          style="width:100%"
+        >
+      </div>
     </div>
   </div>
 </template>
