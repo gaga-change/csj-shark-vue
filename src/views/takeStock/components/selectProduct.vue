@@ -303,7 +303,10 @@ export default {
       }).then(res => {
         this.confrimLoading = false
         if (!res) return
-        this.selectRows = res.data.list || []
+        this.selectRows = (res.data.list || []).map(v => {
+          v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
+          return v
+        })
         end()
       })
     },
