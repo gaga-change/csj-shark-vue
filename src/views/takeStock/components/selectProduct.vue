@@ -103,9 +103,6 @@
           :config="takeStockSelectProductTableConfig"
           :parseData="parseData"
           :api="planInventoryQuerysSkuStockList"
-          :select="orderType === 0"
-          :selectTotal="true"
-          :selectRows.sync="selectRows"
           :searchParams="searchParams"
           :tableData.sync="tableData"
         />
@@ -298,21 +295,17 @@ export default {
         this.selectRows = []
         this.close()
       }
-      if (this.orderType === 1) { // 动态盘点
-        this.confrimLoading = true
-        planInventoryQuerysSkuStockList({
-          pageNum: 1,
-          pageSize: 9999,
-          ...this.nowSearchParams
-        }).then(res => {
-          this.confrimLoading = false
-          if (!res) return
-          this.selectRows = res.data.list || []
-          end()
-        })
-      } else {
+      this.confrimLoading = true
+      planInventoryQuerysSkuStockList({
+        pageNum: 1,
+        pageSize: 9999,
+        ...this.nowSearchParams
+      }).then(res => {
+        this.confrimLoading = false
+        if (!res) return
+        this.selectRows = res.data.list || []
         end()
-      }
+      })
     },
     /** 关闭 */
     close() {
