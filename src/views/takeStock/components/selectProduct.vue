@@ -26,6 +26,7 @@
               <el-input
                 size="mini"
                 v-model="formData.skuCode"
+                maxlength="30"
                 placeholder="请输入商品编码"
               ></el-input>
             </el-form-item>
@@ -36,6 +37,7 @@
             >
               <el-input
                 size="mini"
+                maxlength="30"
                 v-model="formData.skuName"
                 placeholder="请输入商品名称"
               ></el-input>
@@ -53,24 +55,38 @@
                 placeholder="请选择库区库位"
               ></el-cascader>
             </el-form-item>
-            <el-form-item
-              label="排"
-              prop="row"
-            >
+            <el-form-item label="排">
               <el-input
                 size="mini"
-                v-model="formData.row"
-                placeholder="请输入排"
+                style="width:70px"
+                v-model="formData.rowStart"
+                maxlength="10"
+                placeholder="请输入"
+              ></el-input>
+              <span>至</span>
+              <el-input
+                size="mini"
+                style="width:70px"
+                v-model="formData.rowEnd"
+                maxlength="10"
+                placeholder="请输入"
               ></el-input>
             </el-form-item>
-            <el-form-item
-              label="列"
-              prop="column"
-            >
+            <el-form-item label="列">
               <el-input
                 size="mini"
-                v-model="formData.column"
-                placeholder="请输入列"
+                style="width:70px"
+                v-model="formData.columnStart"
+                maxlength="10"
+                placeholder="请输入"
+              ></el-input>
+              <span>至</span>
+              <el-input
+                size="mini"
+                style="width:70px"
+                v-model="formData.columnEnd"
+                maxlength="10"
+                placeholder="请输入"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -79,8 +95,18 @@
             >
               <el-input
                 size="mini"
-                v-model="formData.layer"
-                placeholder="请输入层"
+                style="width:70px"
+                v-model="formData.layerStart"
+                maxlength="10"
+                placeholder="请输入"
+              ></el-input>
+              <span>至</span>
+              <el-input
+                size="mini"
+                style="width:70px"
+                v-model="formData.layerEnd"
+                maxlength="10"
+                placeholder="请输入"
               ></el-input>
             </el-form-item>
             <el-form-item>
@@ -162,9 +188,12 @@ export default {
       formData: {
         skuName: '',
         skuCode: '',
-        row: '',
-        column: '',
-        layer: '',
+        rowStart: '',
+        rowEnd: '',
+        columnStart: '',
+        columnEnd: '',
+        layerStart: '',
+        layerEnd: '',
         warehouseAreaSpace: undefined,
         warehouseSpaceCodeList: [],
       },
@@ -276,6 +305,9 @@ export default {
     /** 重置 */
     resetForm() {
       this.$refs['form'] && this.$refs['form'].resetFields()
+      Object.keys(this.formData).forEach(key => {
+        this.$set(this.formData, key, undefined)
+      })
       this.formData.warehouseSpaceCodeList = []
       this.$nextTick(() => {
         this.$refs['baseTable'] && this.$refs['baseTable'].fetchData()
