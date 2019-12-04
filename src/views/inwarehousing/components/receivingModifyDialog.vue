@@ -97,6 +97,7 @@
                     v-model="formData[item.lotAttrCode]"
                     type="year"
                     placeholder="选择年"
+                    value-format="yyyy"
                   >
                   </el-date-picker>
                 </template>
@@ -106,6 +107,7 @@
                     v-model="formData[item.lotAttrCode]"
                     type="month"
                     placeholder="选择月"
+                    value-format="yyyy-MM"
                   >
                   </el-date-picker>
                 </template>
@@ -115,6 +117,7 @@
                     v-model="formData[item.lotAttrCode]"
                     type="date"
                     placeholder="选择日期"
+                    value-format="yyyy-MM-dd"
                   >
                   </el-date-picker>
                 </template>
