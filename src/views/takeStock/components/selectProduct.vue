@@ -131,6 +131,7 @@
           :api="planInventoryQuerysSkuStockList"
           :searchParams="searchParams"
           :tableData.sync="tableData"
+          @lastSearchParams="lastParams => nowSearchParams = lastParams"
         />
       </div>
       <!-- <el-alert
@@ -297,7 +298,6 @@ export default {
     submitForm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          this.nowSearchParams = this.searchParams
           this.$refs['baseTable'].fetchData()
         }
       })

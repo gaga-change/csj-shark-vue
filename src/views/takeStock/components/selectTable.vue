@@ -400,11 +400,13 @@ export default {
     },
     fetchData() {
       this.selfLoading = true
+      let searchParams = { ...this.searchParams }
       return this.api({
         pageNum: this.selfCurrentPage,
         pageSize: this.selfPageSize,
-        ...this.searchParams
+        ...searchParams
       }).then(res => {
+        this.$emit('lastSearchParams', searchParams)
         this.selfLoading = false
         if (!res) return
         let data = null
