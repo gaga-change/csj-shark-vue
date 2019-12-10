@@ -80,33 +80,4 @@ const http = {
   }
 }
 
-/** 发布环境 - 监听版本更新 */
-if (process.env.NODE_ENV !== "development") {
-  let tick = () => {
-    setTimeout(() => {
-      axios.get('/version.txt', {
-        headers: {
-          'Cache-Control': 'public,max-age=0'
-        }
-      }).then(res => {
-        let newVersion = res.data.toString().trim()
-        if (process.env.IMAGE_TAG !== newVersion) {
-          update(newVersion)
-        } else {
-          tick()
-        }
-      })
-    }, 5000)
-  }
-  function update(v) {
-    console.log(`版本更新，当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`)
-    Notification({
-      title: '提示',
-      message: '当前系统版本更新，刷新页面获取最新内容！',
-      duration: 0
-    });
-  }
-  tick()
-}
-
 export default http

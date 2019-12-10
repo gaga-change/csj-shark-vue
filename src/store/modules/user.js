@@ -1,5 +1,6 @@
 import { getInfo } from '@/api'
 import { MessageBox } from 'element-ui';
+import io from 'socket.io-client'
 
 const user = {
   state: {
@@ -60,6 +61,7 @@ const user = {
           commit('SET_COMPANY', data.companyname || '')
           commit('SET_COMPANYID', data.companyid || '')
           commit('SET_WAREHOUSEENUM', data)
+          connectSocket(data)
         }
         return res
       })
@@ -69,6 +71,61 @@ const user = {
     },
     setTodolist({ commit }, todolist) {
       commit('SET_TODOLIST', todolist)
+    }
+  }
+}
+
+function connectSocket(user) {
+  /** 发布环境 - 监听版本更新 */
+  const { truename: username, email } = user
+  if (process.env.NODE_ENV !== "development") {
+    const nowVersion = process.env.IMAGE_TAG
+    const roomName = location.hostname
+    // const roomName = 'shark.csjmro.com'
+    const socket = io('http://csj-center-egg.shop.csj361.com/', {
+      // 实际使用中可以在这里传递参数
+      query: {
+        room: roomName,
+        email,
+        username
+      }
+    })
+    /** 监听在线人数 */
+    socket.on('online', msg => {
+      const res = {}
+      let { clientsDetail } = msg
+      clientsDetail = clientsDetail || []
+      Object.keys(clientsDetail).forEach(key => {
+        let item = clientsDetail[key]
+        if (res[item.email]) {
+          res[item.email].clientNum++
+        } else {
+          let user = res[item.email] = {}
+          user.clientNum = 1
+          user = Object.assign(user, item)
+        }
+      })
+      let str = Object.keys(res).map(key => {
+        let user = res[key]
+        return `${user.username}[${user.clientNum}]`
+      }).join('、')
+      console.log('%c===== 当前在线人员，临时打印（用户名[客户端数量]） ====', 'background-color: #42b983;color: #fff;')
+      console.log('%c' + str, 'color:blue')
+    })
+    /** 监听改域名的版本通知 */
+    socket.on(roomName, msg => {
+      if (msg.data.payload.version) {
+        if (nowVersion.trim() !== msg.data.payload.version.trim()) {
+          update(msg.data.payload.version.trim())
+        }
+      }
+    });
+    function update(v) {
+      Notification({
+        title: '提示',
+        message: `当前系统版本更新，刷新页面获取最新内容！当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`,
+        duration: 0
+      });
     }
   }
 }
