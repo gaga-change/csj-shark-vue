@@ -78,6 +78,7 @@ const user = {
 function connectSocket(user) {
   /** 发布环境 - 监听版本更新 */
   const { truename: username, email } = user
+  let listen = true
   if (process.env.NODE_ENV !== "development") {
     const nowVersion = process.env.IMAGE_TAG
     const roomName = location.hostname
@@ -114,18 +115,21 @@ function connectSocket(user) {
     })
     /** 监听改域名的版本通知 */
     socket.on(roomName, msg => {
-      if (msg.data.payload.version) {
+      if (msg.data.payload.version && listen) {
         if (nowVersion.trim() !== msg.data.payload.version.trim()) {
           update(msg.data.payload.version.trim())
         }
       }
     });
     function update(v) {
-      Notification({
-        title: '提示',
-        message: `当前系统版本更新，刷新页面获取最新内容！当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`,
-        duration: 0
-      });
+      if (listen) {
+        listen = false
+        Notification({
+          title: '提示',
+          message: `当前系统版本更新，刷新页面获取最新内容！当前版本：${process.env.IMAGE_TAG}，最新版本：${v}`,
+          duration: 0
+        });
+      }
     }
   }
 }
