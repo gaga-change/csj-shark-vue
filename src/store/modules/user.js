@@ -1,5 +1,5 @@
 import { getInfo } from '@/api'
-import { MessageBox } from 'element-ui';
+import { MessageBox, Notification } from 'element-ui';
 import io from 'socket.io-client'
 
 const user = {
