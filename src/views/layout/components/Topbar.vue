@@ -280,6 +280,8 @@ export default {
           this.totallist()
           this.$store.dispatch('SetWarehouse', warehouse).then(res => {
             this.$message({ type: 'success', message: '切换仓库成功' })
+            this.$store.dispatch('delAllViews')
+            this.$router.push('/')
           })
         } else {
           this.warehouse = this.preWarehouse
