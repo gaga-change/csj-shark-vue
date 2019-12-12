@@ -79,7 +79,7 @@ const tableConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
-  { label: '批次', prop: 'batchNo' },
+  { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
   { label: '通知拣货数', prop: 'sortQty', width: 90 },
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '执行状态', prop: 'jobStatus', type: 'enum', enum: 'jobStatusList' },

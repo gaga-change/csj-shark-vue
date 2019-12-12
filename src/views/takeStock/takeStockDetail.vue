@@ -34,7 +34,7 @@ import { planInventoryQueryByOrderId } from '@/api'
 const takeStockDetailProductTableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
-  { label: '批次', prop: 'batchNo' },
+  { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
   { label: '容器', prop: 'trayCode' },
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },

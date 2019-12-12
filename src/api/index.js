@@ -234,3 +234,5 @@ export const lotUpdateStatus = (id, params) => http.get(`/webApi/basic/lot/updat
 export const addLot = params => http.post(`/webApi/basic/lot/addLot`, params)
 /** 批次详情 */
 export const lotDetail = id => http.get(`/webApi/basic/lot/detail/${id}`)
+/** 批次详情 */
+export const selectLotDetailValue = params => http.get(`/webApi/basic/lot/selectLotDetailValue`, { params })

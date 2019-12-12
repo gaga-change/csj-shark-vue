@@ -18,6 +18,30 @@
           {{detail[item.prop] | parseEnum(mapConfig, item)}}
         </span>
       </template>
+      <template v-else-if="item.type === 'batchNoPopover'">
+        <span class="value-content">
+          <el-popover
+            placement="top-start"
+            :title="`批次：${detail[item.prop]}`"
+            width="400"
+            trigger="hover"
+            @show="handleBatchNoPopoverShow(detail[item.prop])"
+          >
+            <div v-loading="batchNoDetailLoading">
+              <div
+                v-for="(val, key) in batchNoDetail"
+                :key="key"
+              >
+                {{key}}：{{val||''}}
+              </div>
+            </div>
+            <el-link
+              type="primary"
+              slot="reference"
+            >{{detail[item.prop]}}</el-link>
+          </el-popover>
+        </span>
+      </template>
       <template v-else>
         <span class="value-content">{{detail[item.prop]}}</span>
       </template>
@@ -28,6 +52,7 @@
 <script>
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+import { selectLotDetailValue } from '@/api'
 
 export default {
   props: {
@@ -46,7 +71,8 @@ export default {
   },
   data() {
     return {
-
+      batchNoDetailLoading: false,
+      batchNoDetail: null
     }
   },
   computed: {
@@ -74,6 +100,17 @@ export default {
       }
       return temp.name
     }
+  },
+  methods: {
+    /** 批次内容展示 */
+    handleBatchNoPopoverShow(batchNo) {
+      this.batchNoDetailLoading = true
+      selectLotDetailValue({ batchNo }).then(res => {
+        this.batchNoDetailLoading = false
+        if (!res) return
+        this.batchNoDetail = res.data.lotDetails
+      })
+    },
   }
 }
 

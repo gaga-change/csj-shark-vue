@@ -49,7 +49,7 @@ const tableConfig = [
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
-  { label: '批次', prop: 'batchNo' },
+  { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
   { label: '上架数量', prop: 'jobQty' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '容器', prop: 'trayCode' },

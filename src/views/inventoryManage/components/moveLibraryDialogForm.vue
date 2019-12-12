@@ -105,7 +105,7 @@
 import { warehouseSpaceList, skuStockMove } from '@/api'
 const baseInfoConfig = [
   { label: '商品名称 ', prop: 'skuName' },
-  { label: '商品批次', prop: 'batchNo' },
+  { label: '商品批次', prop: 'batchNo', type: 'batchNoPopover' },
   { label: '数量', prop: 'number' },
 ]
 export default {
