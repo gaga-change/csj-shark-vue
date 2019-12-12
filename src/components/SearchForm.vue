@@ -89,6 +89,13 @@
               ></el-option>
             </el-select>
           </template>
+          <template v-else-if="item.type === 'batchRule'">
+            <el-cascader
+              v-model="batchRule"
+              :props="batchRuleProps"
+              @change="handleBatchRuleChange"
+            ></el-cascader>
+          </template>
           <template v-else>
             <el-input
               style="width:178px;"
@@ -121,7 +128,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getSelectInventoryAreaList, warehouseSpaceSelect } from '@/api'
+import { getSelectInventoryAreaList, warehouseSpaceSelect, lotList, lotDetail } from '@/api'
+let id = 0
 export default {
   props: {
     config: {
@@ -188,6 +196,54 @@ export default {
       warehouseSpace: [],
       spanMap: {
         'timeArea': 16
+      },
+      batchRule: [],
+      batchRuleProps: {
+        multiple: true,
+        checkStrictly: true,
+        expandTrigger: 'hover',
+        lazy: true,
+        lazyLoad(node, resolve) {
+          const { level } = node;
+          if (node.isLeaf) {
+            return resolve([])
+          }
+          if (level === 0) {
+            lotList({ pageNum: 1, pageSize: 9999, status: 0 }).then(res => {
+              resolve([])
+              if (!res) return
+              resolve(res.data.list.map(v => {
+                return {
+                  value: v,
+                  label: v.lotName,
+                  leaf: false
+                }
+              }))
+            })
+          } else {
+            lotDetail(node.value.id).then(res => {
+              resolve([])
+              if (!res) return
+              resolve(res.data.lotDetailList.filter(v => v.status === 0).map(v => {
+                return {
+                  value: v,
+                  label: v.lotAttrName,
+                  leaf: true
+                }
+              }))
+            })
+          }
+          // setTimeout(() => {
+          //   const nodes = Array.from({ length: level + 1 })
+          //     .map(item => ({
+          //       value: ++id,
+          //       label: `选项${id}`,
+          //       leaf: level >= 2
+          //     }));
+          //   // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+          //   resolve(nodes);
+          // }, 1000);
+        }
       }
     }
   },
@@ -207,6 +263,50 @@ export default {
     }
   },
   methods: {
+    /** 批次规则修改 */
+    handleBatchRuleChange(val, val2) {
+      console.log('???', val, this.batchRule, val === this.batchRule)
+      console.log('lastFa', this.lastFa && this.lastFa.lotName)
+      let res = val
+
+      /*
+      1. 校验是否有多个父级，无，正常处理
+      */
+      let fas = [...new Set(val.map(v => v[0]))]
+      console.log('父级个数：', fas.length)
+      if (fas.length === 2) {
+        // debugger
+        // 删除上一个父级选中的所有项
+        let newNode = val.filter(v => v[0] !== this.lastFa)[0]
+        this.batchRule = newNode.length == 1 ? [newNode] : [newNode, [newNode[0]]]
+        this.lastFa = newNode[0]
+        // console.log('new lastFa', this.lastFa.lotName)
+      } else if (fas.length === 1) {
+        // console.log('fas[0]', fas[0].lotName)
+        if (!val.find(v => v.length === 1)) {
+          // console.log('无父级情况')
+          if (this.lastFa) {
+            // 删除了父节点
+            this.batchRule = []
+            this.lastFa = null
+          } else {
+            // 新加子节点
+            this.batchRule = [...val, [val[0][0]]]
+            this.lastFa = val[0][0]
+          }
+        } else if (val.length === 1 && val[0].length === 2) {
+          // console.log('用户手动选子级的')
+          this.batchRule = [val[0], [val[0][0]]]
+          this.lastFa = fas[0]
+        } else {
+          // console.log('用户手动选父级')
+          this.lastFa = fas[0]
+        }
+      } else {
+        // console.log('lastFa set null')
+        this.lastFa = null
+      }
+    },
     initData() {
       this.getSelectInventoryAreaListLoading = true
       getSelectInventoryAreaList({ warehouseCode: this.chooseWarehouse }).then(res => {
