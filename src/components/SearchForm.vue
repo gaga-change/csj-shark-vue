@@ -92,6 +92,7 @@
           <template v-else-if="item.type === 'batchRule'">
             <el-cascader
               v-model="batchRule"
+              collapse-tags
               :props="batchRuleProps"
               @change="handleBatchRuleChange"
             ></el-cascader>
@@ -265,20 +266,26 @@ export default {
   methods: {
     /** 批次规则修改 */
     handleBatchRuleChange(val, val2) {
-      console.log('???', val, this.batchRule, val === this.batchRule)
-      console.log('lastFa', this.lastFa && this.lastFa.lotName)
-      let res = val
-
       /*
       1. 校验是否有多个父级，无，正常处理
       */
       let fas = [...new Set(val.map(v => v[0]))]
-      console.log('父级个数：', fas.length)
+      // console.log('父级个数：', fas.length)
       if (fas.length === 2) {
         // debugger
         // 删除上一个父级选中的所有项
+        // debugger
         let newNode = val.filter(v => v[0] !== this.lastFa)[0]
-        this.batchRule = newNode.length == 1 ? [newNode] : [newNode, [newNode[0]]]
+        // this.batchRule = newNode.length == 1 ? [newNode] :
+        // console.log('--', [newNode[0]][0].lotName)
+        this.batchRule = [newNode]
+        if (newNode.length == 2) {
+
+          this.$nextTick(() => {
+            // console.log('喵喵喵')
+            this.batchRule = [[newNode[0]], newNode]
+          })
+        }
         this.lastFa = newNode[0]
         // console.log('new lastFa', this.lastFa.lotName)
       } else if (fas.length === 1) {
