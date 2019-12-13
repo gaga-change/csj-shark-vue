@@ -7,6 +7,7 @@
       <search-form
         :config="searchConfig"
         @search="handleSearch"
+        @batchRuleChange="batchRuleChange"
         :labelWidth="labelWidth"
         :btnInline="btnInline"
       >
@@ -20,7 +21,7 @@
         ref='baseTable'
         :api="api"
         :parseData="parseData"
-        :config="tableConfig"
+        :config="tableConfigAll"
         :data.sync="tableData"
         :searchParams="searchParams"
         :showControl="showControl"
@@ -144,12 +145,27 @@ export default {
       searchParams: { ...this.appendSearchParams, ...initSearchParams, },
       selectRows: [],
       rowNow: {},
+      batchRuleAppendConfig: []
+    }
+  },
+  computed: {
+    tableConfigAll() {
+      if (!this.batchRuleAppendConfig.length) {
+        return this.tableConfig
+      }
+      let i = this.tableConfig.findIndex(v => v.label === '批次')
+      if (i >= 0) {
+        let temp = [...this.tableConfig]
+        temp.splice(i + 1, 0, ...this.batchRuleAppendConfig)
+        return temp
+      }
+      return [...this.tableConfig, ...this.batchRuleAppendConfig]
     }
   },
   watch: {
     tableData(val) {
       this.$emit('updateData', val)
-    }
+    },
   },
   created() {
     if (process.env.NODE_ENV === "development") {
@@ -157,6 +173,15 @@ export default {
     }
   },
   methods: {
+    batchRuleChange(val) {
+      val = val.map(v => {
+        return {
+          label: v.label,
+          prop: v.prop
+        }
+      })
+      this.batchRuleAppendConfig = val
+    },
     /** 展开或收拢 所有子表 */
     toggleRowExpansionAll(...args) {
       this.$refs['baseTable'].toggleRowExpansionAll(...args)

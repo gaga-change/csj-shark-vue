@@ -47,6 +47,7 @@ const searchConfig = [
   { label: '库区', prop: 'warehouseAreaCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '商品名称', prop: 'skuName' },
+  { label: '批次规则', prop: 'batchNo', type: 'batchRule' },
 ]
 export default {
   components: { moveLibraryDialogForm },

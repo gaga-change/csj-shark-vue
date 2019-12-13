@@ -13,13 +13,30 @@
         :inline="true"
       >
         <el-form-item
-          v-for="(item,index) in config"
+          v-for="(item,index) in [...config, ...batchAppendInputList]"
           :key="index"
           :label="item.label"
           :prop="item.prop"
           :label-width="item.labelWidth ? item.labelWidth + 'px' : undefined"
         >
-          <template v-if="item.type === 'enum'">
+          <template v-if="item.type === 'enum' && typeof item.enum === 'object'">
+            <el-select
+              v-model="searchForms[item.prop]"
+              clearable
+              :placeholder="`请选择${item.label}`"
+              size="mini"
+              @change="hanldeSubmit"
+            >
+              <el-option
+                v-for="(item, index) in item.enum"
+                :key="index"
+                :label="item"
+                :value="item + ''"
+              >
+              </el-option>
+            </el-select>
+          </template>
+          <template v-else-if="item.type === 'enum'">
             <el-select
               v-model="searchForms[item.prop]"
               clearable
@@ -97,6 +114,17 @@
               @change="handleBatchRuleChange"
             ></el-cascader>
           </template>
+          <template v-else-if="item.type === 'date'">
+            <el-date-picker
+              style="width:178px;"
+              placeholder="请选择"
+              v-model="searchForms[item.prop]"
+              :type="item.dateType"
+              :value-format="item.valueFormat"
+              :format="item.format"
+            >
+            </el-date-picker>
+          </template>
           <template v-else>
             <el-input
               style="width:178px;"
@@ -148,18 +176,9 @@ export default {
       default: false,
     }
   },
-  computed: {
-    inputItems() {
-      return this.config.filter(v => !v.type)
-    }
-  },
-  watch: {
-    config(val) {
-      this.bindKeys()
-    }
-  },
   data() {
     return {
+      lastFa: null,
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -249,6 +268,9 @@ export default {
     }
   },
   computed: {
+    inputItems() {
+      return this.config.filter(v => !v.type)
+    },
     configRange() {
       return this.config.filter(v => v.props)
     },
@@ -256,6 +278,71 @@ export default {
       'chooseWarehouse',
       'mapConfig'
     ]),
+    batchAppendInputList() {
+      if (!this.batchRule) return []
+      return this.batchRule.filter(v => v.length === 2).map(v => {
+        let temp = v[1]
+        this.$set(this.searchForms, temp.lotAttrCode, '')
+        let item = {
+          label: temp.lotAttrName,
+          prop: temp.lotAttrCode
+        }
+        try {
+          let lotAttrValue = JSON.parse(temp.lotAttrValue)
+          if (temp.lotAttrType === 3) { // 枚举
+            item.type = 'enum'
+            item.enum = lotAttrValue.enum
+          }
+          if (temp.lotAttrType === 4) { // 日期
+            item.type = 'date'
+            switch (lotAttrValue.format) {
+              case 'YYYY':
+                item.dateType = 'year'
+                item.valueFormat = 'yyyy'
+                item.format = 'yyyy 年'
+                break
+              case 'YYYY-MM':
+                item.dateType = 'month'
+                item.valueFormat = 'yyyy-MM'
+                item.format = 'yyyy 年 MM 月'
+                break
+              case 'YYYY-MM-DD':
+                item.dateType = 'date'
+                item.valueFormat = 'yyyy-MM-dd'
+                item.format = 'yyyy 年 MM 月 dd 日'
+                break
+            }
+          }
+
+        } catch (err) {
+          console.error(`lotAttrType解析异常：${lotAttrType}`)
+        }
+        return item
+      })
+    },
+    batchId() {
+      // if (!this.batchRule) return ''
+      // let temp = this.batchRule.filter(v => v.length === 1)
+      // if (temp.length === 1) {
+      //   return temp[0][0].id + ''
+      // } else {
+      //   return ''
+      // }
+      if (!this.lastFa) return ''
+      return this.lastFa.id
+    }
+  },
+  watch: {
+    config(val) {
+      this.bindKeys()
+    },
+    batchAppendInputList(val) {
+      this.$emit('batchRuleChange', this.$copy(val))
+    },
+    batchId(val) {
+      this.$set(this.searchForms, 'lotId', val)
+      this.hanldeSubmit()
+    }
   },
   created() {
     this.bindKeys()
@@ -374,6 +461,7 @@ export default {
       this.config.forEach(v => {
         this.$set(this.searchForms, v.prop, undefined)
       })
+      this.batchRule = []
       this.$nextTick(() => {
         this.$emit('search', this.paramsTrim(this.searchForms), () => {
           this.resetLoading = false

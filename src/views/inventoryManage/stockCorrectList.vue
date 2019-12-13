@@ -51,6 +51,7 @@ const searchConfig = [
   { label: '货主', prop: 'ownerName' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
+  { label: '批次规则', prop: 'batchNo', type: 'batchRule' },
 ]
 export default {
   components: { stockCorrectDialogForm },

@@ -318,108 +318,116 @@ export default {
       'mapConfig',
     ])
   },
+  watch: {
+    config(val) {
+      this.turnConfig()
+    }
+  },
   mounted() {
     if (this.api) {
       this.fetchData()
     }
   },
   beforeMount() {
-    let tableConfig = this.$copy(this.config)
-    tableConfig.forEach(configItem => {
-      if (configItem.type) {
-        switch (configItem.type) {
-          case 'enum':
-            {
-              if (typeof configItem.enum === 'string') {
-                configItem.formatter = (row, column, cellValue, index) => {
-                  let res = cellValue
-                  if (!configItem.enum) {
-                    console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
-                  } else {
-                    const enumArr = this.mapConfig[configItem.enum] || []
-                    if (!enumArr.length && Object.keys(this.mapConfig).length) {
-                      console.error(`枚举异常, 【${configItem.enum}】未配置`)
-                    }
-                    let temp = enumArr.find(v => v.value == cellValue)
-                    if (temp) {
-                      res = temp.name
-                    } else {
-                      // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
-                      res = ''
-                    }
-                  }
-                  return res
-                }
-              } else {
-                configItem.formatter = (row, column, cellValue, index) => {
-                  let res = cellValue
-                  if (!configItem.enum) {
-                    console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
-                  } else {
-                    let temp = configItem.enum.find(v => v.value == cellValue)
-                    if (temp) {
-                      res = temp.name
-                    } else {
-                      // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
-                      res = ''
-                    }
-                  }
-                  return res
-                }
-              }
-            }
-            break
-          case 'time':
-            configItem.formatter = (row, column, cellValue, index) => cellValue ? moment(cellValue).format(configItem.format || 'YYYY-MM-DD HH:mm:ss') : '';
-            break
-          case 'Boolean': configItem.formatter = (row, column, cellValue, index) => cellValue ? '是' : '否'
-            break
-          case 'index': configItem.formatter = (row, column, cellValue, index) => (this.selfPageSize) * (this.selfCurrentPage - 1) + index + 1
-            break
-          case 'toFixed': configItem.formatter = (row, column, cellValue, index) => cellValue && Number(Number(cellValue).toFixed(2))
-            break
-          case 'files': configItem.formatter = (row, column, cellValue, index) => {
-            let files = row.files;
-            if (!files || files.length < 1) {
-              return ''
-            }
-            return <el-dropdown>
-              <span class="el-dropdown-link">
-                查看附件<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                {
-                  files.map((v, i) => <el-dropdown-item>
-                    <a class="el-dropdown-link" target="blank" href={v.path}>{v.name || `附件${i + 1}`}</a>
-                  </el-dropdown-item>)
-                }
-              </el-dropdown-menu>
-            </el-dropdown>
-          }
-            break
-        }
-      }
-      else if (configItem.dom) {
-        configItem.formatter = configItem.dom
-      } else if (!!configItem.linkTo) {
-        configItem.formatter = (row, column, cellValue, index) => {
-          let json = {};
-          configItem.query && configItem.query.forEach(item => {
-            json[item.key] = row[item.value]
-          })
-          let linkTo = configItem.linkTo
-          if (configItem.linkTo.constructor === Function) {
-            linkTo = configItem.linkTo(row)
-          }
-          return <router-link to={{ path: linkTo, query: json }} style={{ color: '#3399ea' }}>{configItem.linkText ? configItem.linkText : cellValue}</router-link>
-        }
-      } else {
-        configItem.formatter = (row, column, cellValue, index) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''
-      }
-    })
-    this.tableConfig = tableConfig;
+    this.turnConfig()
   },
   methods: {
+    turnConfig() {
+      let tableConfig = this.$copy(this.config)
+      tableConfig.forEach(configItem => {
+        if (configItem.type) {
+          switch (configItem.type) {
+            case 'enum':
+              {
+                if (typeof configItem.enum === 'string') {
+                  configItem.formatter = (row, column, cellValue, index) => {
+                    let res = cellValue
+                    if (!configItem.enum) {
+                      console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
+                    } else {
+                      const enumArr = this.mapConfig[configItem.enum] || []
+                      if (!enumArr.length && Object.keys(this.mapConfig).length) {
+                        console.error(`枚举异常, 【${configItem.enum}】未配置`)
+                      }
+                      let temp = enumArr.find(v => v.value == cellValue)
+                      if (temp) {
+                        res = temp.name
+                      } else {
+                        // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                        res = ''
+                      }
+                    }
+                    return res
+                  }
+                } else {
+                  configItem.formatter = (row, column, cellValue, index) => {
+                    let res = cellValue
+                    if (!configItem.enum) {
+                      console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
+                    } else {
+                      let temp = configItem.enum.find(v => v.value == cellValue)
+                      if (temp) {
+                        res = temp.name
+                      } else {
+                        // console.error(`枚举异常, 在【${configItem.type}】下未找到相应枚举值【${cellValue}】`)
+                        res = ''
+                      }
+                    }
+                    return res
+                  }
+                }
+              }
+              break
+            case 'time':
+              configItem.formatter = (row, column, cellValue, index) => cellValue ? moment(cellValue).format(configItem.format || 'YYYY-MM-DD HH:mm:ss') : '';
+              break
+            case 'Boolean': configItem.formatter = (row, column, cellValue, index) => cellValue ? '是' : '否'
+              break
+            case 'index': configItem.formatter = (row, column, cellValue, index) => (this.selfPageSize) * (this.selfCurrentPage - 1) + index + 1
+              break
+            case 'toFixed': configItem.formatter = (row, column, cellValue, index) => cellValue && Number(Number(cellValue).toFixed(2))
+              break
+            case 'files': configItem.formatter = (row, column, cellValue, index) => {
+              let files = row.files;
+              if (!files || files.length < 1) {
+                return ''
+              }
+              return <el-dropdown>
+                <span class="el-dropdown-link">
+                  查看附件<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  {
+                    files.map((v, i) => <el-dropdown-item>
+                      <a class="el-dropdown-link" target="blank" href={v.path}>{v.name || `附件${i + 1}`}</a>
+                    </el-dropdown-item>)
+                  }
+                </el-dropdown-menu>
+              </el-dropdown>
+            }
+              break
+          }
+        }
+        else if (configItem.dom) {
+          configItem.formatter = configItem.dom
+        } else if (!!configItem.linkTo) {
+          configItem.formatter = (row, column, cellValue, index) => {
+            let json = {};
+            configItem.query && configItem.query.forEach(item => {
+              json[item.key] = row[item.value]
+            })
+            let linkTo = configItem.linkTo
+            if (configItem.linkTo.constructor === Function) {
+              linkTo = configItem.linkTo(row)
+            }
+            return <router-link to={{ path: linkTo, query: json }} style={{ color: '#3399ea' }}>{configItem.linkText ? configItem.linkText : cellValue}</router-link>
+          }
+        } else {
+          configItem.formatter = (row, column, cellValue, index) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''
+        }
+      })
+      this.tableConfig = tableConfig;
+    },
     /** 批次内容展示 */
     handleBatchNoPopoverShow(row, batchNo) {
       this.$set(row, '_batchNoDetailLoading', true)

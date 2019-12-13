@@ -48,6 +48,7 @@ const searchConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: 'yesOrNoEnum', default: 0 },
+  { label: '批次规则', prop: 'batchNo', type: 'batchRule' },
 ]
 
 export default {

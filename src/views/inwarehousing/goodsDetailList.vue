@@ -69,6 +69,7 @@ const searchConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
   { label: '收货单号', prop: 'receiveOrderCode' },
+  { label: '批次规则', prop: 'batchNo', type: 'batchRule' },
 ]
 
 export default {

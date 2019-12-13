@@ -70,7 +70,7 @@ const searchConfig = [
   { label: '货主名称', prop: 'ownerName' },
   { label: '库位编码', prop: 'warehouseSpaceCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
-  { label: '批次规则', prop: 'batchNo', type: 'batchRule' },
+  { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
 ]
 
 export default {
