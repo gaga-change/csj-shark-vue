@@ -49,6 +49,7 @@ export default {
         if (!res) return
         this.detail = res.data
         this.propItems = (res.data.lotDetailList || []).map(v => {
+          v.lotAttrValue = v.lotAttrValue || '{}'
           try {
             v.lotAttrValue = JSON.parse(v.lotAttrValue)
           } catch (error) {

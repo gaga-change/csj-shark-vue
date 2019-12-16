@@ -287,9 +287,9 @@ export default {
           label: temp.lotAttrName,
           prop: temp.lotAttrCode
         }
+        temp.lotAttrValue = temp.lotAttrValue || '{}'
         try {
           let lotAttrValue = JSON.parse(temp.lotAttrValue)
-          lotAttrValue = lotAttrValue || {}
           if (temp.lotAttrType === 3) { // 枚举
             item.type = 'enum'
             item.enum = lotAttrValue.enum
