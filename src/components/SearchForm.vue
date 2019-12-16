@@ -289,6 +289,7 @@ export default {
         }
         try {
           let lotAttrValue = JSON.parse(temp.lotAttrValue)
+          lotAttrValue = lotAttrValue || {}
           if (temp.lotAttrType === 3) { // 枚举
             item.type = 'enum'
             item.enum = lotAttrValue.enum
@@ -313,9 +314,8 @@ export default {
                 break
             }
           }
-
         } catch (err) {
-          console.error(`lotAttrType解析异常：${lotAttrType}`)
+          console.error(`lotAttrType解析异常：${temp.lotAttrType}`, temp)
         }
         return item
       })
