@@ -2,7 +2,7 @@
   <div class="">
     <!-- 600px【小型，单列】 70% 【中型，双列】-->
     <el-dialog
-      title="新建仓库"
+      :title="`${this.rowData.isAdd ? '添加': '编辑'}联系信息`"
       :visible="visible"
       width="400px"
       :before-close="handleClose"
@@ -41,34 +41,23 @@
 </template>
 
 <script>
+// {linkUser: undefined, linkTel: undefined, address: undefined}
 const formConfig = [
-  { label: '仓库编码', prop: 'warehouseCode', width: 120 },
-  { label: '仓库名称', prop: 'warehouseName' },
-  { label: '类型', prop: 'type', type: 'enum', enum: 'warehouseTypeEnum' },
-  { label: '联系人', prop: 'linkName' },
-  { label: '详细地址', prop: 'warehouseAddress' },
-  { label: '状态', prop: 'status', type: 'radio', enum: 'warehouseStatusEnum', default: 0 },
+  { label: '联系人', prop: 'linkUser' },
+  { label: '电话', prop: 'linkTel' },
+  { label: '地址', prop: 'address' },
+
 ]
 const rules = {
-  warehouseCode: [
-    { required: true, message: '必填项', trigger: 'blur' },
-    { pattern: /^[0-9a-zA-Z]*$/, message: '只能输入数字或字母' },
-    { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' }
+  linkUser: [
+    { required: true, message: '必填项', trigger: ['blur', 'change'] },
+    { min: 0, max: 15, message: '不能超过15个字符', trigger: ['blur', 'change'] }
   ],
-  warehouseName: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 50, message: '不能超过50个字符', trigger: 'blur' }],
-  type: [{ required: true, message: '必填项', trigger: 'blur' }],
-  linkName: [{ min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' }],
-  warehouseAddress: [{ min: 0, max: 100, message: '不能超过100个字符', trigger: 'blur' }],
-  status: [{ required: true, message: '必填项', trigger: 'blur' }],
+  linkTel: [
+    { required: true, message: '必填项', trigger: ['blur', 'change'] },
+    { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号码' }],
+  address: [{ max: 80, message: '不能超过80个字符', trigger: ['blur', 'change'] }]
 }
-/**
- * 父级设置
- * <dialog
-      :visible.sync="dialogVisible"
-      :row="selectedRow"
-      @submited="getTableData()"
-    />
- */
 // import { saveApi } from '@/api'
 export default {
   props: {
@@ -105,6 +94,9 @@ export default {
       formConfig,
       rules,
       loading: false,
+      formData: {
+        //  ... 表单字段
+      }
     }
   },
   methods: {
@@ -112,14 +104,8 @@ export default {
     confirm() {
       this.$refs['form'].validate((valid, params) => {
         if (valid) {
-          // this.loading = true
-          // saveApi(params).then(res => {
-          //   this.loading = false
-          //   if (!res) return
-          //   this.$message.success('操作成功！')
-          //   this.$emit('submited')
-          //   this.close()
-          // })
+          this.$emit('submited', this.$copy(params))
+          this.close()
         }
       })
     },

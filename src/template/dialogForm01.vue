@@ -54,6 +54,7 @@
             prop="single"
           >
             <el-input-number
+              style="width:200px;"
               placeholder="最小单位"
               v-model="formData.single"
               :precision="0"
@@ -68,6 +69,7 @@
             prop="warehouseAreaNature"
           >
             <el-select
+              style="width:200px;"
               v-model="formData.warehouseAreaNature"
               placeholder="请选择库区性质"
               clearable
