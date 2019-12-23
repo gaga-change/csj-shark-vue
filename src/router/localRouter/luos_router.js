@@ -283,6 +283,34 @@ export default [
         component: _import('baseInfo/warehouseUserList'),
         hidden: false,
       },
+      {
+        name: 'customerList',
+        path: 'customerList',
+        meta: { title: '合作关系管理', noCache: true },
+        component: _import('baseInfo/customer/customerList'),
+        hidden: false,
+      },
+      {
+        name: 'customerAdd',
+        path: 'customerAdd',
+        meta: { title: '新增合作关系', noCache: true },
+        component: _import('baseInfo/customer/customerAdd'),
+        hidden: false,
+      },
+      {
+        name: 'customerModify',
+        path: 'customerAdd/:id',
+        meta: { title: '编辑合作关系', noCache: true },
+        component: _import('baseInfo/customer/customerAdd'),
+        hidden: false,
+      },
+      {
+        name: 'customerDetail',
+        path: 'customerDetail',
+        meta: { title: '合作关系详情', noCache: true },
+        component: _import('baseInfo/customer/customerDetail'),
+        hidden: false,
+      },
     ]
   },
   {

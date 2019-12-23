@@ -236,3 +236,15 @@ export const addLot = params => http.post(`/webApi/basic/lot/addLot`, params)
 export const lotDetail = id => http.get(`/webApi/basic/lot/detail/${id}`)
 /** 批次详情 */
 export const selectLotDetailValue = params => http.get(`/webApi/basic/lot/selectLotDetailValue`, { params })
+/** 客户列表 */
+export const customerList = params => http.post(`/webApi/basic/customer/list`, params)
+/** 新增客户 */
+export const addCustomer = params => http.post(`/webApi/basic/customer/addCustomer`, params)
+/** 修改客户状态 */
+export const customerUpdateStatus = (id, params) => http.get(`/webApi/basic/customer/updateStatus/${id}`, { params })
+// /** 删除客户地址 */
+// export const customerDeleteAddress = id => http.get(`/webApi/basic/customer/deleteAddress/${id}`)
+// /** 查询客户地址 */
+// export const customerSelectAddress = params => http.get(`/webApi/basic/customer/selectAddress`, { params })
+// /** 修改客户地址 */
+// export const updateCustomerAddress = params => http.post(`/webApi/basic/customer/updateCustomerAddress`, params)

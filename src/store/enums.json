@@ -643,5 +643,39 @@
         "value": "providerCode"
       }
     ]
+  },
+  {
+    "name": "customerTypeEnum",
+    "keyValue": [
+      {
+        "name": "货主",
+        "value": 1
+      },
+      {
+        "name": "供应商",
+        "value": 2
+      },
+      {
+        "name": "客户",
+        "value": 3
+      },
+      {
+        "name": "承运商",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "name": "customerStatusEnum",
+    "keyValue": [
+      {
+        "name": "启用",
+        "value": 0
+      },
+      {
+        "name": "禁用",
+        "value": 1
+      }
+    ]
   }
 ]
