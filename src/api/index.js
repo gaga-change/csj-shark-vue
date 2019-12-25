@@ -240,11 +240,15 @@ export const selectLotDetailValue = params => http.get(`/webApi/basic/lot/select
 export const customerList = params => http.post(`/webApi/basic/customer/list`, params)
 /** 新增客户 */
 export const addCustomer = params => http.post(`/webApi/basic/customer/addCustomer`, params)
+/** 修改客户 */
+export const updateCustomer = params => http.post(`/webApi/basic/customer/updateCustomer`, params)
+/** 客户详情 */
+export const customerDetail = id => http.get(`/webApi/basic/customer/detail/${id}`)
 /** 修改客户状态 */
-export const customerUpdateStatus = (id, params) => http.get(`/webApi/basic/customer/updateStatus/${id}`, { params })
+export const customerUpdateStatus = (id, params) => http.get(`/ webApi / basic / customer / updateStatus / ${id}`, { params })
 // /** 删除客户地址 */
-// export const customerDeleteAddress = id => http.get(`/webApi/basic/customer/deleteAddress/${id}`)
+// export const customerDeleteAddress = id => http.get(`/ webApi / basic / customer / deleteAddress / ${ id }`)
 // /** 查询客户地址 */
-// export const customerSelectAddress = params => http.get(`/webApi/basic/customer/selectAddress`, { params })
+// export const customerSelectAddress = params => http.get(`/ webApi / basic / customer / selectAddress`, { params })
 // /** 修改客户地址 */
-// export const updateCustomerAddress = params => http.post(`/webApi/basic/customer/updateCustomerAddress`, params)
+// export const updateCustomerAddress = params => http.post(`/ webApi / basic / customer / updateCustomerAddress`, params)

@@ -1,8 +1,8 @@
 <template>
-  <div v-loading="queryInOrderDetailLoading">
+  <div v-loading="loading">
     <div
       class="mb20"
-      v-if="detail.isPush == 2"
+      v-if="true"
     >
       <el-button
         type="primary"
@@ -22,20 +22,11 @@
     <div class="mt25">
       <item-title>商品明细</item-title>
       <base-table
-        :config="detailDOsConfig"
-        :data="detail.skuDoList"
+        :config="detailSonListConfig"
+        :data="detail.sonList"
         :showControl="false"
         :controlWidth="160"
         :select="false"
-      >
-      </base-table>
-    </div>
-    <div class="mt25">
-      <item-title>入库明细</item-title>
-      <base-table
-        :config="detailItemDosConfig"
-        :data="detail.jobDOList"
-        :showControl="false"
       >
       </base-table>
     </div>
@@ -55,7 +46,7 @@ const detailItemConfig = [
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
 ]
-const detailDOsConfig = [
+const detailSonListConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'skuFormat' },
@@ -63,30 +54,16 @@ const detailDOsConfig = [
   { label: '单位', prop: 'skuUnitName' },
   { label: '数量', prop: 'inQty' },
 ]
-const detailItemDosConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格', prop: 'skuFormat' },
-  { label: '型号', prop: 'skuModel' },
-  { label: '单位', prop: 'skuUnitCode' },
-  { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
-  { label: '上架数量', prop: 'jobQty' },
-  { label: '上架库位', prop: 'warehouseSpaceCode' },
-  { label: '容器', prop: 'trayCode' },
-  { label: '上架时间', prop: 'gmtCreate', type: 'time', width: 140 },
-]
 
 export default {
   components: {},
   data() {
     return {
-      queryInOrderDetailLoading: true,
+      loading: true,
       detailItemConfig,
-      detailDOsConfig,
-      detailItemDosConfig,
+      detailSonListConfig,
       detail: {
-        jobDOList: [],
-        skuDoList: []
+        sonList: []
       },
     }
   },
@@ -106,12 +83,12 @@ export default {
     },
     /** 获取详情内容 */
     initData() {
-      this.queryInOrderDetailLoading = true
-      queryInOrderDetail({ orderId: this.$route.query.id }).then(res => {
-        this.queryInOrderDetailLoading = false
+      this.loading = true
+      // queryInOrderDetail({ orderId: this.$route.query.id }).then(res => {
+      queryInOrderDetail({ orderId: 214 }).then(res => {
+        this.loading = false
         if (!res) return
-        res.data.jobDOList = res.data.jobDOList || []
-        res.data.skuDoList = res.data.skuDoList || []
+        res.data.sonList = res.data.skuDoList || []
         this.detail = res.data
       })
     },
