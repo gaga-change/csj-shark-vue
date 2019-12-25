@@ -82,27 +82,24 @@ function connectSocket(user) {
     let nowVersion = process.env.IMAGE_TAG
     const roomName = location.hostname
     // const roomName = 'shark.csjmro.com'
-    const socket = io('http://csj-center-egg.shop.csj361.com/', {
+    const socket = io('http://csj-center-egg-v2.shop.csj361.com/user', {
       // 实际使用中可以在这里传递参数
       query: {
         room: roomName,
-        email,
-        username
+        userId: user.id + '#' + email,
+        username,
+        version: process.env.IMAGE_TAG
       }
     })
     /** 监听在线人数 */
     socket.on('online', msg => {
       const res = {}
-      let { clientsDetail } = msg
-      clientsDetail = clientsDetail || []
-      Object.keys(clientsDetail).forEach(key => {
-        let item = clientsDetail[key]
-        if (res[item.email]) {
-          res[item.email].clientNum++
+      let { clients } = msg
+      clients.forEach(item => {
+        if (res[item.userId]) {
+          res[item.userId].clientNum++
         } else {
-          let user = res[item.email] = {}
-          user.clientNum = 1
-          user = Object.assign(user, item)
+          res[item.userId] = { ...item, clientNum: 1 }
         }
       })
       let str = Object.keys(res).map(key => {
