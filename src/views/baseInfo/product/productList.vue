@@ -6,15 +6,35 @@
       :searchConfig="searchConfig"
       :api="skuSelect"
       :showControl="true"
+      :controlWidth="220"
     >
       <template slot-scope="scope">
         <el-link
           type="primary"
           @click="handleSet(scope.row)"
         >扩展配置</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/baseInfo/productDetail`,query:{id: scope.row.id}})"
+        >查看</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/baseInfo/productAdd/${scope.row.id}`})"
+        >编辑</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/baseInfo/productAdd`,query:{id: scope.row.id}})"
+        >删除</el-link>
       </template>
       <template slot="btns">
         <!-- 操作区域 -->
+        <el-button
+          type="primary"
+          @click="$router.push('/baseInfo/productAdd')"
+        >创建商品</el-button>
       </template>
     </base-list>
     <product-set-dialog
