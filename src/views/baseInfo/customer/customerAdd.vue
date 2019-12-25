@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="detailLoading">
     <el-form
       :inline="false"
       :model="formData"
@@ -17,6 +17,7 @@
           v-model="formData.customerCode"
           placeholder="请输入"
           maxlength="20"
+          :disabled="edit"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -28,6 +29,7 @@
           v-model="formData.customerType"
           placeholder="请选择库区性质"
           clearable
+          :disabled="edit"
         >
           <el-option
             v-for="item in mapConfig['customerTypeEnum'] || []"
@@ -86,7 +88,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import relationDialogForm from './components/relationDialogForm'
-import { addCustomer } from '@/api'
+import { addCustomer, customerDetail, updateCustomer } from '@/api'
 
 const tableConfig = [
   { label: '联系人', prop: 'linkUser' },
@@ -102,6 +104,7 @@ export default {
       selectedRow: null,
       tableConfig,
       loading: false,
+      detailLoading: false,
       formData: {
         customerCode: undefined,
         customerName: undefined,
@@ -112,16 +115,39 @@ export default {
         customerName: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
         customerType: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
       },
-      tableData: []
+      tableData: [],
     }
   },
   computed: {
     ...mapGetters([
       'mapConfig',
       'visitedViews'
-    ])
+    ]),
+    id() {
+      return this.$route.params.id
+    },
+    edit() {
+      return !!this.$route.params.id
+    }
+  },
+  created() {
+    if (this.edit) {
+      this.initData()
+    }
   },
   methods: {
+    /** 获取详情内容 */
+    initData() {
+      this.detailLoading = true
+      customerDetail(this.id).then(res => {
+        this.detailLoading = false
+        if (!res) return
+        Object.keys(this.formData).forEach(key => {
+          this.formData[key] = res.data[key]
+        })
+        this.tableData = res.data.addressList || []
+      })
+    },
     /** 提交 */
     confirm() {
       const view = this.visitedViews.filter(v => v.path === this.$route.path)
@@ -133,6 +159,10 @@ export default {
           let params = { ...this.formData }
           params.addressList = this.tableData
           let api = addCustomer
+          if (this.edit) {
+            api = updateCustomer
+            params.id = this.id
+          }
           this.loading = true
           api(params).then(res => {
             if (!res) {
