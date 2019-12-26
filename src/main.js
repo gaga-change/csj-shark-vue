@@ -13,15 +13,12 @@ import PrintTableDialog from '@/components/PrintTableDialog'
 import BasePrintTable from '@/components/BasePrintTable'
 import DetailItem from '@/components/DetailItem'
 import BaseForm from '@/components/BaseForm'
-
 import 'normalize.css/normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss'
-
 import App from './App'
 import router from './router'
 import store from './store'
-
 import '@/icons'
 import '@/permission'
 
