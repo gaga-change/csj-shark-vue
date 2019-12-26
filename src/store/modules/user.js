@@ -77,7 +77,8 @@ const user = {
 
 function connectSocket(user) {
   /** 发布环境 - 监听版本更新 */
-  const { truename: username, email } = user
+  const userId = user.id + '#' + user.email + '#' + user.phone
+  const username = user.truename
   if (process.env.NODE_ENV !== "development") {
     let nowVersion = process.env.IMAGE_TAG
     const roomName = location.hostname
@@ -86,7 +87,7 @@ function connectSocket(user) {
       // 实际使用中可以在这里传递参数
       query: {
         room: roomName,
-        userId: user.id + '#' + email,
+        userId,
         username,
         version: process.env.IMAGE_TAG
       }
