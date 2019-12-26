@@ -92,7 +92,7 @@ function connectSocket(user) {
         version: process.env.IMAGE_TAG
       }
     })
-    /** 监听改域名的版本通知 */
+    /** 监听版本通知 */
     socket.on('exchange', msg => {
       const { data } = msg
       const { action, payload } = data
