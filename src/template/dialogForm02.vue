@@ -51,15 +51,15 @@ const formConfig = [
 ]
 const rules = {
   warehouseCode: [
-    { required: true, message: '必填项', trigger: 'blur' },
+    { required: true, message: '必填项', trigger: ['blur', 'change'] },
     { pattern: /^[0-9a-zA-Z]*$/, message: '只能输入数字或字母' },
-    { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' }
+    { min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] }
   ],
-  warehouseName: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 50, message: '不能超过50个字符', trigger: 'blur' }],
-  type: [{ required: true, message: '必填项', trigger: 'blur' }],
-  linkName: [{ min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' }],
-  warehouseAddress: [{ min: 0, max: 100, message: '不能超过100个字符', trigger: 'blur' }],
-  status: [{ required: true, message: '必填项', trigger: 'blur' }],
+  warehouseName: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }, { min: 0, max: 50, message: '不能超过50个字符', trigger: ['blur', 'change'] }],
+  type: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+  linkName: [{ min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] }],
+  warehouseAddress: [{ min: 0, max: 100, message: '不能超过100个字符', trigger: ['blur', 'change'] }],
+  status: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
 }
 /**
  * 父级设置

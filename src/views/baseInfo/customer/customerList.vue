@@ -16,7 +16,7 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="$router.push({name: 'customerModify', params: {id: scope.row.id}})"
+          @click="$router.push({name: 'customerModify', query: {id: scope.row.id}})"
         >编辑</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link

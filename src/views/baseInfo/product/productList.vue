@@ -21,7 +21,7 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="$router.push({path:`/baseInfo/productAdd/${scope.row.id}`})"
+          @click="$router.push({path:`/baseInfo/productAdd/edit`,query:{id: scope.row.id}})"
         >编辑</el-link>
         <el-divider direction="vertical"></el-divider>
         <el-link

@@ -52,7 +52,7 @@
             :min="0"
             :max="99999999"
             :disabled="item.disabled"
-            controls-position="right"
+            :controls="false"
           ></el-input-number>
           <!-- 开关 -->
           <el-switch
@@ -76,10 +76,18 @@
           </el-radio-group>
           <!-- 输入框 -->
           <el-input
+            v-else-if="item.type === 'inputNumber'"
+            style="width:200px;"
+            @input="v => handleInput(v, item)"
+            v-model="formData[item.prop]"
+            :placeholder="`请输入${item.label}`"
+            :disabled="item.disabled"
+          ></el-input>
+          <el-input
             v-else
             style="width:200px;"
             v-model="formData[item.prop]"
-            :placeholder="`请输入${item.label}`"
+            :placeholder="item.placeholder || `请输入${item.label}`"
             :disabled="item.disabled"
           ></el-input>
           <span
@@ -88,35 +96,12 @@
           >{{item.unit}}</span>
         </el-form-item>
       </template>
-      <!-- 单选 -->
-      <!-- <el-form-item
-        label="特殊资源"
-        prop="resource"
-      >
-        <el-radio-group v-model="formData.resource">
-          <el-radio label="线上品牌商赞助"></el-radio>
-          <el-radio label="线下场地免费"></el-radio>
-        </el-radio-group>
-      </el-form-item> -->
     </el-form>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-// rules: {
-//  ... 表单校验
-// packageDesc: [
-//   { required: true, message: '必填项', trigger: 'blur' },
-//   { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },
-//   {
-//     validator(rule, value, callback) {
-//       value > 0 ? callback() : callback('数值必须大于0')
-//     },
-//     trigger: 'blur'
-//   }
-// ]
-// }
 export default {
   props: {
     config: {
@@ -141,17 +126,26 @@ export default {
   computed: {
     ...mapGetters([
       'mapConfig',
-    ])
+    ]),
   },
   watch: {
     config() {
       this.init()
-    }
+    },
   },
   created() {
     this.init()
   },
   methods: {
+    handleInput(v, item) {
+      let temp = {}
+      let { lotAttrCode8 = 0, lotAttrCode9 = 0, lotAttrCode10 = 0 } = this.formData
+      temp.lotAttrCode8 = Number(lotAttrCode8) || 0
+      temp.lotAttrCode9 = Number(lotAttrCode9) || 0
+      temp.lotAttrCode10 = Number(lotAttrCode10) || 0
+      temp[item.prop] = Number(v) || 0
+      this.formData.bulk = ((temp.lotAttrCode8 * temp.lotAttrCode9 * temp.lotAttrCode10) / 1000).toFixed(12)
+    },
     init() {
       this.config.forEach(item => {
         this.$set(this.formData, item.prop, item.default)

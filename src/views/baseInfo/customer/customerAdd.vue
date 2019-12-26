@@ -124,10 +124,10 @@ export default {
       'visitedViews'
     ]),
     id() {
-      return this.$route.params.id
+      return this.$route.query.id
     },
     edit() {
-      return !!this.$route.params.id
+      return !!this.$route.query.id
     }
   },
   created() {

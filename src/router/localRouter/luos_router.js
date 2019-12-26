@@ -271,7 +271,7 @@ export default [
       },
       {
         name: 'productEdit',
-        path: 'productAdd/:id',
+        path: 'productAdd/edit',
         meta: { title: '编辑商品', noCache: true },
         component: _import('baseInfo/product/productAdd'),
         hidden: false,
@@ -320,7 +320,7 @@ export default [
       },
       {
         name: 'customerModify',
-        path: 'customerAdd/:id',
+        path: 'customerAdd/edit',
         meta: { title: '编辑合作关系', noCache: true },
         component: _import('baseInfo/customer/customerAdd'),
         hidden: false,
