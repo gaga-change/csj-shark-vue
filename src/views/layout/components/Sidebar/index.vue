@@ -14,6 +14,7 @@
       </el-menu>
     </scroll-bar>
     <div class="beian">
+      <span>系统版本：{{version}}</span>
       <a
         href="http://www.beian.miit.gov.cn"
         target="_blank"
@@ -29,6 +30,11 @@ import ScrollBar from '@/components/ScrollBar'
 
 export default {
   components: { SidebarItem, ScrollBar },
+  data() {
+    return {
+      version: process.env.IMAGE_TAG || '0.0.0'
+    }
+  },
   computed: {
     ...mapGetters([
       'menu',
@@ -48,13 +54,15 @@ export default {
 .beian {
   position: absolute;
   width: 100%;
-  height: 20px;
-  color: #fff;
-  opacity: 0.5;
+  height: 35px;
+  color: rgba(255, 255, 255, 0.5);
+  padding-top: 5px;
+  background-color: rgb(48, 65, 86);
+  box-shadow: 1px -4px 3px 0 rgba(0, 0, 0, 0.1);
   left: 0;
   bottom: 65px;
   text-align: center;
-  z-index: 999999999;
+  z-index: 1000;
   font-size: 12px;
 }
 </style>
