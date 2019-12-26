@@ -110,10 +110,12 @@ function connectSocket(user) {
       console.log('%c' + str, 'color:blue')
     })
     /** 监听改域名的版本通知 */
-    socket.on(roomName, msg => {
-      if (msg.data.payload.version) {
-        if (nowVersion !== msg.data.payload.version) {
-          nowVersion = msg.data.payload.version
+    socket.on('exchange', msg => {
+      const { data } = msg
+      const { action, payload } = data
+      if (action === 'version update' && payload.version) {
+        if (nowVersion !== payload.version) {
+          nowVersion = payload.version
           update(nowVersion)
         }
       }
