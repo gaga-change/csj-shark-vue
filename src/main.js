@@ -81,9 +81,7 @@ Vue.use(ItemTitle);
 Vue.use(BarCode);
 
 Vue.config.productionTip = false
-if (process.env.NODE_ENV === 'production') {
-  console.log('--- 当前版本：', process.env.IMAGE_TAG)
-}
+
 new Vue({
   el: '#app',
   router,

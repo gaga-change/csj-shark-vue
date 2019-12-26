@@ -91,24 +91,6 @@ function connectSocket(user) {
         version: process.env.IMAGE_TAG
       }
     })
-    /** 监听在线人数 */
-    socket.on('online', msg => {
-      const res = {}
-      let { clients } = msg
-      clients.forEach(item => {
-        if (res[item.userId]) {
-          res[item.userId].clientNum++
-        } else {
-          res[item.userId] = { ...item, clientNum: 1 }
-        }
-      })
-      let str = Object.keys(res).map(key => {
-        let user = res[key]
-        return `${user.username}[${user.clientNum}]`
-      }).join('、')
-      console.log(`%c===== 当前在线人员，临时打印（用户名[客户端数量]）${new Date().toLocaleString()} ====`, 'background-color: #42b983;color: #fff;')
-      console.log('%c' + str, 'color:blue')
-    })
     /** 监听改域名的版本通知 */
     socket.on('exchange', msg => {
       const { data } = msg

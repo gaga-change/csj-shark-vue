@@ -357,28 +357,22 @@ export default {
       1. 校验是否有多个父级，无，正常处理
       */
       let fas = [...new Set(val.map(v => v[0]))]
-      // console.log('父级个数：', fas.length)
       if (fas.length === 2) {
         // debugger
         // 删除上一个父级选中的所有项
         // debugger
         let newNode = val.filter(v => v[0] !== this.lastFa)[0]
         // this.batchRule = newNode.length == 1 ? [newNode] :
-        // console.log('--', [newNode[0]][0].lotName)
         this.batchRule = [newNode]
         if (newNode.length == 2) {
 
           this.$nextTick(() => {
-            // console.log('喵喵喵')
             this.batchRule = [[newNode[0]], newNode]
           })
         }
         this.lastFa = newNode[0]
-        // console.log('new lastFa', this.lastFa.lotName)
       } else if (fas.length === 1) {
-        // console.log('fas[0]', fas[0].lotName)
         if (!val.find(v => v.length === 1)) {
-          // console.log('无父级情况')
           if (this.lastFa) {
             // 删除了父节点
             this.batchRule = []
@@ -389,15 +383,12 @@ export default {
             this.lastFa = val[0][0]
           }
         } else if (val.length === 1 && val[0].length === 2) {
-          // console.log('用户手动选子级的')
           this.batchRule = [val[0], [val[0][0]]]
           this.lastFa = fas[0]
         } else {
-          // console.log('用户手动选父级')
           this.lastFa = fas[0]
         }
       } else {
-        // console.log('lastFa set null')
         this.lastFa = null
       }
     },
