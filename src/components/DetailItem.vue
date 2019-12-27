@@ -43,7 +43,11 @@
         </span>
       </template>
       <template v-else>
-        <span class="value-content">{{detail[item.prop]}}</span>
+        <span class="value-content">
+          <template v-if="detail[item.prop] !== null && detail[item.prop] !== undefined && detail[item.prop] !== ''">
+            {{detail[item.prop]}}{{item.unit || ''}}
+          </template>
+        </span>
       </template>
     </div>
   </div>
