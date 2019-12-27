@@ -31,6 +31,12 @@
         >
           创建收货单
         </el-button>
+        <el-button
+          type="primary"
+          @click="$router.push('/inwarehousing/inPlanAdd')"
+        >
+          创建计划单
+        </el-button>
       </template>
     </double-list>
   </div>

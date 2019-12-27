@@ -30,7 +30,14 @@ export default [
         name: 'inPlanList',
         path: 'inPlanList',
         meta: { title: '入库计划', noCache: true },
-        component: _import('inwarehousing/inPlanList'),
+        component: _import('inwarehousing/inPlan/inPlanList'),
+        hidden: false,
+      },
+      {
+        name: 'inPlanAdd',
+        path: 'inPlanAdd',
+        meta: { title: '创建计划单', noCache: true },
+        component: _import('inwarehousing/inPlan/inPlanAdd'),
         hidden: false,
       },
       {
