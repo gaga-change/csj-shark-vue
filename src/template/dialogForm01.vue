@@ -104,6 +104,22 @@
               <el-radio label="线下场地免费"></el-radio>
             </el-radio-group>
           </el-form-item>
+          <!-- 年月日 -->
+          <el-form-item
+            label="123"
+            prop="abc"
+          >
+            <el-date-picker
+              style="width:200px;"
+              v-model="formData.warehouseAreaNature"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+            >
+              >
+            </el-date-picker>
+          </el-form-item>
         </el-form>
       </div>
       <!-- <el-alert
@@ -176,13 +192,13 @@ export default {
       rules: {
         //  ... 表单校验
         packageDesc: [
-          { required: true, message: '必填项', trigger: 'blur' },
-          { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },
+          { required: true, message: '必填项', trigger: ['blur', 'change'] },
+          { min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] },
           {
             validator(rule, value, callback) {
               value > 0 ? callback() : callback('数值必须大于0')
             },
-            trigger: 'blur'
+            trigger: ['blur', 'change']
           }
         ]
       }

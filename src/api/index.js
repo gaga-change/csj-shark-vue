@@ -254,3 +254,5 @@ export const skuQueryDetailById = params => http.get(`/webApi/basic/sku/queryDet
 export const customerUpdateStatus = (id, params) => http.get(`/webApi/basic/customer/updateStatus/${id}`, { params })
 /** 删除商品 */
 export const deleteSkuById = params => http.get(`/webApi/basic/sku/deleteSkuById`, { params })
+/** 新增入库计划单 */
+export const addInWarehousePlan = params => http.post(`/webApi/plan/in/addInWarehousePlan`, params)

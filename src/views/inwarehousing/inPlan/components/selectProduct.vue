@@ -14,9 +14,6 @@
             :inline="true"
             :model="formData"
           >
-            <el-form-item label="类型">
-              {{mapConfig['takeStockTypeEnum'] && mapConfig['takeStockTypeEnum'].find(v => v.value == orderType).name}}
-            </el-form-item>
             <el-form-item
               label="商品编码"
               prop="skuCode"
@@ -37,19 +34,6 @@
                 placeholder="请输入商品名称"
               ></el-input>
             </el-form-item>
-            <el-form-item
-              label="库区库位"
-              class="form-item-block"
-              prop="warehouseAreaSpace"
-            >
-              <el-cascader
-                style="width: 100%"
-                :props="cascaderProps"
-                @change="handleCascaderChange"
-                v-model="formData.warehouseAreaSpace"
-                placeholder="请选择库区库位"
-              ></el-cascader>
-            </el-form-item>
             <el-form-item>
               <el-button
                 size="mini"
@@ -69,7 +53,7 @@
           ref='baseTable'
           :config="takeStockSelectProductTableConfig"
           :parseData="parseData"
-          :api="planInventoryQuerysSkuStockList"
+          :api="skuSelect"
           :select="true"
           :selectTotal="true"
           :selectRows.sync="selectRows"
@@ -104,9 +88,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { planInventoryQuerysSkuStockList, warehouseAreaList, warehouseSpaceSelectByAreaCode } from '@/api'
-import { takeStockSelectProductTableConfig } from './config'
+import { skuSelect } from '@/api'
 import SelectTable from './selectTable'
+
+export const takeStockSelectProductTableConfig = [
+  { label: '商品编码 ', prop: 'skuCode' },
+  { label: '商品名称 ', prop: 'skuName' },
+  { label: '规格', prop: 'lotAttrCode1' },
+  { label: '型号', prop: 'lotAttrCode2' },
+  { label: '单位', prop: 'lotAttrCode3' },
+]
 export default {
   components: { SelectTable },
   props: {
@@ -114,74 +105,24 @@ export default {
       type: Boolean,
       default: false,
     },
-    orderType: {
-      type: Number,
-      default: 0
-    },
     selectData: {
       type: Array,
       default: () => []
+    },
+    ownerCode: {
+      type: String,
     }
   },
   data() {
     let vm = this
     return {
       formData: {
-        skuName: '',
-        skuCode: '',
-        warehouseAreaSpace: undefined,
-        warehouseSpaceCodeList: [],
+        // ownerCode:
       },
       takeStockSelectProductTableConfig,
       selectRows: [],
       tableData: [],
-      planInventoryQuerysSkuStockList,
-      cascaderProps: {
-        lazy: true,
-        multiple: true,
-        expandTrigger: 'hover',
-        lazyLoad(node, resolve) {
-          const { level } = node;
-          if (level === 0) {
-            warehouseAreaList({
-              warehouseCode: vm.$store.getters.chooseWarehouse
-            }).then(res => {
-              if (res) {
-                let codes = res.data.map(v => v.warehouseAreaCode)
-                const nodes = codes.map(code => {
-                  return {
-                    value: code,
-                    label: `库区${code}`,
-                    leaf: level >= 1
-                  }
-                })
-                resolve(nodes)
-              } else {
-                resolve([])
-              }
-            })
-          }
-          if (level === 1) {
-            warehouseSpaceSelectByAreaCode({ warehouseAreaCode: node.data.value }).then(res => {
-              if (res) {
-                const nodes = res.data.map(v => {
-                  return {
-                    value: v.warehouseSpaceCode,
-                    label: `库位${v.warehouseSpaceCode}`,
-                    leaf: true
-                  }
-                })
-                resolve(nodes)
-              } else {
-                resolve([])
-              }
-            })
-          }
-          if (level === 2) {
-            resolve([])
-          }
-        },
-      },
+      skuSelect,
     }
   },
   computed: {
@@ -190,10 +131,8 @@ export default {
     ]),
     searchParams() {
       let data = { ...this.formData }
-      delete data.warehouseAreaSpace
-      if (this.orderType === 1) {
-        data.isDynamicCheck = 1
-      }
+      // 在这里添加 货主code
+      data.ownerCode = this.ownerCode
       return data
     }
   },
@@ -208,16 +147,9 @@ export default {
   created() {
   },
   methods: {
-    /** 级联选择change 事件 */
-    handleCascaderChange(val) {
-      this.formData.warehouseSpaceCodeList = val.map(v => {
-        return v[1]
-      })
-    },
     parseData(res) {
       return {
         data: res.data.list.map(v => {
-          v.areaSpceCode = (v.warehouseAreaCode || '') + '/' + (v.warehouseSpaceCode || '')
           return v
         }),
         total: res.data.total
@@ -243,10 +175,10 @@ export default {
     confrim() {
       // 根据库区库位进行排序
       this.$emit('update:selectData', [...this.selectRows].sort((a, b) => {
-        if (a.warehouseAreaCode === b.warehouseAreaCode) {
-          return b.warehouseSpaceCode > a.warehouseSpaceCode ? -1 : 1
+        if (a.skuCode === b.skuCode) {
+          return b.skuName > a.skuName ? -1 : 1
         } else {
-          return b.warehouseAreaCode > a.warehouseAreaCode ? 1 : -1
+          return b.skuCode < a.skuCode ? 1 : -1
         }
       }))
       this.selectRows = []

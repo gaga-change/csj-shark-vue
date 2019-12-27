@@ -5,45 +5,123 @@
       label-width="100px"
       :model="formData"
       :rules="rules"
-      v-loading="queryDynamicSkuStockListLoading"
+      :inline="true"
     >
-      <el-form-item
-        label="盘点类型"
-        prop="orderType"
-      >
-        <el-select
-          v-model="formData.orderType"
-          placeholder="请选择盘点类型"
-          @change="handleOrderTypeChange"
-        >
-          <el-option
-            v-for="item in mapConfig['takeStockTypeEnum']"
-            :key="item.name"
-            :label="item.name"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item
-        label="上次盘点时间"
-        v-if="orderType === 1"
-      >
-        {{lastInventoryDate}}
-      </el-form-item> -->
       <div>
-        <el-button
-          type="primary"
-          size="mini"
-          @click="showChooseProdDialog"
+        <item-title>基本信息</item-title>
+        <el-form-item
+          label="单据类型"
+          prop="busiBillType"
         >
-          获取盘点商品
-        </el-button>
+          <el-select
+            style="width:200px;"
+            v-model="formData.busiBillType"
+            placeholder="请选择"
+            clearable
+          >
+            <el-option
+              v-for="item in mapConfig['busiBillTypeEnum_in'] || []"
+              :key="item.name"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="外部单号"
+          prop="busiBillNo"
+        >
+          <el-input
+            style="width:200px;"
+            v-model="formData.busiBillNo"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="货主"
+          prop="ownerCode"
+        >
+          <el-select
+            style="width:200px;"
+            v-model="formData.ownerCode"
+            @change="handleOwnerCodeChange"
+            placeholder="请选择"
+            filterable
+            clearable
+            :loading="ownerLoading"
+          >
+            <el-option
+              v-for="(item, index) in mapConfig['_customer_type1_enum'] || []"
+              :key="index"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="供应商"
+          prop="providerCode"
+        >
+          <el-select
+            style="width:200px;"
+            v-model="formData.providerCode"
+            placeholder="请选择"
+            clearable
+            filterable
+            @change="handleProviderCodeChange"
+            :loading="providerLoading"
+          >
+            <el-option
+              v-for="item in mapConfig['_customer_type2_enum'] || []"
+              :key="item.name"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="计划入库日期"
+          prop="planTime"
+        >
+          <el-date-picker
+            style="width:200px;"
+            v-model="formData.planTime"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+          >
+            >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item
+          label="备注"
+          prop="remarkInfo"
+        >
+          <el-input
+            style="width:200px;"
+            v-model="formData.remarkInfo"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+      </div>
+      <div class="mt25">
+        <item-title>商品信息 <el-button
+            class="ml20"
+            type="primary"
+            :disabled="!formData.ownerCode"
+            @click="selectProductVisible = true"
+            title="请先选择货主"
+          >
+            添加商品
+          </el-button>
+        </item-title>
       </div>
       <div class="mt20">
         <base-table
-          :config="takeStockSelectProductTableConfig"
+          :config="skuConfig"
           :data="tableData"
-          :showControl="orderType === 0"
+          :showControl="true"
         >
           <template slot-scope="scope">
             <el-link
@@ -56,32 +134,18 @@
         </base-table>
       </div>
       <div class="mt20">
-        <el-form-item
-          label="备注"
-          prop="remark"
-        >
-          <el-input
-            style="width:300px;"
-            maxlength="20"
-            type="textarea"
-            placeholder="根据需要填写，比如重新盘点"
-            v-model="formData.remark"
-            show-word-limit
-          ></el-input>
-        </el-form-item>
-      </div>
-      <div class="mt20">
         <el-button
           type="primary"
           size="mini"
           @click="handleSubmitForm"
-          :loading="insertInventoryOrderLoading"
+          :loading="submitLoading"
         >
           提交
         </el-button>
         <el-button
           size="mini"
           @click="handleResetForm"
+          :disabled="submitLoading"
         >
           重置
         </el-button>
@@ -91,7 +155,7 @@
       ref="selctProduct"
       :visible.sync="selectProductVisible"
       :selectData.sync="tableData"
-      :orderType="orderType"
+      :ownerCode="formData.ownerCode"
     />
   </div>
 </template>
@@ -99,32 +163,48 @@
 <script>
 import moment from 'moment'
 import { mapGetters } from 'vuex'
-import { insertInventoryOrder, queryDynamicSkuStockList } from '@/api'
-import { takeStockSelectProductTableConfig } from './components/config'
+import { addInWarehousePlan, customerList } from '@/api'
 import selectProduct from './components/selectProduct'
 
+export const skuConfig = [
+  { label: '商品编码 ', prop: 'skuCode' },
+  { label: '商品名称 ', prop: 'skuName' },
+  { label: '规格', prop: 'lotAttrCode1' },
+  { label: '型号', prop: 'lotAttrCode2' },
+  { label: '单位', prop: 'lotAttrCode3' },
+  { label: '数量', prop: 'planInQty', edit: true, inputType: 'number', min: 1, max: 999999, width: 170 },
+]
 export default {
   components: { selectProduct },
   data() {
     return {
-      takeStockSelectProductTableConfig,
-      insertInventoryOrderLoading: false,
-      queryDynamicSkuStockListLoading: false,
+      skuConfig,
+      submitLoading: false,
+      providerLoading: false,
+      ownerLoading: false,
       selectProductVisible: false,
       tableData: [],
       formData: {
-        //  ... 表单字段
-        remark: '',
-        orderType: 0,
+        busiBillType: undefined,
+        busiBillNo: undefined,
+        ownerCode: undefined,
+        ownerName: undefined,
+        providerCode: undefined,
+        providerName: undefined,
+        planTime: undefined,
+        remarkInfo: undefined,
       },
       rules: {
-        //  ... 表单校验
+        busiBillType: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        busiBillNo: [{ max: 30, message: '不能超过30个字符', trigger: ['blur', 'change'] }],
+        ownerCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        providerCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        planTime: undefined,
+        remarkInfo: [{ max: 50, message: '不能超过50个字符', trigger: ['blur', 'change'] }],
         orderType: [
-          { required: true, message: '必填项', trigger: 'blur' },
+          { required: true, message: '必填项', trigger: ['blur', 'change'] },
         ]
       },
-      lastInventoryDate: undefined, // 上次盘点时间
-      skuStockList: undefined, // 动态盘点列表
     }
   },
   computed: {
@@ -133,12 +213,48 @@ export default {
     },
     ...mapGetters([
       'mapConfig',
+      'visitedViews'
     ])
   },
   created() {
-
+    this.initCustomer()
+    this.initProvider()
   },
   methods: {
+    /** 获取货主列表 */
+    initCustomer() {
+      this.ownerLoading = true
+      customerList({ pageSize: 9999, status: 0, customerType: 1 }).then(res => {
+        this.ownerLoading = false
+        if (!res) return
+        this.$store.commit('ADD_MAP', {
+          name: '_customer_type1_enum',
+          keyValue: (res.data.list || []).map(v => {
+            return {
+              name: v.customerName,
+              value: v.customerCode,
+            }
+          })
+        })
+      })
+    },
+    /** 获取供应商 */
+    initProvider() {
+      this.providerLoading = true
+      customerList({ pageSize: 9999, status: 0, customerType: 2 }).then(res => {
+        this.providerLoading = false
+        if (!res) return
+        this.$store.commit('ADD_MAP', {
+          name: '_customer_type2_enum',
+          keyValue: (res.data.list || []).map(v => {
+            return {
+              name: v.customerName,
+              value: v.customerCode,
+            }
+          })
+        })
+      })
+    },
     /** 盘点类型切换 */
     handleOrderTypeChange(v) {
       this.tableData = []
@@ -146,19 +262,59 @@ export default {
     },
     /** 提交 */
     handleSubmitForm() {
-      if (!this.tableData.length) {
-        return this.$message.error('请选择盘点商品！')
-      }
-      this.insertInventoryOrderLoading = true
-      insertInventoryOrder({
-        stockIdList: this.tableData.map(v => v.id),
-        ...this.formData
-      }).then(res => {
-        this.insertInventoryOrderLoading = false
-        if (!res) return
-        this.$message.success('操作成功！')
-        this.handleResetForm()
+      const view = this.visitedViews.filter(v => v.path === this.$route.path)
+      this.$refs['form'].validate((valid) => {
+        if (!this.tableData.length) {
+          return this.$message.error('请添加商品！')
+        }
+        if (valid) {
+          let temp = this.tableData.find(({ planInQty }) => planInQty === '' || planInQty === undefined || planInQty === null)
+          console.log(temp)
+          if (temp) {
+            console.log(temp)
+            return this.$message.error(`请输入商品【${temp.skuName}】的数量`)
+          }
+          this.submitLoading = true
+          addInWarehousePlan({
+            items: this.tableData.map((v, index) => {
+              return {
+                id: v.id,
+                skuCode: v.skuCode,
+                busiIndex: index + 1,
+                planInQty: v.planInQty
+              }
+            }),
+            ...this.formData
+          }).then(res => {
+            if (!res) {
+              this.submitLoading = false
+              return
+            }
+            this.$message({
+              type: 'success',
+              message: '操作成功,即将跳转到列表页！',
+              duration: 1500,
+              onClose: () => {
+                this.$store.dispatch('delVisitedViews', view[0]).then(() => {
+                  this.$router.push({
+                    path: `/inwarehousing/inPlanList`
+                  })
+                }).catch(err => {
+                })
+              }
+            })
+          })
+        }
       })
+    },
+    /** 货主切换 */
+    handleOwnerCodeChange(code) {
+      this.formData.ownerName = this.mapConfig['_customer_type1_enum'].find(v => v.value === code).name
+      this.tableData = []
+    },
+    /* 供应商切换 */
+    handleProviderCodeChange(code) {
+      this.formData.providerName = this.mapConfig['_customer_type2_enum'].find(v => v.value === code).name
     },
     /** 重置 */
     handleResetForm() {
@@ -177,10 +333,6 @@ export default {
         this.$message.success('删除成功')
       }).catch(() => { })
     },
-    /** 展示选择商品弹窗 */
-    showChooseProdDialog() {
-      this.selectProductVisible = true
-    }
   },
 }
 </script>
