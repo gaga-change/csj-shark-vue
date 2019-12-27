@@ -26,7 +26,7 @@
         <el-divider direction="vertical"></el-divider>
         <el-link
           type="primary"
-          @click="$router.push({path:`/baseInfo/productAdd`,query:{id: scope.row.id}})"
+          @click="handleDelete(scope.row)"
         >删除</el-link>
       </template>
       <template slot="btns">
@@ -47,7 +47,7 @@
 
 <script>
 import ProductSetDialog from './components/productSetDialog'
-import { skuSelect, lotList } from '@/api'
+import { skuSelect, lotList, deleteSkuById } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '商品名称 ', prop: 'skuName' },
@@ -90,6 +90,14 @@ export default {
             }
           })
         })
+      })
+    },
+    /** 删除 */
+    handleDelete(row) {
+      this.$apiConfirm(`是否确定删除【${row.skuName}】？`, () => deleteSkuById({ id: row.id })).then(res => {
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.getTableData()
       })
     },
     /** 刷新列表 */

@@ -70,7 +70,15 @@ export default {
     /** 新建 */
     handleCreate() {
       this.$router.push({ path: '/qualityTesting/create' })
-    }
+    },
+    /** 删除 */
+    handleDelete(row) {
+      // this.$apiConfirm(`是否确定删除【${row.name}】？`, () => enumsDel(row.id)).then(res => {
+      //   if (!res) return
+      //   this.$message.success('操作成功！')
+      //   this.getTableData()
+      // })
+    },
   }
 }
 </script>

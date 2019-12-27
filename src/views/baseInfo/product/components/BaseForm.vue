@@ -137,19 +137,19 @@ export default {
     this.init()
   },
   methods: {
-    handleInput(v, item) {
+    handleInput() {
       let temp = {}
       let { lotAttrCode8 = 0, lotAttrCode9 = 0, lotAttrCode10 = 0 } = this.formData
       temp.lotAttrCode8 = Number(lotAttrCode8) || 0
       temp.lotAttrCode9 = Number(lotAttrCode9) || 0
       temp.lotAttrCode10 = Number(lotAttrCode10) || 0
-      temp[item.prop] = Number(v) || 0
       this.formData.bulk = ((temp.lotAttrCode8 * temp.lotAttrCode9 * temp.lotAttrCode10) / 1000).toFixed(12)
     },
     init() {
       this.config.forEach(item => {
         this.$set(this.formData, item.prop, item.default)
       })
+      this.handleInput()
     },
     /** 确定 */
     validate(callback) {

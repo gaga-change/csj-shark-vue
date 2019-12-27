@@ -251,4 +251,6 @@ export const customerDetail = id => http.get(`/webApi/basic/customer/detail/${id
 /** 商品详情 */
 export const skuQueryDetailById = params => http.get(`/webApi/basic/sku/queryDetailById`, { params })
 /** 修改客户状态 */
-export const customerUpdateStatus = (id, params) => http.get(`/ webApi / basic / customer / updateStatus / ${id}`, { params })
+export const customerUpdateStatus = (id, params) => http.get(`/webApi/basic/customer/updateStatus/${id}`, { params })
+/** 删除商品 */
+export const deleteSkuById = params => http.get(`/webApi/basic/sku/deleteSkuById`, { params })
