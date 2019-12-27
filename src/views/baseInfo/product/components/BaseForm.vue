@@ -143,7 +143,8 @@ export default {
       temp.lotAttrCode8 = Number(lotAttrCode8) || 0
       temp.lotAttrCode9 = Number(lotAttrCode9) || 0
       temp.lotAttrCode10 = Number(lotAttrCode10) || 0
-      this.formData.bulk = ((temp.lotAttrCode8 * temp.lotAttrCode9 * temp.lotAttrCode10) / 1000).toFixed(12)
+      let res = ((temp.lotAttrCode8 * temp.lotAttrCode9 * temp.lotAttrCode10) / 1000).toFixed(12)
+      this.formData.bulk = (res + '').replace(/(([0]+)$)|(\.([0]+)$)/g, '')
     },
     init() {
       this.config.forEach(item => {

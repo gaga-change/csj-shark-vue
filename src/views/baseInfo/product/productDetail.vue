@@ -78,7 +78,7 @@ export default {
         temp.lotAttrCode9 = Number(lotAttrCode9) || 0
         temp.lotAttrCode10 = Number(lotAttrCode10) || 0
         res.data.bulk = ((temp.lotAttrCode8 * temp.lotAttrCode9 * temp.lotAttrCode10) / 1000).toFixed(12)
-        res.data.bulk = (res.data.bulk + '').replace(/[0]+$/g, '')
+        res.data.bulk = (res.data.bulk + '').replace(/(([0]+)$)|(\.([0]+)$)/g, '')
         this.detail = res.data
       })
     },
