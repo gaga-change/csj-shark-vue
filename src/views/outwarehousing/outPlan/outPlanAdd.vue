@@ -326,9 +326,7 @@ export default {
         }
         if (valid) {
           let temp = this.tableData.find(({ planOutQty }) => planOutQty === '' || planOutQty === undefined || planOutQty === null)
-          console.log(temp)
           if (temp) {
-            console.log(temp)
             return this.$message.error(`请输入商品【${temp.skuName}】的数量`)
           }
           this.submitLoading = true
@@ -380,12 +378,10 @@ export default {
         let temp = this.mapConfig['_customer_type3_enum'].find(v => v.value === code)
         this.formData.arrivalName = temp.name
         this.addressListLoading = true
-        console.log(temp, code)
         customerDetail(temp.id).then(res => {
           this.addressListLoading = false
           if (!res) return
           this.addressList = res.data.addressList
-          console.log(this.$copy(res.data.addressList))
         })
       }
     },

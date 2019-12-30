@@ -279,9 +279,7 @@ export default {
         }
         if (valid) {
           let temp = this.tableData.find(({ planInQty }) => planInQty === '' || planInQty === undefined || planInQty === null)
-          console.log(temp)
           if (temp) {
-            console.log(temp)
             return this.$message.error(`请输入商品【${temp.skuName}】的数量`)
           }
           this.submitLoading = true
