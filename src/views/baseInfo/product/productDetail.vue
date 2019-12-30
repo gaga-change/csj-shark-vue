@@ -25,7 +25,7 @@ const detailItemConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '商品品类', prop: 'lotAttrCode6' },
-  { label: '货主', prop: 'ownerCode' },
+  { label: '货主', prop: 'ownerName' },
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '单位', prop: 'lotAttrCode3' },
   { label: '型号', prop: 'lotAttrCode2' },
