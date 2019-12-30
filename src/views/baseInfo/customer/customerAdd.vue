@@ -16,7 +16,6 @@
           style="width:250px;"
           v-model="formData.customerCode"
           placeholder="请输入"
-          maxlength="20"
           :disabled="edit"
         ></el-input>
       </el-form-item>
@@ -47,7 +46,6 @@
           style="width:250px;"
           v-model="formData.customerName"
           placeholder="请输入"
-          maxlength="50"
         ></el-input>
       </el-form-item>
       <item-title>联系信息 <el-button @click="handleAddRelation">添加</el-button>
@@ -111,9 +109,18 @@ export default {
         customerType: undefined
       },
       rules: {
-        customerCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
-        customerName: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
-        customerType: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        customerCode: [
+          { required: true, message: '必填项', trigger: ['blur', 'change'] },
+          { pattern: /^[0-9a-zA-Z]*$/, message: '只能输入数字或字母' },
+          { min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] }
+        ],
+        customerName: [
+          { required: true, message: '必填项', trigger: ['blur', 'change'] },
+          { max: 50, message: '不能超过50个字符', trigger: ['blur', 'change'] }
+        ],
+        customerType: [
+          { required: true, message: '必填项', trigger: ['blur', 'change'] },
+        ],
       },
       tableData: [],
     }
