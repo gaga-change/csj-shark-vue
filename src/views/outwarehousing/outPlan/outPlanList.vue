@@ -38,6 +38,10 @@
           type="primary"
           @click="handleAssignPicking"
         >手动分配拣货任务</el-button>
+        <el-button
+          type="primary"
+          @click="$router.push('/outwarehousing/outPlanAdd')"
+        >新建计划单</el-button>
       </template>
     </double-list>
   </div>

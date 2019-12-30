@@ -20,7 +20,7 @@
             clearable
           >
             <el-option
-              v-for="item in mapConfig['busiBillTypeEnum_in'] || []"
+              v-for="item in mapConfig['busiBillTypeEnum_out'] || []"
               :key="item.name"
               :label="item.name"
               :value="item.value"
@@ -59,20 +59,20 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          label="供应商"
-          prop="providerCode"
+          label="客户"
+          prop="arrivalCode"
         >
           <el-select
             style="width:200px;"
-            v-model="formData.providerCode"
+            v-model="formData.arrivalCode"
             placeholder="请选择"
             clearable
             filterable
-            @change="handleProviderCodeChange"
+            @change="handleArrivalCodeChange"
             :loading="providerLoading"
           >
             <el-option
-              v-for="item in mapConfig['_customer_type2_enum'] || []"
+              v-for="item in mapConfig['_customer_type3_enum'] || []"
               :key="item.name"
               :label="item.name"
               :value="item.value"
@@ -80,12 +80,52 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          label="计划入库日期"
-          prop="planTime"
+          label="客户地址"
+          prop="addressId"
+          v-show="addressList.length"
+        >
+          <el-select
+            style="width:200px;"
+            v-model="formData.addressId"
+            @change="handleAddressChange"
+            placeholder="请选择"
+            filterable
+            clearable
+            :loading="ownerLoading"
+          >
+            <el-option
+              v-for="(item, index) in addressList"
+              :key="index"
+              :label="item.address"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="联系电话"
+          prop="arrivalLinkTel"
+          v-show="this.formData.arrivalLinkTel"
+        >
+          <div style="width:200px">
+            {{this.formData.arrivalLinkTel || ''}}
+          </div>
+        </el-form-item>
+        <el-form-item
+          label="联系人"
+          prop="arrivalLinkName"
+          v-show="this.formData.arrivalLinkName"
+        >
+          <div style="width:200px">
+            {{this.formData.arrivalLinkName || ''}}
+          </div>
+        </el-form-item>
+        <el-form-item
+          label="计划出库日期"
+          prop="planOutTime"
         >
           <el-date-picker
             style="width:200px;"
-            v-model="formData.planTime"
+            v-model="formData.planOutTime"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -94,7 +134,7 @@
             >
           </el-date-picker>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           label="备注"
           prop="remarkInfo"
         >
@@ -103,7 +143,7 @@
             v-model="formData.remarkInfo"
             placeholder="请输入"
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </div>
       <div class="mt25">
         <item-title>商品信息 <el-button
@@ -173,7 +213,7 @@
 <script>
 import moment from 'moment'
 import { mapGetters } from 'vuex'
-import { addInWarehousePlan, customerList } from '@/api'
+import { addOutWarehousePlan, customerList, customerDetail } from '@/api'
 import selectProduct from './components/selectProduct'
 
 export const skuConfig = [
@@ -182,7 +222,7 @@ export const skuConfig = [
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '型号', prop: 'lotAttrCode2' },
   { label: '单位', prop: 'lotAttrCode3' },
-  { label: '数量', prop: 'planInQty', edit: true, inputType: 'number', min: 1, max: 999999, width: 170 },
+  { label: '数量', prop: 'planOutQty', edit: true, inputType: 'number', min: 1, max: 999999, width: 170 },
 ]
 export default {
   components: { selectProduct },
@@ -199,22 +239,28 @@ export default {
         busiBillNo: undefined,
         ownerCode: undefined,
         ownerName: undefined,
-        providerCode: undefined,
-        providerName: undefined,
-        planTime: undefined,
-        remarkInfo: undefined,
+        arrivalCode: undefined,
+        arrivalName: undefined,
+        planOutTime: undefined,
+        arrivalLinkTel: undefined,
+        arrivalLinkName: undefined,
+        arrivalAddress: undefined,
+        addressId: undefined,
+        remarkInfo: '',
       },
       rules: {
         busiBillType: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
         busiBillNo: [{ max: 30, message: '不能超过30个字符', trigger: ['blur', 'change'] }],
         ownerCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
-        providerCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
-        planTime: undefined,
-        remarkInfo: [{ max: 50, message: '不能超过50个字符', trigger: ['blur', 'change'] }],
+        arrivalCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
+        planOutTime: undefined,
+        // remarkInfo: [{ max: 50, message: '不能超过50个字符', trigger: ['blur', 'change'] }],
+        addressId: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }],
         orderType: [
           { required: true, message: '必填项', trigger: ['blur', 'change'] },
         ]
       },
+      addressList: [],
     }
   },
   computed: {
@@ -227,12 +273,12 @@ export default {
     ])
   },
   created() {
+    this.initOwner()
     this.initCustomer()
-    this.initProvider()
   },
   methods: {
     /** 获取货主列表 */
-    initCustomer() {
+    initOwner() {
       this.ownerLoading = true
       customerList({ pageSize: 9999, status: 0, customerType: 1 }).then(res => {
         this.ownerLoading = false
@@ -248,18 +294,19 @@ export default {
         })
       })
     },
-    /** 获取供应商 */
-    initProvider() {
+    /** 获取客户 */
+    initCustomer() {
       this.providerLoading = true
-      customerList({ pageSize: 9999, status: 0, customerType: 2 }).then(res => {
+      customerList({ pageSize: 9999, status: 0, customerType: 3 }).then(res => {
         this.providerLoading = false
         if (!res) return
         this.$store.commit('ADD_MAP', {
-          name: '_customer_type2_enum',
+          name: '_customer_type3_enum',
           keyValue: (res.data.list || []).map(v => {
             return {
               name: v.customerName,
               value: v.customerCode,
+              id: v.id,
             }
           })
         })
@@ -278,20 +325,20 @@ export default {
           return this.$message.error('请添加商品！')
         }
         if (valid) {
-          let temp = this.tableData.find(({ planInQty }) => planInQty === '' || planInQty === undefined || planInQty === null)
+          let temp = this.tableData.find(({ planOutQty }) => planOutQty === '' || planOutQty === undefined || planOutQty === null)
           console.log(temp)
           if (temp) {
             console.log(temp)
             return this.$message.error(`请输入商品【${temp.skuName}】的数量`)
           }
           this.submitLoading = true
-          addInWarehousePlan({
+          addOutWarehousePlan({
             items: this.tableData.map((v, index) => {
               return {
                 id: v.id,
                 skuCode: v.skuCode,
                 busiIndex: index + 1,
-                planInQty: v.planInQty
+                planOutQty: v.planOutQty
               }
             }),
             ...this.formData
@@ -307,7 +354,7 @@ export default {
               onClose: () => {
                 this.$store.dispatch('delVisitedViews', view[0]).then(() => {
                   this.$router.push({
-                    path: `/inwarehousing/inPlanList`
+                    path: `/outwarehousing/outPlanList`
                   })
                 }).catch(err => {
                 })
@@ -320,13 +367,27 @@ export default {
     /** 货主切换 */
     handleOwnerCodeChange(code) {
       let temp = this.mapConfig['_customer_type1_enum'].find(v => v.value === code)
-      this.formData.ownerName = temp ? temp.name : ''
+      this.formData.ownerName = temp ? temp.name : undefined
       this.tableData = []
     },
-    /* 供应商切换 */
-    handleProviderCodeChange(code) {
-      let temp = this.mapConfig['_customer_type2_enum'].find(v => v.value === code)
-      this.formData.providerName = temp ? temp.name : ''
+    /* 客户切换 */
+    handleArrivalCodeChange(code) {
+      this.addressList = []
+      if (!code) {
+        this.handleAddressChange()
+        this.formData.arrivalName = ''
+      } else {
+        let temp = this.mapConfig['_customer_type3_enum'].find(v => v.value === code)
+        this.formData.arrivalName = temp.name
+        this.addressListLoading = true
+        console.log(temp, code)
+        customerDetail(temp.id).then(res => {
+          this.addressListLoading = false
+          if (!res) return
+          this.addressList = res.data.addressList
+          console.log(this.$copy(res.data.addressList))
+        })
+      }
     },
     /** 重置 */
     handleResetForm() {
@@ -345,6 +406,20 @@ export default {
         this.$message.success('删除成功')
       }).catch(() => { })
     },
+    /** 客户地址切换 */
+    handleAddressChange(id) {
+      if (!id) {
+        this.formData.addressId = undefined
+        this.formData.arrivalAddress = undefined
+        this.formData.arrivalLinkTel = undefined
+        this.formData.arrivalLinkName = undefined
+      } else {
+        let temp = this.addressList.find(v => v.id === id)
+        this.formData.arrivalAddress = temp.address
+        this.formData.arrivalLinkTel = temp.linkTel
+        this.formData.arrivalLinkName = temp.linkUser
+      }
+    }
   },
 }
 </script>

@@ -102,7 +102,14 @@ export default [
         name: 'outPlanList',
         path: 'outPlanList',
         meta: { title: '出库计划', noCache: true },
-        component: _import('outwarehousing/outPlanList'),
+        component: _import('outwarehousing/outPlan/outPlanList'),
+        hidden: false,
+      },
+      {
+        name: 'outPlanAdd',
+        path: 'outPlanAdd',
+        meta: { title: '新建出库计划', noCache: true },
+        component: _import('outwarehousing/outPlan/outPlanAdd'),
         hidden: false,
       },
       {
