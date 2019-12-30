@@ -1,7 +1,7 @@
 <template>
   <div class="SelectProductCom">
     <el-dialog
-      title="选择盘点商品"
+      title="添加商品"
       :visible="visible"
       width="70%"
       :before-close="handleClose"
@@ -118,6 +118,8 @@ export default {
     return {
       formData: {
         // ownerCode:
+        skuCode: undefined,
+        skuName: undefined
       },
       takeStockSelectProductTableConfig,
       selectRows: [],
