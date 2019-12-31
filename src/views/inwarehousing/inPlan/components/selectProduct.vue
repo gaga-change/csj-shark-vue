@@ -63,7 +63,7 @@
       </div>
       <el-alert
         class="mt15"
-        title="注：最多选取50条，如需盘点更多商品，请分批处理！"
+        title="注：最多选取50条，如需添加更多商品，请分批处理！"
         type="info"
         :closable="false"
       >
