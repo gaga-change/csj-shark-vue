@@ -5,7 +5,8 @@
       <detail-item
         :config="detailItemConfig"
         :detail="detail"
-        :labelWidth="100"
+        :labelWidth="50"
+        :textWidth="170"
       />
     </div>
     <div class="mt25">

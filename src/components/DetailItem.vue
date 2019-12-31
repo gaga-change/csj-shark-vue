@@ -2,7 +2,7 @@
   <div class="DetailItemCom">
     <div
       class="item"
-      :style="{width: labelWidth ? (labelWidth + 120) + 'px' : undefined}"
+      :style="{width: labelWidth ? (labelWidth + textWidth) + 'px' : undefined}"
       v-for="(item, index) in config"
       :key="index"
     >
@@ -71,6 +71,10 @@ export default {
     labelWidth: {
       type: Number,
       default: 80
+    },
+    textWidth: {
+      type: Number,
+      default: 120
     }
   },
   data() {
@@ -137,6 +141,7 @@ export default {
     }
     .value-content {
       flex: 1;
+      word-break: break-all;
     }
   }
 }
