@@ -157,12 +157,16 @@ export default {
   methods: {
     init() {
       this.detailLoading = true
+      let disabledProp = ['skuCode', 'ownerCode', 'lotAttrCode1', 'lotAttrCode2']
       skuQueryDetailById({ id: this.id }).then(res => {
         this.detailLoading = false
         if (!res) return
         let detail = res.data || {}
         const setDef = item => {
           item.default = detail[item.prop]
+          if (disabledProp.find(v => v === item.prop)) {
+            this.$set(item, 'disabled', true)
+          }
           return item
         }
         this.formBaseConfig = this.$copy(this.formBaseConfig).map(setDef)
