@@ -26,7 +26,7 @@
         <el-select
           style="width:250px;"
           v-model="formData.customerType"
-          placeholder="请选择库区性质"
+          placeholder="请选择"
           clearable
           :disabled="edit"
         >
