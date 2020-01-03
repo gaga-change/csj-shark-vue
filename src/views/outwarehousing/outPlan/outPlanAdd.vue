@@ -371,10 +371,9 @@ export default {
     /* 客户切换 */
     handleArrivalCodeChange(code) {
       this.addressList = []
-      if (!code) {
-        this.handleAddressChange()
-        this.formData.arrivalName = ''
-      } else {
+      this.handleAddressChange()
+      this.formData.arrivalName = ''
+      if (code) {
         let temp = this.mapConfig['_customer_type3_enum'].find(v => v.value === code)
         this.formData.arrivalName = temp.name
         this.addressListLoading = true
