@@ -47,7 +47,7 @@ const tableConfig = [
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitName' },
-  { label: '批次', prop: 'batchNo' },
+  { label: '批次', prop: 'batchNo', type: 'batchNoPopover' },
   { label: '容器 ', prop: 'trayCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '货主', prop: 'ownerName' },
