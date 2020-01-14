@@ -9,6 +9,7 @@
       :select="true"
       @selectionChange="selectionChange"
       :selectable="selectable"
+      :labelWidth="100"
     >
       <template slot="btns">
         <el-button
@@ -44,11 +45,13 @@ const tableConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 const searchConfig = [
+  { label: '入库计划单号', prop: 'planCode' },
   { label: '收货单号', prop: 'receiveOrderCode' },
-  { label: '容器', prop: 'trayCode' },
-  { label: '库位', prop: 'warehouseSpaceCode' },
+  { label: '外部订单号', prop: 'busiBillNo' },
   { label: '是否已生成入库单', prop: 'isCreateOrder', type: 'radio', labelWidth: 120, radio: 'yesOrNoEnum', default: 0 },
+  { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '批次规则', prop: 'batchNo', type: 'batchRule' },
+  { label: '容器', prop: 'trayCode' },
 ]
 
 export default {

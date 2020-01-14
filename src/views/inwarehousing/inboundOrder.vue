@@ -35,10 +35,11 @@ const tableConfig = [
   { label: '操作人', prop: 'createrName' },
 ]
 const searchConfig = [
-  { label: '供应商名称', prop: 'providerName' },
   { label: '计划单号', prop: 'planCode' },
-  { label: '货主', prop: 'ownerName' },
   { label: '入库单号', prop: 'orderCode' },
+  { label: '外部订单号', prop: 'busiBillNo' },
+  { label: '货主', prop: 'ownerName' },
+  { label: '供应商名称', prop: 'providerName' },
   { label: '入库日期', prop: 'createTimeArea', props: ['orderStartDate', 'orderEndDate'], type: 'timeArea' },
   { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
 ]
