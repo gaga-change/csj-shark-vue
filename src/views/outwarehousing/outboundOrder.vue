@@ -31,14 +31,15 @@ const tableConfig = [
   { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
   { label: '单据类型', prop: 'orderType', type: 'enum', enum: 'busiBillTypeEnum' },
   { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: 'outboundOrderStatus' },
-  { label: '客户/供应商', prop: 'ownerName', },
+  { label: '货主', prop: 'ownerName', },
   { label: '操作人', prop: 'createrName' },
 ]
 const searchConfig = [
   { label: '计划单号', prop: 'planCode' },
   { label: '出库单号', prop: 'orderCode' },
-  { label: '客户/供应商', prop: 'ownerName' },
+  { label: '外部订单号', prop: 'busiBillNo' },
   { label: '单据状态', prop: 'orderStatus', type: 'enum', enum: 'outboundOrderStatus' },
+  { label: '货主', prop: 'ownerName' },
   { label: '出库时间', prop: 'createTimeArea', props: ['startDate', 'endDate'], type: 'timeArea' },
   { label: '推送状态', prop: 'isPush', type: 'enum', enum: 'isPushStateEnum' },
 ]
