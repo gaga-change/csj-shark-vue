@@ -68,7 +68,7 @@ const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '货主名称', prop: 'ownerName' },
-  { label: '库位编码', prop: 'warehouseSpaceCode' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
   { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
 ]

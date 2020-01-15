@@ -32,7 +32,7 @@ const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '货主名称', prop: 'ownerName' },
-  { label: '库位编码', prop: 'warehouseSpaceCode' },
+  { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '变动时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
   { label: '变动类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
 ]
