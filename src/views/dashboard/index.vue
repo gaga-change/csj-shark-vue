@@ -101,7 +101,7 @@ import bgpath from '@/assets/images/bgimg.png'
 let todoConfig = [
   { name: '待审核', key: 'notCheck', link: '/toDoTask/toDoTaskAuditList?opStatus=0' },
   { name: '待收货', key: 'receive', link: '/inwarehousing/inPlanList?receiveStatus=0' },
-  { name: '待上架', key: 'put', link: '/inwarehousing/inrecord?isPut=0' },
+  { name: '待上架', key: 'put', link: '/inwarehousing/goodsDetailList?isPut=0' },
   { name: '待入库', key: 'notInStore', link: '/inwarehousing/record?isCreateOrder=0' },
   { name: '待拣货', key: 'sort', link: '/outwarehousing/outPlanList?sortStatus=0' },
   { name: '待复核', key: 'review', link: '/outwarehousing/temporaryStorage' },
