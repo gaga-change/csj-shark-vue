@@ -4,7 +4,7 @@
       <img :src="logoPath" />
     </div>
     <div class="plant-text">
-      供应链云仓库管理系统WMS{{development ? '【开发环境】': ''}}
+      供应链云仓库管理系统{{development ? '【开发环境】': ''}}
     </div>
     <ul class="top-nav">
       <li>
