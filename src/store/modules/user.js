@@ -39,7 +39,7 @@ const user = {
           confirmButtonText: '确定',
           callback: action => {
             if (action === 'confirm') {
-              location.href = `/csj_logout`
+              location.href = `/login`
             }
           }
         });

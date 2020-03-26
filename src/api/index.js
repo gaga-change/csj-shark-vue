@@ -258,3 +258,7 @@ export const deleteSkuById = params => http.get(`/webApi/basic/sku/deleteSkuById
 export const addInWarehousePlan = params => http.post(`/webApi/plan/in/addInWarehousePlan`, params)
 /** 新增出库计划单 */
 export const addOutWarehousePlan = params => http.post(`/webApi/plan/out/addOutWarehousePlan`, params)
+/** 登录 */
+export const userlogin = params => http.post(`/api/sso/login`, params)
+/** 退出登录 */
+export const logout = () => http.get(`/api/sso/logout`)

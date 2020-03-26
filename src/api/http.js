@@ -12,19 +12,19 @@ let newAxios = axios.create({
 newAxios.interceptors.response.use(function (response) {
   let data = response.data
   // 系统异常提示（返回的数据为 null）
-  if (data.code === 'user-not-login' || data.code === 'shark-512') {
+  if (data.code === 'user-not-login' || data.code === 'shark-512' || data.code == '501') {
     Message({
       type: 'error',
       message: '登录失效，请重新登录',
       onClose: () => {
         sessionStorage.setItem('warehouse', '')
-        location.href = `/csj_login`
+        location.href = `/login`
       },
       duration: 1500
     })
     data = null
   } else if (data.code !== '200') {
-    let message = data.message || data.errorMsg || ''
+    let message = data.detailError || data.message || data.errorMsg || ''
     Message({
       type: 'error',
       message: message || '系统异常',
@@ -35,7 +35,7 @@ newAxios.interceptors.response.use(function (response) {
   return data
 }, function (error) {
   let data = error.response.data
-  let message = data.message || data.errorMsg || ''
+  let message = data.detailError || data.message || data.errorMsg || ''
   if (error.message === 'timeout of 1500ms exceeded') {
     Notification({
       title: '错误信息',
@@ -49,7 +49,7 @@ newAxios.interceptors.response.use(function (response) {
       message: message || '登录失效，请重新登录',
       onClose: () => {
         sessionStorage.setItem('warehouse', '')
-        location.href = `/csj_login`
+        location.href = `/login`
       },
       duration: 1500
     })

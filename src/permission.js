@@ -2,12 +2,10 @@ import NProgress from 'nprogress'
 
 import router from './router'
 import store from './store'
-import { LoginPath } from '@/utils'
 
 import 'nprogress/nprogress.css'
-import { Message } from 'element-ui';
 
-const whiteList = ['/csj_login'] // 不重定向白名单
+const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (whiteList.includes(to.path)) {
@@ -20,7 +18,7 @@ router.beforeEach((to, from, next) => {
         next({ ...to, replace: true })
       } else {
         store.dispatch('SetWarehouse', '')
-        location.href = `/csj_logout`
+        location.href = `/login`
       }
     })
   } else {

@@ -15,7 +15,7 @@ const getters = {
   mapConfig: state => state.map.mapConfig,
   arrivalBill: state => state.tempData.arrivalBill,
   menu: state => {
-    let bakmenus = state.user.userInfo && state.user.userInfo.menus && JSON.parse(state.user.userInfo.menus) || []
+    let bakmenus = state.user.userInfo && state.user.userInfo.menus && state.user.userInfo.menus || []
     let bakmenu = deepExistMenu(bakmenus, asyncRouterMap)
     const menutemp = []
     bakmenu.forEach(item => {
@@ -50,7 +50,7 @@ const getters = {
     return menutemp
   },
   totalmenu: state => {
-    let bakmenus = state.user.userInfo && state.user.userInfo.menus && JSON.parse(state.user.userInfo.menus) || []
+    let bakmenus = state.user.userInfo && state.user.userInfo.menus && state.user.userInfo.menus || []
     let totalmenu = deepExistMenu(bakmenus, asyncRouterMap)
     const nameArray = []
     if (!totalmenu) {

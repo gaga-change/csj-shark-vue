@@ -44,7 +44,7 @@
       trigger="click"
     >
       <div class="avatar-wrapper">
-        <span class="welcome">欢迎，{{userInfo.truename}}</span>
+        <span class="welcome">欢迎，{{userInfo.nick || userInfo.email}}</span>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu
@@ -144,8 +144,7 @@
 <script>
 import logoPath from '@/assets/images/logo.png'
 import { mapGetters } from 'vuex'
-import { updatepassword, setWarehouseCode, todolist } from '@/api'
-import { LoginPath, TiggerUrl } from '@/utils'
+import { updatepassword, setWarehouseCode, todolist, logout } from '@/api'
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -175,7 +174,6 @@ export default {
       dataUrl: null,
       development: false,
       logoPath,
-      TiggerUrl,
       modifyPasswordShow: false,
       form: {
         oldpassword: '',
@@ -313,9 +311,10 @@ export default {
         cancelButtonText: '取消'
       }).then(action => {
         if (action === 'confirm') {
+          logout()
           this.$store.dispatch('SetWarehouse', '')
           this.$store.dispatch('setTodolist', '')
-          location.href = `/csj_logout`
+          location.href = `/login`
         }
       }).catch(() => { })
     }

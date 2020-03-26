@@ -9,7 +9,8 @@ import Layout from '../views/layout/Layout'
 
 
 export const constantRouterMap = [
-  { path: '/login', redirect: '/csj_login', hidden: true },
+  { path: '/login', component: () => import('../views/login/index'), hidden: true },
+  // { path: '/login', redirect: '/csj_login', hidden: true },
   { path: '/404', component: _import('404'), hidden: true },
   { path: '/401', component: _import('401'), hidden: true },
   {
@@ -29,7 +30,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  mode: 'hash',
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
