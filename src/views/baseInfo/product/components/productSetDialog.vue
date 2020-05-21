@@ -83,10 +83,43 @@
               :loading="lotListLoading"
               v-model="formData.lotId"
               placeholder="请选择批次规则"
-              no-data-text='??'
             >
               <el-option
                 v-for="item in batchList"
+                :key="item.id"
+                :label="item.lotName"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <item-title>上架策略 <span class="c-red f12">（必填）</span></item-title>
+          <el-form-item
+            label="上架策略"
+            prop="AA"
+          >
+            <el-select
+              v-model="formData.AA"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in []"
+                :key="item.id"
+                :label="item.lotName"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <item-title>周转规则 <span class="c-red f12">（必填）</span></item-title>
+          <el-form-item
+            label="周转规则"
+            prop="BB"
+          >
+            <el-select
+              v-model="formData.BB"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in []"
                 :key="item.id"
                 :label="item.lotName"
                 :value="item.id"
@@ -151,9 +184,17 @@ export default {
         lotAttrCode7: undefined, // 是否质检
         packageCode: undefined, // 包装编码
         lotId: undefined,
+        AA: undefined, // 上架策略
+        BB: undefined, // 周转规则
       },
       rules: {
         lotId: [
+          { required: true, message: '必填项', trigger: 'blur' }
+        ],
+        AA: [
+          { required: true, message: '必填项', trigger: 'blur' }
+        ],
+        BB: [
           { required: true, message: '必填项', trigger: 'blur' }
         ],
       }
