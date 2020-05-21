@@ -17,7 +17,7 @@
           type="primary"
           @click="$router.push({path:`/inwarehousing/inrecordDetail`,query:{id: scope.row.id}})"
         >详情</el-link>
-        <template v-if="scope.row.execStatus === 0">
+        <template v-if="scope.row.execStatus !== 9">
           <el-divider direction="vertical"></el-divider>
           <el-link
             type="primary"
