@@ -37,14 +37,24 @@
         >
           创建计划单
         </el-button>
+        <el-button
+          type="primary"
+          @click="lockDialogVisible=true"
+        >
+          商品锁定计划
+        </el-button>
       </template>
     </double-list>
+    <lockDialog
+      :visible.sync="lockDialogVisible"
+      @submited="getTableData()"
+    />
   </div>
 </template>
 
 <script>
 import { getInfoWarehousing, getInfoDetailWarehousing, createReceiveOrder, planInEnd } from '@/api'
-
+import lockDialog from './components/lockDialog'
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
@@ -77,11 +87,13 @@ const searchConfig = [
 ]
 
 export default {
+  components: { lockDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       childTableConfig,
+      lockDialogVisible: false,
       listApi: getInfoWarehousing,
       selectRows: [],
       createReceiveOrderLoading: false,
