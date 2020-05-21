@@ -48,6 +48,7 @@ import { getInfoWarehousing, getInfoDetailWarehousing, createReceiveOrder, planI
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
+  { label: '货主商品编码', prop: 'ownerSkuCode', width: 150 },
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
@@ -63,6 +64,7 @@ const tableConfig = [
   { label: '货主', prop: 'ownerName' },
   { label: '供应商', prop: 'providerName' },
   { label: '下单时间', prop: 'gmtCreate', type: 'time', width: 140 },
+  { label: '计划到货日期', prop: 'planInWarehouseTime', type: 'time', width: 140 },
 ]
 const searchConfig = [
   { label: '入库计划单号 ', prop: 'planCode' },
