@@ -50,6 +50,48 @@
               ></el-input-number>
             </el-form-item>
             <el-form-item
+              label="合格数"
+              prop="AA"
+            >
+              <el-input-number
+                style="width:200px;"
+                placeholder="请输入"
+                v-model="formData.AA"
+                :precision="0"
+                :min="0"
+                :max="99999999"
+                controls-position="right"
+              ></el-input-number>
+            </el-form-item>
+            <el-form-item
+              label="不合格数"
+              prop="BB"
+            >
+              <el-input-number
+                style="width:200px;"
+                placeholder="请输入"
+                v-model="formData.BB"
+                :precision="0"
+                :min="0"
+                :max="99999999"
+                controls-position="right"
+              ></el-input-number>
+            </el-form-item>
+            <el-form-item
+              label="破坏数"
+              prop="CC"
+            >
+              <el-input-number
+                style="width:200px;"
+                placeholder="请输入"
+                v-model="formData.CC"
+                :precision="0"
+                :min="0"
+                :max="99999999"
+                controls-position="right"
+              ></el-input-number>
+            </el-form-item>
+            <el-form-item
               v-for="item in lotDetailList"
               :key="item.lotAttrCode"
               :label="item.lotAttrName"
@@ -182,6 +224,9 @@ export default {
       Object.keys(this.formData).forEach(key => {
         this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
       })
+      this.formData.AA = this.rowData.receiveQty || 0
+      this.formData.BB = 0
+      this.formData.CC = 0
       this.initBatch()
     }
   },
@@ -194,6 +239,9 @@ export default {
         //  ... 表单字段
         trayCode: undefined,
         receiveQty: undefined,
+        AA: undefined,
+        BB: undefined,
+        CC: undefined,
       },
       rules: {
         trayCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }, { min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] },],
@@ -241,6 +289,10 @@ export default {
         if (valid) {
           let params = { ...this.formData, itemId: this.rowData.id }
           params.confirmQty = params.receiveQty
+          const { AA, BB, CC, receiveQty } = params
+          if (AA + BB + CC > receiveQty) {
+            return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
+          }
           delete params.receiveQty
           this.loading = true
           editorReceiveItem(params).then(res => {
