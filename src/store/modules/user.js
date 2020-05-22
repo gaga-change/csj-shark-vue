@@ -39,7 +39,7 @@ const user = {
           confirmButtonText: '确定',
           callback: action => {
             if (action === 'confirm') {
-              location.href = `/login`
+              location.href = `/login?backUrl=${location.href}`
             }
           }
         });

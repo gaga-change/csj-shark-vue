@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
         next({ ...to, replace: true })
       } else {
         store.dispatch('SetWarehouse', '')
-        location.href = `/login`
+        location.href = `/login?backUrl=${location.href}`
       }
     })
   } else {

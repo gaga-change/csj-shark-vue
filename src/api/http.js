@@ -18,7 +18,7 @@ newAxios.interceptors.response.use(function (response) {
       message: '登录失效，请重新登录',
       onClose: () => {
         sessionStorage.setItem('warehouse', '')
-        location.href = `/login`
+        location.href = `/login?backUrl=${location.href}`
       },
       duration: 1500
     })
@@ -49,7 +49,7 @@ newAxios.interceptors.response.use(function (response) {
       message: message || '登录失效，请重新登录',
       onClose: () => {
         sessionStorage.setItem('warehouse', '')
-        location.href = `/login`
+        location.href = `/login?backUrl=${location.href}`
       },
       duration: 1500
     })

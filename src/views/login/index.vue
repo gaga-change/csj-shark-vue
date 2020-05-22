@@ -121,7 +121,8 @@ export default {
               return this.loading = false
             } else {
               // return this.loading = false
-              location.href = '/'
+              const backUrl = this.$route.query.backUrl || '/'
+              location.href = backUrl
             }
           })
         }

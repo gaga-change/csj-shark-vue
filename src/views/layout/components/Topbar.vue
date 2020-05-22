@@ -314,7 +314,7 @@ export default {
           logout()
           this.$store.dispatch('SetWarehouse', '')
           this.$store.dispatch('setTodolist', '')
-          location.href = `/login`
+          location.href = `/login?backUrl=${location.href}`
         }
       }).catch(() => { })
     }
