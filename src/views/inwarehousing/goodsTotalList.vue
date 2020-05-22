@@ -36,6 +36,7 @@ const tableConfig = [
   { label: '单位', prop: 'skuUnitCode' },
   { label: '预期收货量', prop: 'planQty' },
   { label: '实际收货量', prop: 'receiveQty' },
+  { label: '商品状态', prop: 'AA' },
 ]
 const searchConfig = [
   { label: '收货单号 ', prop: 'receiveOrderCode' },
