@@ -124,6 +124,9 @@ const detailItemDosConfig = [
   { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
+  { label: '合格数', prop: 'AA' },
+  { label: '不合格', prop: 'AA' },
+  { label: '破坏数', prop: 'AA' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
 ]
 
