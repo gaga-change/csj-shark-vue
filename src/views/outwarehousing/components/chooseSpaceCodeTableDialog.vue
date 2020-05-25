@@ -65,6 +65,7 @@ const tableConfig = [
 ]
 const searchConfig = [
   { label: '批次', prop: 'batchNo' },
+  { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
 ]
 export default {
   props: {
