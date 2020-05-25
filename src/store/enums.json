@@ -412,6 +412,23 @@
     ]
   },
   {
+    "name": "productStatusEnum",
+    "keyValue": [
+      {
+        "name": "正品",
+        "value": 0
+      },
+      {
+        "name": "残次品",
+        "value": 1
+      },
+      {
+        "name": "破坏品",
+        "value": 2
+      }
+    ]
+  },
+  {
     "name": "busiBillTypeEnum_out",
     "_id": "5d90299dc1bb12002b8d3e80",
     "keyValue": [
