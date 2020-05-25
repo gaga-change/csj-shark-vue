@@ -416,15 +416,15 @@
     "keyValue": [
       {
         "name": "正品",
-        "value": 0
-      },
-      {
-        "name": "残次品",
         "value": 1
       },
       {
-        "name": "破坏品",
+        "name": "残次品",
         "value": 2
+      },
+      {
+        "name": "破坏品",
+        "value": 3
       }
     ]
   },
