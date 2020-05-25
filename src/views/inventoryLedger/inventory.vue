@@ -58,7 +58,7 @@ const tableConfig = [
   { label: '单位', prop: 'skuUnitName' },
   { label: '单价', prop: 'inPrice' },
   { label: '批次', prop: 'batchNo' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
+  { label: '商品状态', prop: 'skuStatus', type: 'enum', enum: 'productStatusEnum' },
   { label: '库存', prop: 'skuQty' },
   { label: '已分配量', prop: 'blockQty' },
   { label: '最近入库时间', prop: 'lastInTime', type: 'time', width: 140 },
@@ -69,7 +69,7 @@ const searchConfig = [
   { label: '商品名称', prop: 'skuName' },
   { label: '货主名称', prop: 'ownerName' },
   { label: '库位', prop: 'warehouseSpaceCode' },
-  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'checkResultEnum' },
+  { label: '商品状态', prop: 'skuStatus', type: 'enum', enum: 'productStatusEnum' },
   { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
 ]
 
