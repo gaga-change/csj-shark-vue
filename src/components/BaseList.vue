@@ -201,7 +201,10 @@ export default {
     },
     /** 刷新列表 */
     fetchData(callback) {
-      this.$refs['baseTable'].fetchData().then(callback)
+      this.searchParams = { ...this.searchParams, ...this.appendSearchParams }
+      this.$nextTick(() => {
+        this.$refs['baseTable'].fetchData().then(callback)
+      })
     },
     /** 多选选择 */
     selectionChange(val) {

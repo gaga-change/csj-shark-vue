@@ -11,28 +11,23 @@
       <div>
         <div>
           <el-input
-            v-model.lazy="AA"
+            v-model.trim.lazy="skuCode"
             placeholder="商品编码或货主商品编码"
           ></el-input>
         </div>
         <div
           class="mt15"
-          v-if="AA"
+          v-if="skuCode"
         >
-          <template v-if="!BB">
+          <template v-if="loading">
+            <span>加载中...</span>
+          </template>
+          <template v-else-if="!skuName">
             <span>未找到匹配的商品</span>
           </template>
           <template v-else>
-            <span>商品名称：</span><span>{{BB}}</span>
+            <span>商品名称：</span><span>{{skuName}}</span>
           </template>
-        </div>
-        <div class="mt15">
-          <div>
-            <el-checkbox v-model="CC">仅含商品，且有计划到货日期的单据</el-checkbox>
-          </div>
-          <div class="mt10">
-            <el-checkbox v-model="DD">含商品的所有单据</el-checkbox>
-          </div>
         </div>
         <div
           class="mt15"
@@ -82,7 +77,7 @@
       @submited="getTableData()"
     />
  */
-// import { saveApi } from '@/api'
+import { queryDetailBySkuCode } from '@/api'
 export default {
   props: {
     visible: {
@@ -105,63 +100,61 @@ export default {
     /** 监听数据切换，重置表单 */
     visible(val) {
       if (!val) return
-      Object.keys(this.formData).forEach(key => {
-        this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
-      })
+      this.skuCode = ''
+      this.skuName = ''
+      this.skuList = []
+    },
+    skuCode(val) {
+      console.log('watch', val)
+      this.handleSearchInputChange(val)
     }
   },
   data() {
     return {
-      AA: '',
-      BB: '',
-      CC: true,
-      DD: false,
+      skuCode: '',
+      skuName: '',
       loading: false,
-      formData: {
-        //  ... 表单字段
-      }
+      skuList: [],
     }
   },
   methods: {
+    handleSearchInputChange(v) {
+      if (this.tick) {
+        clearTimeout(this.tick)
+      }
+      this.tick = setTimeout(() => {
+        console.log('搜素 ', v)
+        if (!v) {
+          this.skuName = ''
+        } else {
+          this.loading = true
+          queryDetailBySkuCode({ skuCode: v }).then(res => {
+            this.loading = false
+            if (!res) return
+            console.log(res)
+            this.skuName = res.data.map(v => v.skuName).join('，')
+            this.skuList = res.data
+          })
+        }
+        this.tick = null
+      }, 500)
+    },
     handleSearch() {
       let err = ''
-      if (!this.AA) {
+      if (!this.skuCode) {
         err = '请输入商品编码或货主商品编码'
-      } else if (!this.BB) {
+      } else if (!this.skuName) {
         err = '未检索到商品'
       }
       if (err) {
         return this.$message.error(err)
       }
-      this.$emit('submited')
+      this.$emit('submited', { skuList: this.skuList })
       this.close()
     },
     handleRest() {
-      this.AA = ''
-      this.BB = ''
-      this.CC = true
-      this.DD = false
-    },
-    /** 确定 */
-    confirm() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          let params = { ...this.formData }
-          for (let key in params) {
-            if (params[key] === undefined) {
-              params[key] = ''
-            }
-          }
-          // saveApi(params).then(res => {
-          //   this.loading = false
-          //   if (!res) return
-          //   this.$message.success('操作成功！')
-          //   this.$emit('submited')
-          //   this.close()
-          // })
-        }
-      })
+      this.skuCode = ''
+      this.skuName = ''
     },
     /** 关闭弹窗 */
     close() {

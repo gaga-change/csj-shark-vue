@@ -11,6 +11,7 @@
       :controlWidth="controlWidth"
       :showControlFixed="false"
       :expand="true"
+      :appendSearchParams="appendSearchParams"
       @expandChange="hanldeExpandChange"
       @updateData="updateData"
       :parseData="middleParseData"

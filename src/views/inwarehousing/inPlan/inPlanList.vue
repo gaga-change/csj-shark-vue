@@ -13,6 +13,7 @@
       :select="true"
       @selectionChange="selectionChange"
       :selectable="selectable"
+      :appendSearchParams="appendSearchParams"
       :labelWidth="100"
     >
       <template slot-scope="scope">
@@ -42,12 +43,20 @@
           @click="lockDialogVisible=true"
         >
           商品锁定计划
+          <el-tag
+            v-show="skuNames"
+            closable
+            @close="handleCloseTag"
+            type="success"
+          >
+            {{skuNames}}
+          </el-tag>
         </el-button>
       </template>
     </double-list>
     <lockDialog
       :visible.sync="lockDialogVisible"
-      @submited="getTableData()"
+      @submited="getTableData"
     />
   </div>
 </template>
@@ -96,10 +105,24 @@ export default {
       lockDialogVisible: false,
       listApi: getInfoWarehousing,
       selectRows: [],
+      appendSearchParams: {},
+      skuList: [],
       createReceiveOrderLoading: false,
     }
   },
+  computed: {
+    skuNames() {
+      return this.skuList.map(v => v.skuName).join('，')
+    }
+  },
   methods: {
+    handleCloseTag() {
+      this.skuList = []
+      this.appendSearchParams = { skuCodeList: undefined }
+      this.$nextTick(() => {
+        this.getTableData()
+      })
+    },
     /** 完结按钮点击事件 */
     handleClose(row) {
       this.$apiConfirm('确认完结该计划单', () => planInEnd({
@@ -126,8 +149,14 @@ export default {
       this.$refs['doubleList'].clearSelection()
     },
     /** 刷新列表 */
-    getTableData() {
-      this.$refs['doubleList'].fetchData()
+    getTableData(params) {
+      if (params && params.skuList) {
+        this.skuList = params.skuList
+        this.appendSearchParams = { skuCodeList: params.skuList.map(v => v.skuCode) }
+      }
+      this.$nextTick(() => {
+        this.$refs['doubleList'].fetchData()
+      })
     },
     /** 主表多选 */
     selectionChange(selectRows) {
