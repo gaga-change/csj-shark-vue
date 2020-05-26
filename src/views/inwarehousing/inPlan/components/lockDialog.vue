@@ -105,7 +105,6 @@ export default {
       this.skuList = []
     },
     skuCode(val) {
-      console.log('watch', val)
       this.handleSearchInputChange(val)
     }
   },
@@ -123,7 +122,6 @@ export default {
         clearTimeout(this.tick)
       }
       this.tick = setTimeout(() => {
-        console.log('搜素 ', v)
         if (!v) {
           this.skuName = ''
         } else {
@@ -131,7 +129,6 @@ export default {
           queryDetailBySkuCode({ skuCode: v }).then(res => {
             this.loading = false
             if (!res) return
-            console.log(res)
             this.skuName = res.data.map(v => v.skuName).join('，')
             this.skuList = res.data
           })
