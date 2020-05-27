@@ -35,7 +35,7 @@
           <el-divider direction="vertical"></el-divider>
           <el-link
             type="primary"
-            @click="$router.push({path:`/inwarehousing/inrecordDetail`,query:{id: scope.row.id}})"
+            @click="$router.push({path:`/inwarehousing/inrecordDetail`,query:{id: scope.row.id, type: 'confirm'}})"
           >收货确认</el-link>
         </template>
       </template>

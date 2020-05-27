@@ -51,12 +51,13 @@
             </el-form-item>
             <el-form-item
               label="合格数"
-              prop="AA"
+              prop="qualityQty"
+              v-if="isConfirm"
             >
               <el-input-number
                 style="width:200px;"
                 placeholder="请输入"
-                v-model="formData.AA"
+                v-model="formData.qualityQty"
                 :precision="0"
                 :min="0"
                 :max="99999999"
@@ -65,12 +66,13 @@
             </el-form-item>
             <el-form-item
               label="不合格数"
-              prop="BB"
+              prop="disqualityQty"
+              v-if="isConfirm"
             >
               <el-input-number
                 style="width:200px;"
                 placeholder="请输入"
-                v-model="formData.BB"
+                v-model="formData.disqualityQty"
                 :precision="0"
                 :min="0"
                 :max="99999999"
@@ -79,12 +81,13 @@
             </el-form-item>
             <el-form-item
               label="破坏数"
-              prop="CC"
+              prop="damagedQty"
+              v-if="isConfirm"
             >
               <el-input-number
                 style="width:200px;"
                 placeholder="请输入"
-                v-model="formData.CC"
+                v-model="formData.damagedQty"
                 :precision="0"
                 :min="0"
                 :max="99999999"
@@ -209,6 +212,9 @@ export default {
     row: {
       type: Object,
       default: {}
+    },
+    isConfirm: {
+      type: Boolean
     }
   },
   computed: {
@@ -224,9 +230,11 @@ export default {
       Object.keys(this.formData).forEach(key => {
         this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
       })
-      this.formData.AA = this.rowData.receiveQty || 0
-      this.formData.BB = 0
-      this.formData.CC = 0
+      if (this.isConfirm) {
+        this.formData.qualityQty = this.rowData.receiveQty || 0
+        this.formData.disqualityQty = 0
+        this.formData.damagedQty = 0
+      }
       this.initBatch()
     }
   },
@@ -239,9 +247,9 @@ export default {
         //  ... 表单字段
         trayCode: undefined,
         receiveQty: undefined,
-        AA: undefined,
-        BB: undefined,
-        CC: undefined,
+        qualityQty: undefined,
+        disqualityQty: undefined,
+        damagedQty: undefined,
       },
       rules: {
         trayCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }, { min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] },],
@@ -289,8 +297,8 @@ export default {
         if (valid) {
           let params = { ...this.formData, itemId: this.rowData.id }
           params.confirmQty = params.receiveQty
-          const { AA, BB, CC, receiveQty } = params
-          if (AA + BB + CC > receiveQty) {
+          const { qualityQty, disqualityQty, damagedQty, receiveQty } = params
+          if (this.isConfirm && ((qualityQty + disqualityQty + damagedQty) > receiveQty)) {
             return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
           }
           delete params.receiveQty

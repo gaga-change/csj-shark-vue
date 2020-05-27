@@ -31,7 +31,7 @@
       <base-table
         :config="detailDOsConfig"
         :data="detail.detailDOs"
-        :showControl="receivingRegisterShow"
+        :showControl="!isConfirm && receivingRegisterShow"
         :controlWidth="160"
       >
         <template slot-scope="scope">
@@ -86,6 +86,7 @@
     <receiving-modify-dialog
       :visible.sync="receivingModifyDialogVisible"
       :row="modifyRow"
+      :isConfirm="isConfirm"
       @submited="initData"
     />
   </div>
@@ -124,9 +125,9 @@ const detailItemDosConfig = [
   { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
   { label: '容器', prop: 'trayCode' },
   { label: '实际收货量', prop: 'receiveQty' },
-  { label: '合格数', prop: 'AA' },
-  { label: '不合格', prop: 'AA' },
-  { label: '破坏数', prop: 'AA' },
+  { label: '合格数', prop: 'qualityQty' },
+  { label: '不合格数', prop: 'disqualityQty' },
+  { label: '破坏数', prop: 'damagedQty' },
   { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
 ]
 
@@ -156,6 +157,9 @@ export default {
   computed: {
     receivingRegisterShow() {
       return !!~[0, 1, 3].findIndex(v => v == this.detail.receiveOrderDO.execStatus)
+    },
+    isConfirm() {
+      return this.$route.query.type === 'confirm'
     }
   },
   methods: {
