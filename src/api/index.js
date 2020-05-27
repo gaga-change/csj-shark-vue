@@ -262,5 +262,9 @@ export const addOutWarehousePlan = params => http.post(`/webApi/plan/out/addOutW
 export const queryDetailBySkuCode = params => http.get(`/webApi/basic/sku/queryDetailBySkuCode`, { params })
 /** 登录 */
 export const userlogin = params => http.post(`/api/sso/login`, params)
+/** 上架策略 */
+export const selectPutPlotByPlotName = params => http.get(`/webApi/basic/putPlot/selectPutPlotByPlotName`, { params })
+/** 周转规则 */
+export const selectTrunoverPlotByPlotName = params => http.get(`/webApi/basic/trunoverPlot/selectTrunoverPlotByPlotName`, { params })
 /** 退出登录 */
 export const logout = () => http.get(`/api/sso/logout`)

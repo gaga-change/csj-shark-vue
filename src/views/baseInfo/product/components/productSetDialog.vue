@@ -95,36 +95,25 @@
           <item-title>上架策略 <span class="c-red f12">（必填）</span></item-title>
           <el-form-item
             label="上架策略"
-            prop="AA"
+            prop="putPlotId"
           >
-            <el-select
-              v-model="formData.AA"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in []"
-                :key="item.id"
-                :label="item.lotName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+
+            <ApiSelect
+              api="selectPutPlotByPlotName"
+              :config="['id', 'plotName']"
+              v-model="formData.putPlotId"
+            />
           </el-form-item>
           <item-title>周转规则 <span class="c-red f12">（必填）</span></item-title>
           <el-form-item
             label="周转规则"
-            prop="BB"
+            prop="trunoverPlotId"
           >
-            <el-select
-              v-model="formData.BB"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in []"
-                :key="item.id"
-                :label="item.lotName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+            <ApiSelect
+              api="selectTrunoverPlotByPlotName"
+              :config="['id', 'plotName']"
+              v-model="formData.trunoverPlotId"
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -168,9 +157,9 @@ export default {
     /** 监听数据切换，重置表单 */
     visible(val) {
       if (!val) return
-      Object.keys(this.formData).forEach(key => {
-        this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
-      })
+      // Object.keys(this.formData).forEach(key => {
+      //   this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
+      // })
     }
   },
   data() {
@@ -184,17 +173,17 @@ export default {
         lotAttrCode7: undefined, // 是否质检
         packageCode: undefined, // 包装编码
         lotId: undefined,
-        AA: undefined, // 上架策略
-        BB: undefined, // 周转规则
+        putPlotId: undefined, // 上架策略
+        trunoverPlotId: undefined, // 周转规则
       },
       rules: {
         lotId: [
           { required: true, message: '必填项', trigger: 'blur' }
         ],
-        AA: [
+        putPlotId: [
           { required: true, message: '必填项', trigger: 'blur' }
         ],
-        BB: [
+        trunoverPlotId: [
           { required: true, message: '必填项', trigger: 'blur' }
         ],
       }
