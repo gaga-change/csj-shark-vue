@@ -157,9 +157,9 @@ export default {
     /** 监听数据切换，重置表单 */
     visible(val) {
       if (!val) return
-      // Object.keys(this.formData).forEach(key => {
-      //   this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
-      // })
+      Object.keys(this.formData).forEach(key => {
+        this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
+      })
     }
   },
   data() {
