@@ -35,7 +35,7 @@ newAxios.interceptors.response.use(function (response) {
   return data
 }, function (error) {
   let data = error.response.data
-  let message = data.detailError || data.message || data.errorMsg || ''
+  let message = data.errorMsg || data.message || data.detailError || ''
   if (error.message === 'timeout of 1500ms exceeded') {
     Notification({
       title: '错误信息',
