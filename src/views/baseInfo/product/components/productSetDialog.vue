@@ -79,18 +79,12 @@
             label="批次规则"
             prop="lotId"
           >
-            <el-select
-              :loading="lotListLoading"
+
+            <ApiSelect
+              api="lotList"
+              :config="['id', 'lotName']"
               v-model="formData.lotId"
-              placeholder="请选择批次规则"
-            >
-              <el-option
-                v-for="item in batchList"
-                :key="item.id"
-                :label="item.lotName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+            />
           </el-form-item>
           <item-title>上架策略 <span class="c-red f12">（必填）</span></item-title>
           <el-form-item
@@ -134,7 +128,7 @@
 
 <script>
 
-import { skuUpdate, packageSelect, lotList } from '@/api'
+import { skuUpdate, packageSelect } from '@/api'
 export default {
   props: {
     visible: {
@@ -195,17 +189,8 @@ export default {
       if (!res) return
       this.packageList = res.data.list || []
     })
-    this.initBatch()
   },
   methods: {
-    initBatch() {
-      this.lotListLoading = true
-      lotList({ pageSize: 999, status: 0 }).then(res => {
-        this.lotListLoading = false
-        if (!res) return
-        this.batchList = (res.data.list || []).filter(v => v.status === 0)
-      })
-    },
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid) => {
