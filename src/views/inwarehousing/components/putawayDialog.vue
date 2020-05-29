@@ -129,7 +129,6 @@ const detailItemConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '数量', prop: 'receiveQty' },
   { label: '上架数量', prop: 'realInQty' },
-  { label: '商品状态', prop: 'skuStatus', type: 'enum', enum: 'productStatusEnum' },
 ]
 
 export default {
