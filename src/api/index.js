@@ -236,6 +236,33 @@ export const addLot = params => http.post(`/webApi/basic/lot/addLot`, params)
 export const lotDetail = id => http.get(`/webApi/basic/lot/detail/${id}`)
 /** 批次详情 */
 export const selectLotDetailValue = params => http.get(`/webApi/basic/lot/selectLotDetailValue`, { params })
+/** 策略新增 */
+export const addTaticsApi = params => http.post(`/webApi/basic/putPlot/addPutPlot`, params)
+/** 策略详情 */
+export const taticsDetailApi = id => http.get(`/webApi/basic/putPlot/detail/${id}`)
+/** 策略列表 */
+export const taticsListApi = params => http.post(`/webApi/basic/putPlot/list`, params)
+/** 启用禁用策略 */
+export const taticsStatusApi = params => http.get(`/webApi/basic/putPlot/updateLotStatus`, { params })
+/** 波次新增 */
+export const addWaveApi = params => http.post(`/webApi/basic/pickPlot/addPutPlot`, params)
+/** 波次详情 */
+export const waveDetailApi = id => http.get(`/webApi/basic/pickPlot/detail/${id}`)
+/** 波次列表 */
+export const waveListApi = params => http.post(`/webApi/basic/pickPlot/list`, params)
+/** 启用禁用波次 */
+export const waveStatusApi = params => http.get(`/webApi/basic/pickPlot/updateBasicPickPlotStatus`, { params })
+/** 周转规则新增 */
+export const addTrunoverApi = params => http.post(`/webApi/basic/trunoverPlot/addTrunoverPlot`, params)
+/** 周转规则详情 */
+export const trunoverDetailApi = id => http.get(`/webApi/basic/trunoverPlot/detail/${id}`)
+/** 周转规则列表 */
+export const trunoverListApi = params => http.post(`/webApi/basic/trunoverPlot/list`, params)
+/** 启用禁用周转规则 */
+export const trunoverStatusApi = params => http.get(`/webApi/basic/trunoverPlot/updateBasicTrunoverPlotStatus`, { params })
+/** 获取枚举类型数据 */
+export const getSysEnumType = params => http.get(`/webApi/basic/basicEnum/getSysEnumByEnumType`, { params })
+
 /** 客户列表 */
 export const customerList = params => http.post(`/webApi/basic/customer/list`, params)
 /** 新增客户 */
