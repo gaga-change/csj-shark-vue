@@ -14,6 +14,7 @@ import BasePrintTable from '@/components/BasePrintTable'
 import DetailItem from '@/components/DetailItem'
 import BaseForm from '@/components/BaseForm'
 import ApiSelect from '@/components/Select/ApiSelect'
+import MapSelect from '@/components/Select/MapSelect'
 import 'normalize.css/normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss'
@@ -34,6 +35,7 @@ Vue.component('BasePrintTable', BasePrintTable);
 Vue.component('DetailItem', DetailItem);
 Vue.component('BaseForm', BaseForm);
 Vue.component('ApiSelect', ApiSelect);
+Vue.component('MapSelect', MapSelect);
 Vue.prototype.$copy = obj => cloneDeep(obj)
 Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve, reject) => {
   MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {

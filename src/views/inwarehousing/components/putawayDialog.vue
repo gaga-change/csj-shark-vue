@@ -70,6 +70,29 @@
                 <el-radio :label="1">残次品</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="商品状态">
+              <MapSelect
+                :disabled="true"
+                v-model="formData.skuStatus"
+                map="productStatusEnum"
+              />
+            </el-form-item>
+            <div class="mt10">
+              <span>推荐库位：</span>
+              <span
+                v-for="(item, i) in warehouseSpaceList"
+                :key="item.id"
+              >
+                <el-link
+                  type="primary"
+                  @click="handleSelectWarehouseSpaceCode(item)"
+                >{{item.warehouseSpaceCode}}</el-link>
+                <el-divider
+                  v-if="i + 1 !== warehouseSpaceList.length"
+                  direction="vertical"
+                ></el-divider>
+              </span>
+            </div>
           </el-form>
         </div>
       </div>
@@ -93,8 +116,8 @@
 </template>
 
 <script>
-
-import { inJobAdd } from '@/api'
+import { mapGetters } from 'vuex'
+import { inJobAdd, warehouseSpaceSelect } from '@/api'
 
 const detailItemConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -106,6 +129,7 @@ const detailItemConfig = [
   { label: '容器', prop: 'trayCode' },
   { label: '数量', prop: 'receiveQty' },
   { label: '上架数量', prop: 'realInQty' },
+  { label: '商品状态', prop: 'skuStatus', type: 'enum', enum: 'productStatusEnum' },
 ]
 
 export default {
@@ -120,14 +144,10 @@ export default {
       default: {}
     }
   },
-  computed: {
-    /** 防止父级传递 null */
-    rowData() {
-      return this.row || {}
-    }
-  },
   data() {
     return {
+      warehouseSpaceListLoading: true,
+      warehouseSpaceList: [],
       detailItemConfig,
       loading: false,
       hasContainer: false,
@@ -137,6 +157,7 @@ export default {
         putQty: undefined,
         trayCode: undefined,
         checkResult: undefined,
+        skuStatus: undefined,
       },
       rules: {
         warehouseSpaceCode: [{ required: true, message: '必填项', trigger: 'blur' }, { min: 0, max: 20, message: '不能超过20个字符', trigger: 'blur' },],
@@ -146,7 +167,39 @@ export default {
       }
     }
   },
+  computed: {
+    /** 防止父级传递 null */
+    rowData() {
+      return this.row || {}
+    },
+    ...mapGetters([
+      'chooseWarehouse',
+    ]),
+  },
+  watch: {
+    /** 监听数据切换，重置表单。为何不监听rowData?因为主组件visible一一对应，但选中数据不是，selectRow 是多个弹窗共享的 */
+    visible(val) {
+      if (!val) return
+      this.formData.skuStatus = (this.row || {}).skuStatus || undefined
+    }
+  },
+  created() {
+    this.warehouseSpaceListLoading = true
+    warehouseSpaceSelect({
+      pageNum: 1,
+      pageSize: 5,
+      warehouseCode: this.chooseWarehouse
+    }).then(res => {
+      this.warehouseSpaceListLoading = false
+      if (!res) return
+      this.warehouseSpaceList = res.data.list
+    })
+  },
   methods: {
+    /** 选择推荐库位 */
+    handleSelectWarehouseSpaceCode(item) {
+      this.formData.warehouseSpaceCode = item.warehouseSpaceCode
+    },
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid) => {
