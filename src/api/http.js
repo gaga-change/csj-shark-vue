@@ -13,15 +13,7 @@ newAxios.interceptors.response.use(function (response) {
   let data = response.data
   // 系统异常提示（返回的数据为 null）
   if (data.code === 'user-not-login' || data.code === 'shark-512' || data.code == '501') {
-    Message({
-      type: 'error',
-      message: '登录失效，请重新登录',
-      onClose: () => {
-        sessionStorage.setItem('warehouse', '')
-        location.href = `/login?backUrl=${location.href}`
-      },
-      duration: 1500
-    })
+    location.href = `/login?backUrl=${location.href}`
     data = null
   } else if (data.code !== '200') {
     let message = data.detailError || data.message || data.errorMsg || ''
@@ -44,15 +36,7 @@ newAxios.interceptors.response.use(function (response) {
       duration: 5000,
     })
   } if (error.response.status === 401) {
-    Message({
-      type: 'error',
-      message: message || '登录失效，请重新登录',
-      onClose: () => {
-        sessionStorage.setItem('warehouse', '')
-        location.href = `/login?backUrl=${location.href}`
-      },
-      duration: 1500
-    })
+    location.href = `/login?backUrl=${location.href}`
     data = null
   } else {
     Message({
