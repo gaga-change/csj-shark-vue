@@ -207,8 +207,8 @@ export default {
       addLotLoading: false,
       dynamicValidateForm: {
         lotName: undefined,
-        taskBeignTime: new Date(2020, 5, 27, 0, 0),
-        taskEndTime: new Date(2020, 5, 27, 23, 59, 59),
+        taskBeignTime: new Date(),
+        taskEndTime: new Date(),
         orderTime: '',
         timeUnit: '2',
         billStatus: [ 0, 1 ],
