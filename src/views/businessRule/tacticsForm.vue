@@ -69,10 +69,10 @@
               >
                 <el-option
                   v-for="item in plotRules"
-                  :key="item"
-                  :disabled="dynamicValidateForm.ruleList.includes(item)"
-                  :label="item"
-                  :value="item"
+                  :key="item.id"
+                  :disabled="dynamicValidateForm.ruleList.includes(item.enumValue)"
+                  :label="item.typeName"
+                  :value="item.enumValue"
                 ></el-option>
               </el-select>
             </td>
@@ -113,7 +113,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { cloneDeep, omit, pick } from 'lodash';
-import { addTaticsApi, getSelectInventoryAreaList } from '@/api'
+import { addTaticsApi, getSelectInventoryAreaList, getSysEnumType } from '@/api'
 const plotRules = [ '同一商品邻近为空', '任意空库位' ]
 export default {
   data() {
@@ -128,7 +128,7 @@ export default {
       // formatArr: ['YYYY', 'YYYY-MM', 'YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss'],
       formatArr: ['YYYY', 'YYYY-MM', 'YYYY-MM-DD'],
       warehouseAreaCodeEnum: [],
-      plotRules
+      plotRules: []
     };
   },
   computed: {
@@ -143,6 +143,11 @@ export default {
 
   },
   created() {
+    //策略规则枚举
+    getSysEnumType({ enumType:'MJ00001' }).then(res => {
+      if (!res) return
+      this.plotRules = res.data || []
+    })
     getSelectInventoryAreaList({
       warehouseCode: this.chooseWarehouse
     }).then(res => {
@@ -172,8 +177,10 @@ export default {
           warehouseAreaCode: data.warehouseAreaCode
         }
         params.addPutPlotDetailReqList = data.ruleList.map((v, index) => {
+          const obj = this.plotRules.find(item => item.enumValue === v) || {}
           return {
-            plotRuleName: v,
+            plotRuleId: v,
+            plotRuleName: obj.typeName,
             serialNumber: index + 1,
             plotStatus: data.statusList[index]
           }
