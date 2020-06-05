@@ -9,25 +9,58 @@
       @close="close"
     >
       <div>
-        <div>
-          <el-input
+        <!-- <div> -->
+        <!-- <el-input
             v-model.trim.lazy="skuCode"
             placeholder="商品编码或货主商品编码"
-          ></el-input>
+          ></el-input> -->
+
+        <!-- </div> -->
+        <div>
+          <el-select
+            v-model="skuCode"
+            filterable
+            remote
+            reserve-keyword
+            placeholder="商品编码或货主商品编码"
+            :remote-method="skuCodeRemoteMethod"
+            :loading="skuCodeLoading"
+            @change="handelSkuChange"
+          >
+
+            <el-option
+              v-for="item in skuList"
+              :key="item.id"
+              :label="item.skuName"
+              :value="item.skuCode"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="mt15">
+          <el-select
+            v-model="providerCode"
+            filterable
+            remote
+            reserve-keyword
+            placeholder="供应商编码或名称"
+            :remote-method="providerCodeRemoteMethod"
+            :loading="providerCodeLoading"
+          >
+            <el-option
+              v-for="item in providerList"
+              :key="item.id"
+              :value="item.customerCode"
+            >
+              {{item.customerCode}} - {{item.customerName}}
+            </el-option>
+          </el-select>
         </div>
         <div
           class="mt15"
           v-if="skuCode"
         >
-          <template v-if="loading">
-            <span>加载中...</span>
-          </template>
-          <template v-else-if="!skuName">
-            <span>未找到匹配的商品</span>
-          </template>
-          <template v-else>
-            <span>商品名称：</span><span>{{skuName}}</span>
-          </template>
+          <span>商品名称：</span><span>{{skuName}}</span>
         </div>
         <div
           class="mt15"
@@ -77,7 +110,7 @@
       @submited="getTableData()"
     />
  */
-import { queryDetailBySkuCode } from '@/api'
+import { queryDetailBySkuCode, customerList } from '@/api'
 export default {
   props: {
     visible: {
@@ -102,56 +135,78 @@ export default {
       if (!val) return
       this.skuCode = ''
       this.skuName = ''
+      this.providerCode = ''
       this.skuList = []
+      this.providerList = []
     },
-    skuCode(val) {
-      this.handleSearchInputChange(val)
-    }
+    // skuCode(val) {
+    //   this.handleSearchInputChange(val)
+    // }
   },
   data() {
     return {
       skuCode: '',
+      providerCode: '',
       skuName: '',
       loading: false,
       skuList: [],
+      providerList: [],
+      skuCodeLoading: false,
+      providerCodeLoading: false,
     }
   },
   methods: {
-    handleSearchInputChange(v) {
-      if (this.tick) {
-        clearTimeout(this.tick)
+    // 商品远程查询
+    skuCodeRemoteMethod(query) {
+      if (query !== '') {
+        this.skuCodeLoading = true
+        queryDetailBySkuCode({ skuCode: query }).then(res => {
+          this.skuCodeLoading = false
+          if (!res) return
+          this.skuList = res.data
+        })
+      } else {
+        this.skuList = [];
       }
-      this.tick = setTimeout(() => {
-        if (!v) {
-          this.skuName = ''
-        } else {
-          this.loading = true
-          queryDetailBySkuCode({ skuCode: v }).then(res => {
-            this.loading = false
-            if (!res) return
-            this.skuName = res.data.map(v => v.skuName).join('，')
-            this.skuList = res.data
-          })
-        }
-        this.tick = null
-      }, 500)
+    },
+    // 商品远程查询
+    providerCodeRemoteMethod(query) {
+      if (query !== '') {
+        this.providerCodeLoading = true
+        customerList({ customerCodeLike: query, pageNum: 1, pageSize: 999, customerType: 2 }).then(res => {
+          this.providerCodeLoading = false
+          if (!res) return
+          this.providerList = res.data.list
+        })
+      } else {
+        this.providerList = [];
+      }
+    },
+    handelSkuChange(v) {
+      if (v) {
+        const temp = this.skuList.find(i => i.skuCode === v)
+        this.skuName = temp && temp.skuName
+      } else {
+        this.skuName = ''
+      }
+    },
+    handleRest() {
+      this.skuCode = undefined
+      this.providerCode = undefined
+      this.handelSkuChange()
     },
     handleSearch() {
       let err = ''
       if (!this.skuCode) {
-        err = '请输入商品编码或货主商品编码'
-      } else if (!this.skuName) {
-        err = '未检索到商品'
+        err = '请选择商品'
+      } else if (!this.providerCode) {
+        err = '请选择供应商'
       }
       if (err) {
         return this.$message.error(err)
       }
-      this.$emit('submited', { skuList: this.skuList })
+      this.$emit('submited', { skuCode: this.skuCode, providerCode: this.providerCode, skuName: this.skuName })
       this.close()
-    },
-    handleRest() {
-      this.skuCode = ''
-      this.skuName = ''
     },
     /** 关闭弹窗 */
     close() {

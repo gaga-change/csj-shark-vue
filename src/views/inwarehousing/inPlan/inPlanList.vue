@@ -44,12 +44,12 @@
         >
           商品锁定计划
           <el-tag
-            v-show="skuNames"
+            v-show="lockParamsStr"
             closable
             @close="handleCloseTag"
             type="success"
           >
-            {{skuNames}}
+            {{lockParamsStr}}
           </el-tag>
         </el-button>
       </template>
@@ -106,19 +106,14 @@ export default {
       listApi: getInfoWarehousing,
       selectRows: [],
       appendSearchParams: {},
-      skuList: [],
+      lockParamsStr: '',
       createReceiveOrderLoading: false,
-    }
-  },
-  computed: {
-    skuNames() {
-      return this.skuList.map(v => v.skuName).join('，')
     }
   },
   methods: {
     handleCloseTag() {
-      this.skuList = []
-      this.appendSearchParams = { skuCodeList: undefined }
+      this.lockParamsStr = ''
+      this.appendSearchParams = { skuCodeList: undefined, providerCodeOrName: undefined }
       this.$nextTick(() => {
         this.getTableData()
       })
@@ -150,9 +145,10 @@ export default {
     },
     /** 刷新列表 */
     getTableData(params) {
-      if (params && params.skuList) {
-        this.skuList = params.skuList
-        this.appendSearchParams = { skuCodeList: params.skuList.map(v => v.skuCode) }
+      if (params) {
+        const { skuCode, providerCode, skuName } = params
+        this.lockParamsStr = `商品名称：【${skuName}】、供应商编码：【${providerCode}】`
+        this.appendSearchParams = { skuCodeList: [skuCode], providerCodeOrName: providerCode }
       }
       this.$nextTick(() => {
         this.$refs['doubleList'].fetchData()
