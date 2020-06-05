@@ -25,149 +25,167 @@
             ref="form"
             style="font-size: 0"
           >
-            <el-form-item
-              label="容器"
-              prop="trayCode"
-            >
-              <el-input
-                style="width:200px;"
-                v-model="formData.trayCode"
-                placeholder="请输入容器"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="数量"
-              prop="receiveQty"
-            >
-              <el-input-number
-                style="width:200px;"
-                placeholder="数量"
-                v-model="formData.receiveQty"
-                :precision="0"
-                :min="1"
-                :max="99999999"
-                controls-position="right"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item
-              label="合格数"
-              prop="qualityQty"
-              v-if="isConfirm"
-            >
-              <el-input-number
-                style="width:200px;"
-                placeholder="请输入"
-                v-model="formData.qualityQty"
-                :precision="0"
-                :min="0"
-                :max="99999999"
-                controls-position="right"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item
-              label="不合格数"
-              prop="disqualityQty"
-              v-if="isConfirm"
-            >
-              <el-input-number
-                style="width:200px;"
-                placeholder="请输入"
-                v-model="formData.disqualityQty"
-                :precision="0"
-                :min="0"
-                :max="99999999"
-                controls-position="right"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item
-              label="破坏数"
-              prop="damagedQty"
-              v-if="isConfirm"
-            >
-              <el-input-number
-                style="width:200px;"
-                placeholder="请输入"
-                v-model="formData.damagedQty"
-                :precision="0"
-                :min="0"
-                :max="99999999"
-                controls-position="right"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item
-              v-for="item in lotDetailList"
-              :key="item.lotAttrCode"
-              :label="item.lotAttrName"
-              :prop="item.lotAttrCode"
-              :rules="[{ required: item.inputType === 1, message: '必填项', trigger: ['blur', 'change'] }]"
-            >
-              <template v-if="item.lotAttrType === 1">
-                <el-input
-                  style="width:200px;"
-                  v-model="formData[item.lotAttrCode]"
-                  :placeholder="'请输入' + item.lotAttrName"
-                  :maxlength="item.lotAttrValue.length || 20"
-                ></el-input>
-              </template>
-              <template v-if="item.lotAttrType === 2">
+            <div v-if="isConfirm">
+              <el-form-item
+                label="数量"
+                prop="receiveQty"
+              >
                 <el-input-number
+                  disabled=""
                   style="width:200px;"
-                  v-model="formData[item.lotAttrCode]"
-                  :placeholder="'请输入' + item.lotAttrName"
-                  :precision="item.lotAttrValue.precision || 0"
-                  :min="item.lotAttrValue.min || 0"
-                  :max="item.lotAttrValue.max || 999999"
+                  placeholder="数量"
+                  v-model="formData.receiveQty"
+                  :precision="0"
+                  :min="1"
+                  :max="99999999"
                   controls-position="right"
                 ></el-input-number>
-              </template>
-              <template v-if="item.lotAttrType === 3">
-                <el-select
+              </el-form-item>
+              <el-form-item
+                label="合格数"
+                prop="qualityQty"
+              >
+                <el-input-number
                   style="width:200px;"
-                  v-model="formData[item.lotAttrCode]"
-                  :placeholder="'请选择'"
-                  clearable
-                >
-                  <el-option
-                    v-for="item in item.lotAttrValue.enum || []"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                  ></el-option>
-                </el-select>
-              </template>
-              <template v-if="item.lotAttrType === 4">
-                <template v-if="item.lotAttrValue.format == 'YYYY'">
-                  <el-date-picker
+                  placeholder="请输入"
+                  v-model="formData.qualityQty"
+                  :precision="0"
+                  :min="0"
+                  :max="99999999"
+                  controls-position="right"
+                ></el-input-number>
+              </el-form-item>
+              <el-form-item
+                label="不合格数"
+                prop="disqualityQty"
+              >
+                <el-input-number
+                  style="width:200px;"
+                  placeholder="请输入"
+                  v-model="formData.disqualityQty"
+                  :precision="0"
+                  :min="0"
+                  :max="99999999"
+                  controls-position="right"
+                ></el-input-number>
+              </el-form-item>
+              <el-form-item
+                label="破坏数"
+                prop="damagedQty"
+              >
+                <el-input-number
+                  style="width:200px;"
+                  placeholder="请输入"
+                  v-model="formData.damagedQty"
+                  :precision="0"
+                  :min="0"
+                  :max="99999999"
+                  controls-position="right"
+                ></el-input-number>
+              </el-form-item>
+            </div>
+            <div v-if="!isConfirm">
+              <el-form-item
+                label="容器"
+                prop="trayCode"
+              >
+                <el-input
+                  style="width:200px;"
+                  v-model="formData.trayCode"
+                  placeholder="请输入容器"
+                ></el-input>
+              </el-form-item>
+              <el-form-item
+                label="数量"
+                prop="receiveQty"
+              >
+                <el-input-number
+                  style="width:200px;"
+                  placeholder="数量"
+                  v-model="formData.receiveQty"
+                  :precision="0"
+                  :min="1"
+                  :max="99999999"
+                  controls-position="right"
+                ></el-input-number>
+              </el-form-item>
+
+              <el-form-item
+                v-for="item in lotDetailList"
+                :key="item.lotAttrCode"
+                :label="item.lotAttrName"
+                :prop="item.lotAttrCode"
+                :rules="[{ required: item.inputType === 1, message: '必填项', trigger: ['blur', 'change'] }]"
+              >
+                <template v-if="item.lotAttrType === 1">
+                  <el-input
                     style="width:200px;"
                     v-model="formData[item.lotAttrCode]"
-                    type="year"
-                    placeholder="选择年"
-                    value-format="yyyy"
-                  >
-                  </el-date-picker>
+                    :placeholder="'请输入' + item.lotAttrName"
+                    :maxlength="item.lotAttrValue.length || 20"
+                  ></el-input>
                 </template>
-                <template v-if="item.lotAttrValue.format == 'YYYY-MM'">
-                  <el-date-picker
+                <template v-if="item.lotAttrType === 2">
+                  <el-input-number
                     style="width:200px;"
                     v-model="formData[item.lotAttrCode]"
-                    type="month"
-                    placeholder="选择月"
-                    value-format="yyyy-MM"
-                  >
-                  </el-date-picker>
+                    :placeholder="'请输入' + item.lotAttrName"
+                    :precision="item.lotAttrValue.precision || 0"
+                    :min="item.lotAttrValue.min || 0"
+                    :max="item.lotAttrValue.max || 999999"
+                    controls-position="right"
+                  ></el-input-number>
                 </template>
-                <template v-if="item.lotAttrValue.format == 'YYYY-MM-DD'">
-                  <el-date-picker
+                <template v-if="item.lotAttrType === 3">
+                  <el-select
                     style="width:200px;"
                     v-model="formData[item.lotAttrCode]"
-                    type="date"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd"
+                    :placeholder="'请选择'"
+                    clearable
                   >
-                  </el-date-picker>
+                    <el-option
+                      v-for="item in item.lotAttrValue.enum || []"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    ></el-option>
+                  </el-select>
                 </template>
-              </template>
-            </el-form-item>
+                <template v-if="item.lotAttrType === 4">
+                  <template v-if="item.lotAttrValue.format == 'YYYY'">
+                    <el-date-picker
+                      style="width:200px;"
+                      v-model="formData[item.lotAttrCode]"
+                      type="year"
+                      placeholder="选择年"
+                      value-format="yyyy"
+                    >
+                    </el-date-picker>
+                  </template>
+                  <template v-if="item.lotAttrValue.format == 'YYYY-MM'">
+                    <el-date-picker
+                      style="width:200px;"
+                      v-model="formData[item.lotAttrCode]"
+                      type="month"
+                      placeholder="选择月"
+                      value-format="yyyy-MM"
+                    >
+                    </el-date-picker>
+                  </template>
+                  <template v-if="item.lotAttrValue.format == 'YYYY-MM-DD'">
+                    <el-date-picker
+                      style="width:200px;"
+                      v-model="formData[item.lotAttrCode]"
+                      type="date"
+                      placeholder="选择日期"
+                      value-format="yyyy-MM-dd"
+                    >
+                    </el-date-picker>
+                  </template>
+                </template>
+              </el-form-item>
+            </div>
+
           </el-form>
         </div>
       </div>
@@ -179,12 +197,22 @@
           @click="close()"
           size="mini"
         >取 消</el-button>
-        <el-button
-          type="primary"
-          size="mini"
-          :loading="loading"
-          @click="confirm()"
-        >收货确认</el-button>
+        <template>
+          <el-button
+            v-if="isConfirm"
+            type="primary"
+            size="mini"
+            @click="save()"
+          >保存</el-button>
+          <el-button
+            v-else
+            type="primary"
+            size="mini"
+            :loading="loading"
+            @click="confirm()"
+          >收货确认</el-button>
+        </template>
+
       </span>
     </el-dialog>
   </div>
@@ -231,9 +259,9 @@ export default {
         this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
       })
       if (this.isConfirm) {
-        this.formData.qualityQty = this.rowData.receiveQty || 0
-        this.formData.disqualityQty = 0
-        this.formData.damagedQty = 0
+        this.formData.qualityQty = this.rowData.qualityQty || this.rowData.receiveQty || 0
+        this.formData.disqualityQty = this.rowData.disqualityQty || 0
+        this.formData.damagedQty = this.rowData.damagedQty || 0
       }
       this.initBatch()
     }
@@ -291,16 +319,21 @@ export default {
         this.lotDetailList = temp
       })
     },
+    /** 保存 */
+    save() {
+      const { qualityQty, disqualityQty, damagedQty, receiveQty } = this.formData
+      if ((qualityQty + disqualityQty + damagedQty) > receiveQty) {
+        return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
+      }
+      this.$emit('save', this.$copy(this.formData))
+      this.close()
+    },
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let params = { ...this.formData, itemId: this.rowData.id }
           params.confirmQty = params.receiveQty
-          const { qualityQty, disqualityQty, damagedQty, receiveQty } = params
-          if (this.isConfirm && ((qualityQty + disqualityQty + damagedQty) > receiveQty)) {
-            return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
-          }
           delete params.receiveQty
           this.loading = true
           editorReceiveItem(params).then(res => {

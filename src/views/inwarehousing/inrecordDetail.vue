@@ -4,7 +4,7 @@
       <!-- 收货中 & 已激活 可见 -->
       <el-button
         type="primary"
-        v-if="isConfirm"
+        v-if=" isConfirm && (detail.receiveOrderDO.execStatus===3 || detail.receiveOrderDO.execStatus===1)"
         :loading="receiveConfirmLoading"
         @click="handleConfirm"
       >
@@ -87,6 +87,7 @@
       :visible.sync="receivingModifyDialogVisible"
       :row="modifyRow"
       :isConfirm="isConfirm"
+      @save="detailItemSave"
       @submited="initData"
     />
   </div>
@@ -163,6 +164,14 @@ export default {
     }
   },
   methods: {
+    /** 编辑保存 */
+    detailItemSave(form) {
+      const { qualityQty, disqualityQty, damagedQty } = form
+      this.modifyRow.qualityQty = qualityQty
+      this.modifyRow.disqualityQty = disqualityQty
+      this.modifyRow.damagedQty = damagedQty
+      this.modifyRow.modifyed = true
+    },
     /** 获取详情内容 */
     initData() {
       receiveOrderQueryDetails({ id: this.$route.query.id }).then(res => {
@@ -201,37 +210,76 @@ export default {
     },
     /** 收货确认 */
     handleConfirm() {
-      let prods = this.detail.detailDOs
-      let out = prods.filter(v => {
-        let planQty = Number(v.planQty) || 0
-        let receiveQty = Number(v.receiveQty) || 0
-        return planQty > receiveQty
-      })
-      let params = {
-        receiveOrderCode: this.detail.receiveOrderDO.orderCode,
-        detailIds: prods.map(v => v.id)
-      }
-      if (out.length) {
-        let msg = ''
-        if (out.length === 1) {
-          msg = `商品【${out[0].skuName}】非全部收货，是否继续收货确认`
-        } else {
-          msg = `商品【${out[0].skuName}】等【${out.length}】项非全部收货，是否继续收货确认`
-        }
-        this.$apiConfirm(msg, () => receiveConfirm(params)).then(res => {
-          if (!res) return
-          this.$message.success('操作成功！')
-          this.initData()
-        })
+      // const {detailItemDos, detailDOs} = this.detail
+      // console.log(this.$copy(this.detail.detailDOs))
+      // console.log(this.$copy(this.detail.detailItemDos))
+      const detailItemDos = this.$copy(this.detail.detailItemDos)
+      const detailDOs = this.$copy(this.detail.detailDOs)
+      const prod = this.detail.detailItemDos.find(v => !v.modifyed)
+      if (prod) {
+        return this.$message.warning(`请编辑收货明细【${prod.skuName}}】`)
       } else {
-        this.receiveConfirmLoading = true
-        receiveConfirm(params).then((res) => {
-          this.receiveConfirmLoading = false
-          if (!res) return
-          this.$message.success('操作成功！')
-          this.initData()
+        detailItemDos.forEach(item => {
+          const temp = detailDOs.find(v => v.skuCode === item.skuCode)
+          if (temp) {
+            temp.son = temp.son || []
+            temp.son.push(item)
+          }
         })
       }
+      const paramsData = {
+        receiveConfirmDetailReqList: detailDOs.map(v => {
+          return {
+            id: v.id,
+            receiveConfirmDetailItemReqList: v.son.map(v => ({
+              "damagedQty": v.damagedQty,
+              "detailId": v.id,
+              "disqualityQty": v.disqualityQty,
+              "qualityQty": v.qualityQty,
+            }))
+          }
+        }),
+        receiveOrderCode: this.detail.receiveOrderDO.orderCode,
+      }
+      this.receiveConfirmLoading = true
+      receiveConfirm(paramsData).then((res) => {
+        this.receiveConfirmLoading = false
+        if (!res) return
+        this.$message.success('操作成功！')
+        this.initData()
+      })
+      // return
+      // let prods = this.detail.detailDOs
+      // let out = prods.filter(v => {
+      //   let planQty = Number(v.planQty) || 0
+      //   let receiveQty = Number(v.receiveQty) || 0
+      //   return planQty > receiveQty
+      // })
+      // let params = {
+      //   receiveOrderCode: this.detail.receiveOrderDO.orderCode,
+      //   detailIds: prods.map(v => v.id)
+      // }
+      // if (out.length) {
+      //   let msg = ''
+      //   if (out.length === 1) {
+      //     msg = `商品【${out[0].skuName}】非全部收货，是否继续收货确认`
+      //   } else {
+      //     msg = `商品【${out[0].skuName}】等【${out.length}】项非全部收货，是否继续收货确认`
+      //   }
+      //   this.$apiConfirm(msg, () => receiveConfirm(params)).then(res => {
+      //     if (!res) return
+      //     this.$message.success('操作成功！')
+      //     this.initData()
+      //   })
+      // } else {
+      //   this.receiveConfirmLoading = true
+      //   receiveConfirm(params).then((res) => {
+      //     this.receiveConfirmLoading = false
+      //     if (!res) return
+      //     this.$message.success('操作成功！')
+      //     this.initData()
+      //   })
+      // }
     }
   },
 }
