@@ -28,6 +28,11 @@
           type="primary"
           @click="handleDelete(scope.row)"
         >删除</el-link>
+        <!-- <el-divider direction="vertical"></el-divider> -->
+        <el-link
+          type="primary"
+          @click="selectedRow=scope.row;printTagDialogVisible=true"
+        >打印到货标签</el-link>
       </template>
       <template slot="btns">
         <!-- 操作区域 -->
@@ -42,11 +47,16 @@
       :row="selectedRow"
       @submited="getTableData()"
     />
+    <printTagDialog
+      :visible.sync="printTagDialogVisible"
+      :row="selectedRow"
+    />
   </div>
 </template>
 
 <script>
 import ProductSetDialog from './components/productSetDialog'
+import printTagDialog from './components/printTagDialog'
 import { skuSelect, lotList, deleteSkuById } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
@@ -64,13 +74,14 @@ const searchConfig = [
   { label: '批次', prop: 'lotId', type: 'enum', enum: '_lotEnum' },
 ]
 export default {
-  components: { ProductSetDialog },
+  components: { ProductSetDialog, printTagDialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       skuSelect,
       selectedRow: {},
+      printTagDialogVisible: false,
       productSetDialogVisible: false,
     }
   },
