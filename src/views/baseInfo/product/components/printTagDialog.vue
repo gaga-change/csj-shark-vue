@@ -2,7 +2,7 @@
   <div class="">
     <!-- 600px【小型，单列】 70% 【中型，双列】-->
     <el-dialog
-      title="打印到货标签"
+      title="打印标签"
       :visible="visible"
       width="70%"
       :before-close="handleClose"
