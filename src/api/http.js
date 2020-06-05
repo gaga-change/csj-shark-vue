@@ -16,7 +16,7 @@ newAxios.interceptors.response.use(function (response) {
     location.href = `/login?backUrl=${location.href}`
     data = null
   } else if (data.code !== '200') {
-    let message = data.detailError || data.message || data.errorMsg || ''
+    let message = data.errorMsg || data.message || data.detailError || ''
     Message({
       type: 'error',
       message: message || '系统异常',
