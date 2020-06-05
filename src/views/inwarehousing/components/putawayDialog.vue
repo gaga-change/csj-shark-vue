@@ -61,18 +61,10 @@
                 placeholder="请输入容器"
               ></el-input>
             </el-form-item>
-            <el-form-item
-              label=""
-              prop="checkResult"
-            >
-              <el-radio-group v-model="formData.checkResult">
-                <el-radio :label="2">正品</el-radio>
-                <el-radio :label="1">残次品</el-radio>
-              </el-radio-group>
-            </el-form-item>
             <el-form-item label="商品状态">
               <MapSelect
                 :disabled="true"
+                placeholder=" "
                 v-model="formData.skuStatus"
                 map="productStatusEnum"
               />

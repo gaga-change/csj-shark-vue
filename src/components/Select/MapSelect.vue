@@ -2,7 +2,7 @@
   <el-select
     :value="value"
     @change="handleChange"
-    placeholder="请选择"
+    :placeholder="placeholder || '请选择'"
     clearable
     :loading="loading"
     :disabled="disabled"
@@ -25,6 +25,7 @@ export default {
     event: 'update'
   },
   props: {
+    placeholder: String,
     value: Number,
     map: String,
     name: String,
