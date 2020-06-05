@@ -4,7 +4,7 @@
       <!-- 收货中 & 已激活 可见 -->
       <el-button
         type="primary"
-        v-if="detail.receiveOrderDO.execStatus===3 || detail.receiveOrderDO.execStatus===1"
+        v-if="isConfirm"
         :loading="receiveConfirmLoading"
         @click="handleConfirm"
       >
