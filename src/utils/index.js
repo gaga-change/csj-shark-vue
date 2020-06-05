@@ -610,6 +610,7 @@ export function MakePrint(content, userStyle, w = null, h = null) {
     img {width: 100%;}
     .card-list{margin-bottom: 6px;width:25%;display:inline-block}
     .el-dropdown{display:inline-block}
+    .outgoing-quirydetail-container{page-break-before: auto;page-break-after: always;} 
   </style>`;
   myWindow.document.write(content + style);
   myWindow.focus();

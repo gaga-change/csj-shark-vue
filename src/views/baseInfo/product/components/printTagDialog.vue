@@ -14,41 +14,45 @@
           :config="tableConfig"
         ></base-table>
         <!-- 打印内容 -->
-        <div ref="print">
-          <div
-            v-for="i in number"
-            :key="i"
-          >
-            <div style="float:right">
-              <bar-code :code="123" />
-            </div>
+        <div style="visibility:hidden; height: 0px; overflow:hidden">
+          <div ref="print">
             <div
-              class="f12"
-              style="overflow: hidden"
+              v-for="i in number"
+              :key="i"
+              class="outgoing-quirydetail-container"
             >
-              <p>
-                <span>外部商品编码 ：</span> <span>{{rowData.ownerSkuCode}}</span>
-              </p>
-              <p>
-                <span>商品名称 ：</span> <span>{{rowData.skuName}}</span>
-              </p>
-              <p>
-                <span>规格 ：</span> <span>{{rowData.lotAttrCode1}}</span>
-              </p>
-              <p>
-                <span>型号 ：</span> <span>{{rowData.lotAttrCode2}}</span>
-              </p>
-              <p>
-                <span>单位 ：</span> <span>{{rowData.lotAttrCode3}}</span>
-              </p>
-              <p>
-                <span>数量 ：</span>
-                <span style="display:inline-block;width:200px;border-bottom: 1px solid #000;"></span>
-              </p>
-              <p>
-                <span>批号 ：</span>
-                <span style="display:inline-block;width:200px;border-bottom: 1px solid #000;"></span>
-              </p>
+              <h3>{{i}} / {{number}}</h3>
+              <div style="float:right">
+                <bar-code :code="i | getTagCode" />
+              </div>
+              <div
+                class="f12"
+                style="overflow: hidden"
+              >
+                <p>
+                  <span>外部商品编码 ：</span> <span>{{rowData.ownerSkuCode}}</span>
+                </p>
+                <p>
+                  <span>商品名称 ：</span> <span>{{rowData.skuName}}</span>
+                </p>
+                <p>
+                  <span>规格 ：</span> <span>{{rowData.lotAttrCode1}}</span>
+                </p>
+                <p>
+                  <span>型号 ：</span> <span>{{rowData.lotAttrCode2}}</span>
+                </p>
+                <p>
+                  <span>单位 ：</span> <span>{{rowData.lotAttrCode3}}</span>
+                </p>
+                <p>
+                  <span>数量 ：</span>
+                  <span style="display:inline-block;width:200px;border-bottom: 1px solid #000;height:30px"></span>
+                </p>
+                <p>
+                  <span>批号 ：</span>
+                  <span style="display:inline-block;width:200px;border-bottom: 1px solid #000;height:30px"></span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -89,6 +93,7 @@
 // import { saveApi } from '@/api'
 import { MakePrint } from '@/utils'
 import JsBarcode from 'jsbarcode'
+import moment from 'moment'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '外部商品编码', prop: 'ownerSkuCode' },
@@ -96,7 +101,7 @@ const tableConfig = [
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '型号', prop: 'lotAttrCode2' },
   { label: '单位', prop: 'lotAttrCode3' },
-  { label: '打印数量', prop: 'num', edit: true, inputType: number, min: 1, max: 99 },
+  { label: '打印数量', prop: 'num', edit: true, inputType: 'number', min: 1, max: 99, width: 200 },
 ]
 export default {
   props: {
@@ -124,10 +129,23 @@ export default {
       tableConfig,
       loading: false,
       rowData: {},
-      number: undefined,
+      number: 0,
     }
   },
+  filters: {
+    /** 获取流水号 */
+    getTagCode(i) {
+      let num = ''
+      if (i < 10) {
+        num = '000' + i
+      } else {
+        num = '00' + i
+      }
+      return moment(new Date()).format('YYMMDD') + num
+    },
+  },
   methods: {
+
     /** 确定 */
     confirm() {
       this.number = this.rowData.num
