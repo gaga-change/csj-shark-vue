@@ -50,7 +50,7 @@ const tableConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitCode' },
   { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
-  { label: '商品状态', prop: 'skuStatus', type: 'enum', enum: 'productStatusEnum' },
+  { label: '商品状态', prop: 'checkResult', type: 'enum', enum: 'productStatusEnum' },
   { label: '上架数量', prop: 'jobQty' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '容器', prop: 'trayCode' },

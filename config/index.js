@@ -1,8 +1,8 @@
 'use strict'
 
 const path = require('path')
-// let ip = 'http://192.168.2.33:8787'; // 金启明
-let ip = 'http://192.168.1.37:8787'; // 测试环境。  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
+let ip = 'http://192.168.2.33:8787'; // 金启明
+// let ip = 'http://192.168.1.37:8787'; // 测试环境。  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
 // let ip = 'http://192.168.1.204:8787'; // 正式环境  需配置 host 文件，`127.0.0.1 testshark.csjmro.com` 即可生效。
 
 const proxyTableArr = ['/webApi', '/api', '/app']
