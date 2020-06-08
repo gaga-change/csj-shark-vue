@@ -83,7 +83,7 @@ export default {
       recordListDialogVisible: false,
       putawayDialogVisible: false,
       nowRow: {},
-      appendSearchParams: { receiveExecStatus: 2 },
+      appendSearchParams: { receiveExecStatus: 2, damagedQty: 0 },
     }
   },
   methods: {
