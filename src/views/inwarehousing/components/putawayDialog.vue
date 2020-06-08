@@ -88,6 +88,12 @@
                 ></el-divider>
               </span>
             </div>
+            <div
+              class="mt10"
+              v-if="warehouseSpaceList.length===0"
+            >
+              <span>推荐库位：无</span>
+            </div>
           </el-form>
         </div>
       </div>
