@@ -69,16 +69,19 @@
                 map="productStatusEnum"
               />
             </el-form-item>
-            <div class="mt10">
+            <div
+              class="mt10"
+              v-if="warehouseSpaceList.length"
+            >
               <span>推荐库位：</span>
               <span
-                v-for="(item, i) in warehouseSpaceList"
-                :key="item.id"
+                v-for="(item) in warehouseSpaceList"
+                :key="item"
               >
                 <el-link
                   type="primary"
                   @click="handleSelectWarehouseSpaceCode(item)"
-                >{{item.warehouseSpaceCode}}</el-link>
+                >{{item}}</el-link>
                 <el-divider
                   v-if="i + 1 !== warehouseSpaceList.length"
                   direction="vertical"
@@ -109,7 +112,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { inJobAdd, warehouseSpaceSelect } from '@/api'
+import { inJobAdd, recommendWarehouseArea } from '@/api'
 
 const detailItemConfig = [
   { label: '商品编码', prop: 'skuCode' },
@@ -172,24 +175,26 @@ export default {
     visible(val) {
       if (!val) return
       this.formData.skuStatus = (this.row || {}).skuStatus || undefined
+      this.recommendWarehouseArea()
     }
   },
-  created() {
-    this.warehouseSpaceListLoading = true
-    warehouseSpaceSelect({
-      pageNum: 1,
-      pageSize: 5,
-      warehouseCode: this.chooseWarehouse
-    }).then(res => {
-      this.warehouseSpaceListLoading = false
-      if (!res) return
-      this.warehouseSpaceList = res.data.list
-    })
-  },
   methods: {
+    recommendWarehouseArea() {
+      this.warehouseSpaceList = []
+      this.warehouseSpaceListLoading = true
+      recommendWarehouseArea({
+        skuCode: this.rowData.skuCode
+      }).then(res => {
+        this.warehouseSpaceListLoading = false
+        if (res.data && res.data[0])
+          this.warehouseSpaceList = [res.data[0]]
+      }).catch(err => {
+        this.warehouseSpaceListLoading = false
+      })
+    },
     /** 选择推荐库位 */
     handleSelectWarehouseSpaceCode(item) {
-      this.formData.warehouseSpaceCode = item.warehouseSpaceCode
+      this.formData.warehouseSpaceCode = item
     },
     /** 确定 */
     confirm() {
@@ -210,6 +215,7 @@ export default {
     close() {
       this.$refs['form'] && this.$refs['form'].resetFields()
       this.hasContainer = false
+      this.warehouseSpaceList = []
       this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {

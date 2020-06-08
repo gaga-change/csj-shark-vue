@@ -1,4 +1,5 @@
 import http from './http'
+import axios from 'axios'
 import download from './download'
 
 export * from './config'
@@ -293,5 +294,7 @@ export const userlogin = params => http.post(`/api/sso/login`, params)
 export const selectPutPlotByPlotName = params => http.get(`/webApi/basic/putPlot/selectPutPlotByPlotName`, { params })
 /** 周转规则 */
 export const selectTrunoverPlotByPlotName = params => http.get(`/webApi/basic/trunoverPlot/selectTrunoverPlotByPlotName`, { params })
+/** 推荐库位 */
+export const recommendWarehouseArea = params => axios.get(`/webApi/in/job/recommendWarehouseArea`, { params })
 /** 退出登录 */
 export const logout = () => http.get(`/api/sso/logout`)
