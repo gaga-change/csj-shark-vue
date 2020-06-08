@@ -210,16 +210,13 @@ export default {
     },
     /** 收货确认 */
     handleConfirm() {
-      // const {detailItemDos, detailDOs} = this.detail
-      // console.log(this.$copy(this.detail.detailDOs))
-      // console.log(this.$copy(this.detail.detailItemDos))
       const detailItemDos = this.$copy(this.detail.detailItemDos)
       const detailDOs = this.$copy(this.detail.detailDOs)
       const prod = this.detail.detailItemDos.find(v => !v.modifyed)
       if (prod) {
-        return this.$message.warning(`请编辑收货明细【${prod.skuName}}】`)
+        return this.$message.warning(`请编辑确认收货明细【${prod.skuName}}】`)
       } else {
-        detailItemDos.forEach(item => {
+        detailItemDos.forEach(item => { // 收获明细循环，添加到商品明细钟
           const temp = detailDOs.find(v => v.skuCode === item.skuCode)
           if (temp) {
             temp.son = temp.son || []
@@ -228,7 +225,7 @@ export default {
         })
       }
       const paramsData = {
-        receiveConfirmDetailReqList: detailDOs.map(v => {
+        receiveConfirmDetailReqList: detailDOs.filter(v => v.son && v.son.length).map(v => {
           return {
             id: v.id,
             receiveConfirmDetailItemReqList: v.son.map(v => ({
