@@ -18,6 +18,11 @@
           type="primary"
           @click="handleChangeStatus(scope.row)"
         >{{scope.row.plotStatus === 0 ? '禁用' : '启用'}}</el-link>
+        <el-divider direction="vertical"></el-divider>
+        <el-link
+          type="primary"
+          @click="$router.push({path:`/baseInfo/productList`,query:{putPlotId: scope.row.id}})"
+        >关联商品</el-link>
       </template>
       <template slot="btns">
         <el-button

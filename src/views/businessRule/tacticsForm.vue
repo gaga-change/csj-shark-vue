@@ -80,8 +80,8 @@
             <td style="width:100px">
               <el-switch
                 v-model="dynamicValidateForm.statusList[index]"
-                :active-value="1"
-                :inactive-value="0"
+                :active-value="0"
+                :inactive-value="1"
                 active-color="#13ce66"
                 inactive-color="#ccc">
               </el-switch>
@@ -114,7 +114,6 @@
 import { mapGetters } from 'vuex'
 import { cloneDeep, omit, pick } from 'lodash';
 import { addTaticsApi, getSelectInventoryAreaList, getSysEnumType } from '@/api'
-const plotRules = [ '同一商品邻近为空', '任意空库位' ]
 export default {
   data() {
     return {

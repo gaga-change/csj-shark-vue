@@ -5,7 +5,6 @@
       ref="dynamicValidateForm"
       label-width="100px"
       class="demo-dynamic"
-      :inline="true"
     >
     <el-row>
       <el-col>
@@ -32,7 +31,7 @@
         { required: true, message: '请设置执行规则', trigger: ['change'] }
       ]"
     >
-      <table class="input-table">
+      <table class="input-table" style="width:600px">
         <tr>
           <th>序号</th>
           <th>批次属性</th>
@@ -62,8 +61,8 @@
           <td style="width:100px">
             <el-switch
               v-model="item.plotStatus"
-              active-value="1"
-              inactive-value="0"
+              active-value="0"
+              inactive-value="1"
               active-color="#13ce66"
               inactive-color="#ccc">
             </el-switch>
@@ -119,7 +118,7 @@ export default {
       addLotLoading: false,
       dynamicValidateForm: {
         lotName: undefined,
-        addPlot: null,
+        addPlot: '',
         basicTrunoverPlotDetailReqList: [{
           batchAttr: '1',
           serialNumber: 1,
@@ -161,9 +160,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (!valid) return
         let data = cloneDeep(this.dynamicValidateForm)
-        data.basicPickPlotRuleReqList = [{
-          addPlot: data.addPlot
-        }]
+        data.basicPickPlotRuleReqList = []
+        if (data.addPlot) {
+          data.basicPickPlotRuleReqList.push({
+            addPlot: data.addPlot
+          })
+        }
         this.addLotLoading = true
         addTrunoverApi(data).then(res => {
           if (!res) {
