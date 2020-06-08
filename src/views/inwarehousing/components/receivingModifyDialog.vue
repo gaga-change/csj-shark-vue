@@ -259,7 +259,7 @@ export default {
         this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
       })
       if (this.isConfirm) {
-        this.formData.qualityQty = this.rowData.qualityQty || this.rowData.receiveQty || 0
+        this.formData.qualityQty = (this.rowData.qualityQty === null || this.rowData.qualityQty === undefined) ? this.rowData.receiveQty : 0
         this.formData.disqualityQty = this.rowData.disqualityQty || 0
         this.formData.damagedQty = this.rowData.damagedQty || 0
       }
@@ -281,7 +281,10 @@ export default {
       },
       rules: {
         trayCode: [{ required: true, message: '必填项', trigger: ['blur', 'change'] }, { min: 0, max: 20, message: '不能超过20个字符', trigger: ['blur', 'change'] },],
-        receiveQty: [{ required: true, message: '必填项', trigger: ['blur', 'change'] },]
+        receiveQty: [{ required: true, message: '必填项', trigger: ['blur', 'change'] },],
+        qualityQty: [{ required: true, message: '必填项', trigger: ['blur', 'change'] },],
+        disqualityQty: [{ required: true, message: '必填项', trigger: ['blur', 'change'] },],
+        damagedQty: [{ required: true, message: '必填项', trigger: ['blur', 'change'] },]
       },
       lotDetailList: []
     }
@@ -321,12 +324,16 @@ export default {
     },
     /** 保存 */
     save() {
-      const { qualityQty, disqualityQty, damagedQty, receiveQty } = this.formData
-      if ((qualityQty + disqualityQty + damagedQty) > receiveQty) {
-        return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
-      }
-      this.$emit('save', this.$copy(this.formData))
-      this.close()
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          const { qualityQty, disqualityQty, damagedQty, receiveQty } = this.formData
+          if ((qualityQty + disqualityQty + damagedQty) > receiveQty) {
+            return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
+          }
+          this.$emit('save', this.$copy(this.formData))
+          this.close()
+        }
+      })
     },
     /** 确定 */
     confirm() {
@@ -348,7 +355,9 @@ export default {
     },
     /** 关闭弹窗 */
     close() {
-      this.$refs['form'] && this.$refs['form'].resetFields()
+      setTimeout(() => {
+        this.$refs['form'] && this.$refs['form'].resetFields()
+      }, 1000)
       this.visible && this.$emit('update:visible', false)
     },
     handleClose(done) {
