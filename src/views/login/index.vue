@@ -102,6 +102,7 @@ export default {
     }
   },
   created() {
+    sessionStorage.clear('warehouse')
   },
   methods: {
     showPwd() {
