@@ -92,7 +92,6 @@
  */
 // import { saveApi } from '@/api'
 import { MakePrint } from '@/utils'
-import JsBarcode from 'jsbarcode'
 import moment from 'moment'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
