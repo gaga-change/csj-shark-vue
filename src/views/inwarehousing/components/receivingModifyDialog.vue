@@ -327,8 +327,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           const { qualityQty, disqualityQty, damagedQty, receiveQty } = this.formData
-          if ((qualityQty + disqualityQty + damagedQty) > receiveQty) {
-            return this.$message.error('合格数+不合格数+破坏数不能大于实际收货量')
+          if ((qualityQty + disqualityQty + damagedQty) !== receiveQty) {
+            return this.$message.error('合格数、不合格数、破坏数数量之和不能大于或小于收货总量')
           }
           this.$emit('save', this.$copy(this.formData))
           this.close()
