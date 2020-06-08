@@ -60,6 +60,7 @@ import printTagDialog from './components/printTagDialog'
 import { skuSelect, lotList, deleteSkuById, taticsListApi } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
+  { label: '外部商品编码 ', prop: 'ownerSkuCode' },
   { label: '商品名称 ', prop: 'skuName' },
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '型号', prop: 'lotAttrCode2' },
@@ -68,6 +69,7 @@ const tableConfig = [
 ]
 const searchConfig = [
   { label: '商品编码', prop: 'skuCode' },
+  { label: '外部商品编码 ', prop: 'ownerSkuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'lotAttrCode1' },
   { label: '型号', prop: 'lotAttrCode2' },
