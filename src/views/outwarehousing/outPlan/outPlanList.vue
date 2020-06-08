@@ -80,7 +80,7 @@ const searchConfig = [
   { label: '出库计划单号', prop: 'planCode' },
   { label: '外部订单号', prop: 'busiBillNo' },
   { label: '状态', prop: 'sortStatus', type: 'enum', enum: 'sortStatusEnum' },
-  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum' },
+  { label: '单据类型', prop: 'busiBillType', type: 'enum', enum: 'busiBillTypeEnum_out' },
   { label: '货主', prop: 'ownerName' },
   { label: '下单时间', prop: 'createTimeArea', props: ['createBeginDate', 'createEndDate'], type: 'timeArea' },
 ]
