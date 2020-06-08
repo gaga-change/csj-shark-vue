@@ -66,7 +66,7 @@
             <el-date-picker
               size="mini"
               v-model="searchForms[item.prop]"
-              type="datetimerange"
+              type="daterange"
               :picker-options="pickerOptions"
               range-separator="至"
               start-placeholder="开始日期"
