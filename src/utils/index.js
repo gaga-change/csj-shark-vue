@@ -466,7 +466,7 @@ export function downloadFile(file) {
  * @returns
  */
 
-export function MakePrint(content, userStyle, w = null, h = null) {
+export function MakePrint(content, userStyle, w = null, h = null, appendStyle) {
   // Fixes dual-screen position                         Most browsers      Firefox
   const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
   const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
@@ -610,9 +610,9 @@ export function MakePrint(content, userStyle, w = null, h = null) {
     img {width: 100%;}
     .card-list{margin-bottom: 6px;width:25%;display:inline-block}
     .el-dropdown{display:inline-block}
-    .outgoing-quirydetail-container{page-break-before: auto;page-break-after: always;} 
+    .outgoing-quirydetail-container{page-break-before: auto;page-break-after: always;}
   </style>`;
-  myWindow.document.write(content + style);
+  myWindow.document.write(content + style + (appendStyle || ''));
   myWindow.focus();
   myWindow.document.close();     //关闭document的输出流, 显示选定的数据
   // myWindow.print()

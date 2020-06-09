@@ -5,6 +5,8 @@ import download from './download'
 export * from './config'
 export * from './app'
 
+/** 推荐库位 */
+export const recommendWarehouseArea = params => axios.get(`/webApi/in/job/recommendWarehouseArea`, { params })
 /** 导出库位库存 */
 export const exportLedger = params => download({ url: `/webApi/sku/stock/exportLedger`, params })
 /** 盘点管理导出 */
@@ -294,7 +296,7 @@ export const userlogin = params => http.post(`/api/sso/login`, params)
 export const selectPutPlotByPlotName = params => http.get(`/webApi/basic/putPlot/selectPutPlotByPlotName`, { params })
 /** 周转规则 */
 export const selectTrunoverPlotByPlotName = params => http.get(`/webApi/basic/trunoverPlot/selectTrunoverPlotByPlotName`, { params })
-/** 推荐库位 */
-export const recommendWarehouseArea = params => axios.get(`/webApi/in/job/recommendWarehouseArea`, { params })
+/** 获取流水号编码 */
+export const getSkuBarCode = params => http.get(`/webApi/basic/sku/getSkuBarCode`, { params })
 /** 退出登录 */
 export const logout = () => http.get(`/api/sso/logout`)
