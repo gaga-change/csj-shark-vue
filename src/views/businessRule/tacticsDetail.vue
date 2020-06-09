@@ -30,7 +30,7 @@ const titleConfig = [
 const tableConfig = [
   { label: '规则名称', prop: 'plotRuleName' },
   { label: '执行顺序', prop: 'serialNumber' },
-  { label: '是否开启', prop: 'plotStatus' },
+  { label: '是否开启', prop: 'plotStatus', dom: v =>  v === 0 ? '禁用' : '启用' },
 ]
 export default {
   data() {

@@ -5,7 +5,6 @@
       ref="dynamicValidateForm"
       label-width="100px"
       class="demo-dynamic"
-      :inline="true"
     >
     <el-row>
       <el-col>
@@ -27,7 +26,7 @@
       prop="basicTrunoverPlotDetailReqList"
       label="执行规则"
     >
-      <table class="input-table">
+      <table class="input-table" style="width:600px">
         <tr>
           <th>序号</th>
           <th>批次属性</th>
@@ -58,8 +57,8 @@
           <td style="width:100px">
             <el-switch
               v-model="item.plotStatus"
-              :active-value="1"
-              :inactive-value="0"
+              :active-value="0"
+              :inactive-value="1"
               disabled
               active-color="#13ce66"
               inactive-color="#ccc">
