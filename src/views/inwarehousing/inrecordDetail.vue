@@ -37,7 +37,7 @@
         <template slot-scope="scope">
           <el-link
             type="primary"
-            :disabled="scope.row.planQty == scope.row.receiveQty"
+            :disabled="Number(scope.row.planQty) === Number(scope.row.receiveQty)"
             @click="handleReceivingRegister(scope.row)"
           >收货登记</el-link>
         </template>
@@ -129,7 +129,7 @@ const detailItemDosConfig = [
   { label: '合格数', prop: 'qualityQty' },
   { label: '不合格数', prop: 'disqualityQty' },
   { label: '破坏数', prop: 'damagedQty' },
-  { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
+  // { label: '上架状态', prop: 'isPut', type: 'enum', enum: 'isPutEnum' },
 ]
 
 export default {
@@ -157,7 +157,7 @@ export default {
   },
   computed: {
     receivingRegisterShow() {
-      return !!~[0, 1, 3].findIndex(v => v == this.detail.receiveOrderDO.execStatus)
+      return !!~[0, 1, 3].findIndex(v => v === Number(this.detail.receiveOrderDO.execStatus))
     },
     isConfirm() {
       return this.$route.query.type === 'confirm'
