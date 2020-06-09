@@ -5,6 +5,7 @@ import { cloneDeep } from 'lodash';
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 import ItemTitle from '@/components/ItemTitle/index'
 import BarCode from '@/components/BarCode/index'
+import BarCode2 from '@/components/BarCode2'
 import BaseTable from '@/components/BaseTable'
 import SearchForm from '@/components/SearchForm'
 import BaseList from '@/components/BaseList'
@@ -36,6 +37,7 @@ Vue.component('DetailItem', DetailItem);
 Vue.component('BaseForm', BaseForm);
 Vue.component('ApiSelect', ApiSelect);
 Vue.component('MapSelect', MapSelect);
+Vue.component('BarCode2', BarCode2);
 Vue.prototype.$copy = obj => cloneDeep(obj)
 Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve, reject) => {
   MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {

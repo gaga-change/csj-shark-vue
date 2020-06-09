@@ -198,14 +198,21 @@
       >
         <div
           v-for="item in multipleParentSelection"
-          class="printItemCss"
+          class="printItemCss outgoing-quirydetail-container"
+          style="display: flex"
           :key="item.warehouseSpaceCode"
         >
-          <bar-code
+          <BarCode2
+            style=" width: 50%;"
             :code="item.warehouseSpaceCode"
-            fontSize="5mm"
-            mw="0.3"
-          ></bar-code>
+          ></BarCode2>
+          <div style=" width: 50%;
+    display: flex;
+    font-size: 24px;
+    align-items: center;
+    justify-content: center;">
+            {{item.warehouseSpaceCode}}
+          </div>
         </div>
       </div>
       <span
@@ -350,15 +357,23 @@ export default {
       }
     },
     printIt() {
-      var useStyle = `<style type='text/css'> 
-                                .printItemCss{
-                                    width:40mm;
-                                    height:25mm;   
-                                }  
-                                img{
-                                    width: 100%;
-                                    height: 100%;
-                                }
+      var useStyle = `<style type='text/css'>
+    body {
+    margin: 0;
+    padding: 0 5px;
+    }
+    .printItemCss {
+    height: 100vh;
+    overflow: hidden;
+    }
+                                /*.printItemCss{*/
+                                /*    width:40mm;*/
+                                /*    height:25mm;*/
+                                /*}*/
+                                /*img{*/
+                                /*    width: 100%;*/
+                                /*    height: 100%;*/
+                                /*}*/
                                </style>`
       MakePrint(document.getElementById('print').innerHTML, useStyle)
     },
@@ -457,11 +472,11 @@ export default {
   .printSiteCss {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: space-between;
+    /*justify-content: space-between;*/
+    /*align-content: space-between;*/
     .printItemCss {
-      width: 40mm;
-      height: 25mm;
+      width: 200px;
+      height: 50px;
       img {
         width: 100%;
         height: 100%;
