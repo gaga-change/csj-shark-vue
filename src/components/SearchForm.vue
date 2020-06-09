@@ -459,12 +459,14 @@ export default {
         })
       })
     },
-    /** 对字符串进行 去空格操作 */
+    /** 对字符串进行 去空格、去空串操作 */
     paramsTrim(form) {
       let temp = { ...form }
       Object.keys(temp).forEach(key => {
         let val = temp[key]
-        if (typeof val === 'string') {
+        if (val === '') {
+          temp[key] = undefined
+        } else if (typeof val === 'string') {
           temp[key] = temp[key].trim()
         }
       })
