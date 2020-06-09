@@ -5,7 +5,6 @@
       ref="dynamicValidateForm"
       label-width="100px"
       class="demo-dynamic"
-      :inline="true"
     >
       <el-row>
         <el-col>
@@ -31,74 +30,73 @@
         :rules="[
         { required: true, message: '请设置执行规则', trigger: ['change'] }
       ]"
-      >
-        <table class="input-table">
-          <tr>
-            <th>序号</th>
-            <th>批次属性</th>
-            <th>启用</th>
-            <th>排序规则</th>
-          </tr>
-          <tr
-            v-for="(item) in dynamicValidateForm.basicTrunoverPlotDetailReqList"
-            :key="item.serialNumber"
-          >
-            <td style="width:100px">{{item.serialNumber}}</td>
-            <td style="width:250px">
-              <el-select
-                v-model="item.batchAttr"
-                clearable
-                placeholder="请选择批次属性"
-                size="mini"
-              >
-                <el-option
-                  v-for="item in batchAttrs"
-                  :key="item.id"
-                  :label="item.typeName"
-                  :value="item.enumValue"
-                ></el-option>
-              </el-select>
-            </td>
-            <td style="width:100px">
-              <el-switch
-                v-model="item.plotStatus"
-                active-value="1"
-                inactive-value="0"
-                active-color="#13ce66"
-                inactive-color="#ccc"
-              >
-              </el-switch>
-            </td>
-            <td style="width:250px">
-              <el-select
-                v-model="item.sortRule"
-                clearable
-                placeholder="请选择排序规则"
-                size="mini"
-              >
-                <el-option
-                  v-for="item in sortRules"
-                  :key="item.id"
-                  :label="item.typeName"
-                  :value="item.enumValue"
-                ></el-option>
-              </el-select>
-            </td>
-          </tr>
-        </table>
-      </el-form-item>
-      <el-form-item label="补充规则">
-        <el-row
-          v-for="item in rulesEnum"
-          :key="item.id"
-          style="padding-bottom:10px"
+    >
+      <table class="input-table" style="width:600px">
+        <tr>
+          <th>序号</th>
+          <th>批次属性</th>
+          <th>启用</th>
+          <th>排序规则</th>
+        </tr>
+        <tr
+          v-for="(item) in dynamicValidateForm.basicTrunoverPlotDetailReqList"
+          :key="item.serialNumber"
         >
-          <el-radio
-            v-model="dynamicValidateForm.addPlot"
-            :label="item.enumValue"
-          >{{item.typeName}}</el-radio>
-        </el-row>
-      </el-form-item>
+          <td style="width:100px">{{item.serialNumber}}</td>          
+          <td style="width:250px">
+            <el-select
+              v-model="item.batchAttr"
+              clearable
+              placeholder="请选择批次属性"
+              size="mini"
+            >
+              <el-option
+                v-for="item in batchAttrs"
+                :key="item.id"
+                :label="item.typeName"
+                :value="item.enumValue"
+              ></el-option>
+            </el-select>
+          </td>
+          <td style="width:100px">
+            <el-switch
+              v-model="item.plotStatus"
+              active-value="0"
+              inactive-value="1"
+              active-color="#13ce66"
+              inactive-color="#ccc"
+            >
+            </el-switch>
+          </td>
+          <td style="width:250px">
+            <el-select
+              v-model="item.sortRule"
+              clearable
+              placeholder="请选择排序规则"
+              size="mini"
+            >
+              <el-option
+                v-for="item in sortRules"
+                :key="item.id"
+                :label="item.typeName"
+                :value="item.enumValue"
+              ></el-option>
+            </el-select>
+          </td>
+        </tr>
+      </table>
+    </el-form-item>
+    <el-form-item label="补充规则">
+      <el-row 
+        v-for="item in rulesEnum" 
+        :key="item.id" 
+        style="padding-bottom:10px">
+        <el-radio 
+          v-model="dynamicValidateForm.addPlot" 
+          :label="item.enumValue"
+        >{{item.typeName}}</el-radio>
+      </el-row>
+    </el-form-item>
 
       <div class="mt20">
         <el-form-item>
@@ -127,7 +125,7 @@ export default {
       addLotLoading: false,
       dynamicValidateForm: {
         lotName: undefined,
-        addPlot: null,
+        addPlot: '',
         basicTrunoverPlotDetailReqList: [{
           batchAttr: '1',
           serialNumber: 1,
@@ -169,9 +167,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (!valid) return
         let data = cloneDeep(this.dynamicValidateForm)
-        data.basicPickPlotRuleReqList = [{
-          addPlot: data.addPlot
-        }]
+        data.basicPickPlotRuleReqList = []
+        if (data.addPlot) {
+          data.basicPickPlotRuleReqList.push({
+            addPlot: data.addPlot
+          })
+        }
         this.addLotLoading = true
         addTrunoverApi(data).then(res => {
           if (!res) {
