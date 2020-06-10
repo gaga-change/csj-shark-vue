@@ -93,6 +93,7 @@
         style="padding-bottom:10px">
         <el-radio 
           v-model="dynamicValidateForm.addPlot" 
+          @click.native="radioClick"
           :label="item.enumValue"
         >{{item.typeName}}</el-radio>
       </el-row>
@@ -162,6 +163,11 @@ export default {
     })
   },
   methods: {
+    radioClick(e) {
+      if(e.target.value) {
+         this.dynamicValidateForm.addPlot = ''
+      }
+    },
     submitForm(formName) {
       const view = this.visitedViews.filter(v => v.path === this.$route.path)
       this.$refs[formName].validate((valid) => {
