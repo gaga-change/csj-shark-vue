@@ -75,7 +75,7 @@
             >
               <span>推荐库位：</span>
               <span
-                v-for="(item) in warehouseSpaceList"
+                v-for="(item, i) in warehouseSpaceList"
                 :key="item"
               >
                 <el-link
@@ -192,6 +192,7 @@ export default {
         skuCode: this.rowData.skuCode,
         id: this.rowData.id
       }).then(res => {
+        res = res.data
         this.warehouseSpaceListLoading = false
         if (res.data && res.data[0])
           this.warehouseSpaceList = [res.data[0]]
