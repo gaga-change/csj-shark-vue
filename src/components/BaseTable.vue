@@ -138,12 +138,33 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-else-if="item.linkTo"
+          :fixed="item.fixed"
+          :width="item.width"
+          :key="item.label"
+          :prop="item.prop"
+          :label="item.label"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <router-link :to="{path: item.linkTo, query: trunQuery(item.query, scope.row)}">
+              <el-link type="primary">
+                <BaseTableCell
+                  :row="scope.row"
+                  :index="scope.$index"
+                  :configItem="item"
+                  :formatter="item.formatter"
+                />
+              </el-link>
+            </router-link>
+          </template>
+        </el-table-column>
+        <el-table-column
           v-else
           :formatter="item.formatter"
           :fixed="item.fixed"
-          :type="item.columnType"
           :width="item.width"
-          :key="item.lable"
+          :key="item.label"
           :prop="item.prop"
           :label="item.label"
           show-overflow-tooltip
@@ -193,8 +214,10 @@
 import moment from 'moment';
 import { mapGetters } from 'vuex'
 import { selectLotDetailValue } from '@/api'
+import BaseTableCell from './BaseTableCell'
 
 export default {
+  components: {BaseTableCell},
   props: {
     /** 是否扩展 */
     expand: {
@@ -311,6 +334,7 @@ export default {
       selfPageSize: 10,
       selfCurrentPage: 1,
       selfLoading: true,
+      oldSearchParams: null,
     }
   },
   computed: {
@@ -319,7 +343,7 @@ export default {
     ])
   },
   watch: {
-    config(val) {
+    config() {
       this.turnConfig()
     }
   },
@@ -332,6 +356,13 @@ export default {
     this.turnConfig()
   },
   methods: {
+    trunQuery(query, row){
+      let json = {};
+      query && query.forEach(item => {
+        json[item.key] = row[item.value]
+      })
+      return json
+    },
     turnConfig() {
       let tableConfig = this.$copy(this.config)
       tableConfig.forEach(configItem => {
@@ -340,7 +371,7 @@ export default {
             case 'enum':
               {
                 if (typeof configItem.enum === 'string') {
-                  configItem.formatter = (row, column, cellValue, index) => {
+                  configItem.formatter = (row, column, cellValue) => {
                     let res = cellValue
                     if (!configItem.enum) {
                       console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
@@ -349,7 +380,7 @@ export default {
                       if (!enumArr.length && Object.keys(this.mapConfig).length) {
                         console.error(`枚举异常, 【${configItem.enum}】未配置`)
                       }
-                      let temp = enumArr.find(v => v.value == cellValue)
+                      let temp = enumArr.find(v => v.value === cellValue)
                       if (temp) {
                         res = temp.name
                       } else {
@@ -360,12 +391,12 @@ export default {
                     return res
                   }
                 } else {
-                  configItem.formatter = (row, column, cellValue, index) => {
+                  configItem.formatter = (row, column, cellValue) => {
                     let res = cellValue
                     if (!configItem.enum) {
                       console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
                     } else {
-                      let temp = configItem.enum.find(v => v.value == cellValue)
+                      let temp = configItem.enum.find(v => v.value === cellValue)
                       if (temp) {
                         res = temp.name
                       } else {
@@ -379,51 +410,20 @@ export default {
               }
               break
             case 'time':
-              configItem.formatter = (row, column, cellValue, index) => cellValue ? moment(cellValue).format(configItem.format || 'YYYY-MM-DD HH:mm:ss') : '';
+              configItem.formatter = (row, column, cellValue) => cellValue ? moment(cellValue).format(configItem.format || 'YYYY-MM-DD HH:mm:ss') : '';
               break
-            case 'Boolean': configItem.formatter = (row, column, cellValue, index) => cellValue ? '是' : '否'
+            case 'Boolean': configItem.formatter = (row, column, cellValue) => cellValue ? '是' : '否'
               break
             case 'index': configItem.formatter = (row, column, cellValue, index) => (this.selfPageSize) * (this.selfCurrentPage - 1) + index + 1
               break
-            case 'toFixed': configItem.formatter = (row, column, cellValue, index) => cellValue && Number(Number(cellValue).toFixed(2))
-              break
-            case 'files': configItem.formatter = (row, column, cellValue, index) => {
-              let files = row.files;
-              if (!files || files.length < 1) {
-                return ''
-              }
-              return <el-dropdown>
-                <span class="el-dropdown-link">
-                  查看附件<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  {
-                    files.map((v, i) => <el-dropdown-item>
-                      <a class="el-dropdown-link" target="blank" href={v.path}>{v.name || `附件${i + 1}`}</a>
-                    </el-dropdown-item>)
-                  }
-                </el-dropdown-menu>
-              </el-dropdown>
-            }
+            case 'toFixed': configItem.formatter = (row, column, cellValue) => cellValue && Number(Number(cellValue).toFixed(2))
               break
           }
         }
         else if (configItem.dom) {
           configItem.formatter = configItem.dom
-        } else if (!!configItem.linkTo) {
-          configItem.formatter = (row, column, cellValue, index) => {
-            let json = {};
-            configItem.query && configItem.query.forEach(item => {
-              json[item.key] = row[item.value]
-            })
-            let linkTo = configItem.linkTo
-            if (configItem.linkTo.constructor === Function) {
-              linkTo = configItem.linkTo(row)
-            }
-            return <router-link to={{ path: linkTo, query: json }} style={{ color: '#3399ea' }}>{configItem.linkText ? configItem.linkText : cellValue}</router-link>
-          }
         } else {
-          configItem.formatter = (row, column, cellValue, index) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''
+          configItem.formatter = (row, column, cellValue) => cellValue !== undefined && cellValue !== null && cellValue !== '' ? cellValue : ''
         }
       })
       this.tableConfig = tableConfig;
@@ -461,6 +461,11 @@ export default {
     },
     fetchData() {
       this.selfLoading = true
+      let temp = JSON.stringify(this.searchParams)
+      if (this.oldSearchParams !== temp) {
+        this.oldSearchParams = temp
+        this.selfCurrentPage = 1
+      }
       return this.api({
         pageNum: this.selfCurrentPage,
         pageSize: this.selfPageSize,
@@ -468,8 +473,8 @@ export default {
       }).then(res => {
         this.selfLoading = false
         if (!res) return
-        let data = null
-        let total = null
+        let data
+        let total
         if (this.parseData) {
           let obj = this.parseData(res)
           data = obj.data
