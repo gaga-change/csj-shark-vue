@@ -152,7 +152,7 @@
                   </el-select>
                 </template>
                 <template v-if="item.lotAttrType === 4">
-                  <template v-if="item.lotAttrValue.format == 'YYYY'">
+                  <template v-if="item.lotAttrValue.format === 'YYYY'">
                     <el-date-picker
                       style="width:200px;"
                       v-model="formData[item.lotAttrCode]"
@@ -162,7 +162,7 @@
                     >
                     </el-date-picker>
                   </template>
-                  <template v-if="item.lotAttrValue.format == 'YYYY-MM'">
+                  <template v-if="item.lotAttrValue.format === 'YYYY-MM'">
                     <el-date-picker
                       style="width:200px;"
                       v-model="formData[item.lotAttrCode]"
@@ -172,7 +172,7 @@
                     >
                     </el-date-picker>
                   </template>
-                  <template v-if="item.lotAttrValue.format == 'YYYY-MM-DD'">
+                  <template v-if="item.lotAttrValue.format === 'YYYY-MM-DD'">
                     <el-date-picker
                       style="width:200px;"
                       v-model="formData[item.lotAttrCode]"
@@ -220,9 +220,9 @@
 
 <script>
 
-import { editorReceiveItem, lotDetail } from '@/api'
+  import {editorReceiveItem, lotDetail} from '@/api'
 
-const detailItemConfig = [
+  const detailItemConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
   { label: '规格', prop: 'skuFormat' },
@@ -259,7 +259,7 @@ export default {
         this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
       })
       if (this.isConfirm) {
-        this.formData.qualityQty = (this.rowData.qualityQty === null || this.rowData.qualityQty === undefined) ? this.rowData.receiveQty : 0
+        this.formData.qualityQty = (this.rowData.qualityQty === null || this.rowData.qualityQty === undefined) ? this.rowData.receiveQty : (this.rowData.qualityQty  || 0)
         this.formData.disqualityQty = this.rowData.disqualityQty || 0
         this.formData.damagedQty = this.rowData.damagedQty || 0
       }
@@ -304,7 +304,7 @@ export default {
         this.lotDetailLoading = false
         if (!res) return
         const lotDetailList = res.data.lotDetailList || []
-        let temp = lotDetailList.filter(v => {
+        this.lotDetailList = lotDetailList.filter(v => {
           return v.dataSource === 1 && v.status === 0
         }).map(v => {
           if (v.lotAttrValue) {
@@ -319,7 +319,6 @@ export default {
           }
           return v
         })
-        this.lotDetailList = temp
       })
     },
     /** 保存 */
