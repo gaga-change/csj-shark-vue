@@ -38,8 +38,14 @@ Vue.component('BaseForm', BaseForm);
 Vue.component('ApiSelect', ApiSelect);
 Vue.component('MapSelect', MapSelect);
 Vue.component('BarCode2', BarCode2);
+Vue.prototype.$turnNumber = str => {
+  if (/^\d+$/.test(str)) {
+    return Number(str)
+  }
+  return str
+}
 Vue.prototype.$copy = obj => cloneDeep(obj)
-Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve, reject) => {
+Vue.prototype.$apiConfirm = (msg, api) => new Promise((resolve) => {
   MessageBox.confirm(msg || '此操作将永久删除该行, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',

@@ -380,7 +380,7 @@ export default {
                       if (!enumArr.length && Object.keys(this.mapConfig).length) {
                         console.error(`枚举异常, 【${configItem.enum}】未配置`)
                       }
-                      let temp = enumArr.find(v => v.value === cellValue)
+                      let temp = enumArr.find(v => v.value === this.$turnNumber(cellValue))
                       if (temp) {
                         res = temp.name
                       } else {
@@ -396,7 +396,7 @@ export default {
                     if (!configItem.enum) {
                       console.error(`列【${configItem.label} : ${configItem.prop}】,需要 【enum】字段`)
                     } else {
-                      let temp = configItem.enum.find(v => v.value === cellValue)
+                      let temp = configItem.enum.find(v => v.value === this.$turnNumber(cellValue))
                       if (temp) {
                         res = temp.name
                       } else {
