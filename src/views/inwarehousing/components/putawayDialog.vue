@@ -189,12 +189,13 @@ export default {
       this.warehouseSpaceList = []
       this.warehouseSpaceListLoading = true
       recommendWarehouseArea({
-        skuCode: this.rowData.skuCode
+        skuCode: this.rowData.skuCode,
+        id: this.rowData.id
       }).then(res => {
         this.warehouseSpaceListLoading = false
         if (res.data && res.data[0])
           this.warehouseSpaceList = [res.data[0]]
-      }).catch(err => {
+      }).catch(() => {
         this.warehouseSpaceListLoading = false
       })
     },
