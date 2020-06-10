@@ -57,7 +57,7 @@
 <script>
 import ProductSetDialog from './components/productSetDialog'
 import printTagDialog from './components/printTagDialog'
-import { skuSelect, lotList, deleteSkuById, taticsListApi } from '@/api'
+import { skuSelect, lotList, deleteSkuById, taticsListApi, trunoverListApi } from '@/api'
 const tableConfig = [
   { label: '商品编码 ', prop: 'skuCode' },
   { label: '外部商品编码 ', prop: 'ownerSkuCode' },
@@ -75,6 +75,7 @@ const searchConfig = [
   { label: '型号', prop: 'lotAttrCode2' },
   { label: '批次', prop: 'lotId', type: 'enum', enum: '_lotEnum' },
   { label: '策略', prop: 'putPlotId', type: 'enum', enum: '_putPlot' },
+  { label: '周转规则', prop: 'putRuleId', type: 'enum', enum: '_putRule' },
 ]
 export default {
   components: { ProductSetDialog, printTagDialog },
@@ -91,6 +92,7 @@ export default {
   created() {
     this.initLot()
     this.putLotList()
+    this.turnoverList()
   },
   methods: {
     initLot() {
@@ -112,6 +114,20 @@ export default {
         if (!res) return
         this.$store.commit('ADD_MAP', {
           name: '_putPlot',
+          keyValue: (res.data.list || []).map(v => {
+            return {
+              name: v.plotName,
+              value: v.id,
+            }
+          })
+        })
+      })
+    },
+    turnoverList() {
+      trunoverListApi({ pageSize: 9999, plotStatus: 0 }).then(res => {
+        if (!res) return
+        this.$store.commit('ADD_MAP', {
+          name: '_putRule',
           keyValue: (res.data.list || []).map(v => {
             return {
               name: v.plotName,
