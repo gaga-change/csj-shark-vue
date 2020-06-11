@@ -46,7 +46,8 @@
         prop="ruleList"
         label="策略规则"
         :rules="[
-          { required: true, message: '请设置策略规则', trigger: ['change'] }
+          { required: true, message: '请设置策略规则', trigger: ['change'] },
+          { validator: validateRule, trigger: ['change', 'blur'] }
         ]"
       >
         <table class="input-table" style="width:600px">
@@ -155,6 +156,13 @@ export default {
     })
   },
   methods: {
+    validateRule(rule, value, callback) {
+      if (value.some(v => v === '')) {
+        callback(new Error('规则名称不能为空'))
+      } else {
+        callback()
+      }
+    },
     move(index, step) {
       if (!this.dynamicValidateForm.ruleList[index + step])
       return
