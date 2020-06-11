@@ -28,7 +28,8 @@
         prop="basicTrunoverPlotDetailReqList"
         label="执行规则"
         :rules="[
-        { required: true, message: '请设置执行规则', trigger: ['change'] }
+        { required: true, message: '请设置执行规则', trigger: ['change'] },
+        { validator: validateRule, trigger: ['change', 'blur'] }
       ]"
     >
       <table class="input-table" style="width:600px">
@@ -163,6 +164,15 @@ export default {
     })
   },
   methods: {
+    validateRule(rule, value, callback) {
+      if (value.some(v => v.batchAttr === '')) {
+        callback(new Error('批次属性不能为空'))
+      } else if (value.some(v => v.sortRule === '')) {
+        callback(new Error('排序规则不能为空'))
+      } else {
+        callback()
+      }
+    },
     radioClick(e) {
       if(e.target.value) {
          this.dynamicValidateForm.addPlot = ''
