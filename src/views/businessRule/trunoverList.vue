@@ -22,7 +22,7 @@
           <el-divider direction="vertical"></el-divider>
           <el-link
             type="primary"
-            @click="$router.push({path:`/baseInfo/productList`,query:{putRuleId: scope.row.id}})"
+            @click="$router.push({path:`/baseInfo/productList`,query:{trunoverPlotId: scope.row.id}})"
           >关联商品</el-link>
         </template>
       </template>

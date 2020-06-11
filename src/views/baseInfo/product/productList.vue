@@ -75,7 +75,7 @@ const searchConfig = [
   { label: '型号', prop: 'lotAttrCode2' },
   { label: '批次', prop: 'lotId', type: 'enum', enum: '_lotEnum' },
   { label: '策略', prop: 'putPlotId', type: 'enum', enum: '_putPlot' },
-  { label: '周转规则', prop: 'putRuleId', type: 'enum', enum: '_putRule' },
+  { label: '周转规则', prop: 'trunoverPlotId', type: 'enum', enum: '_putRule' },
 ]
 export default {
   components: { ProductSetDialog, printTagDialog },
