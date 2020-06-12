@@ -7,6 +7,7 @@
       width="70%"
       :before-close="handleClose"
       @close="close"
+      destroy-on-close
     >
       <div>
         <!-- 基本信息 -->
@@ -180,6 +181,13 @@ export default {
     /** 监听数据切换，重置表单。为何不监听rowData?因为主组件visible一一对应，但选中数据不是，selectRow 是多个弹窗共享的 */
     visible(val) {
       if (!val) return
+      this.formData = {
+        warehouseSpaceCode: undefined,
+        putQty: undefined,
+        trayCode: undefined,
+        checkResult: undefined,
+        skuStatus: undefined,
+      }
       this.formData.skuStatus = (this.row || {}).skuStatus || undefined
       this.recommendWarehouseArea()
     }
@@ -221,10 +229,9 @@ export default {
     },
     /** 关闭弹窗 */
     close() {
-      this.$refs['form'] && this.$refs['form'].resetFields()
       this.hasContainer = false
       this.warehouseSpaceList = []
-      this.visible && this.$emit('update:visible', false)
+      this.$emit('update:visible', false)
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
