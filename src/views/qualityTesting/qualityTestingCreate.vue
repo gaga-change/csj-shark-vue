@@ -165,11 +165,11 @@ export default {
       }
       return isSupport && isLt2M
     },
-    handleRemove(file, fileList) {
+    handleRemove(file) {
       let index = this.fileList.findIndex(v => v.uid === file.uid)
       ~index && this.fileList.splice(index, 1)
     },
-    handleSuccess(file, fileList) {
+    handleSuccess(file) {
       this.fileList.push(file)
     },
     handlePreview(file) {
@@ -180,7 +180,7 @@ export default {
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
-    beforeRemove(file, fileList) {
+    beforeRemove(file) {
       // file.raw === true  说明是不符合格式，自动删除的
       if (file.raw) return true
       return this.$confirm(`确定移除 ${file.name}？`)
@@ -222,7 +222,7 @@ export default {
               path: `/qualityTesting/record`,
               query: { t: Date.now() }
             })
-          }).catch(err => {
+          }).catch(() => {
           })
         }, 3000)
       })

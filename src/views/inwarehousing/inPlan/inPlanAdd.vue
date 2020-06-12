@@ -51,8 +51,8 @@
             :loading="ownerLoading"
           >
             <el-option
-              v-for="(item, index) in mapConfig['_customer_type1_enum'] || []"
-              :key="index"
+              v-for="(item) in mapConfig['_customer_type1_enum'] || []"
+              :key="'ownerCode_' + item.value"
               :label="item.name"
               :value="item.value"
             ></el-option>
@@ -73,7 +73,7 @@
           >
             <el-option
               v-for="item in mapConfig['_customer_type2_enum'] || []"
-              :key="item.name"
+              :key="'providerCode_' + item.value"
               :label="item.name"
               :value="item.value"
             ></el-option>
@@ -171,7 +171,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { mapGetters } from 'vuex'
 import { addInWarehousePlan, customerList } from '@/api'
 import selectProduct from './components/selectProduct'
@@ -266,7 +265,7 @@ export default {
       })
     },
     /** 盘点类型切换 */
-    handleOrderTypeChange(v) {
+    handleOrderTypeChange() {
       this.tableData = []
       this.$refs['selctProduct'].resetForm()
     },
@@ -307,7 +306,7 @@ export default {
                   this.$router.push({
                     path: `/inwarehousing/inPlanList`
                   })
-                }).catch(err => {
+                }).catch(() => {
                 })
               }
             })
