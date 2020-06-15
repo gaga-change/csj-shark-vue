@@ -31,9 +31,9 @@
             <el-option
               v-for="item in skuList"
               :key="item.id"
-              :label="item.skuName"
-              :value="item.skuCode"
+              :value="item.id"
             >
+              <span>{{item.skuCode}}</span>  <el-divider direction="vertical"></el-divider>  <span>{{item.skuName}}</span>
             </el-option>
           </el-select>
         </div>
@@ -52,7 +52,7 @@
               :key="item.id"
               :value="item.customerCode"
             >
-              {{item.customerCode}} - {{item.customerName}}
+              {{item.customerCode}}  <el-divider direction="vertical"></el-divider>  {{item.customerName}}
             </el-option>
           </el-select>
         </div>
@@ -184,10 +184,12 @@ export default {
     },
     handelSkuChange(v) {
       if (v) {
-        const temp = this.skuList.find(i => i.skuCode === v)
+        const temp = this.skuList.find(i => i.id === v)
         this.skuName = temp && temp.skuName
+        this.skuCode = temp && temp.skuCode
       } else {
         this.skuName = ''
+        this.skuCode = ''
       }
     },
     handleRest() {
