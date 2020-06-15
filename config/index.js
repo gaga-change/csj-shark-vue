@@ -21,9 +21,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: proxyTable,
-
     // Various Dev Server settings
-    host: '0.0.0.0', // 测试环境 调试
+    host: '127.0.0.1', // 测试环境 调试
     // host: 'shark.csjmro.com', // 正式环境 调试
     port: 7888, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
