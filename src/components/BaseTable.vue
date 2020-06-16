@@ -147,7 +147,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <router-link :to="{path: item.linkTo, query: trunQuery(item.query, scope.row)}">
+            <router-link :to="{path: item.linkTo(scope.row), query: trunQuery(item.query, scope.row)}">
               <el-link type="primary">
                 <BaseTableCell
                   :row="scope.row"
