@@ -24,13 +24,13 @@
             @click="handleClose(scope.row)"
           >终止</el-link>
         </template>
-        <template v-if="scope.row.execStatus === 2">
-          <el-divider direction="vertical"></el-divider>
-          <el-link
-            type="primary"
-            @click="handleActive(scope.row)"
-          >激活</el-link>
-        </template>
+<!--        <template v-if="scope.row.execStatus === 2">-->
+<!--          <el-divider direction="vertical"></el-divider>-->
+<!--          <el-link-->
+<!--            type="primary"-->
+<!--            @click="handleActive(scope.row)"-->
+<!--          >激活</el-link>-->
+<!--        </template>-->
         <template v-if="scope.row.execStatus === 1 || scope.row.execStatus === 3">
           <el-divider direction="vertical"></el-divider>
           <el-link
