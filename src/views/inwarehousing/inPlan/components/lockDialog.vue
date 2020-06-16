@@ -18,7 +18,7 @@
         <!-- </div> -->
         <div>
           <el-select
-            v-model="skuCode"
+            v-model="skuCodeStr"
             filterable
             remote
             reserve-keyword
@@ -32,8 +32,9 @@
               v-for="item in skuList"
               :key="item.id"
               :value="item.id"
+              :label="`${item.skuCode} | ${item.ownerSkuCode || ''}`"
             >
-              <span>{{item.skuCode}}</span>  <el-divider direction="vertical"></el-divider>  <span>{{item.skuName}}</span>
+              <span>{{item.skuCode}}</span>  <el-divider direction="vertical"></el-divider>  <span>{{item.ownerSkuCode || ''}}</span>
             </el-option>
           </el-select>
         </div>
@@ -134,7 +135,9 @@ export default {
     visible(val) {
       if (!val) return
       this.skuCode = ''
+      this.skuCodeStr = ''
       this.skuName = ''
+      this.ownerSkuCode = ''
       this.providerCode = ''
       this.skuList = []
       this.providerList = []
@@ -146,8 +149,10 @@ export default {
   data() {
     return {
       skuCode: '',
-      providerCode: '',
+      skuCodeStr: '',
       skuName: '',
+      ownerSkuCode: '',
+      providerCode: '',
       loading: false,
       skuList: [],
       providerList: [],
@@ -187,14 +192,16 @@ export default {
         const temp = this.skuList.find(i => i.id === v)
         this.skuName = temp && temp.skuName
         this.skuCode = temp && temp.skuCode
+        this.ownerSkuCode = temp && temp.ownerSkuCode
       } else {
         this.skuName = ''
         this.skuCode = ''
+        this.ownerSkuCode = ''
       }
     },
     handleRest() {
-      this.skuCode = undefined
       this.providerCode = undefined
+      this.skuCodeStr = undefined
       this.handelSkuChange()
     },
     handleSearch() {
@@ -207,7 +214,7 @@ export default {
       if (err) {
         return this.$message.error(err)
       }
-      this.$emit('submited', { skuCode: this.skuCode, providerCode: this.providerCode, skuName: this.skuName })
+      this.$emit('submited', { skuCode: this.skuCode, providerCode: this.providerCode, skuName: this.skuName, ownerSkuCode: this.ownerSkuCode })
       this.close()
     },
     /** 关闭弹窗 */

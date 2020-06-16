@@ -18,7 +18,7 @@
     >
       <template slot-scope="scope">
         <el-link
-          :disabled="scope.row.receiveStatus != 1"
+          :disabled="scope.row.receiveStatus !== 1"
           type="primary"
           @click="handleClose(scope.row)"
         >完结</el-link>
@@ -137,7 +137,7 @@ export default {
     },
     /** 可选条件 */
     selectable(row) {
-      return row.receiveStatus == 0 || row.receiveStatus == 1
+      return row.receiveStatus === 0 || row.receiveStatus === 1
     },
     /** 清除选中 */
     clearSelection() {
@@ -146,8 +146,8 @@ export default {
     /** 刷新列表 */
     getTableData(params) {
       if (params) {
-        const { skuCode, providerCode, skuName } = params
-        this.lockParamsStr = `商品名称：【${skuName}】、供应商编码：【${providerCode}】`
+        const { skuCode, providerCode, ownerSkuCode } = params
+        this.lockParamsStr = `货主商品编码：【${ownerSkuCode}】、供应商编码：【${providerCode}】`
         this.appendSearchParams = { skuCodeList: [skuCode], providerCodeOrName: providerCode }
       }
       this.$nextTick(() => {
