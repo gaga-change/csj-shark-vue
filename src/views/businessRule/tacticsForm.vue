@@ -157,8 +157,11 @@ export default {
   },
   methods: {
     validateRule(rule, value, callback) {
-      if (value.some(v => v === '')) {
-        callback(new Error('规则名称不能为空'))
+      const statusList = this.dynamicValidateForm.statusList
+      if (statusList.every(v => v === 1)) {
+        callback(new Error('至少启用一项规则'))
+      } else if (statusList.some((v, index) => v === 0 && !value[index])) {
+        callback(new Error('启用的规则名称不能空'))
       } else {
         callback()
       }
