@@ -4,6 +4,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>川山甲—供应链云仓库管理系统(Shark-WMS)</title>
+    <script>
+    function compatible() {
+      // flex支持属性
+      return !!support_css3('flex')
+    }
+    var support_css3 = (function () {
+      var div = document.createElement('div'),
+        vendors = 'Ms O Moz Webkit'.split(' '),
+        len = vendors.length;
+
+      return function (prop) {
+        if (prop in div.style) return true;
+
+        prop = prop.replace(/^[a-z]/, function (val) {
+          return val.toUpperCase();
+        });
+
+        while (len--) {
+          if ((vendors[len] + prop in div.style) || ('-' + vendors[len] + '-' + prop).toLowerCase() in div.style) {
+            return true;
+          }
+        }
+        return false;
+      };
+    })();
+    if (!compatible()) {
+      var msg = '当前浏览器版本过低，请使用qq浏览器或360浏览器、谷歌浏览器。若已使用qq浏览器或者360浏览器，请使用极速模式。'
+      alert(msg)
+      window.onload = function () {
+        document.write(msg)
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="app"></div>

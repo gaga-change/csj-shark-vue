@@ -15,6 +15,14 @@ const store = new Vuex.Store({
     map,
     tempData
   },
+  state: {
+    update: false,
+  },
+  mutations: {
+    versionUpdate: (state) => {
+      state.update = true
+    }
+  },
   getters
 })
 

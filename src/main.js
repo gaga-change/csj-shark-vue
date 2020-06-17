@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import moment from 'moment'
+import "babel-polyfill"
 import { cloneDeep } from 'lodash';
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 import ItemTitle from '@/components/ItemTitle/index'

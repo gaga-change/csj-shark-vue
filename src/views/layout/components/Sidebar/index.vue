@@ -14,7 +14,7 @@
       </el-menu>
     </scroll-bar>
     <div class="beian">
-      <span>系统版本：{{version}}</span>
+      <span>系统版本：{{version}}<el-link v-if="update" type="danger" @click="handleUpdate" :underline="false">(更新)</el-link></span>
       <a
         href="http://www.beian.miit.gov.cn"
         target="_blank"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 import SidebarItem from './SidebarItem'
 import ScrollBar from '@/components/ScrollBar'
 
@@ -32,10 +32,11 @@ export default {
   components: { SidebarItem, ScrollBar },
   data() {
     return {
-      version: process.env.IMAGE_TAG || '0.0.0'
+      version: process.env.IMAGE_TAG || '0.0.0',
     }
   },
   computed: {
+    ...mapState(['update']),
     ...mapGetters([
       'menu',
       'sidebar'
@@ -45,6 +46,11 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
+    }
+  },
+  methods: {
+    handleUpdate() {
+      location.href = location.origin + '?t='+ Date.now()
     }
   }
 }
@@ -64,5 +70,8 @@ export default {
   text-align: center;
   z-index: 1000;
   font-size: 12px;
+  a {
+    width: auto!important;
+  }
 }
 </style>
