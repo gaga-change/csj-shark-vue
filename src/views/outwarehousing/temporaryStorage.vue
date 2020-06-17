@@ -110,9 +110,11 @@ export default {
 <style rel="stylesheet/scss" lang="scss" >
 .TemporaryStorageComponent {
   .right-area {
-    margin-left: 280px;
-    position: sticky;
-    top: 97px;
+    /*margin-left: 280px;*/
+    /*position: sticky;*/
+    /*top: 97px;*/
+    overflow: hidden;
+    padding-left: 20px;
   }
   .tableBtnBox {
     font-size: 12px;
