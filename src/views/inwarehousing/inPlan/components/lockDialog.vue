@@ -55,9 +55,9 @@
               v-for="item in providerList"
               :key="item.id"
               :value="item.id"
-              :label="`${item.customerCode} | ${item.outCustomerCode || ''}`"
+              :label="`${item.customerCode} | ${item.reserve5 || ''}`"
             >
-              {{item.customerCode}}  <el-divider direction="vertical"></el-divider>  {{item.outCustomerCode}}
+              {{item.customerCode}}  <el-divider direction="vertical"></el-divider>  {{item.reserve5}}
             </el-option>
           </el-select>
         </div>
@@ -208,7 +208,7 @@ export default {
         const temp = this.providerList.find(i => i.id === v)
         this.providerCode = temp && temp.customerCode
         this.providerName = temp && temp.customerName
-        this.outProviderCode = temp && temp.outCustomerCode
+        this.outProviderCode = temp && temp.reserve5
       } else {
         this.providerCode = ''
         this.providerName = ''
