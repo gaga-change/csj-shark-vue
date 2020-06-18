@@ -242,7 +242,7 @@ export default {
       if (err) {
         return this.$message.error(err)
       }
-      this.$emit('submited', { skuCode: this.skuCode, providerCode: this.providerCode, skuName: this.skuName, ownerSkuCode: this.ownerSkuCode })
+      this.$emit('submited', { skuCode: this.skuCode, providerCode: this.providerCode, skuName: this.skuName, ownerSkuCode: this.ownerSkuCode, outProviderCode: this.outProviderCode })
       this.close()
     },
     /** 关闭弹窗 */
