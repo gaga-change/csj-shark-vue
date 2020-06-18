@@ -147,7 +147,7 @@ export default {
     getTableData(params) {
       if (params) {
         const { skuCode, providerCode, ownerSkuCode } = params
-        this.lockParamsStr = `货主商品编码：【${ownerSkuCode}】、供应商编码：【${providerCode}】`
+        this.lockParamsStr = `货主商品编码：【${ownerSkuCode || ''}】、供应商编码：【${providerCode || ''}】`
         this.appendSearchParams = { skuCodeList: [skuCode], providerCodeOrName: providerCode }
       }
       this.$nextTick(() => {

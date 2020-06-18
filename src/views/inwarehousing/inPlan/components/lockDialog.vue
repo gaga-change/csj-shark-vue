@@ -26,6 +26,7 @@
             :remote-method="skuCodeRemoteMethod"
             :loading="skuCodeLoading"
             @change="handelSkuChange"
+            style="width: 250px"
           >
 
             <el-option
@@ -40,28 +41,36 @@
         </div>
         <div class="mt15">
           <el-select
-            v-model="providerCode"
+            v-model="providerStr"
             filterable
             remote
             reserve-keyword
-            placeholder="供应商编码或名称"
+            placeholder="供应商自有编码或外部编码"
             :remote-method="providerCodeRemoteMethod"
             :loading="providerCodeLoading"
+            @change="handelProviderChange"
+            style="width: 250px"
           >
             <el-option
               v-for="item in providerList"
               :key="item.id"
-              :value="item.customerCode"
+              :value="item.id"
+              :label="`${item.customerCode} | ${item.outCustomerCode || ''}`"
             >
-              {{item.customerCode}}  <el-divider direction="vertical"></el-divider>  {{item.customerName}}
+              {{item.customerCode}}  <el-divider direction="vertical"></el-divider>  {{item.outCustomerCode}}
             </el-option>
           </el-select>
         </div>
         <div
           class="mt15"
-          v-if="skuCode"
         >
-          <span>商品名称：</span><span>{{skuName}}</span>
+          <div  v-if="skuCode" >
+            <span>商品名称：</span><span>{{skuName}}</span>
+          </div>
+
+          <div  v-if="providerCode" >
+            <span>供应商名称：</span><span>{{providerName}}</span>
+          </div>
         </div>
         <div
           class="mt15"
@@ -136,9 +145,12 @@ export default {
       if (!val) return
       this.skuCode = ''
       this.skuCodeStr = ''
+      this.providerStr = ''
       this.skuName = ''
       this.ownerSkuCode = ''
       this.providerCode = ''
+      this.providerName = ''
+      this.outProviderCode = ''
       this.skuList = []
       this.providerList = []
     },
@@ -153,6 +165,9 @@ export default {
       skuName: '',
       ownerSkuCode: '',
       providerCode: '',
+      providerName: '',
+      providerStr: '',
+      outProviderCode: '',
       loading: false,
       skuList: [],
       providerList: [],
@@ -161,6 +176,7 @@ export default {
     }
   },
   methods: {
+
     // 商品远程查询
     skuCodeRemoteMethod(query) {
       if (query !== '') {
@@ -174,7 +190,7 @@ export default {
         this.skuList = [];
       }
     },
-    // 商品远程查询
+    // 供应商远程查询
     providerCodeRemoteMethod(query) {
       if (query !== '') {
         this.providerCodeLoading = true
@@ -185,6 +201,18 @@ export default {
         })
       } else {
         this.providerList = [];
+      }
+    },
+    handelProviderChange(v) {
+      if (v) {
+        const temp = this.providerList.find(i => i.id === v)
+        this.providerCode = temp && temp.customerCode
+        this.providerName = temp && temp.customerName
+        this.outProviderCode = temp && temp.outCustomerCode
+      } else {
+        this.providerCode = ''
+        this.providerName = ''
+        this.outProviderCode = ''
       }
     },
     handelSkuChange(v) {
@@ -200,7 +228,7 @@ export default {
       }
     },
     handleRest() {
-      this.providerCode = undefined
+      this.providerStr = undefined
       this.skuCodeStr = undefined
       this.handelSkuChange()
     },
