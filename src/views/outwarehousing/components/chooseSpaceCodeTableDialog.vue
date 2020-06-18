@@ -57,6 +57,7 @@ const tableConfig = [
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitName' },
   { label: '批次', prop: 'batchNo' },
+  { label: '货主', prop: 'ownerName' },
   { label: '容器', prop: 'trayCode' },
   { label: '库位', prop: 'warehouseSpaceCode' },
   { label: '可用库存', prop: 'skuQty' },
