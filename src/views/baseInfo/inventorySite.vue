@@ -264,7 +264,7 @@ export default {
       searchConfig,
       warehouseSpaceSelect,
       setStorageVisible: false,
-      appendSearchParams: { warehouseCode: undefined },
+      appendSearchParams: { },
       dialogVisible: false,
       dialogTitle: '',
       multipleParentSelection: [],//选中的主表
@@ -282,7 +282,7 @@ export default {
     ]),
   },
   created() {
-    this.appendSearchParams.warehouseCode = this.chooseWarehouse
+    // this.appendSearchParams.warehouseCode = this.chooseWarehouse
     getSelectInventoryAreaList({
       warehouseCode: this.chooseWarehouse
     }).then(res => {

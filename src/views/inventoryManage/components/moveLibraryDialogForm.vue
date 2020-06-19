@@ -47,17 +47,19 @@
           >
             <el-select
               v-model="formData.warehouseSpaceCode"
-              placeholder="请选择目标库位"
-              clearable
-              :loading="warehouseSpaceSelectLoading"
-            >
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="warehouseSpaceSelectLoading">
               <el-option
-                v-for="item in warehouseSpaceCodeConfigComputed"
+                v-for="item in warehouseSpaceCodeConfig"
                 :key="item.warehouseSpaceCode"
                 :label="item.warehouseSpaceCode"
                 :value="item.warehouseSpaceCode"
-                :disabled="item.disabled"
-              ></el-option>
+              >
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="带容器">
@@ -102,7 +104,7 @@
 </template>
 
 <script>
-import { warehouseSpaceList, skuStockMove } from '@/api'
+import { warehouseSpaceSelect, skuStockMove } from '@/api'
 const baseInfoConfig = [
   { label: '商品名称 ', prop: 'skuName' },
   { label: '商品批次', prop: 'batchNo', type: 'batchNoPopover' },
@@ -123,17 +125,17 @@ export default {
   watch: {
     /** 监听数据切换，重置表单 */
     visible(val) {
-      // if (!val) return
-      // Object.keys(this.formData).forEach(key => {
-      //   this.$set(this.formData, key, this.rowData[key] === null ? undefined : this.rowData[key])
-      // })
+      if (!val) return
+      this.warehouseSpaceCodeConfig = [];
     }
   },
   data() {
     return {
       baseInfoConfig,
       loading: false,
+      warehouseSpaceSelectLoading: false,
       hasContainer: false,
+      warehouseSpaceCodeConfig: [],
       formData: {
         //  ... 表单字段
         number: undefined,
@@ -157,7 +159,6 @@ export default {
           { min: 0, max: 30, message: '不能超过30个字符', trigger: 'blur' }
         ]
       },
-      warehouseSpaceCodeConfig: [],
     }
   },
   computed: {
@@ -165,27 +166,20 @@ export default {
     rowData() {
       return this.row || {}
     },
-    warehouseSpaceCodeConfigComputed() {
-      return this.warehouseSpaceCodeConfig.map(v => {
-        if (v.warehouseSpaceCode === this.rowData.warehouseSpaceCode) {
-          v.disabled = true
-        } else {
-          v.disabled = false
-        }
-        return v
-      })
-    }
-  },
-  created() {
-    this.warehouseSpaceSelectLoading = true
-    warehouseSpaceList().then(res => {
-      this.warehouseSpaceSelectLoading = false
-      if (res) {
-        this.warehouseSpaceCodeConfig = res.data || [];
-      }
-    })
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.warehouseSpaceSelectLoading = true;
+        warehouseSpaceSelect({pageNum: 1, pageSize: 100, warehouseSpaceCodeLike: query}).then(res => {
+          this.warehouseSpaceSelectLoading = false
+          if (!res) return
+          this.warehouseSpaceCodeConfig = res.data.list.filter(v => v.warehouseSpaceCode !== this.rowData.warehouseSpaceCode)
+        })
+      } else {
+        this.warehouseSpaceCodeConfig = [];
+      }
+    },
     /** 确定 */
     confirm() {
       this.$refs['form'].validate((valid) => {
