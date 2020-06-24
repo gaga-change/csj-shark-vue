@@ -192,7 +192,8 @@ export default {
       this.$apiConfirm('是否确定删除？', () => receiveOrderDeleteOrInvalid({ status: 0, itemId: row.id })).then(res => {
         if (!res) return
         this.$message.success('操作成功！')
-        this.initData()
+        const index = this.detail.detailItemDos.findIndex(v => v.id === row.id)
+        this.detail.detailItemDos.splice(index, 1)
       })
     },
     /** 编辑 按钮点击 */
