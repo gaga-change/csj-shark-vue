@@ -107,6 +107,7 @@ const detailItemConfig = [
   { label: '货主', prop: 'ownerName' },
   { label: '创建人', prop: 'createrName' },
   { label: '创建时间', prop: 'gmtCreate', type: 'time' },
+  { label: '存储地点', prop: 'outWarehouseName' },
 ]
 const detailDOsConfig = [
   { label: '商品编码', prop: 'skuCode' },
