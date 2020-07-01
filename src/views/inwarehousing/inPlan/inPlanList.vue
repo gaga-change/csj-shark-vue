@@ -25,9 +25,19 @@
       </template>
       <template slot="btns">
         <el-button
+          v-if="!isYatai"
           type="primary"
           :disabled="!selectRows.length"
           @click="handleCreateReceiveOrder"
+          :loading="createReceiveOrderLoading"
+        >
+          创建收货单
+        </el-button>
+        <el-button
+          v-if="isYatai"
+          type="primary"
+          :disabled="!selectRows.length"
+          @click="handleCreateReceiveOrderYatai"
           :loading="createReceiveOrderLoading"
         >
           创建收货单
@@ -58,12 +68,19 @@
       :visible.sync="lockDialogVisible"
       @submited="getTableData"
     />
+    <createInrecordYataidialog
+      :visible.sync="createInrecordYataidialogVisible"
+      :rows="selectRows"
+      @submited="getTableData"
+    />
   </div>
 </template>
 
 <script>
 import { getInfoWarehousing, getInfoDetailWarehousing, createReceiveOrder, planInEnd } from '@/api'
+import { mapGetters } from 'vuex'
 import lockDialog from './components/lockDialog'
+import createInrecordYataidialog from './components/createInrecordYataidialog'
 const childTableConfig = [
   { label: '商品编码', prop: 'skuCode', width: 150 },
   { label: '商品名称', prop: 'skuName', width: 150 },
@@ -96,18 +113,27 @@ const searchConfig = [
 ]
 
 export default {
-  components: { lockDialog },
+  components: { lockDialog, createInrecordYataidialog },
   data() {
     return {
       tableConfig,
       searchConfig,
       childTableConfig,
       lockDialogVisible: false,
+      createInrecordYataidialogVisible: false,
       listApi: getInfoWarehousing,
       selectRows: [],
       appendSearchParams: {},
       lockParamsStr: '',
       createReceiveOrderLoading: false,
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'chooseWarehouse',
+    ]),
+    isYatai() {
+      return this.chooseWarehouse === 'D202006010001'
     }
   },
   methods: {
@@ -157,6 +183,13 @@ export default {
     /** 主表多选 */
     selectionChange(selectRows) {
       this.selectRows = [...selectRows]
+    },
+    /** 创建收货单【亚太仓】 - 弹窗 */
+    handleCreateReceiveOrderYatai() {
+      if (this.selectRows.length > 1) {
+        return this.$message.error("计划单不可多选")
+      }
+      this.createInrecordYataidialogVisible = true
     },
     /** 创建收货单 */
     handleCreateReceiveOrder() {

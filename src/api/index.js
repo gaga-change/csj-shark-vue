@@ -300,3 +300,7 @@ export const selectTrunoverPlotByPlotName = params => http.get(`/webApi/basic/tr
 export const getSkuBarCode = params => http.get(`/webApi/basic/sku/getSkuBarCode`, { params })
 /** 退出登录 */
 export const logout = () => http.get(`/api/sso/logout`)
+// 亚太U9组织分页列表
+export const asiaOrganizeList = params => http.post(`/webApi/asia/organize/list`, params)
+// 根据组织查询仓库分页列表
+export const asiaWareHouseList = params => http.post(`/webApi/asia/warehouse/list`, params)
