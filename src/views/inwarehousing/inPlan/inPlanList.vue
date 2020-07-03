@@ -187,7 +187,11 @@ export default {
     /** 创建收货单【亚太仓】 - 弹窗 */
     handleCreateReceiveOrderYatai() {
       if (this.selectRows.length > 1) {
-        return this.$message.error("计划单不可多选")
+        // 若勾选了多笔计划单，计划单同为货主EP001或同为非EP001时，跳转弹框维护存储地点；混合勾选时，报错文案：自营和非自营单据不能同时被勾选
+        const ep001Num = this.selectRows.filter(v => v.ownerCode === 'EP001').length
+        if (ep001Num > 0 && ep001Num < this.selectRows.length) {
+          return this.$message.error("自营和非自营单据不能同时被勾选")
+        }
       }
       this.createInrecordYataidialogVisible = true
     },

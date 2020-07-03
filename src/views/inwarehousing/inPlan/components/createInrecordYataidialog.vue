@@ -45,7 +45,7 @@
 
         </el-form>
       </div>
-      <div>
+      <div v-loading="childLoading">
         <base-table
           :data="sonList"
           :config="tableConfig"
@@ -99,17 +99,13 @@ export default {
     /** 数据初始 */
     rows: {
       type: Array,
-      default: () => null
+      default: () => []
     }
   },
   computed: {
-    /** 防止父级传递 null */
-    rowData() {
-      return this.rows[0] || {}
-    },
     outWarehouseType() {
-      if (this.rowData) {
-        if (this.rowData.ownerCode === 'EP001')
+      if (this.rows[0]) {
+        if (this.rows[0].ownerCode === 'EP001')
           return 0
         else return 1
       } else {
@@ -131,6 +127,7 @@ export default {
     return {
       sonList: [],
       tableConfig,
+      childLoading: false,
       loading: false,
       formData: {
         //  ... 表单字段
@@ -162,12 +159,18 @@ export default {
   methods: {
     /** 子表内容获取 */
     childApi() {
-      const row = this.rowData
+      const rows = this.rows
       this.sonList = []
-      getInfoDetailWarehousing({ planCode: row.planCode }).then(res => {
-        if (!res || !res.data) return
-        this.sonList = res.data.inWarehousePlanDetailRespList || []
+      this.childLoading = true
+      Promise.all(rows.map(row => {
+        return getInfoDetailWarehousing({ planCode: row.planCode }).then(res => {
+          if (!res || !res.data) return
+          this.sonList.push(...(res.data.inWarehousePlanDetailRespList || []))
+        })
+      })).then(res => {
+        this.childLoading = false
       })
+
     },
     /** 确定 */
     confirm() {
@@ -175,14 +178,12 @@ export default {
         if (valid) {
           const { outWarehouseCode, outWarehouseName } = this.formData
           this.loading = true
-          const params = [
-            {
-              planOrderId: this.rowData.id,
-              planOrderCode: this.rowData.planCode,
-              outWarehouseCode,
-              outWarehouseName
-            }
-          ]
+          const params = this.rows.map(row => ({
+            planOrderId: row.id,
+            planOrderCode: row.planCode,
+            outWarehouseCode,
+            outWarehouseName
+          }))
           createReceiveOrder(params).then(res => {
             this.loading = false
             if (!res) return
