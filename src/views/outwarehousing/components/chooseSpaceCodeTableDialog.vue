@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { planInventoryQuerysSkuStockList } from '@/api'
+import { planInventoryQuerysSkuStockList, planInventoryQueryAsiaSkuStockList } from '@/api'
 const tableConfig = [
   { label: '商品编码', prop: 'skuCode' },
   { label: '商品名称', prop: 'skuName' },
@@ -63,10 +63,6 @@ const tableConfig = [
   { label: '可用库存', prop: 'skuQty' },
   { label: '入库时间', prop: 'lastInTime', type: 'time', width: 140 },
   { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
-]
-const searchConfig = [
-  { label: '批次', prop: 'batchNo' },
-  { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
 ]
 export default {
   props: {
@@ -104,10 +100,25 @@ export default {
     }
   },
   data() {
+    const { isYaTai, ownerCode } = this.$route.query
+    const outWarehouseType = ownerCode === 'EP001' ? 0 : 1
+    let searchConfig
+    if (isYaTai) {
+      searchConfig = [
+        { label: '收货组织', prop: '_organize', type: 'organize' },
+        { label: '存储地点', prop: 'outWarehouseCode', type: 'outWarehouse', required: ['_organize'], outWarehouseType },
+      ]
+    } else {
+      searchConfig = [
+        { label: '批次', prop: 'batchNo' },
+        { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
+      ]
+    }
+    const listApi = isYaTai ? planInventoryQueryAsiaSkuStockList : planInventoryQuerysSkuStockList
     return {
       tableConfig,
       searchConfig,
-      listApi: planInventoryQuerysSkuStockList,
+      listApi,
       // 可选 附加查询条件
       appendSearchParams: { skuCode: undefined, queryTempArea: 0, fileCanQtyZero: 1, outLockFlag: 0 },
       loading: false,

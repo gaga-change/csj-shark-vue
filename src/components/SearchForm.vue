@@ -13,7 +13,7 @@
         :inline="true"
       >
         <el-form-item
-          v-for="(item,index) in [...config, ...batchAppendInputList]"
+          v-for="(item,index) in [...computedConfig, ...batchAppendInputList]"
           :key="index"
           :label="item.label"
           :prop="item.prop"
@@ -124,6 +124,21 @@
               :format="item.format"
             >
             </el-date-picker>
+          </template>
+          <template v-else-if="item.type === 'organize'">
+            <ApiSelect
+              api="asiaOrganizeList"
+              :config="['organizationCode', 'organizationName']"
+              v-model="searchForms[item.prop]"
+            />
+          </template>
+          <template v-else-if="item.type === 'outWarehouse'">
+            <ApiSelect
+              api="asiaWareHouseList"
+              :config="['outWarehouseCode', 'outWarehouseName']"
+              :params="{organizationCode: searchForms && searchForms['_organize'], outWarehouseType: item.outWarehouseType }"
+              v-model="searchForms[item.prop]"
+            />
           </template>
           <template v-else>
             <el-input
@@ -268,6 +283,15 @@ export default {
     }
   },
   computed: {
+    computedConfig() {
+      return this.config.filter(item => {
+        if (Array.isArray(item.required)) {
+          const bool = item.required.every(key => this.searchForms[key])
+          return bool
+        }
+        return true
+      })
+    },
     inputItems() {
       return this.config.filter(v => !v.type)
     },

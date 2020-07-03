@@ -36,12 +36,16 @@
         >自动分配拣货任务</el-button>
         <el-button
           type="primary"
-          @click="handleAssignPicking"
+          @click="handleAssignPicking({isYaTai: false})"
         >手动分配拣货任务</el-button>
         <el-button
           type="primary"
           @click="$router.push('/outwarehousing/outPlanAdd')"
         >新建计划单</el-button>
+        <el-button
+          type="primary"
+          @click="handleAssignPicking({isYaTai: true})"
+        >人工分配拣货任务</el-button>
       </template>
     </double-list>
   </div>
@@ -125,6 +129,7 @@ export default {
           v._planCode = row.planCode
           v._gmtCreate = row.gmtCreate
           v._busiBillNo = row.busiBillNo
+          v._ownerCode = row.ownerCode
           v._sortStatus = row.sortStatus
           return v
         })
@@ -149,7 +154,7 @@ export default {
       this.childSelectRows = temp
     },
     /** 手动分配 按钮点击 */
-    handleAssignPicking() {
+    handleAssignPicking({ isYaTai }) {
       if (!this.childSelectRows.length) {
         return this.$message.warning('请勾选计划单下的商品！')
       }
@@ -166,6 +171,8 @@ export default {
           billNos: this.childSelectRows.map(v => v.billNo).join(','),
           gmtCreate: this.childSelectRows[0]._gmtCreate,
           busiBillNo: this.childSelectRows[0]._busiBillNo,
+          ownerCode: this.childSelectRows[0]._ownerCode,
+          isYaTai: isYaTai ? 1 : '',
           planCode: planCodes[0],
         }
       })
