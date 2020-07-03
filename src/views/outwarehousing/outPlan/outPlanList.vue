@@ -30,19 +30,23 @@
           @submited="getTableData"
         />
         <el-button
+          v-if="$haspermission('outwarehousing-outPlanList:自动分配拣货任务')"
           type="primary"
           :loading="pickOrderAddByAutoLoading"
           @click="handleAutoAssignPicking"
         >自动分配拣货任务</el-button>
         <el-button
+          v-if="$haspermission('outwarehousing-outPlanList:手动分配拣货任务')"
           type="primary"
           @click="handleAssignPicking({isYaTai: false})"
         >手动分配拣货任务</el-button>
         <el-button
+          v-if="$haspermission('outwarehousing-outPlanList:新建计划单')"
           type="primary"
           @click="$router.push('/outwarehousing/outPlanAdd')"
         >新建计划单</el-button>
         <el-button
+          v-if="$haspermission('outwarehousing-outPlanList:人工分配拣货任务')"
           type="primary"
           @click="handleAssignPicking({isYaTai: true})"
         >人工分配拣货任务</el-button>

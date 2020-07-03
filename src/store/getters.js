@@ -13,6 +13,7 @@ const getters = {
   warehouseMap: state => state.user.warehouseMap,
   visitedViews: state => state.tagsView.visitedViews,
   mapConfig: state => state.map.mapConfig,
+  permission_codes: state => state.user.permissionCodes,
   arrivalBill: state => state.tempData.arrivalBill,
   menu: state => {
     let bakmenus = state.user.userInfo && state.user.userInfo.menus && state.user.userInfo.menus || []
