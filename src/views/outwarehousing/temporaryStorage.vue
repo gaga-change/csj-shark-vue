@@ -49,6 +49,7 @@ const tableConfig = [
   { label: '已拣货数', prop: 'realSortQty' },
   { label: '是否已生成出库单', prop: 'isCreateOrder', type: 'Boolean', width: 120 },
   { label: '执行状态', prop: 'sortStatusStr' },
+  { label: '存储地点', prop: 'outWarehouseName' },
   { label: '库位', prop: 'warehouseSpaceCode' },
 ]
 
