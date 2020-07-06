@@ -133,7 +133,7 @@ export default {
       'chooseWarehouse',
     ]),
     isYatai() {
-      return this.chooseWarehouse === 'D202006010001'
+      return this.chooseWarehouse === 'D202007010001'
     }
   },
   methods: {
