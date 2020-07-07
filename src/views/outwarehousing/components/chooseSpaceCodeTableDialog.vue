@@ -110,7 +110,7 @@ export default {
         { label: '单位', prop: 'skuUnitName' },
         { label: '货主', prop: 'ownerName' },
         { label: '外部批号', prop: 'lotAttrCode3' },
-        { label: '入库时间', prop: 'lastInTime', type: 'time', width: 100, format: 'YYYY-MM-DD' },
+        { label: '入库时间', prop: 'lotAttrCode4', type: 'time', width: 100, format: 'YYYY-MM-DD' },
         { label: '容器', prop: 'trayCode' },
         { label: '库位', prop: 'warehouseSpaceCode' },
         { label: '可用库存', prop: 'skuQty' },
