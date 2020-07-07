@@ -50,20 +50,6 @@
 
 <script>
 import { planInventoryQuerysSkuStockList, planInventoryQueryAsiaSkuStockList } from '@/api'
-const tableConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格', prop: 'skuFormat' },
-  { label: '型号', prop: 'skuModel' },
-  { label: '单位', prop: 'skuUnitName' },
-  { label: '批次', prop: 'batchNo' },
-  { label: '货主', prop: 'ownerName' },
-  { label: '容器', prop: 'trayCode' },
-  { label: '库位', prop: 'warehouseSpaceCode' },
-  { label: '可用库存', prop: 'skuQty' },
-  { label: '入库时间', prop: 'lastInTime', type: 'time', width: 140 },
-  { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
-]
 export default {
   props: {
     visible: {
@@ -111,6 +97,39 @@ export default {
       searchConfig = [
         { label: '批次', prop: 'batchNo' },
         { label: '批次规则', prop: 'batchRule', type: 'batchRule' },
+      ]
+    }
+    let tableConfig
+    if (isYaTai) {
+      tableConfig = [
+        { label: '商品编码', prop: 'skuCode' },
+        { label: '货主商品编码', prop: 'lotAttrCode10' },
+        { label: '商品名称', prop: 'skuName' },
+        { label: '规格', prop: 'skuFormat' },
+        { label: '型号', prop: 'skuModel' },
+        { label: '单位', prop: 'skuUnitName' },
+        { label: '货主', prop: 'ownerName' },
+        { label: '外部批号', prop: 'lotAttrCode3' },
+        { label: '入库时间', prop: 'lastInTime', type: 'time', width: 100, format: 'YYYY-MM-DD' },
+        { label: '容器', prop: 'trayCode' },
+        { label: '库位', prop: 'warehouseSpaceCode' },
+        { label: '可用库存', prop: 'skuQty' },
+        { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
+      ]
+    } else {
+      tableConfig = [
+        { label: '商品编码', prop: 'skuCode' },
+        { label: '商品名称', prop: 'skuName' },
+        { label: '规格', prop: 'skuFormat' },
+        { label: '型号', prop: 'skuModel' },
+        { label: '单位', prop: 'skuUnitName' },
+        { label: '批次', prop: 'batchNo' },
+        { label: '货主', prop: 'ownerName' },
+        { label: '容器', prop: 'trayCode' },
+        { label: '库位', prop: 'warehouseSpaceCode' },
+        { label: '可用库存', prop: 'skuQty' },
+        { label: '入库时间', prop: 'lastInTime', type: 'time', width: 140 },
+        { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
       ]
     }
     const listApi = isYaTai ? planInventoryQueryAsiaSkuStockList : planInventoryQuerysSkuStockList
