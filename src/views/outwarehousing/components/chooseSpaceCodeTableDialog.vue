@@ -101,12 +101,11 @@ export default {
   },
   data() {
     const { isYaTai, ownerCode } = this.$route.query
-    const outWarehouseType = ownerCode === 'EP001' ? 0 : 1
     let searchConfig
     if (isYaTai) {
       searchConfig = [
-        { label: '收货组织', prop: '_organize', type: 'organize' },
-        { label: '存储地点', prop: 'outWarehouseCode', type: 'outWarehouse', required: ['_organize'], outWarehouseType },
+        { label: '组织', prop: '_organize', type: 'organize' },
+        { label: '存储地点', prop: 'outWarehouseCode', type: 'outWarehouse', required: ['_organize'] },
       ]
     } else {
       searchConfig = [
