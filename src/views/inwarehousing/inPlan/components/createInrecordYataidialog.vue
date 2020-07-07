@@ -47,7 +47,7 @@
       </div>
       <div v-loading="childLoading">
         <base-table
-          :data="sonList"
+          :data="skuList"
           :config="tableConfig"
         ></base-table>
       </div>
@@ -111,6 +111,13 @@ export default {
       } else {
         return undefined;
       }
+    },
+    skuList() {
+      const skuMap = {}
+      this.sonList.forEach(item => {
+        skuMap[item.skuCode] = item
+      })
+      return Object.keys(skuMap).map(key => skuMap[key])
     }
   },
   watch: {
