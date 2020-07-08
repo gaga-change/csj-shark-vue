@@ -100,7 +100,7 @@ const planTableConfig = [
   { label: '规格', prop: 'skuFormat' },
   { label: '型号', prop: 'skuModel' },
   { label: '单位', prop: 'skuUnitName' },
-  { label: '批次', prop: 'batchNo' },
+  { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
   { label: '本次拣货量', prop: 'number' },
   { label: '本次拣货库位', prop: 'warehouseSpaceCode' },
 ]
@@ -209,20 +209,22 @@ export default {
     /** 选择结束 */
     submited(tableData) {
       /** 覆盖 child 中的值 */
-      let obj = {}
+      let skuMap = {}
       this.selectedRow._child.forEach(v => {
-        obj[v.id + ''] = v.number
+        skuMap[v.id] = v
+      })
+      tableData.map(v => {
+        // 如果又数量 追加填充
+        if (v.number) {
+          skuMap[v.id] = v
+        }
       })
       let sum = 0
-      this.selectedRow._child = tableData.map(v => {
-        if (!v.number && obj[v.id + '']) { // 还原值
-          v.number = obj[v.id + '']
-        }
-        if (v.number) {
-          sum += (Number(v.number) || 0)
-        }
-        return v
-      }).filter(v => v.number)
+      this.selectedRow._child = Object.keys(skuMap).map(id => {
+        let item = skuMap[id]
+        sum += (Number(item.number) || 0)
+        return item
+      })
       this.selectedRow.sum = sum
     },
     /** 获取详情 */

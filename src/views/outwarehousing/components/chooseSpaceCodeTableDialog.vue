@@ -4,7 +4,7 @@
     <el-dialog
       title="选择库存"
       :visible="visible"
-      width="80%"
+      width="95%"
       :before-close="handleClose"
       @close="close"
     >

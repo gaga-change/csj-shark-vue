@@ -166,7 +166,7 @@ export default {
       this.childSelectRows.forEach(v => planCodes.push(v._planCode))
       planCodes = [...new Set(planCodes)]
       if (planCodes.length > 1) {
-        return this.$message.error('手动分配，计划单不可多选')
+        return this.$message.error('计划单不可多选')
       }
       this.$router.push({
         path: '/outwarehousing/assignPickingTasks',
