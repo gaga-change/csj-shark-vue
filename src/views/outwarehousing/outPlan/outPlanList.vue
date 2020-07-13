@@ -38,7 +38,7 @@
         <el-button
           v-if="$haspermission('outwarehousing-outPlanList:手动分配拣货任务')"
           type="primary"
-          @click="handleAssignPicking({isYaTai: false})"
+          @click="handleAssignPicking({isArtificial: false})"
         >手动分配拣货任务</el-button>
         <el-button
           v-if="$haspermission('outwarehousing-outPlanList:新建计划单')"
@@ -48,7 +48,7 @@
         <el-button
           v-if="$haspermission('outwarehousing-outPlanList:人工分配拣货任务')"
           type="primary"
-          @click="handleAssignPicking({isYaTai: true})"
+          @click="handleAssignPicking({isArtificial: true})"
         >人工分配拣货任务</el-button>
       </template>
     </double-list>
@@ -158,7 +158,7 @@ export default {
       this.childSelectRows = temp
     },
     /** 手动分配 按钮点击 */
-    handleAssignPicking({ isYaTai }) {
+    handleAssignPicking({ isArtificial }) {
       if (!this.childSelectRows.length) {
         return this.$message.warning('请勾选计划单下的商品！')
       }
@@ -176,7 +176,7 @@ export default {
           gmtCreate: this.childSelectRows[0]._gmtCreate,
           busiBillNo: this.childSelectRows[0]._busiBillNo,
           ownerCode: this.childSelectRows[0]._ownerCode,
-          isYaTai: isYaTai ? 1 : '',
+          isArtificial: isArtificial ? 1 : '',
           planCode: planCodes[0],
         }
       })

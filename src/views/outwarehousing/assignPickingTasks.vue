@@ -94,19 +94,36 @@ const tableConfig = [
   { label: '已通知拣货量', prop: 'sortQty' },
   { label: '本次拣货量', prop: 'sum' },
 ]
-const planTableConfig = [
-  { label: '商品编码', prop: 'skuCode' },
-  { label: '商品名称', prop: 'skuName' },
-  { label: '规格', prop: 'skuFormat' },
-  { label: '型号', prop: 'skuModel' },
-  { label: '单位', prop: 'skuUnitName' },
-  { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
-  { label: '本次拣货量', prop: 'number' },
-  { label: '本次拣货库位', prop: 'warehouseSpaceCode' },
-]
+
 export default {
   components: { 'chooseDialog': chooseSpaceCodeTableDialog },
   data() {
+    const { isArtificial } = this.$route.query
+    let planTableConfig
+    if (isArtificial) {
+      planTableConfig = [
+        { label: '商品编码', prop: 'skuCode' },
+        { label: '商品名称', prop: 'skuName' },
+        { label: '规格', prop: 'skuFormat' },
+        { label: '型号', prop: 'skuModel' },
+        { label: '单位', prop: 'skuUnitName' },
+        { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
+        { label: '本次拣货量', prop: 'number' },
+        { label: '存储地点', prop: 'outWarehouseName' },
+        { label: '本次拣货库位', prop: 'warehouseSpaceCode' },
+      ]
+    } else {
+      planTableConfig = [
+        { label: '商品编码', prop: 'skuCode' },
+        { label: '商品名称', prop: 'skuName' },
+        { label: '规格', prop: 'skuFormat' },
+        { label: '型号', prop: 'skuModel' },
+        { label: '单位', prop: 'skuUnitName' },
+        { label: '批次', prop: 'batchNo', type: 'batchNoPopover', width: 110 },
+        { label: '本次拣货量', prop: 'number' },
+        { label: '本次拣货库位', prop: 'warehouseSpaceCode' },
+      ]
+    }
     return {
       pickOrderAddLoading: false,
       dialogVisible: false,

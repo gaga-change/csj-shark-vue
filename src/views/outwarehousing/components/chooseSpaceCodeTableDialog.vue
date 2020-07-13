@@ -86,9 +86,9 @@ export default {
     }
   },
   data() {
-    const { isYaTai, ownerCode } = this.$route.query
+    const { isArtificial, ownerCode } = this.$route.query
     let searchConfig
-    if (isYaTai) {
+    if (isArtificial) {
       searchConfig = [
         { label: '组织', prop: '_organize', type: 'organize' },
         { label: '存储地点', prop: 'outWarehouseCode', type: 'outWarehouse', required: ['_organize'] },
@@ -100,7 +100,7 @@ export default {
       ]
     }
     let tableConfig
-    if (isYaTai) {
+    if (isArtificial) {
       tableConfig = [
         { label: '商品编码', prop: 'skuCode' },
         { label: '货主商品编码', prop: 'lotAttrCode10' },
@@ -132,7 +132,7 @@ export default {
         { label: '通知拣货量', prop: 'number', edit: true, inputType: 'number2', min: 1, maxKey: 'skuQty', width: 200 },
       ]
     }
-    const listApi = isYaTai ? planInventoryQueryAsiaSkuStockList : planInventoryQuerysSkuStockList
+    const listApi = isArtificial ? planInventoryQueryAsiaSkuStockList : planInventoryQuerysSkuStockList
     return {
       tableConfig,
       searchConfig,
