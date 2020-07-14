@@ -1,5 +1,4 @@
 import { getInfo } from '@/api'
-import { connectSocket } from '@/api/socket'
 import { MessageBox } from 'element-ui';
 
 const user = {
@@ -61,7 +60,6 @@ const user = {
           commit('SET_COMPANY', data.companyname || '')
           commit('SET_COMPANYID', data.companyid || '')
           commit('SET_WAREHOUSEENUM', data)
-          connectSocket(data)
         }
         return res
       })

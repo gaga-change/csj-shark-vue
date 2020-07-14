@@ -14,7 +14,7 @@
       </el-menu>
     </scroll-bar>
     <div class="beian">
-      <span>系统版本：{{version}}<el-link v-if="update" type="danger" @click="handleUpdate" :underline="false">(更新)</el-link></span>
+      <!-- <span>系统版本：{{version}}<el-link v-if="update" type="danger" @click="handleUpdate" :underline="false">(更新)</el-link></span> -->
       <a
         href="http://www.beian.miit.gov.cn"
         target="_blank"
